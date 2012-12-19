@@ -154,13 +154,14 @@ Found: <%= filteredCount %>
  --%>
 <div id="help-<%= id %>" style="float: left; display: block;" >
 &nbsp; &nbsp;
-<a id="modeHide-<%=id%>" href="Javascript:setColumnMode(<%=id%>,'hide')">Hide</a>
+<%-- <a id="modeHide-<%=id%>" href="Javascript:setColumnMode(<%=id%>,'hide')">Hide</a>
 <a href="Javascript:showAllColumnTable('table-<%=id%>')">Show All</a>&nbsp;
+ --%>
 <% if (totalCount>=2) { %>
 <a id="modeSort-<%=id%>" href="Javascript:setColumnMode(<%=id%>,'sort')">Sort</a>
 <% } %>
 &nbsp;<a href="Javascript:transposeToggle(<%=id%>)">Transpose</a>
-
+ 
 &nbsp;&nbsp;&nbsp;&nbsp;
 <% if (totalCount>=5) { %>
 <img src="image/view.png" border=0 ><input id="search-<%=id%>" value="<%= searchValue %>" size=15 onChange="searchTable(<%=id%>,$(this).val())">
@@ -175,17 +176,21 @@ Found: <%= filteredCount %>
 	if (main != null) tableClass = "gridBodyBOLD";
 
 %>
-
+<%-- 
 <table id="table-<%= id %>" border=1 class="<%= tableClass %>">
 <tr>
-
+ --%>
 <%
 	int offset = 0;
+	String pkLabel[] = new String [q.getColumnCount()+1];
+	String pkDataLink[] = new String [linesPerPage+1];
+	String dataCell[][] = new String[linesPerPage+1][q.getColumnCount()+1];
+
 	if (hasPK && dLink) {
 		offset ++;
 %>
-	<th class="headerRow">Link</th>
-<%
+<!-- 	<th class="headerRow">Link</th>
+ --><%
 	}
 
 	
@@ -220,17 +225,20 @@ Found: <%= filteredCount %>
 			
 			if (pkColList != null && pkColList.contains(colName)) colDisp = "<b>" + colDisp + "</b>";
 			
+			pkLabel[i] = "<a " + ( highlight?"style='background-color:yellow;'" :"") + 
+					" href=\"Javascript:setColumn('" + id + "','" + colName + "', " + (colIdx + offset) + ");\" title=\"" + tooltip + "\">" +
+					colDisp + "</a>" + extraImage;
 %>
-<th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
+<%-- <th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
 	href="Javascript:setColumn(<%= id %>, '<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colDisp%></a>
-	<%= extraImage %>
+	<%= extraImage %><%= cpasDisp %>
 </th>
-<%
+ --%><%
 	} 
 %>
-</tr>
+<!-- </tr>
 
-<%
+ --><%
 	int rowCnt = 0;
 	String pkValues = ""; 
 
@@ -241,9 +249,9 @@ Found: <%= filteredCount %>
 		String rowClass = "oddRow";
 		if (rowCnt%2 == 0) rowClass = "evenRow";
 %>
-<tr class="simplehighlight">
+<!-- <tr class="simplehighlight">
 
-<%
+ --><%
 	if (hasPK && q.hasData() && dLink) {
 		String keyValue = null;
 	
@@ -255,11 +263,12 @@ Found: <%= filteredCount %>
 		pkValues = keyValue;
 		
 		String linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
+		pkDataLink[rowCnt-1] = "<a href='" + linkUrlTree + "'><img src=\"image/chingoo-icon.png\" width=16 height=16 border=0 title=\"Data Link\"></a>";
 %>
-	<td class="<%= rowClass%>">
-		<a href='<%= linkUrlTree %>'><img src="image/chingoo-icon.png" width=16 height=16 border=0 title="Data link"></a>
+<%-- 	<td class="<%= rowClass%>">
+		<a href='<%= linkUrlTree %>'><img src="image/arrows.gif" border=0 title="Data link"></a>
 	</td>
-<%
+ --%><%
 	}
 
 	colIdx=0;
@@ -332,23 +341,68 @@ Found: <%= filteredCount %>
 
 if (pkColList != null && pkColList.contains(colName)) valDisp = "<span class='pk'>" + valDisp + "</span>";
 
+dataCell[rowCnt-1][colIdx-1] = valDisp;
+if (dLink && val!=null && !val.equals("") && isLinked && !linkUrl.startsWith("Javascript")) 
+	dataCell[rowCnt-1][colIdx-1] += "<a target=_blank href=\"" + linkUrl  + "\"><img border=0 src='" + linkImage + "'></a>";
+
+if (dLink && val!=null && !val.equals("") && linkUrl.startsWith("Javascript"))
+	dataCell[rowCnt-1][colIdx-1] += "<a href=\"" + linkUrl  + "\"><img border=0 src='" + linkImage + "'></a>";
+
 %>
-<td class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
-<%-- <%= (val!=null && isLinked?"<a class='inspect' href='" + linkUrl  + "'><img border=0 src='" + linkImage + "'></a>":"")%>
- --%>
+<%-- <td class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
+<%= (val!=null && isLinked?"<a class='inspect' href='" + linkUrl  + "'><img border=0 src='" + linkImage + "'></a>":"")%>
+
 <%= (val!=null && isLinked && linkImage.startsWith("image/view")? "<a href='Javascript:showDialog(" + dialogUrl + ")'><img border=0 src='" + linkImage + "'></a>":"")%>
 <%= (val!=null && isLinked && linkImage.equals("image/download.gif")? "<a href='" + linkUrl + "' target=_blank><img border=0 src='" + linkImage + "'></a>":"")%>
 </td>
-<%
+ --%><%
 		}
 %>
-</tr>
-<%		if (q.hasData()) counter++;
+<!-- </tr>
+ --><%		if (q.hasData()) counter++;
 		if (counter >= linesPerPage) break;
 	}
 	
 %>
+<!-- </table>
+ -->
+ 
+<table id="dataTable" border=1 class="gridBody">
+<% if (dLink) { %>
+<tr>
+	<th class="headerRow"></th>
+<% 
+	for (int j=0; j<Math.min(linesPerPage, filteredCount);j++) {
+%>
+	<th class="headerRow"><%= pkDataLink[j]==null?"&nbsp;":pkDataLink[j] %></th>
+<%
+	}
+%>
+</tr>
+<% } %>
+
+<% 
+	for (int i=0; i<q.getColumnCount();i++) {
+%>
+	<tr class="simplehighlight">
+	<td style="background-color: #D6E7FF"><%= pkLabel[i] %></td>
+<% 
+	for (int j=0; j<Math.min(linesPerPage, filteredCount);j++) {
+%>
+	<td <%= (numberCol[i+1])?"align=right":""%>><%= dataCell[j][i] %></td>
+<%
+	}
+%>
+	</tr>
+<% 
+	}
+%>
+
 </table>
+
+<br/><br/>
+
+
 
 <% if (!showFKLink) return; %>
 <% if (fkLinkTab.size()<=0) return; 
