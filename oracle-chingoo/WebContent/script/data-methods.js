@@ -236,7 +236,11 @@
 	function reloadData(id) {
 		var divName = "div-" + id;
 		var sql = $("#sql-" + id).html();
-//		alert("id=" + id);
+		var ori = $("#ori-" + id).html();
+		pageUrl = "ajax/qry-simple.jsp";
+		if (ori=='V') pageUrl = "ajax/qry-simple-v.jsp";
+
+		//		alert("id=" + id);
 //		alert(sql);		
 		$("#sql").val(sql);
 		$("#id").val(id);
@@ -246,7 +250,7 @@
 		//$('body').css('cursor', 'wait'); 
 		$.ajax({
 			type: 'POST',
-			url: "ajax/qry-simple.jsp",
+			url: pageUrl,
 			data: $("#form0").serialize(),
 			success: function(data){
 				$("#"+divName).html(data);
@@ -334,6 +338,17 @@
 		$("#search"+id).val("");
 		$("#pageNo").val(1);
 		searchTable(id, '');
+	}
+	
+	function transposeToggle(id) {
+		var ori = $("#ori-" + id).html();
+		
+		if (ori=='H') ori = 'V';
+		else ori = 'H';
+		
+		$("#ori-" + id).html(ori);
+
+		reloadData(id);
 	}
 	
 	function showERD(tname) {

@@ -143,3 +143,8 @@ Build 1047
 Build 1048
 	Support Transpose in Query page
 	
+
+Build 1051
+	Data Link support Transpose
+
+	

@@ -154,6 +154,7 @@ Search <input id="globalSearch" style="width: 200px;"/>
 <%-- <%= sql %> --%>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
 <div style="display: none;" id="mode-<%=id%>">hide</div>
+<div style="display: none;" id="ori-<%=id%>">H</div>
 <div style="display: none;" id="hide-<%=id%>"></div>
 
 <br/>
@@ -235,6 +236,7 @@ Search <input id="globalSearch" style="width: 200px;"/>
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
 <div style="display: none;" id="mode-<%=id%>">hide</div>
+<div style="display: none;" id="ori-<%=id%>">H</div>
 <div style="display: none;" id="hide-<%=id%>"></div>
 <div id="div-<%=id%>" style="display: none;"></div>
 <br/>
@@ -276,6 +278,7 @@ Search <input id="globalSearch" style="width: 200px;"/>
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
 <div style="display: none;" id="mode-<%=id%>">hide</div>
+<div style="display: none;" id="ori-<%=id%>">H</div>
 <div style="display: none;" id="hide-<%=id%>"></div>
 <div id="div-<%=id%>" style="display: none;"></div>
 <br/>
@@ -336,6 +339,7 @@ Search <input id="globalSearch" style="width: 200px;"/>
 <div style="display: none;" id="sort-<%=id%>"></div>
 <div style="display: none;" id="sortdir-<%=id%>">0</div>
 <div style="display: none;" id="mode-<%=id%>">sort</div>
+<div style="display: none;" id="ori-<%=id%>">H</div>
 <div id="div-<%=id%>" style="margin-left: 40px; display: none;"></div>
 <br/>
 </div>
