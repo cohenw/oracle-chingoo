@@ -242,7 +242,11 @@
 	            alert(jqXHR.status + " " + errorThrown);
 	        }  
 		});	
-	}	
+	}
+	
+	function editQuery() {
+		$("#queryMain").slideToggle();		
+	}
 	</script>    
 </head> 
 
@@ -268,6 +272,8 @@ Search <input id="globalSearch" style="width: 200px;"/>
 </td>
 </table>
 <br/>
+
+<div id="queryMain">
 
 <a href="Javascript:toggleHelp()"><img  style="float: left" id="helpDivImage" border="0" src="image/minus.gif"></a>
 <div id="div-help" style="float: left">
@@ -371,6 +377,9 @@ Up to
 <input type="button" value="Explain plan" onClick="Javascript:explainPlan()"/>
 </form>
 
+</div> <!-- end of query main -->
+<a href="Javascript:editQuery()">Edit Query</a>
+
 <form name="form0" id="form0">
 <textarea style="display: none;" id="sql" name="sql" ><%= sql %></textarea>
 <input type="hidden" id="sortColumn" name="sortColumn" value="">
@@ -378,6 +387,7 @@ Up to
 <input type="hidden" id="hideColumn" name="hideColumn" value="">
 <input type="hidden" id="filterColumn" name="filterColumn" value="">
 <input type="hidden" id="filterValue" name="filterValue" value="">
+<input type="hidden" id="filter2" name="filter2" value="">
 <input type="hidden" id="searchValue" name="searchValue" value="">
 <input type="hidden" id="pageNo" name="pageNo" value="1">
 <input type="hidden" id="rowsPerPage" name="rowsPerPage" value="20">
@@ -425,11 +435,15 @@ Up to
 
  -->
 </TD>
+<!-- 
 <TD><a class="qryBtn" id="modeFilter" href="Javascript:setDoMode('filter')">Filter</a></TD>
 <TD><span id="filter-div"></span></TD>
+ -->
+<TD><a class="qryBtn" id="modeFilter2" href="Javascript:setDoMode('filter2')">Filter</a></TD>
 </TABLE>
 </div>
 <BR/>
+<div id="filter2-div" style="display:none"></div>
 
 <div id="data-div">
 <jsp:include page="ajax/qry.jsp">
@@ -462,6 +476,10 @@ Up to
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
+
+  $(document).ready(function(){
+  	$("#queryMain").slideUp();
+   });
 
 </script>
 
