@@ -29,6 +29,7 @@
 	
 	String filterColumn = request.getParameter("filterColumn");
 	String filterValue = request.getParameter("filterValue");
+	String filter2 = request.getParameter("filter2");
 	String searchValue = request.getParameter("searchValue");
 	if (searchValue==null) searchValue = "";
 /*
@@ -79,6 +80,10 @@
 			filterColumn = q.getColumnLabel(0);
 		}
 		q.filter(filterColumn, filterValue);
+	}
+	
+	if (filter2 != null && !filter2.equals("")) {
+		q.filter2(filter2);
 	}
 	
 	if (searchValue !=null && !searchValue.equals("")) {
@@ -207,7 +212,7 @@ if (!hasPK && q.hasColumn("ROWID")) hasRowid = true;
 <%= cn.getUrlString() %>&nbsp;&nbsp;&nbsp;&nbsp; <%= new Date() %>
 --%>
  
-<pre style="color: #000000;"><%= sql %></pre>
+<pre style="color: #0000FF; font-size: 20px;"><b><%= sql %></b></pre>
 <% if (pgNo>1) { %>
 <a href="Javascript:gotoPage(<%= pgNo - 1%>)"><img border=0 src="image/btn-prev.png" align="top"></a>
 <% } %>

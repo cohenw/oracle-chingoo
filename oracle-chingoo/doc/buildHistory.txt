@@ -147,4 +147,7 @@ Build 1048
 Build 1051
 	Data Link support Transpose
 
+Build 1053
+	Filter2 for multiple filters 
+
 	
