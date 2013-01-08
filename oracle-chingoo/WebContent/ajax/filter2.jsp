@@ -39,7 +39,7 @@ for (int c=0; c<q.getColumnCount();c++) {
 	String cname = q.getColumnLabel(c);
 
 %>
-<th class="headerRow"><%= cname.toLowerCase() %> <a href="Javascript:removeFilterCol(<%=c+1%>)"><img src="image/delete.png"></a></th>
+<th class="headerRow"><%= cname.toLowerCase() %> <a href="Javascript:removeFilterCol(<%=c+1%>)"><img border=0 src="image/delete.png"></a></th>
 <%
 }
 %>

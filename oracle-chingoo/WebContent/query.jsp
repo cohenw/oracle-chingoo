@@ -247,6 +247,11 @@
 	function editQuery() {
 		$("#queryMain").slideToggle();		
 	}
+	
+	function reloadQuery() {
+		$("#form1").submit();		
+	}
+	
 	</script>    
 </head> 
 
@@ -273,6 +278,7 @@ Search <input id="globalSearch" style="width: 200px;"/>
 </table>
 <br/>
 
+<a href="Javascript:editQuery()">Edit Query</a>
 <div id="queryMain">
 
 <a href="Javascript:toggleHelp()"><img  style="float: left" id="helpDivImage" border="0" src="image/minus.gif"></a>
@@ -371,14 +377,14 @@ Up to
 <input type="submit" name="submit" value="Submit"/>
  -->
 <input type="button" value="Submit" onClick="Javascript:submitQuery()"/>
-&nbsp;
+<!-- &nbsp;
 <input type="button" value="Download" onClick="Javascript:download()"/>
 &nbsp;
 <input type="button" value="Explain plan" onClick="Javascript:explainPlan()"/>
+ -->
 </form>
 
 </div> <!-- end of query main -->
-<a href="Javascript:editQuery()">Edit Query</a>
 
 <form name="form0" id="form0">
 <textarea style="display: none;" id="sql" name="sql" ><%= sql %></textarea>
@@ -440,6 +446,25 @@ Up to
 <TD><span id="filter-div"></span></TD>
  -->
 <TD><a class="qryBtn" id="modeFilter2" href="Javascript:setDoMode('filter2')">Filter</a></TD>
+
+<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>
+<input type="button" value="Transpose" onClick="Javascript:setTranspose()"/>
+</td>
+<td>
+<input type="button" value="Filter" onClick="Javascript:filter2()"/>
+</td>
+<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>
+<input type="button" value="Download" onClick="Javascript:download()"/>
+</td>
+<td>
+<input type="button" value="Explain plan" onClick="Javascript:explainPlan()"/>
+</td>
+<td>
+<input type="button" value="Reload" onClick="Javascript:reloadQuery()"/>
+</td>
+
 </TABLE>
 </div>
 <BR/>
