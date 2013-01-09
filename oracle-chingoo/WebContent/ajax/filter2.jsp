@@ -52,7 +52,7 @@ for (int c=0; c<q.getColumnCount();c++) {
 %>
 
 <td>
-<select size=10 id="filterSelect-<%=c%>" class="filterCol" onchange="setFilter()">
+<select size=10 id="filterSelect-<%=c%>" class="filterCol" onchange="setFilter()" style="font-size: 12px;">
 <option value="">All</option>
 <% for (int i=0; i<list.size(); i++) { 
 		FilterRecord rec = list.get(i);
