@@ -278,7 +278,6 @@ Search <input id="globalSearch" style="width: 200px;"/>
 </table>
 <br/>
 
-<a href="Javascript:editQuery()">Edit Query</a>
 <div id="queryMain">
 
 <a href="Javascript:toggleHelp()"><img  style="float: left" id="helpDivImage" border="0" src="image/minus.gif"></a>

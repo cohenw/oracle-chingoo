@@ -212,8 +212,9 @@ if (!hasPK && q.hasColumn("ROWID")) hasRowid = true;
 <%= cn.getUrlString() %>&nbsp;&nbsp;&nbsp;&nbsp; <%= new Date() %>
 --%>
  
-<%= cn.getUrlString() %> - <%= new java.util.Date() %> 
-<pre style="color: #0000FF; font-size: 20px;"><b><%= sql %></b></pre>
+<span style="color:#666666;"><%= cn.getUrlString() %> - <%= new java.util.Date() %></span> 
+<pre style="color: #0000FF; font-size: 18px;"><b><%= sql %></b><input style="margin-left: 20px;" type="button" value="Edit" onClick="Javascript:editQuery()"/></pre>
+
 <% if (pgNo>1) { %>
 <a href="Javascript:gotoPage(<%= pgNo - 1%>)"><img border=0 src="image/btn-prev.png" align="top"></a>
 <% } %>
