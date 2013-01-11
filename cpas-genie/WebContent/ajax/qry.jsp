@@ -214,7 +214,7 @@ if (!hasPK && q.hasColumn("ROWID")) hasRowid = true;
 --%>
  
 <span style="color:#666666;"><%= cn.getUrlString() %> - <%= new java.util.Date() %></span> 
-<pre style="color: #0000FF; font-size: 18px;"><b><%= sql %></b><input style="margin-left: 20px;" type="button" value="Edit" onClick="Javascript:editQuery()"/></pre>
+<pre style="color: #0000FF; font-size: 18px;"><b><%= sql %></b><a title="Edit Query" style="margin-left: 10px;" href="Javascript:editQuery()"><img border=0 src="image/sql.png"></a></pre>
 
 <% if (pgNo>1) { %>
 <a href="Javascript:gotoPage(<%= pgNo - 1%>)"><img border=0 src="image/btn-prev.png" align="top"></a>

@@ -140,6 +140,7 @@
 <option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1521/SDCDEV">S-ORA-002.SDCDEV</option>
 <option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1521/SDCERA">S-ORA-002.SDCERA</option>
 <option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1521/SSGQA">S-ORA-002.SSGQA</option>
+<option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1526/KCERA">S-ORA-002.KCERA</option>
 <option></option>
 
 <option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR">S-ORA-003.BALTIMOR</option>
@@ -165,7 +166,6 @@
 <option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/GENDYN">S-ORA-004.GENDYN</option>
 <option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/IBT">S-ORA-004.IBT</option>
 <option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/INTEGRA">S-ORA-004.INTEGRA</option>
-<option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/KCERA">S-ORA-004.KCERA</option>
 <option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/KEYSTONE">S-ORA-004.KEYSTONE</option>
 <option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/OEFROZEN">S-ORA-004.OEFROZEN</option>
 <option value="jdbc:oracle:thin:@s-ora-004.cpas.com:1521/PPL">S-ORA-004.PPL</option>
@@ -275,7 +275,7 @@ GOODYEAR<br/>
 <br/>
 
 KCERA<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/KCERA', 'client_55kcd')">client_55kcd@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/KCERA</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/KCERA', 'client_55kcd')">client_55kcd@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/KCERA</a>
 <br/>
 
 MCERA<br/>
@@ -362,6 +362,10 @@ VANGUARD<br/>
 <div style="margin: 10px; padding:5px; width:450px; height:300px; overflow: scroll; border: 1px solid #666666;">
 <b>What's New.</b>
 <br/><br/>
+<li>Multiple Filter enabled</li>
+<li>CPAS online slave event query added</li>
+<li>Support Transpose in Query page.</li>
+<li>Suppoer queries start with WITH.</li>
 <li>Query support Explain Plan</li>
 <li>Calc Detail/Calc Html Detail added.</li>
 <li>Search view, trigger added.</li>

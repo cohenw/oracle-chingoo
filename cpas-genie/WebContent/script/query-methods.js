@@ -372,16 +372,26 @@ var qryPage = 'ajax/qry.jsp';
 	}
 
 	function hideFilterWithOneValue() {
+   	 	var hideCol = []; 
+
 		$("select.filterCol").each(function() {
 			var name = $(this).attr("id");
 			var len = $("#" + name + " option").length;
 			if (len <= 2) {
+				$(this).hide();
 				var n=name.split("-");
-				console.log('removing ' + n[1]);
-				removeFilterCol(eval(n[1]+1));
+	   	    	hideCol.push( 1 + eval(n[1]) );
 			} 
 			
-		});		
+		});
+		
+   	 	for (var i = 0, l = hideCol.length; i < l; ++i) {
+   	 		//alert('hide ' + i );
+//   	 		hideColumn(id, hideCol[i]);
+   	 		console.log('hide ' + hideCol[i]);
+   	 		removeFilterCol(eval(hideCol[i]));
+   	    }
+		
 	}
 	
 	function hideIfAny() {
