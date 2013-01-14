@@ -150,4 +150,6 @@ Build 1051
 Build 1053
 	Filter2 for multiple filters 
 
+Build 1054
+	UTF-8 issue
 	

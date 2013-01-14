@@ -29,9 +29,9 @@
 	}
 %>
 <a href="Javascript:resetFilter()">Reset filter</a>
-<!-- &nbsp;
-<a href="Javascript:hideFilterWithOneValue()">Hide filters that have only one value</a>
- -->
+&nbsp;&nbsp;
+<a href="Javascript:hideFilterWithOneValue()">Hide useless filters</a>
+
 <table id="filterTable" border=1 class="gridBody">
 <tr>
 <%
