@@ -336,11 +336,17 @@ var qryPage = 'ajax/qry.jsp';
 				
 				setHighlight();
 				//$('body').css('cursor', 'default'); 
+
+				$("#qqq").click(function(){
+			        editQuery();
+			    });		
+
 			},
             error:function (jqXHR, textStatus, errorThrown){
             	alert(jqXHR.status + " " + errorThrown);
             }  
 		});	
+		
 	}
 	
 	function applyFilter(value) {
