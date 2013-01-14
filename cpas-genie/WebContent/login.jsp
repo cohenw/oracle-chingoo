@@ -57,6 +57,7 @@
 	<meta name="description" content="Genie is an open-source, web based oracle database schema navigator." />
 	<meta name="keywords" content="Oracle Web Database OpenSource JDBC" />
 	<meta name="author" content="Spencer Hwang" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
 
     <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'> 
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
