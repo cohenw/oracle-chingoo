@@ -6,7 +6,6 @@
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
-
 <%!
 	ArrayList<String> getBindVariableList(String qry) {
 		ArrayList<String> al = new ArrayList<String>();
@@ -505,6 +504,9 @@ Up to
 	  //alert(rc);
 	  if (rc != "0") {
 	  	$("#queryMain").slideUp();
+	    $("#qqq").click(function(){
+	        editQuery();
+	      });
 	  }
    });
 

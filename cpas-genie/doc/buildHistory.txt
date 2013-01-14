@@ -155,5 +155,6 @@ Build CPAS1052
 Build CPAS1053
 	Filter2 for multiple filters 
 
-
-	
+Build CPAS1054
+	UTF-8 issue
+ 
