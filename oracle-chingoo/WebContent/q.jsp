@@ -15,6 +15,8 @@
 <html>
 <head> 
 	<title>Q</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+
     <script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
     <script src="script/worksheet-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>

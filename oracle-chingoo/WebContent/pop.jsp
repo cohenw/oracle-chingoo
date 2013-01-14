@@ -21,6 +21,8 @@
 <html>
 <head> 
 	<title><%= key %></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+
 	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
 	<script src="script/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
     <script src="script/chingoo.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
