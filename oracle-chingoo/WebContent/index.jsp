@@ -470,6 +470,13 @@ Spencer Hwang - the creator of Chingoo<br/>
              2                    // Sets the scope to session-level.  Optional parameter.
           ]);
   
+  _gaq.push(['_setCustomVar',
+             5,                   // This custom var is set to slot #1.  Required parameter.
+             'URL',     // The name acts as a kind of category for the user activity.  Required parameter.
+             '<%= request.getRequestURL() %>',               // This value of the custom variable.  Required parameter.
+             2                    // Sets the scope to session-level.  Optional parameter.
+          ]);
+
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';

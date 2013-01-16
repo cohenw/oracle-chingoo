@@ -512,6 +512,11 @@ Up to
 	    $("#qqq").click(function(){
 	        editQuery();
 	      });
+		$('#qqq').hover(function(){
+			$(this).addClass('datahighlight');
+		},function(){
+			$(this).removeClass('datahighlight');
+		});	    
 	  }
    });
 
