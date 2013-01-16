@@ -40,6 +40,8 @@ public class ClobDownloadServlet extends HttpServlet {
     	
 //    	String sql = "SELECT " + col + " FROM " + table + " WHERE " + conCols + "='" + key +"'";
     	String sql = "SELECT " + col + " FROM " + table + " WHERE " + condition;
+    	if (condition.equals("=''"))
+        	sql = "SELECT " + col + " FROM " + table + "";
     	if (sql.endsWith(";")) sql = sql.substring(0, sql.length()-1);
     	sql = sql.replaceAll("&gt;",">").replace("&lt;","<");
     	
