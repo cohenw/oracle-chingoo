@@ -40,6 +40,7 @@ public String extractJS(String str) {
 <head> 
 	<title>Chingoo Sessions <%= ss.size() %></title>
     <script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="script/chingoo.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
     <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
     <script src="script/worksheet-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
 
@@ -56,15 +57,16 @@ public String extractJS(String str) {
 
 <b>Chingoo Sessions</b>
 <br/><br/>
-
-<table border=1>
+<%= new Date() %><br/>
+<table id="dataTable" border=1 class="gridBody">
 <tr>
-	<th>Database / User</th>
-	<th>Hist</th>
-	<th>Count</th>
-	<th>Queries</th>
+	<th class="headerRow">Database / User</th>
+	<th class="headerRow">Hist</th>
+	<th class="headerRow">Count</th>
+	<th class="headerRow">Queries</th>
 </tr>
 <% 
+	int rowCnt = 0;
 	for (Connect cn : ss) {
 		HashMap<String,QueryLog> map = cn.getQueryHistory();
 		
@@ -79,9 +81,14 @@ public String extractJS(String str) {
     		}
     	}		
     	String savedHistory = cn.getAddedHistory();
+
+    	rowCnt++;
+    	String rowClass = "oddRow";
+    	if (rowCnt%2 == 0) rowClass = "evenRow";
+    	
 %>
-<tr>
-	<td valign=top>
+<tr class="simplehighlight">
+	<td valign=top class="<%= rowClass%>">
 		<%= cn.getUrlString() %><br/>
 		IP: <%= cn.getIPAddress() %><br/>
 		Agent: <%= cn.getUserAgent() %><br/>
@@ -89,9 +96,9 @@ public String extractJS(String str) {
 		Login Date: <%= cn.getLoginDate() %><br/>
 		Last Date: <%= cn.getLastDate() %><br/>
 	</td>
-	<td nowrap valign=top><%= extractJS(savedHistory) %>&nbsp;</td>
-	<td nowrap valign=top><%= map.size() %>&nbsp;</td>
-	<td valign=top><p style="white-space:pre;"><%= qry %>&nbsp;</p></td>
+	<td nowrap valign=top class="<%= rowClass%>"><%= extractJS(savedHistory) %>&nbsp;</td>
+	<td nowrap valign=top class="<%= rowClass%>"><%= map.size() %>&nbsp;</td>
+	<td valign=top class="<%= rowClass%>"><p style="white-space:pre;"><%= qry %>&nbsp;</p></td>
 </tr>
 
 <% 

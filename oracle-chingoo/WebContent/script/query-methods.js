@@ -340,6 +340,12 @@ var qryPage = 'ajax/qry.jsp';
 				$("#qqq").click(function(){
 			        editQuery();
 			    });		
+
+				$('#qqq').hover(function(){
+					$(this).addClass('datahighlight');
+				},function(){
+					$(this).removeClass('datahighlight');
+				});	    
 				
 			},
             error:function (jqXHR, textStatus, errorThrown){
