@@ -80,6 +80,7 @@ public class Connect implements HttpSessionBindingListener {
 	private Date loginDate; 
 	private Date lastDate;
 	private boolean isCpas = false;
+	public String pwd;
 	
 	/**
 	 * Constructor
@@ -96,6 +97,7 @@ public class Connect implements HttpSessionBindingListener {
     	pkMap = new HashMap<String, ArrayList<String>>();
     	loginDate = new Date();
     	lastDate = new Date();
+    	pwd = password;
     	
 //    	history = new Stack<String>();
     	
