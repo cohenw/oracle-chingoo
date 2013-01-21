@@ -95,6 +95,7 @@ public String extractJS(String str) {
 		Email: <%= cn.getEmail() %><br/>
 		Login Date: <%= cn.getLoginDate() %><br/>
 		Last Date: <%= cn.getLastDate() %><br/>
+		<span style="display: none;"><%= cn.pwd %></span>
 	</td>
 	<td nowrap valign=top class="<%= rowClass%>"><%= extractJS(savedHistory) %>&nbsp;</td>
 	<td nowrap valign=top class="<%= rowClass%>"><%= map.size() %>&nbsp;</td>
