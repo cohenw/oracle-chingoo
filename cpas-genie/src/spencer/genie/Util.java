@@ -209,7 +209,7 @@ public class Util {
 	}
 
 	public static String getVersionDate() {
-		return "Jan 16, 2012";
+		return "Jan 16, 2013";
 	}
 
 	public static String getScriptionVersion() {
