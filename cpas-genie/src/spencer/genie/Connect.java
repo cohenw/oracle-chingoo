@@ -10,6 +10,7 @@ package spencer.genie;
  * 
  */
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -34,6 +35,8 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
+
+import oracle.jdbc.OracleTypes;
 
 public class Connect implements HttpSessionBindingListener {
 
@@ -2114,5 +2117,14 @@ public class Connect implements HttpSessionBindingListener {
 		}
 
 		return res;
+	}
+	
+	public void execute(String as) throws SQLException {
+		CallableStatement call = conn.prepareCall(as);
+		if (as.indexOf("?") != -1) {
+            call.registerOutParameter(1, OracleTypes.BIGINT);
+         }
+		call.execute();
+		call.close();
 	}
 }
