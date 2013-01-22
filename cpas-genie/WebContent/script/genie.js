@@ -61,7 +61,7 @@
 		$("#searchFilter").val("");
 		$("#inner-table").html('');
 	}
-	
+
 	function loadObject(oName) {
 		saveForNavigation();
 		var objectName = oName;

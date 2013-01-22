@@ -29,6 +29,7 @@
 	
 </head>
 
+<div style="font-size: 18px;">
 <b>CPAS Catalog</b>
 <br/><br/>
 <a href="cpas-treeview.jsp" target="_blank">CPAS Tree View</a> |
@@ -108,3 +109,4 @@
 <li><a href="Javascript:qr('SELECT * FROM REQUEST ORDER BY REQUESTID DESC')">Latest Requests</a></li>
 <li><a href="Javascript:qr('SELECT * FROM WIZARD_RUN A ORDER BY RUNID DESC')">Latest Wizards</a></li>
 
+</div>

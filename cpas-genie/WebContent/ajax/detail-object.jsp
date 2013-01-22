@@ -1,6 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
-	import="java.sql.*" 
+	import="java.sql.*"
+	import="java.net.URLEncoder" 
 	import="spencer.genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
@@ -14,9 +15,12 @@
 	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nObject: " + object);
 
 	String qry = "SELECT object_type FROM user_objects where object_name='" + object + "'";
-//	System.out.println(qry);
+//System.out.println(qry);
 	String oType = cn.queryOne(qry);
-	
+
+	 String encoded = URLEncoder.encode(object, "UTF-8");
+	 object = encoded;
+	 
 	if (oType.equals("TABLE")) {
 		response.sendRedirect("detail-table.jsp?table=" + object);
 	} else if (oType.equals("VIEW")) {

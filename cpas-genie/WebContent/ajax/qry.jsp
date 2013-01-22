@@ -572,6 +572,52 @@ if (fkLinkTab.size()>0 && dLink && false) {
 %>
 </table>
 
+<% if (pgNo>1) { %>
+<a href="Javascript:gotoPage(<%= pgNo - 1%>)"><img border=0 src="image/btn-prev.png" align="top"></a>
+<% } %>
+
+<% if (totalPage > 1) { %>
+Page: <b><%= pgNo %></b> of <%= totalPage %>
+<% } %>
+
+<% if (q.getTotalPage(linesPerPage) > pgNo) { %>
+<a href="Javascript:gotoPage(<%= pgNo + 1%>)"><img border=0 src="image/btn-next.png" align="top"></a>
+<% } %>
+
+Records: <b><%= filteredCount %></b>
+<% if (totalCount > filteredCount) {%>
+(<%= totalCount %>)
+<% } %>
+
+<% if (filteredCount > 10) {%>
+&nbsp;&nbsp;&nbsp;
+Rows/Page 
+<select id="linePerPage" name="linePerPage" onChange="rowsPerPage(this.options[this.selectedIndex].value);">
+<option value="1" <%= (linesPerPage==1?"SELECTED":"") %>>1</option>
+<option value="2" <%= (linesPerPage==2?"SELECTED":"") %>>2</option>
+<option value="5" <%= (linesPerPage==5?"SELECTED":"") %>>5</option>
+<option value="10" <%= (linesPerPage==10?"SELECTED":"") %>>10</option>
+<option value="20" <%= (linesPerPage==20?"SELECTED":"") %>>20</option>
+<% if (totalCount>=20) { %>
+<option value="50" <%= (linesPerPage==50?"SELECTED":"") %>>50</option>
+<% } %>
+<% if (totalCount>=50) { %>
+<option value="100" <%= (linesPerPage==100?"SELECTED":"") %>>100</option>
+<% } %>
+<% if (totalCount>=100) { %>
+<option value="200" <%= (linesPerPage==200?"SELECTED":"") %>>200</option>
+<% } %>
+<% if (totalCount>=200) { %>
+<option value="500" <%= (linesPerPage==500?"SELECTED":"") %>>500</option>
+<% } %>
+<% if (totalCount>=500) { %>
+<option value="1000" <%= (linesPerPage==1000?"SELECTED":"") %>>1000</option>
+<% } %>
+</select>
+
+<% } %>
+
+
 <input id="recordCount" value="<%= q.getRecordCount() %>" type="hidden">
 
 <%--
