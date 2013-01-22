@@ -165,7 +165,7 @@ function run() {
 
 function runMain() {
 	var mainQry = $("#mainQry").html();
-
+//alert(mainQry);
 	var clnt = $("#CLNT").val();
 	var mkey = $("#MKEY").val();
 	var erkey = $("#ERKEY").val();
@@ -191,11 +191,30 @@ function runMain() {
 	newQry=newQry.replace(new RegExp(":S.MEMBERID", 'g'), "'" + memberid + "'");
 	newQry=newQry.replace(new RegExp(":S.TASKID", 'g'), "'" + taskid + "'");
 	newQry=newQry.replace(new RegExp(":S.USERID", 'g'), "'" + userid + "'");
-	
+//alert(newQry);
+
+var aStmt = $("#div-as").html();
+var newAs=aStmt.replace(new RegExp(":S.CLNT", 'g'), "'" + clnt + "'");
+newAs=newAs.replace(new RegExp(":S.MKEY", 'g'), "'" + mkey + "'");
+newAs=newAs.replace(new RegExp(":S.ERKEY", 'g'), "'" + erkey + "'");
+newAs=newAs.replace(new RegExp(":S.PLAN", 'g'), "'" + plan + "'");
+newAs=newAs.replace(new RegExp(":S.ACCOUNTID", 'g'), "'" + accountid + "'");
+newAs=newAs.replace(new RegExp(":S.PERSONID", 'g'), "'" + personid + "'");
+newAs=newAs.replace(new RegExp(":S.SESSIONID", 'g'), "'" + sessionid + "'");
+newAs=newAs.replace(new RegExp(":S.PROCESSID", 'g'), "'" + processid + "'");
+newAs=newAs.replace(new RegExp(":S.SECLEVEL", 'g'), "'" + seclevel + "'");
+newAs=newAs.replace(new RegExp(":S.MEMBERID", 'g'), "'" + memberid + "'");
+newAs=newAs.replace(new RegExp(":S.TASKID", 'g'), "'" + taskid + "'");
+newAs=newAs.replace(new RegExp(":S.USERID", 'g'), "'" + userid + "'");
+newAs=newAs.replace(new RegExp(":EXC", 'g'), "?");
+
+//alert(newAs);
+
 //	alert(mainQry);
 	$("#sql-1").html(newQry);
 	$("#layout").val("<%=mainLayout%>");
 	$("#sql2").val($("#subQry").html());
+	$("#as").val(newAs);
 //	alert(newQry);
 
 	$("#div-1").html("");
@@ -407,7 +426,7 @@ function submitSub() {
 <hr/>
 <b>Action</b>
 
-<div style="padding: 4px;"><%= as %></div>
+<div style="padding: 4px;" id="div-as"><%= as %></div>
 <hr/>
 <%
 	if (mainLayout != null && mainLayout.startsWith("SELECT")) {
@@ -463,6 +482,7 @@ function submitSub() {
 <form name="form0" id="form0" action="query.jsp">
 <input id="sql" name="sql" type="hidden" value=""/>
 <input id="sql2" name="sql2" type="hidden" value=""/>
+<input id="as" name="as" type="hidden" value=""/>
 <input id="dataLink" name="dataLink" type="hidden" value="1"/>
 <input id="id" name="id" type="hidden" value=""/>
 <input id="showFK" name="showFK" type="hidden" value="0"/>

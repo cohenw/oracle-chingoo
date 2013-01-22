@@ -15,7 +15,9 @@
 	String id = request.getParameter("id");
 	String layout = request.getParameter("layout");
 	String appLayout = request.getParameter("applylayout");
-	
+
+	String as = request.getParameter("as");  // action statement
+System.out.println("AS=" + as);	
 	boolean showFKLink = false;  
 
 	String pageNo = request.getParameter("pageNo");
@@ -35,6 +37,10 @@
 	if (searchValue==null) searchValue = "";
 
 	Connect cn = (Connect) session.getAttribute("CN");
+	
+if (as != null && as.startsWith("BEGIN")) {
+	cn.execute(as);
+}
 	Query q = new Query(cn, sql, false);
 
 	if (q.isError()) {

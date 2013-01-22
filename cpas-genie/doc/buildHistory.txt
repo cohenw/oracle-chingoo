@@ -161,4 +161,11 @@ Build CPAS1054
 Build CPAS1055
 	GA track custom variable5 - website url
 	Support JDK5
+
+Build CPAS1056
+	Fix CLOB/BLOB Download servlet when there is no PK
+
+Build CPAS1057
+	Simulator support Action Statement (ex: populate temp table)
+
 	

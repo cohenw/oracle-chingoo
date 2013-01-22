@@ -339,7 +339,11 @@ SEARSDB<br/>
 
 
 SIGMA<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/SIGMA', 'client_55sg')">client_55sg@jdbc:oracle:thin:@s-ora-003.cpas.com:1521/SIGMA</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/SIGMA', 'client_55sg')">client_55sg@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/SIGMA</a>
+<br/>
+
+SVB Aruba<br/>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SVB', 'SVB_CLIENT_TEST')">SVB_CLIENT_TEST@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SVB</a>
 <br/>
 
 TCERA<br/>
