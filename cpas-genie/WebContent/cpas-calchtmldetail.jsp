@@ -10,6 +10,7 @@
 	String calcid = request.getParameter("calcid");
 
 	String tabs[][] = {
+			
 			{"XX", "Options", ""},
 			{"CC", "General", ""},
 			{"DD", "Service", ""},
