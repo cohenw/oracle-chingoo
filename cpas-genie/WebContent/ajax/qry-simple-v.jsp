@@ -355,6 +355,13 @@ Found: <%= filteredCount %>
 						}
 					}
 
+					if (!isLinked && colName.endsWith("PERSONID")) {
+						isLinked = true;
+						lTable = "PERSON";
+						keyValue = val;
+						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
+					}
+
 					if (val==null || val.equals("*")) isLinked = false;
 					if (isLinked) {
 						isLogicalLink = true;

@@ -107,6 +107,6 @@
 <b>Query</b><br/>
 <li><a href="Javascript:qr('SELECT * FROM BATCH ORDER BY PROCESSID DESC')">Latest Batches</a></li>
 <li><a href="Javascript:qr('SELECT * FROM REQUEST ORDER BY REQUESTID DESC')">Latest Requests</a></li>
-<li><a href="Javascript:qr('SELECT * FROM WIZARD_RUN A ORDER BY RUNID DESC')">Latest Wizards</a></li>
+<li><a href="Javascript:qr('SELECT * FROM WEBWIZARD ORDER BY RUNID DESC')">Latest Web Wizards</a></li>
 
 </div>

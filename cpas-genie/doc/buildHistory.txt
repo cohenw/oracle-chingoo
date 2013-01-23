@@ -168,4 +168,10 @@ Build CPAS1056
 Build CPAS1057
 	Simulator support Action Statement (ex: populate temp table)
 
+Build CPAS1058
+	Simulator support S:LANG (Language) parameter
+	Latest web wizards query
+	Logical link to %PERSONID columns
+
+	
 	
