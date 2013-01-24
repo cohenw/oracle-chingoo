@@ -70,7 +70,7 @@
 %>
 <b><%= tv.get(0)[1] %></b> <%= tv.get(0)[2] %>
 <a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=sql%>"/></a>
-<a href="javascript:openSimulator()">Simulator</a>
+<a href="javascript:openSimulator()">Simulator <img border=0 src="http://icons.iconarchive.com/icons/cornmanthe3rd/plex/16/Media-play-2-icon.png"></a>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
 <br/>
 <%

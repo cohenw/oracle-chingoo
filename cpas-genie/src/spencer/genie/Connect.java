@@ -45,7 +45,7 @@ public class Connect implements HttpSessionBindingListener {
 	private Connection conn = null;
 	private String urlString = null;
 	private String message = "";
-	private List<String> tables;
+	private List<String> tvs;
 
 	private HashSet<String> comment_tables = new HashSet<String>();
 	private Hashtable<String,String> comments;
@@ -116,7 +116,7 @@ public class Connect implements HttpSessionBindingListener {
             
             if (!loadData) return; 
             	
-            tables = new Vector<String>();
+            tvs = new Vector<String>();
             comments = new Hashtable<String, String>();
             constraints = new Hashtable<String, String>();
             pkByTab = new Hashtable<String, String>();
@@ -197,12 +197,12 @@ public class Connect implements HttpSessionBindingListener {
     	return conn;
     }
     
-    public List<String> getTables() {
-    	return this.tables;
+    public List<String> getTVS() {
+    	return this.tvs;
     }
 
-    public String getTable(int idx) {
-    	return (String) tables.get(idx);
+    public String getTVS(int idx) {
+    	return (String) tvs.get(idx);
     }
     
     public String getUrlString() {
@@ -337,7 +337,7 @@ public class Connect implements HttpSessionBindingListener {
 		clearCache();
 		
 		loadSchema();
-		loadTables();
+		loadTVS();  // table view synonym
 		loadConstraints();
 		loadPrimaryKeys();
 		loadForeignKeys();
@@ -625,18 +625,18 @@ public class Connect implements HttpSessionBindingListener {
 		
 	}
 	
-	private synchronized void loadTables() {
-		tables.clear();
+	private synchronized void loadTVS() {
+		tvs.clear();
 		try {
 			DatabaseMetaData dbm = conn.getMetaData();
-			String[] types = {"TABLE"};
+			String[] types = {"TABLE", "VIEW", "SYNONYM"};
 			ResultSet rs = dbm.getTables(null,schemaName.toUpperCase(),"%",types);
 			//	System.out.println("Table name:");
 			while (rs.next()){
 				String tableSchema = rs.getString(2);
 				String tableName = rs.getString("TABLE_NAME");
 //				tables.add(tableSchema + "." + table);
-				tables.add(tableName);
+				tvs.add(tableName);
 				
 //		        // Get the table name
 //		        String tableName = rs.getString(3);
@@ -646,13 +646,14 @@ public class Connect implements HttpSessionBindingListener {
 //		        String tableSchema = rs.getString(2);
 //				tables.add(tableName + "|" + tableCatalog + "|" + tableSchema);
 				
-				//System.out.println(table);
+//				System.out.println(tableName);
 			}
 		} catch (SQLException e) {
             System.err.println ("4 Cannot connect to database server");
             e.printStackTrace();
             message = e.getMessage();
 		}
+		System.out.println("Loaded TVS " + tvs.size());
 	}
 	
 	public synchronized String genie(String value, String tab, String targetCol, String sourceCol) {
@@ -1561,7 +1562,7 @@ public class Connect implements HttpSessionBindingListener {
 	public synchronized List<TableCol> getTableDetail(String owner, String tname) throws SQLException {
 		if (owner==null) {
 			// see if the table is users
-			if (tables.contains(tname)) {
+			if (tvs.contains(tname)) {
 				owner = schemaName.toUpperCase();
 			} else {
 				String syn = this.getSynonym(tname);

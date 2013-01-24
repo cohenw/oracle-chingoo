@@ -6,28 +6,31 @@
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
+
 <%!
 	ArrayList<String> getBindVariableList(String qry) {
 		ArrayList<String> al = new ArrayList<String>();
 		if (qry==null) return al;
 		StringTokenizer st = new StringTokenizer(qry, " =)\n");
+
 		while (st.hasMoreTokens()) {
 			String token = st.nextToken().trim();
-			if (token.startsWith(":")) {
+			if (token.startsWith(":") && !token.startsWith(":=") && token.length()>1) {
 				System.out.println("token=" + token);
 				al.add(token);
 			}
 		}
-	
 		return al;
 	}
 
-	public boolean isTable(String tname) {
+	public boolean isTVS(Connect cn, String tname) {
 		String temp = tname.toUpperCase().trim();
 	
 		if (tname.contains("\'")) return false;
 		if (tname.contains(" ")) return false;
-		return true;
+		
+		return cn.getTVS().contains(tname);
+		//return true;
 	}
 %>
 <%
@@ -136,7 +139,7 @@
     <script type="text/javascript">
 	$(document).ready(function() {
 <% for (String tname : tbls) { 
-		if (isTable(tname)) {
+		if (isTVS(cn, tname)) {
 %>
 			showTable('<%=tname%>');
 <%
