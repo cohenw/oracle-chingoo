@@ -411,7 +411,7 @@ public class CpasUtil {
 	}
 
 	public String getQryStr(String selectstmt, String value, Query q) {
-		if (selectstmt == null)
+		if (selectstmt == null || q==null)
 			return null;
 		String qry = selectstmt.replaceAll("\n", " ");
 

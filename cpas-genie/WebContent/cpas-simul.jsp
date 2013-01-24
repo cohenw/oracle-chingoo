@@ -367,7 +367,7 @@ function submitSub() {
 <body>
 
 	<table border=0>
-		<td><img src="image/cpas.jpg"
+		<td><img src="http://icons.iconarchive.com/icons/cornmanthe3rd/plex/32/Media-play-2-icon.png"
 			title="Version <%=Util.getVersionDate()%>" /></td>
 		<td><h2 style="color: blue;">CPAS Simulator</h2></td>
 		<td>&nbsp;</td>
@@ -426,7 +426,7 @@ function submitSub() {
 	<td><input name="MEMBERID" id="MEMBERID" value="<%= memberid %>" size=7 maxlength=10></td>
 	<td><input name="TASKID" id="TASKID" value="<%= taskid %>" size=7 maxlength=10></td>
 	<td><input name="USERID" id="USERID" value="<%= userid %>" size=7 maxlength=10></td>
-	<td><input name="LANGUAGE" id="LANGUAGE" value="<%= language %>" size=15 maxlength=15></td>
+	<td><input name="LANGUAGE" id="LANGUAGE" value="<%= language %>" size=10 maxlength=15></td>
 </tr>
 </table>
 <input type="button" value="Submit" onClick="javascript:run()"/>
@@ -457,7 +457,7 @@ function submitSub() {
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 
 <div style="padding: 4px;">
-	<div id="mainQry"><%= mainQry %></div>
+	<div id="mainQry" style="color: gray;"><%= mainQry %></div>
 	<a href="Javascript:toggleEditMain()">Edit</a>
 	<div id="mainQryEdit" style="display:none;">
 		<textarea id="mainQryText" rows="4" cols="60"><%= mainQry %></textarea>
@@ -478,7 +478,7 @@ function submitSub() {
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 
 <div style="padding: 4px;">
-	<div id="subQry"><%= subQry %></div>
+	<div id="subQry" style="color: gray;"><%= subQry %></div>
 	<a href="Javascript:toggleEditSub()">Edit</a>
 	<div id="subQryEdit" style="display:none;">
 		<textarea id="subQryText" rows="4" cols="60"><%= subQry %></textarea>

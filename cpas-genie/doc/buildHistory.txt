@@ -172,6 +172,8 @@ Build CPAS1058
 	Simulator support S:LANG (Language) parameter
 	Latest web wizards query
 	Logical link to %PERSONID columns
-
 	
-	
+Build CPAS1059
+	new CPAS Simulator icon
+	LoadTVS in Connect
+	Query shows column list only for TVS

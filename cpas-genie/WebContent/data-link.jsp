@@ -278,12 +278,12 @@ Search <input id="globalSearch" style="width: 200px;"/>
 		autoLoadFK.add(id);
 %>
 <% if (cntFK == 1) {%>
-	<b><a style="margin-left: 50px;" href="Javascript:toggleFK()">Foreign Key <img id="img-fk" border=0 src="image/minus.gif"></a></b><br/>
+	<b><a style="margin-left: 150px;" href="Javascript:toggleFK()">Foreign Key <img id="img-fk" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-fk" style="margin-top:10px;">
-		<img style="margin-left: 70px;" src="image/arrow_down.jpg"><br/>
+		<img style="margin-left: 170px;" src="image/arrow_down.jpg"><br/>
 <% } %>
 
-<div id="div-fkk-<%=id%>"  style="margin-left: 70px;">
+<div id="div-fkk-<%=id%>"  style="margin-left: 170px;">
 <a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(ft) %>)
 <span class="cpas"><%= cn.getCpasComment(ft) %></span>
@@ -343,13 +343,13 @@ Search <input id="globalSearch" style="width: 200px;"/>
 
 %>
 <% if (cntLFK == 1) {%>
-	<b><a style="margin-left: 50px;" href="Javascript:toggleLFK()">CPAS Logical Link <img id="img-lfk" border=0 src="image/minus.gif"></a></b><br/>
+	<b><a style="margin-left: 150px;" href="Javascript:toggleLFK()">CPAS Logical Link <img id="img-lfk" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-lfk" style="margin-top:10px;">
-		<img style="margin-left: 70px;" src="image/arrow_down.jpg"><br/>
+		<img style="margin-left: 170px;" src="image/arrow_down.jpg"><br/>
 <% } %>
 
 
-<div id="div-fkk-<%=id%>"  style="margin-left: 70px;">
+<div id="div-fkk-<%=id%>"  style="margin-left: 170px;">
 > <a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(ft) %>)
 <span class="cpas"><%= cn.getCpasComment(ft) %></span>
