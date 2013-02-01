@@ -124,7 +124,7 @@ public class Query {
 		
 		String temp = q.toUpperCase();
 		
-		if (temp.startsWith("WITH ")) return q;
+		if (temp.startsWith("WITH")) return q;
 		
 		if (temp.startsWith("SELECT")) q = q.substring(6);
 		
