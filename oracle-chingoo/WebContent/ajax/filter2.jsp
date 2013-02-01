@@ -58,6 +58,8 @@ for (int c=0; c<q.getColumnCount();c++) {
 		FilterRecord rec = list.get(i);
 		String value = rec.getValue();
 		String dispValue = value;
+		if (value.length() > 100) continue;
+		if (value.length() > 20) dispValue = value.substring(0, 18) + "..."; 
 		if (rec.getCount() > 1) dispValue += "\t[" + rec.getCount() + "]";
 %>
 	<option value="<%= value %>"><%= dispValue %></option>

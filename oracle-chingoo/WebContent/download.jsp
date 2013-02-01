@@ -96,4 +96,5 @@
 	
 	q.close();
 	
+	System.out.println("Downloaded " + counter + " rows.");
 %>

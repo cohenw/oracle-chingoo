@@ -157,3 +157,9 @@ Build 1055
 	GA track custom variable5 - website url
 	Support JDK5
 	Encode for url redirect
+	
+Build 1056
+	Fix CLOB/BLOB Download servlet when there is no PK
+	Query shows column list only for TVS
+	removed loading TVS
+		

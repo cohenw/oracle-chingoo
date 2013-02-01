@@ -22,14 +22,6 @@
 	
 		return al;
 	}
-
-	public boolean isTable(String tname) {
-		String temp = tname.toUpperCase().trim();
-	
-		if (tname.contains("\'")) return false;
-		if (tname.contains(" ")) return false;
-		return true;
-	}
 %>
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
@@ -137,11 +129,9 @@
     <script type="text/javascript">
 	$(document).ready(function() {
 <% for (String tname : tbls) { 
-		if (isTable(tname)) {
 %>
 			showTable('<%=tname%>');
 <%
-		}
 	} 
 %>
 		setDoMode('sort');
