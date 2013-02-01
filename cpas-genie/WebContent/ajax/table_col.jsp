@@ -34,6 +34,11 @@ Please select a Table to see the detail.
 	
 	String divId="div_" + table;
 	divId = divId.replaceAll("\\.","-");
+
+	ArrayList<String> pk = cn.getPrimaryKeys(catalog, tname);
+	List<TableCol> cols = cn.getTableDetail(catalog, tname);
+
+	if (cols.size()==0) return;
 %>
 
 <div id="<%= divId %>">
@@ -49,8 +54,6 @@ Please select a Table to see the detail.
 </tr>
 <tr>
 <%	
-	ArrayList<String> pk = cn.getPrimaryKeys(catalog, tname);
-	List<TableCol> cols = cn.getTableDetail(catalog, tname);
 
 	for (int i=0; i<cols.size();i++) {
 		TableCol col = cols.get(i);

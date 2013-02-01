@@ -194,7 +194,7 @@ public class CpasUtil {
 		} else if (temp.equals("MEMBER_RELATION.OWNER")) {
 			String qry = "SELECT UNAME FROM PERSON WHERE PERSONID='" + value + "'";
 			return cn.queryOne(qry);
-		} else if (temp.endsWith(".PLAN") && !tname.equals(planTable) && q.getValue("CLNT") !=null && !q.getValue("CLNT").equals("")) {
+		} else if (temp.endsWith(".PLAN") && !tname.equals(planTable) && q.getValue("CLNT") !=null && !q.getValue("CLNT").equals("") && planTable.equals("SV_PLAN")) {
 			String qry = "SELECT SNAME FROM " + planTable +" WHERE CLNT='"+ q.getValue("CLNT") +"' AND PLAN='" + value + "'";
 			return cn.queryOne(qry);
 		} else if (temp.endsWith(".VKEY") && !tname.equals("CPAS_VALIDATION")) {

@@ -9,7 +9,7 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String process = request.getParameter("process");
 
-	String qry = "SELECT * FROM CPAS_PROCESS_EVENT WHERE PROCESS = '" + process + "' AND SECLABEL != 'SC_NEVER' ORDER BY POSITION"; 
+	String qry = "SELECT * FROM CPAS_PROCESS_EVENT WHERE PROCESS = '" + process + "' AND SECLABEL != 'SC_NEVER' AND PEVENT IS NULL ORDER BY POSITION"; 
 	
 	Query q = new Query(cn, qry, false);
 	

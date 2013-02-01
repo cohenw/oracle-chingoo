@@ -6,7 +6,6 @@
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
-
 <%!
 	ArrayList<String> getBindVariableList(String qry) {
 		ArrayList<String> al = new ArrayList<String>();
@@ -21,16 +20,6 @@
 			}
 		}
 		return al;
-	}
-
-	public boolean isTVS(Connect cn, String tname) {
-		String temp = tname.toUpperCase().trim();
-	
-		if (tname.contains("\'")) return false;
-		if (tname.contains(" ")) return false;
-		
-		return cn.getTVS().contains(tname);
-		//return true;
 	}
 %>
 <%
@@ -139,11 +128,9 @@
     <script type="text/javascript">
 	$(document).ready(function() {
 <% for (String tname : tbls) { 
-		if (isTVS(cn, tname)) {
 %>
-			showTable('<%=tname%>');
+		showTable('<%=tname%>');
 <%
-		}
 	} 
 %>
 		setDoMode('sort');
