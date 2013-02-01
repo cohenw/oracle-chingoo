@@ -218,7 +218,8 @@ function callserver() {
 				$("#" + targetDiv).html(data);
 				loadCount ++;
 				if (loadCount >= 5) {
-					$("#inner-result1").html('<img src="image/genie_bw.png"/>');
+					//$("#inner-result1").html('<img src="image/genie_bw.png"/>');
+					showCPAS();
 				}
 			},
             error:function (jqXHR, textStatus, errorThrown){

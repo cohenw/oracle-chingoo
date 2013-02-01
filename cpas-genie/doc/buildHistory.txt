@@ -177,3 +177,12 @@ Build CPAS1059
 	new CPAS Simulator icon
 	LoadTVS in Connect
 	Query shows column list only for TVS
+
+Build CPAS1060
+	Bug fix for TVS (schema column list in query)
+	CPAS online support for PEPP
+
+Build CPAS1061
+	Bug fix for connection error due to TVS loading
+	removed loading TVS
+	Show CPAS catalog in homepage

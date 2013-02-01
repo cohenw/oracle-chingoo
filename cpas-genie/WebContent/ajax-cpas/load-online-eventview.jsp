@@ -192,6 +192,8 @@
 	<td class="<%= rowClass%>" nowrap>
 	<% if (actionId==null) { %>
 		<%= descr==null?"":descr %>
+		<a href="javascript:openSimul('<%=sdi%>','<%=tv%>')">Simulator  <img border=0 src="http://icons.iconarchive.com/icons/cornmanthe3rd/plex/16/Media-play-2-icon.png"></a>
+		
 	<% } else { %>
 		<a href="javascript:loadSTMT('<%= sdi %>', <%= actionId %>, '<%= tv %>')"><%= descr==null?"":descr %></a>
 	<% } %>
@@ -328,4 +330,5 @@ qSlave.rewind(1000, 1);
 <% if (defaultActionId != null) { %>
 	loadSTMT('<%= defaultSdi %>', <%= defaultActionId %>, '<%= defaultTv %>');
 <% } %>
+
 </script>

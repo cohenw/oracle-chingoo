@@ -395,14 +395,36 @@ function loadSTMT(sdi, actionid, treekey) {
 			
 			qry = "SELECT actionstmt FROM TREEACTION_STMT WHERE SDI = 'WP' AND ACTIONID=" + actionid + " AND ACTIONTYPE='AS'"; 	
 			String actionName = cn.queryOne(qry);
-			
-			qry = "SELECT CAPTION, TREEKEY FROM TREEVIEW where sdi='WP' and actionid=" + actionid; 				
+System.out.println(qry);			
+			qry = "SELECT CAPTION, TREEKEY FROM TREEVIEW where sdi='WP' and actionid=" + actionid;
+System.out.println(qry);			
 %>
 	<span style="margin-left:20px;"></span><a href="Javascript:loadProcess('<%= actionName %>')" title="<%= actionName %>"><%= caption %></a><br/>
 <%
 		}
 	}
 %>
+
+<br/><br/>
+<%
+
+// for PEPP
+if (cn.getUrlString().contains("PEPP")) {
+
+	qry = "SELECT DISTINCT TYPE, (SELECT NAME FROM CPAS_CODE_VALUE WHERE GRUP='CCV' AND VALU=A.TYPE) FROM CPAS_PROCESS A ORDER BY 1";
+	List<String[]> list = cn.query(qry);
+
+%>
+<b>Process Type</b>
+<%
+	for (int i=0; i<list.size();i++) {
+%>
+	<li><a id="pt-<%=list.get(i)[1]%>" href="javascript:loadProcess('<%=list.get(i)[1]%>');"><%=list.get(i)[2]%></a> <span class="nullstyle"><%=list.get(i)[1]%></span></li>
+<% 
+	} 
+}
+%>
+
 				</div>
 			</div>
 		</td>

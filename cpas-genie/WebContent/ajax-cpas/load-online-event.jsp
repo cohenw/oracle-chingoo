@@ -24,6 +24,7 @@
 
 <br/>
 
+
 <%
 	int rowCnt = 0;
 	q.rewind(1000, 1);
@@ -43,11 +44,12 @@
 		if (rowCnt%2 == 0) rowClass = "evenRow";		
 		String actionName = cn.queryOne("SELECT NAME FROM CPAS_ACTION WHERE ACTION ='" + action + "'");
 		String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + seclabel + "'");
-		
-		if (action.equals("NN")) actionName = "";
+
+		if (action==null || action.equals("NN")) actionName = "";
 		String indent = "";
 		if (position.contains(".")) indent =  "&nbsp;&nbsp;&nbsp;-";
-		if (pevent!=null) indent =  "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"; 
+		if (pevent!=null) indent =  "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	
 %>
 
 <%= indent %>
@@ -57,4 +59,3 @@
 <%
 	} 
 %>
-

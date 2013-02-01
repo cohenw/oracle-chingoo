@@ -29,9 +29,9 @@
 	
 </head>
 
-<div style="font-size: 18px;">
-<b>CPAS Catalog</b>
-<br/><br/>
+<div>
+<h1><img src="image/cpas.jpg"> CPAS Catalog</h1>
+
 <a href="cpas-treeview.jsp" target="_blank">CPAS Tree View</a> |
 <% if (hasCustomTV) { %> 
 <a href="cpas-customtreeview.jsp" target="_blank">CPAS Custom Tree View</a> |
@@ -40,7 +40,7 @@
 <a href="cpas-online.jsp" target="_blank">CPAS Online</a> |
 <a href="cpas-rolesec.jsp" target="_blank">Role Privileges</a>
 <br/><br/>
-<table width=400>
+<table width=600 style="margin-left: 20px;">
 <td valign=top>
 <li><a href="Javascript:q('BATCHCAT')">BATCHCAT</a></li>
 <li><a href="Javascript:q('ERRORCAT')">ERRORCAT</a></li>
@@ -48,15 +48,15 @@
 <li><a href="Javascript:q('REQUESTCAT')">REQUESTCAT</a></li>
 <li><a href="Javascript:q('TASKCAT')">TASKCAT</a></li>
 <li><a href="Javascript:q('WIZARDCAT')">WIZARDCAT</a></li>
-<br/>
+
+</td>
+<td valign=top>
 
 <li><a href="Javascript:q('CPAS_CATALOG')">CPAS_CATALOG</a></li>
 <li><a href="Javascript:q('CPAS_CODE')">CPAS_CODE</a></li>
 <li><a href="Javascript:q('CPAS_WIZARD')">CPAS_WIZARD</a></li>
 <li><a href="Javascript:q('CPAS_VALIDATION')">CPAS_VALIDATION</a></li>
 <li><a href="Javascript:q('CPAS_ROLE')">CPAS_ROLE</a></li>
-<br/>
-
 <li><a href="Javascript:q('CPAS_ACTION')">CPAS_ACTION</a></li>
 <li><a href="Javascript:q('CPAS_AGE')">CPAS_AGE</a></li>
 
@@ -68,16 +68,14 @@
 <li><a href="Javascript:q('CPAS_GROUP')">CPAS_GROUP</a></li>
 <li><a href="Javascript:q('CPAS_TABLE')">CPAS_TABLE</a></li>
 <li><a href="Javascript:q('CPAS_LAYOUT')">CPAS_LAYOUT</a></li>
-<br/>
+
+</td>
+<td valign=top>
 
 <li><a href="Javascript:q('CPAS_SEARCHTYPE')">CPAS_SEARCHTYPE</a></li>
 <li><a href="Javascript:q('CPASFIND')">CPASFIND</a></li>
-<br/>
-
 <li><a href="Javascript:q('CPAS_DOC')">CPAS_DOC</a></li>
 <li><a href="Javascript:q('CPAS_FORM')">CPAS_FORM</a></li>
-<br/>
-
 <li><a href="Javascript:q('CPAS_PARAMETER')">CPAS_PARAMETER</a></li>
 
 </td>
@@ -87,9 +85,8 @@
 <input id="sql" name="sql" type="hidden" value="select * from tab"/>
 </form>
 
-<br/>
 <b>Quick Search</b>
-<form id="form1" name="form1" target=_blank action="query.jsp" method="post">
+<form id="form1" name="form1" target=_blank action="query.jsp" method="post" style="margin-left: 20px;">
 <input name="key" type="radio" id="mkey" value="mkey"><label for="mkey">mkey</label>
 <input name="key" type="radio" id="calcid" value="calcid"><label for="calcid">calcid</label>
 <input name="key" type="radio" id="processid" value="processid"><label for="processid">processid</label>
@@ -105,8 +102,24 @@
 
 <br/>
 <b>Query</b><br/>
+<table style="margin-left: 20px;"><td>
 <li><a href="Javascript:qr('SELECT * FROM BATCH ORDER BY PROCESSID DESC')">Latest Batches</a></li>
 <li><a href="Javascript:qr('SELECT * FROM REQUEST ORDER BY REQUESTID DESC')">Latest Requests</a></li>
 <li><a href="Javascript:qr('SELECT * FROM WEBWIZARD ORDER BY RUNID DESC')">Latest Web Wizards</a></li>
+
+<li><a href="Javascript:qr('SELECT * FROM CALC ORDER BY CALCID DESC')">Latest Calcs</a></li>
+</td></table>
+
+<br/><br/>
+
+<b>Note:</b>
+<div style="margin-left: 20px;">
+Please send me any bug report, feedback, enhancement ideas.<br/>
+Thanks.
+<br/><br/>
+Spencer Hwang
+<br/>
+<a href="mailto:spencerh@cpas.com">spencerh@cpas.com</a>
+</div>
 
 </div>

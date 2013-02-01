@@ -467,12 +467,17 @@ function submitSub() {
 	<div id="div-1"></div>
 </div>
 
-<hr/>
 
+<hr/>
 <%
+if (subQry != null && !subQry.equals("")) {
+
 	Util.getId();
 	qry = "SELECT * FROM CPAS_LAYOUT WHERE TNAME='" + subLayout + "'";
+	
 %>
+
+subQry=<%= subQry %>
 <b>Detail</b> [<%= subLayout %>]
 <a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
@@ -526,8 +531,10 @@ function submitSub() {
 <input name="norun_" type="hidden" value="YES"/>
 </form>
 
-</div>
+<hr/>
 
+</div>
+<% } %>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
