@@ -4,7 +4,7 @@
 
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
-	String qry = "SELECT LEVEL, ITEMID, CAPTION, SWITCH, ACTIONID, TREEKEY, UDATA, TRANSLATE, RATIO FROM TREEVIEW A START WITH ITEMID = 0 AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' CONNECT BY PARENTID = PRIOR ITEMID AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' " +
+	String qry = "SELECT LEVEL, ITEMID, CAPTION, SWITCH, ACTIONID, TREEKEY, UDATA /*, TRANSLATE, RATIO */ FROM TREEVIEW A START WITH ITEMID = 0 AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' CONNECT BY PARENTID = PRIOR ITEMID AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' " +
 		" AND EXISTS (SELECT 1 FROM TREEACTION_STMT WHERE SDI=A.SDI AND ACTIONID=A.ACTIONID AND ACTIONTYPE='AW' AND ACTIONSTMT!='SC_NEVER') " +
 		" ORDER BY SORTORDER";	
 
@@ -395,9 +395,9 @@ function loadSTMT(sdi, actionid, treekey) {
 			
 			qry = "SELECT actionstmt FROM TREEACTION_STMT WHERE SDI = 'WP' AND ACTIONID=" + actionid + " AND ACTIONTYPE='AS'"; 	
 			String actionName = cn.queryOne(qry);
-System.out.println(qry);			
+//System.out.println(qry);			
 			qry = "SELECT CAPTION, TREEKEY FROM TREEVIEW where sdi='WP' and actionid=" + actionid;
-System.out.println(qry);			
+//System.out.println(qry);			
 %>
 	<span style="margin-left:20px;"></span><a href="Javascript:loadProcess('<%= actionName %>')" title="<%= actionName %>"><%= caption %></a><br/>
 <%
