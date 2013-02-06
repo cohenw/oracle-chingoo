@@ -219,7 +219,7 @@ ACTRA<br/>
 <br/>
 
 AFM (MPF)<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.cpas.com:1521/AFM', '')">CPDBSMALL@jdbc:oracle:thin:@s-ora-006.cpas.com:1521/AFM</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.cpas.com:1521/AFM', 'CPDBSMALL')">CPDBSMALL@jdbc:oracle:thin:@s-ora-006.cpas.com:1521/AFM</a>
 <br/>
 
 AIARC<br/>
