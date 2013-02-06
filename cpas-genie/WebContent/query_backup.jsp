@@ -148,9 +148,11 @@
 Table
 <select size=1 id="selectTable" name=""selectTable"" onChange="showTable(this.options[this.selectedIndex].value);"">
 	<option></option>
+<%--
 <% for (int i=0; i<cn.getTables().size();i++) { %>
 	<option value="<%=cn.getTable(i)%>"><%=cn.getTable(i)%></option>
 <% } %>
+--%>
 </select>
 
 <input id="input-table" size=30 value="" onChange="showTable(this.value)"/>
