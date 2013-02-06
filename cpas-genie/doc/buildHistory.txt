@@ -186,3 +186,12 @@ Build CPAS1061
 	Bug fix for connection error due to TVS loading
 	removed loading TVS
 	Show CPAS catalog in homepage
+
+Build CPAS1062
+	CPAS Catalog pages show number of records for each table/synonym
+
+Build CPAS1063
+	CPAS Catalog pages link based on object's existance
+
+	
+	
