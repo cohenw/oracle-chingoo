@@ -5,6 +5,13 @@
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
+<%!
+	String tables1[] = {"MEMBER", "PERSON", "PENSIONER", "ACCOUNT", "CALC", "BATCH", "EMPLOYER", "FUND"};
+	String tables2[] = {"BATCHCAT", "ERRORCAT", "REPORTCAT", "REQUESTCAT", "TASKCAT", "FWIZCAT", "WIZARDCAT"};
+	String tables3[] = {"CPAS_CODE", "CPAS_CALCTYPE", "CPAS_CATALOG", "CPAS_WIZARD", "CPAS_VALIDATION", "CPAS_ROLE", "CPAS_ACTION", "CPAS_TABLE", "CPAS_LAYOUT"};
+	String tables4[] = {"CPAS_DATE", "CPAS_JML", "CPAS_GROUP", "CPAS_SEARCHTYPE", "CPASFIND", "CPAS_DOC", "CPAS_FORM", "CPAS_PARAMETER", "CPAS_AGE"};
+	String tables5[] = {"EXPOSE", "EXPOSE_RULE", "FORMULA", "PLAN_RULEID"};
+%>
 
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
@@ -32,52 +39,83 @@
 <div>
 <h1><img src="image/cpas.jpg"> CPAS Catalog</h1>
 
-<a href="cpas-treeview.jsp" target="_blank">CPAS Tree View</a> |
-<% if (hasCustomTV) { %> 
+<% if (cn.isTVS("TREEVIEW")) { %>
+<a href="cpas-online.jsp" target="_blank">CPAS Online</a> 
+<% } else { %>
+<span class="nullstyle">CPAS Online</span>
+<% } %>
+
+|
+<% if (cn.isTVS("CPAS_SDI")) { %>
+<a href="cpas-treeview.jsp" target="_blank">CPAS Tree View</a>
+<% } else { %>
+<span class="nullstyle">CPAS Tree View</span>
+<% } %>
+
+|
+<% if (hasCustomTV && cn.isTVS("CPAS_SDI")) { %> 
 <a href="cpas-customtreeview.jsp" target="_blank">CPAS Custom Tree View</a> |
 <% } %> 
-<a href="cpas-process.jsp" target="_blank">CPAS Process</a> |
-<a href="cpas-online.jsp" target="_blank">CPAS Online</a> |
+
+<% if (cn.isTVS("CPAS_SDI")) { %>
+<a href="cpas-process.jsp" target="_blank">CPAS Process</a>
+<% } else { %>
+<span class="nullstyle">CPAS Process</span>
+<% } %>
+|
+
+<% if (cn.isTVS("CPAS_ROLE_SECSWITCH")) { %>
 <a href="cpas-rolesec.jsp" target="_blank">Role Privileges</a>
+<% } else { %>
+<span class="nullstyle">Role Privileges</span>
+<% } %>
+
 <br/><br/>
-<table width=600 style="margin-left: 20px;">
+<table width=700 style="margin-left: 20px;">
 <td valign=top>
-<li><a href="Javascript:q('BATCHCAT')">BATCHCAT</a></li>
-<li><a href="Javascript:q('ERRORCAT')">ERRORCAT</a></li>
-<li><a href="Javascript:q('REPORTCAT')">REPORTCAT</a></li>
-<li><a href="Javascript:q('REQUESTCAT')">REQUESTCAT</a></li>
-<li><a href="Javascript:q('TASKCAT')">TASKCAT</a></li>
-<li><a href="Javascript:q('WIZARDCAT')">WIZARDCAT</a></li>
-
+<% for (String tbl : tables1) {%>
+	<% if (cn.isTVS(tbl)) { %>
+	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
+	<% } else { %>
+	<li><span class="nullstyle"><%=tbl%></span></li>
+	<% } %>
+<% } %>
 </td>
 <td valign=top>
-
-<li><a href="Javascript:q('CPAS_CATALOG')">CPAS_CATALOG</a></li>
-<li><a href="Javascript:q('CPAS_CODE')">CPAS_CODE</a></li>
-<li><a href="Javascript:q('CPAS_WIZARD')">CPAS_WIZARD</a></li>
-<li><a href="Javascript:q('CPAS_VALIDATION')">CPAS_VALIDATION</a></li>
-<li><a href="Javascript:q('CPAS_ROLE')">CPAS_ROLE</a></li>
-<li><a href="Javascript:q('CPAS_ACTION')">CPAS_ACTION</a></li>
-<li><a href="Javascript:q('CPAS_AGE')">CPAS_AGE</a></li>
-
+<% for (String tbl : tables2) {%>
+	<% if (cn.isTVS(tbl)) { %>
+	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
+	<% } else { %>
+	<li><span class="nullstyle"><%=tbl%></span></li>
+	<% } %>
+<% } %>
 </td>
 <td valign=top>
-<li><a href="Javascript:q('CPAS_DATE')">CPAS_DATE</a></li>
-<li><a href="Javascript:q('CPAS_CALCTYPE')">CPAS_CALCTYPE</a></li>
-<li><a href="Javascript:q('CPAS_JML')">CPAS_JML</a></li>
-<li><a href="Javascript:q('CPAS_GROUP')">CPAS_GROUP</a></li>
-<li><a href="Javascript:q('CPAS_TABLE')">CPAS_TABLE</a></li>
-<li><a href="Javascript:q('CPAS_LAYOUT')">CPAS_LAYOUT</a></li>
-
+<% for (String tbl : tables3) {%>
+	<% if (cn.isTVS(tbl)) { %>
+	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
+	<% } else { %>
+	<li><span class="nullstyle"><%=tbl%></span></li>
+	<% } %>
+<% } %>
 </td>
 <td valign=top>
-
-<li><a href="Javascript:q('CPAS_SEARCHTYPE')">CPAS_SEARCHTYPE</a></li>
-<li><a href="Javascript:q('CPASFIND')">CPASFIND</a></li>
-<li><a href="Javascript:q('CPAS_DOC')">CPAS_DOC</a></li>
-<li><a href="Javascript:q('CPAS_FORM')">CPAS_FORM</a></li>
-<li><a href="Javascript:q('CPAS_PARAMETER')">CPAS_PARAMETER</a></li>
-
+<% for (String tbl : tables4) {%>
+	<% if (cn.isTVS(tbl)) { %>
+	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
+	<% } else { %>
+	<li><span class="nullstyle"><%=tbl%></span></li>
+	<% } %>
+<% } %>
+</td>
+<td valign=top>
+<% for (String tbl : tables5) {%>
+	<% if (cn.isTVS(tbl)) { %>
+	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
+	<% } else { %>
+	<li><span class="nullstyle"><%=tbl%></span></li>
+	<% } %>
+<% } %>
 </td>
 </table>
 
@@ -101,13 +139,37 @@
 </form>
 
 <br/>
-<b>Query</b><br/>
+<b>Quick Query</b><br/>
 <table style="margin-left: 20px;"><td>
-<li><a href="Javascript:qr('SELECT * FROM BATCH ORDER BY PROCESSID DESC')">Latest Batches</a></li>
-<li><a href="Javascript:qr('SELECT * FROM REQUEST ORDER BY REQUESTID DESC')">Latest Requests</a></li>
-<li><a href="Javascript:qr('SELECT * FROM WEBWIZARD ORDER BY RUNID DESC')">Latest Web Wizards</a></li>
+<% if (cn.isTVS("BATCHCAT")) { %>
+	<li><a href="Javascript:qr('SELECT * FROM BATCH ORDER BY PROCESSID DESC')">Latest Batches</a></li>
+<% } else { %>
+	<li><span class="nullstyle">Latest Batches</span></li>
+<% } %>
 
+<% if (cn.isTVS("REQUEST")) { %>
+<li><a href="Javascript:qr('SELECT * FROM REQUEST ORDER BY REQUESTID DESC')">Latest Requests</a></li>
+<% } else { %>
+	<li><span class="nullstyle">Latest Requests</span></li>
+<% } %>
+
+<% if (cn.isTVS("WEBWIZARD")) { %>
+<li><a href="Javascript:qr('SELECT * FROM WEBWIZARD ORDER BY RUNID DESC')">Latest Web Wizards</a></li>
+<% } else { %>
+	<li><span class="nullstyle">Latest Web Wizards</span></li>
+<% } %>
+
+<% if (cn.isTVS("CALC")) { %>
 <li><a href="Javascript:qr('SELECT * FROM CALC ORDER BY CALCID DESC')">Latest Calcs</a></li>
+<% } else { %>
+	<li><span class="nullstyle">Latest Calcs</span></li>
+<% } %>
+
+<% if (cn.isTVS("CONNSESSION")) { %>
+<li><a href="Javascript:qr('SELECT * FROM CONNSESSION ORDER BY SESSIONID DESC')">Latest Online Sessions</a></li>
+<% } else { %>
+	<li><span class="nullstyle">Latest Online Sessions</span></li>
+<% } %>
 </td></table>
 
 <br/><br/>
