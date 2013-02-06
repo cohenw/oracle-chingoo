@@ -339,7 +339,8 @@ public class Connect implements HttpSessionBindingListener {
 	private void loadData() throws SQLException {
 		
 		clearCache();
-		
+
+		loadTVS();
 		loadSchema();
 		loadConstraints();
 		loadPrimaryKeys();
@@ -353,7 +354,7 @@ public class Connect implements HttpSessionBindingListener {
 	private synchronized void loadSchema() {
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select username from USER_USERS");	
+       		ResultSet rs = stmt.executeQuery("SELECT USERNAME FROM USER_USERS");	
 
        		while (rs.next()) {
        			String cat = rs.getString(1);
@@ -373,7 +374,7 @@ public class Connect implements HttpSessionBindingListener {
 		constraints.clear();
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select CONSTRAINT_NAME, TABLE_NAME, COLUMN_NAME, POSITION from user_cons_columns where position is not null order by 1,2,4");	
+       		ResultSet rs = stmt.executeQuery("SELECT CONSTRAINT_NAME, TABLE_NAME, COLUMN_NAME, POSITION from user_cons_columns where position is not null order by 1,2,4");	
 
        		String prevConName = null;
        		String temp = "";
@@ -418,7 +419,7 @@ public class Connect implements HttpSessionBindingListener {
 		pkByCon.clear();
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select CONSTRAINT_NAME, TABLE_NAME  from user_constraints where CONSTRAINT_TYPE = 'P'");	
+       		ResultSet rs = stmt.executeQuery("SELECT CONSTRAINT_NAME, TABLE_NAME  from user_constraints where CONSTRAINT_TYPE = 'P'");	
 
        		String prevConName = null;
        		String temp = "";
@@ -445,7 +446,7 @@ public class Connect implements HttpSessionBindingListener {
 		try {
        		Statement stmt = conn.createStatement();
 //       		ResultSet rs = stmt.executeQuery("select OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE from all_constraints where CONSTRAINT_TYPE = 'R' order by table_name, constraint_type");	
-       		ResultSet rs = stmt.executeQuery("select OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE from all_constraints where CONSTRAINT_TYPE = 'R' and (owner=user or owner in (select distinct table_owner from user_synonyms)) order by table_name, constraint_type");	
+       		ResultSet rs = stmt.executeQuery("SELECT OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE from all_constraints where CONSTRAINT_TYPE = 'R' and (owner=user or owner in (select distinct table_owner from user_synonyms)) order by table_name, constraint_type");	
        		
        		while (rs.next()) {
        			ForeignKey fk = new ForeignKey();
@@ -476,7 +477,7 @@ public class Connect implements HttpSessionBindingListener {
 		try {
        		Statement stmt = conn.createStatement();
 //       		ResultSet rs = stmt.executeQuery("select owner, table_name, num_rows from ALL_TABLES");	
-       		ResultSet rs = stmt.executeQuery("select owner, table_name, num_rows from ALL_TABLES where (owner=user or owner in (select distinct table_owner from user_synonyms))");	
+       		ResultSet rs = stmt.executeQuery("SELECT owner, table_name, num_rows from ALL_TABLES where (owner=user or owner in (SELECT distinct table_owner from user_synonyms))");	
 
 	   		while (rs.next()) {
 	   			String owner = rs.getString(1);
@@ -512,7 +513,7 @@ public class Connect implements HttpSessionBindingListener {
 		// column comments
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select * from USER_COL_COMMENTS where TABLE_NAME='" + tname + "'");	
+       		ResultSet rs = stmt.executeQuery("SELECT * from USER_COL_COMMENTS where TABLE_NAME='" + tname + "'");	
 
 	   		while (rs.next()) {
 	   			String tab = rs.getString(1);
@@ -535,7 +536,7 @@ public class Connect implements HttpSessionBindingListener {
 		// table comments
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select * from USER_TAB_COMMENTS where TABLE_NAME='" + tname + "'");	
+       		ResultSet rs = stmt.executeQuery("SELECT * from USER_TAB_COMMENTS where TABLE_NAME='" + tname + "'");	
 
 	   		while (rs.next()) {
 	   			String tab = rs.getString(1);
@@ -628,7 +629,6 @@ public class Connect implements HttpSessionBindingListener {
 		
 	}
 
-/*	
 	private synchronized void loadTVS() throws SQLException {
 		tables.clear();
 		views.clear();
@@ -653,7 +653,6 @@ public class Connect implements HttpSessionBindingListener {
 		System.out.println("Loaded VIEW " + views.size());
 		System.out.println("Loaded SYNONYMS " + synonyms.size());
 	}
-*/
 	
 	public synchronized String genie(String value, String tab, String targetCol, String sourceCol) {
 		String res=null;
@@ -902,7 +901,7 @@ public class Connect implements HttpSessionBindingListener {
 		List<String> list = new ArrayList<String>();
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select column_name from all_cons_columns where " +
+       		ResultSet rs = stmt.executeQuery("SELECT column_name from all_cons_columns where " +
        				"owner='" + owner + "' AND constraint_name='" + cname + "' order by position");	
 
        		while (rs.next()) {
@@ -994,7 +993,7 @@ public class Connect implements HttpSessionBindingListener {
 //System.out.println("owner,tname=" + owner + "," + tname);		
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select * from all_constraints where CONSTRAINT_TYPE = 'R' " +
+       		ResultSet rs = stmt.executeQuery("SELECT * from all_constraints where CONSTRAINT_TYPE = 'R' " +
        				"AND owner='" + owner + "' AND table_name='" + tname + "' order by table_name, constraint_type");	
 
        		while (rs.next()) {
@@ -1016,7 +1015,7 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 
 		} catch (SQLException e) {
-             System.err.println ("7 Cannot connect to database server");
+             System.err.println ("77 Cannot connect to database server");
              e.printStackTrace();
              message = e.getMessage();
  		}
@@ -1079,7 +1078,7 @@ public class Connect implements HttpSessionBindingListener {
 
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select distinct NAME from user_dependencies WHERE REFERENCED_NAME='" + tname + "' AND TYPE IN ('TYPE BODY','PACKAGE BODY','PACKAGE','TYPE','PROCEDURE','FUNCTION') ORDER BY NAME");	
+       		ResultSet rs = stmt.executeQuery("SELECT distinct NAME from user_dependencies WHERE REFERENCED_NAME='" + tname + "' AND TYPE IN ('TYPE BODY','PACKAGE BODY','PACKAGE','TYPE','PROCEDURE','FUNCTION') ORDER BY NAME");	
 
        		int count = 0;
        		while (rs.next()) {
@@ -1104,7 +1103,7 @@ public class Connect implements HttpSessionBindingListener {
 
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select distinct NAME from user_dependencies WHERE REFERENCED_NAME='" + tname + "' AND TYPE IN ('VIEW') ORDER BY NAME");	
+       		ResultSet rs = stmt.executeQuery("SELECT distinct NAME from user_dependencies WHERE REFERENCED_NAME='" + tname + "' AND TYPE IN ('VIEW') ORDER BY NAME");	
 
        		int count = 0;
        		while (rs.next()) {
@@ -1186,7 +1185,7 @@ public class Connect implements HttpSessionBindingListener {
 
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select distinct NAME from user_dependencies WHERE REFERENCED_NAME='" + tname + "' AND TYPE IN ('TRIGGER') ORDER BY NAME");	
+       		ResultSet rs = stmt.executeQuery("SELECT distinct NAME from user_dependencies WHERE REFERENCED_NAME='" + tname + "' AND TYPE IN ('TRIGGER') ORDER BY NAME");	
 
        		int count = 0;
        		while (rs.next()) {
@@ -1211,7 +1210,7 @@ public class Connect implements HttpSessionBindingListener {
 		if (owner == null) owner = this.getSchemaName().toUpperCase();
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select * from ALL_IND_COLUMNS WHERE " +
+       		ResultSet rs = stmt.executeQuery("SELECT * from ALL_IND_COLUMNS WHERE " +
        				"TABLE_OWNER='" + owner + "' AND INDEX_NAME='" + iname + "' ORDER BY COLUMN_POSITION");	
 
        		int count = 0;
@@ -1239,7 +1238,7 @@ public class Connect implements HttpSessionBindingListener {
 		if (owner==null) owner = this.getSchemaName().toUpperCase();
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' AND NAME='" + name + "' AND REFERENCED_TYPE IN ('PACKAGE','PACKAGE BODY','FUNCTION','PROCEDURE','TYPE') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
+       		ResultSet rs = stmt.executeQuery("SELECT distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' AND NAME='" + name + "' AND REFERENCED_TYPE IN ('PACKAGE','PACKAGE BODY','FUNCTION','PROCEDURE','TYPE') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
 
        		int count = 0;
        		while (rs.next()) {
@@ -1269,7 +1268,7 @@ public class Connect implements HttpSessionBindingListener {
 		if (owner==null) owner = this.getSchemaName().toUpperCase();
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' and NAME='" + name + "' AND REFERENCED_TYPE IN ('TABLE') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
+       		ResultSet rs = stmt.executeQuery("SELECT distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' and NAME='" + name + "' AND REFERENCED_TYPE IN ('TABLE') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
 
        		int count = 0;
        		while (rs.next()) {
@@ -1301,7 +1300,7 @@ public class Connect implements HttpSessionBindingListener {
 		if (owner==null) owner = this.getSchemaName().toUpperCase();
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' AND NAME='" + name + "' AND REFERENCED_TYPE IN ('VIEW') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
+       		ResultSet rs = stmt.executeQuery("SELECT distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' AND NAME='" + name + "' AND REFERENCED_TYPE IN ('VIEW') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
 
        		int count = 0;
        		while (rs.next()) {
@@ -1333,7 +1332,7 @@ public class Connect implements HttpSessionBindingListener {
 		if (owner==null) owner = this.getSchemaName().toUpperCase();
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("select distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' and NAME='" + name + "' AND REFERENCED_TYPE IN ('SYNONYM') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
+       		ResultSet rs = stmt.executeQuery("SELECT distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' and NAME='" + name + "' AND REFERENCED_TYPE IN ('SYNONYM') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
 
        		int count = 0;
        		while (rs.next()) {
@@ -2104,7 +2103,7 @@ public class Connect implements HttpSessionBindingListener {
 		try {
 			stmt = conn.createStatement();
 			stmt.execute(sql);
-			ResultSet rs = stmt.executeQuery("select plan_table_output from table(dbms_xplan.display())");
+			ResultSet rs = stmt.executeQuery("SELECT plan_table_output from table(dbms_xplan.display())");
 			while (rs.next()) {
 				res += rs.getString(1) + "\n";
 			}
