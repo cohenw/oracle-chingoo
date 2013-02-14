@@ -37,7 +37,7 @@
 </head>
 
 <div>
-<h1><img src="image/cpas.jpg"> CPAS Catalog</h1>
+<h2><img src="image/cpas.jpg"> CPAS Catalog</h2>
 
 <% if (cn.isTVS("TREEVIEW")) { %>
 <a href="cpas-online.jsp" target="_blank">CPAS Online</a> 
@@ -125,7 +125,7 @@
 
 <b>Quick Search</b>
 <form id="form1" name="form1" target=_blank action="query.jsp" method="post" style="margin-left: 20px;">
-<input name="key" type="radio" id="mkey" value="mkey"><label for="mkey">mkey</label>
+<input name="key" type="radio" id="mkey" value="mkey" checked><label for="mkey">mkey</label>
 <input name="key" type="radio" id="calcid" value="calcid"><label for="calcid">calcid</label>
 <input name="key" type="radio" id="processid" value="processid"><label for="processid">processid</label>
 <input name="key" type="radio" id="accountid" value="accountid"><label for="accountid">accountid</label>
@@ -139,6 +139,8 @@
 </form>
 
 <br/>
+<table>
+<td valign=top>
 <b>Quick Query</b><br/>
 <table style="margin-left: 20px;"><td>
 <% if (cn.isTVS("BATCHCAT")) { %>
@@ -159,6 +161,10 @@
 	<li><span class="nullstyle">Latest Web Wizards</span></li>
 <% } %>
 
+<% if (cn.isTVS("WIZARD_RUN")) { %>
+<li><a href="Javascript:qr('SELECT * FROM WIZARD_RUN ORDER BY RUNID DESC')">Latest Web Wizards</a></li>
+<% } %>
+
 <% if (cn.isTVS("CALC")) { %>
 <li><a href="Javascript:qr('SELECT * FROM CALC ORDER BY CALCID DESC')">Latest Calcs</a></li>
 <% } else { %>
@@ -170,7 +176,24 @@
 <% } else { %>
 	<li><span class="nullstyle">Latest Online Sessions</span></li>
 <% } %>
+
+<% if (cn.isTVS("TASK")) { %>
+<li><a href="Javascript:qr('SELECT * FROM TASK ORDER BY TASKID DESC')">Latest Tasks</a></li>
+<% } else { %>
+	<li><span class="nullstyle">Latest Tasks</span></li>
+<% } %>
+
 </td></table>
+</td>
+<td valign=top>
+<b>Query</b><br/>
+<form target="_blank" action="query.jsp" method="post">
+<textarea style="margin-left:20px;" name="sql" cols=50 rows=4>SELECT * FROM TAB</textarea>
+<input type="submit">
+</form>
+
+</td>
+</table>
 
 <br/><br/>
 
