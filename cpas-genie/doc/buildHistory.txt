@@ -192,6 +192,17 @@ Build CPAS1062
 
 Build CPAS1063
 	CPAS Catalog pages link based on object's existance
+	CPAS Simulator bug fixed
+	Logical link for remarkid -> REMARK
+	Bug fix for static reference for CpasUtil.logicalLink2
+	CPAS Simulator support rows/page
+	Tooltip in Query shows column type and length
 
-	
-	
+Build CPAS1064
+	pop.jsp title shows object type
+
+Build CPAS1065
+	data-link shows fk lookup
+	bug fix - qry-simple-v.jsp for fk lookup when dialogUrl is empty
+	able to hide the history division
+	 
