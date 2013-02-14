@@ -311,17 +311,17 @@ Search <input id="globalSearch" style="width: 200px;"/>
 		if (hs.contains("CLNT, " + label)) continue;
 		if (hs.contains("PENID, " + label)) continue;
 		if (q.getValue(label)==null) continue;
-		for (int j=0; j < CpasUtil.logicalLink2.length; j++) {
-			if (label.equals(CpasUtil.logicalLink2[j][0])) {
-				ft = CpasUtil.logicalLink2[j][2];
-				fsql = cn.getPKLinkSql(ft, q.getValue(CpasUtil.logicalLink2[j][1])+ "^" + q.getValue(label));
+		for (int j=0; j < cn.getCpasUtil().logicalLink2.length; j++) {
+			if (label.equals(cn.getCpasUtil().logicalLink2[j][0])) {
+				ft = cn.getCpasUtil().logicalLink2[j][2];
+				fsql = cn.getPKLinkSql(ft, q.getValue(cn.getCpasUtil().logicalLink2[j][1])+ "^" + q.getValue(label));
 				break;
 			}
 		}
 
-		for (int j=0; ft==null && j < CpasUtil.logicalLink.length; j++) {
-			if (label.equals(CpasUtil.logicalLink[j][0])) {
-				ft = CpasUtil.logicalLink[j][1];
+		for (int j=0; ft==null && j < cn.getCpasUtil().logicalLink.length; j++) {
+			if (label.equals(cn.getCpasUtil().logicalLink[j][0])) {
+				ft = cn.getCpasUtil().logicalLink[j][1];
 				fsql = cn.getPKLinkSql(ft, q.getValue(label));
 				break;
 			}
