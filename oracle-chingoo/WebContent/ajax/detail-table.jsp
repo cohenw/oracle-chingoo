@@ -42,7 +42,7 @@ Please select a Table to see the detail.
 	}
 %>
 
-<div id="objectTitle" style="display:none"><%= table %></div>
+<div id="objectTitle" style="display:none">TABLE: <%= table %></div>
 
 <h2>TABLE: <%= table %> &nbsp;&nbsp;<span class="rowcountstyle"><%= cn.getTableRowCount(owner, table) %></span>
 <a href="Javascript:runQuery('','<%=tname%>')"><img border=0 src="image/icon_query.png" title="query"></a>
