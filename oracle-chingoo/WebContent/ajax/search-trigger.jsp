@@ -22,7 +22,9 @@
 	int i = 0;
 	for (String tname : tables) {
 %>
-<a href="javascript:loadPackage('<%= tname %>');"><%= tname %></a><br/>
+<%-- <a href="javascript:loadPackage('<%= tname %>');"><%= tname %></a><br/>
+ --%>
+<a target=_blank href="pop.jsp?type=PACKAGE&key=<%= tname %>"><%= tname %></a><br/>
 <% } %>
 
 <br/>

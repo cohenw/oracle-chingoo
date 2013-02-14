@@ -202,7 +202,7 @@ Found: <%= filteredCount %>
 			int colType = q.getColumnType(i);
 			numberCol[colIdx] = Util.isNumberType(colType);
 			
-			String tooltip = q.getColumnTypeName(i);
+			String tooltip = q.getColumnToolTip(i);
 			String comment =  cn.getComment(tname, colName);
 			if (comment != null && comment.length() > 0) tooltip += " " + comment;
 			
