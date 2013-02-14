@@ -10,6 +10,9 @@
 <%
 	int counter = 0;
 	String sql = request.getParameter("qry");
+	String ttype = request.getParameter("ttype");
+	if (ttype==null) ttype="";
+	
 	if (sql==null) sql = "SELECT * FROM TABLE";
 	sql = sql.trim();
 	if (sql.endsWith(";")) sql = sql.substring(0, sql.length()-1);
@@ -48,6 +51,7 @@
 
 <% if (params.size() >0)  { %>
 <form id="formParam" onSubmit="return false;">
+<input name="ttype" type="hidden" value="<%= ttype %>">
 <input id="param-sql" name="qry" type="hidden" value="<%= sql %>">
 <table>
 <%
@@ -162,7 +166,15 @@
 				boolean isLinked = false;
 				String linkUrl = "";
 %>
-<td <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
+<td <%= (numberCol[colIdx])?"align=right":""%>>
+<% if (colIdx==1 && ttype.equals("SEARCH_PROGRAM")) { %>
+<%-- 	<a href="javascript:loadPackage('<%=valDisp%>');"><%=valDisp%></a>
+ --%>	<a target=_blank href="pop.jsp?type=PACKAGE&key=<%=valDisp%>"><%=valDisp%></a>
+<% } else if (colIdx==2 && ttype.equals("SEARCH_COLUMN")) { %>
+	<a target=_blank href="pop.jsp?type=TABLE&key=<%=valDisp%>"><%=valDisp%></a>
+<% } else { %>
+	<%=valDisp%>
+<% } %>
 </td>
 <%
 		}
