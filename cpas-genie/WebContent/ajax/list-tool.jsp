@@ -11,10 +11,10 @@
 	String filter = request.getParameter("filter");
 
 	List<String> list = new ArrayList<String>();
-	list.add("Search Table");
+	list.add("Search Table Data");
 	list.add("Search Program");
-	list.add("Search View");
-	list.add("Search Trigger");
+	list.add("Search View Definition");
+	list.add("Search Trigger Definition");
 	list.add("");
 	list.add("Table Column");
 	list.add("Schema Diff");
