@@ -6,4 +6,5 @@ public class ColumnDef {
 	String columnLabel;
 	int columnType;
 	String columnTypeName;
+	String tooltip;
 }
