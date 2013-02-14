@@ -286,9 +286,9 @@ Found: <%= filteredCount %>
 				String linkImage = "image/view.png";
 				boolean isLogicalLink = false;
 
-				if (lTable != null  && dLink) {
+				if (lTable != null /* && dLink */) {
 					isLinked = true;
-					linkUrl = "ajax/fk-lookup.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
+//					linkUrl = "ajax/fk-lookup.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
 					dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
 				} else if (val != null && val.startsWith("BLOB ")) {
 					isLinked = true;

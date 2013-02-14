@@ -295,9 +295,9 @@ Found: <%= filteredCount %>
 				String linkImage = "image/view.png";
 				boolean isLogicalLink = false;
 
-				if (lTable != null  && dLink) {
+				if (lTable != null /* && dLink */) {
 					isLinked = true;
-					linkUrl = "ajax/fk-lookup.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
+					//linkUrl = "ajax/fk-lookup.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
 					dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
 				} else if (val != null && val.startsWith("BLOB ")) {
 					isLinked = true;
@@ -342,12 +342,15 @@ Found: <%= filteredCount %>
 if (pkColList != null && pkColList.contains(colName)) valDisp = "<span class='pk'>" + valDisp + "</span>";
 
 dataCell[rowCnt-1][colIdx-1] = valDisp;
+/*
 if (dLink && val!=null && !val.equals("") && isLinked && !linkUrl.startsWith("Javascript")) 
 	dataCell[rowCnt-1][colIdx-1] += "<a target=_blank href=\"" + linkUrl  + "\"><img border=0 src='" + linkImage + "'></a>";
 
 if (dLink && val!=null && !val.equals("") && linkUrl.startsWith("Javascript"))
 	dataCell[rowCnt-1][colIdx-1] += "<a href=\"" + linkUrl  + "\"><img border=0 src='" + linkImage + "'></a>";
-
+*/
+if (dLink && val!=null && !val.equals("") && linkImage.startsWith("image/view") && !dialogUrl.equals(""))
+	dataCell[rowCnt-1][colIdx-1] += "<a href=\"Javascript:showDialog(" + dialogUrl.replaceAll("\"", "\'")  + ")\"><img border=0 src='" + linkImage + "'></a>";
 %>
 <%-- <td class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
 <%= (val!=null && isLinked?"<a class='inspect' href='" + linkUrl  + "'><img border=0 src='" + linkImage + "'></a>":"")%>
