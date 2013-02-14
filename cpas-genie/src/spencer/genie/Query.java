@@ -201,6 +201,13 @@ public class Query {
 		return qData.columns.get(idx).columnTypeName;
 	}
 
+	public String getColumnToolTip(int idx) {
+		if (idx <0 || idx > qData.columns.size()-1) {
+			return "";
+		}
+		return qData.columns.get(idx).tooltip;
+	}
+
 	public boolean hasData() {
 		return (qData != null && qData.columns != null && qData.rows.size() > 0);
 	}
