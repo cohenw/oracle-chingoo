@@ -47,14 +47,14 @@ public class CpasUtil {
 			{"C", "Cancelled"}
 	};
 	
-	public static String logicalLink2[][] = {
+	public String logicalLink2[][] = {
 			{"MKEY", "CLNT", "MEMBER"},
 			{"ERKEY", "CLNT", "EMPLOYER"},
 			{"PLAN", "CLNT", "SV_PLAN"},
 			{"PAYMENTID", "PENID", "PENSIONER_PAYMENT"}
 	};
 			
-	public static String logicalLink[][] = {
+	public String logicalLink[][] = {
 			{"PROCESSID", "BATCH"},
 			{"PENID", "PENSIONER"},
 			{"PERSONID", "PERSON"},
@@ -76,7 +76,8 @@ public class CpasUtil {
 			{"COUNTRY", "COUNTRY"},
 			{"CURRENCY", "CURRENCY"},
 			{"JMLFILEID", "CPAS_DEFLOB"},
-			{"TAXTYPE", "TAXTYPE"}
+			{"TAXTYPE", "TAXTYPE"},
+			{"REMARKID", "REMARK"},
 	};
 	
 	public CpasUtil(Connect cn) {
@@ -92,28 +93,32 @@ public class CpasUtil {
 			hsTable.add(tname);
 		}
 
-		String qry = "SELECT distinct table_name FROM user_tab_cols where column_name in ('CLNT','ERKEY','CTYPE') UNION  "
-				+ "SELECT TNAME FROM CPAS_TABLE A WHERE EXISTS (SELECT 1 FROM TAB WHERE TNAME=A.TNAME)";
-		List<String> tbls = cn.queryMulti(qry);
-		for (String tbl : tbls) {
-			hsTable.add(tbl);
-			isCpas = true;
-			cpasType = 1;
-			
-			// check if there is CPAS_TAB table
-		}
-
-		if (!isCpas) {
-			qry = "SELECT distinct table_name FROM user_tab_cols where column_name in ('CLNT','ERKEY','CTYPE') UNION  "
-					+ "SELECT TNAME FROM ADD$TABLE A WHERE EXISTS (SELECT 1 FROM TAB WHERE TNAME=A.TNAME)";
-			tbls = cn.queryMulti(qry);
+		if (cn.isTVS("CPAS_TABLE")) { 
+			String qry = "SELECT distinct table_name FROM user_tab_cols where column_name in ('CLNT','ERKEY','CTYPE') UNION  "
+					+ "SELECT TNAME FROM CPAS_TABLE A WHERE EXISTS (SELECT 1 FROM TAB WHERE TNAME=A.TNAME)";
+			List<String> tbls = cn.queryMulti(qry);
 			for (String tbl : tbls) {
 				hsTable.add(tbl);
 				isCpas = true;
-				cpasType = 5;
+				cpasType = 1;
+				
+				// check if there is CPAS_TAB table
 			}
 		}
-
+		
+		if (cn.isTVS("ADD$TABLE")) { 
+			if (!isCpas) {
+				String qry = "SELECT distinct table_name FROM user_tab_cols where column_name in ('CLNT','ERKEY','CTYPE') UNION  "
+						+ "SELECT TNAME FROM ADD$TABLE A WHERE EXISTS (SELECT 1 FROM TAB WHERE TNAME=A.TNAME)";
+				List<String> tbls = cn.queryMulti(qry);
+				for (String tbl : tbls) {
+					hsTable.add(tbl);
+					isCpas = true;
+					cpasType = 5;
+				}
+			}
+		}
+		
 		if (cpasType==1) {
 			// check for CPAS_TAB table
 			String tmp = cn.queryOne("SELECT COUNT(*) FROM USER_OBJECTS WHERE OBJECT_NAME='CPAS_TAB'");
@@ -573,4 +578,5 @@ public class CpasUtil {
 	public int getCpasType() {
 		return cpasType;
 	}
+	
 }

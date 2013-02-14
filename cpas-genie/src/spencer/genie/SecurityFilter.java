@@ -36,6 +36,7 @@ public class SecurityFilter implements Filter {
 		HttpSession session = req.getSession();
 		String servletPath = req.getServletPath();
 
+		long before = System.currentTimeMillis();
 		if (!servletPath.contains(".jsp")) {
 			chain.doFilter(request, response);
 			return;
@@ -106,8 +107,10 @@ public class SecurityFilter implements Filter {
 		
 		String ip = Util.getIpAddress(req);
 		if (ip==null) ip = "";	
+
+		long after = System.currentTimeMillis();
 		
-		System.out.println(servletPath + " " + qry + " " + ip); // + " " + (new java.util.Date()));
+		System.out.println(servletPath + " " + qry + " " + ip + " " + (after - before) + "ms"); // + " " + (new java.util.Date()));
 	}
 
 	public void init(FilterConfig chain) throws ServletException {

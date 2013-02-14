@@ -46,7 +46,7 @@ public class OldQuery {
 			
 			String targetQry = processQuery(q2);
 			//System.out.println(targetQry);	
-			rs = stmt.executeQuery(targetQry);	
+			rs = stmt.executeQuery(targetQry);
 		} catch (SQLException e) {
 			message = e.getMessage();
 			System.out.println(e.toString());
