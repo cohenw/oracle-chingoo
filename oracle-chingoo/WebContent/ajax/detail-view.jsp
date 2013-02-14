@@ -27,7 +27,7 @@
 		qry = "SELECT TEXT FROM ALL_VIEWS WHERE OWNER='" + owner + "' AND VIEW_NAME='" + view +"'"; 
 	
 %>
-<div id="objectTitle" style="display:none"><%= view %></div>
+<div id="objectTitle" style="display:none">VIEW: <%= view %></div>
 <h2>VIEW: <%= view %> &nbsp;&nbsp;<a href="Javascript:runQuery('<%=catalog%>','<%=view%>')"><img border=0 src="image/icon_query.png" title="query"></a>
 <a href="pop.jsp?type=VIEW&key=<%=view%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
 </h2>
