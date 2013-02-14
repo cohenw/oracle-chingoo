@@ -21,7 +21,9 @@
 	int i = 0;
 	for (String tname : tables) {
 %>
-<a href="javascript:loadView('<%= tname %>');"><%= tname %></a><br/>
+<%-- <a href="javascript:loadView('<%= tname %>');"><%= tname %></a><br/>
+ --%><a target=_blank href="pop.jsp?type=VIEW&key=<%= tname %>"><%= tname %></a><br/>
+
 <% } %>
 
 <br/>
