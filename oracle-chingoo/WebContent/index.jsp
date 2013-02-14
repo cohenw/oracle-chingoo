@@ -130,6 +130,8 @@ $(document).ready(function(){
 			var newH = h - 80;
 
 			var tmp = w - $('#tabs').width() - $('#outer-result2').width() - 45; 
+			if (!$("#outer-result2").is(":visible"))
+				tmp = w - $('#tabs').width() - 45;
 
 //			$('#outer-table').height(newH-diff);
 			$('#outer-result1').height(newH);
@@ -157,6 +159,11 @@ function callserver() {
 		}
 	});
 }	
+
+function hideHist() {
+	$("#outer-result2").hide();
+	checkResize();
+}
 </script>
 
 	<style>
@@ -329,7 +336,7 @@ function callserver() {
 <img align=top src="image/chingoo-small.gif" title="Oracle Chingoo - Build <%= Util.getBuildNo() %>"/>
 </td>
 
-<td><h3><%= cn.getUrlString() %></h3></td>
+<td><b><%= cn.getUrlString() %></b></td>
 <td nowrap>
 <a href="query.jsp" target="_blank">Query</a> |
 <!-- <a href="worksheet.jsp" target="_blank">Work Sheet</a> |
@@ -403,6 +410,7 @@ function callserver() {
 </td>
 <td valign=top>
 <div id="outer-result2">
+	<a href="Javascript:hideHist()" style="float:right;">hide</a>
 	<div id="inner-result2"><%= addedHistory %></div>
 </div>
 </td>
