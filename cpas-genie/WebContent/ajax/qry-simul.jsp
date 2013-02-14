@@ -15,6 +15,8 @@
 	String id = request.getParameter("id");
 	String layout = request.getParameter("layout");
 	String appLayout = request.getParameter("applylayout");
+	String rowsPerPage = request.getParameter("rowsPerPage");
+	if (rowsPerPage==null || rowsPerPage.equals("")) rowsPerPage = "10";
 
 	String as = request.getParameter("as");  // action statement
 System.out.println("AS=" + as);	
@@ -117,7 +119,7 @@ if (as != null && as.startsWith("BEGIN")) {
 	}
 	
 
-	int linesPerPage = 20;
+	int linesPerPage = Integer.parseInt(rowsPerPage);
 	int totalCount = q.getRecordCount();
 	int filteredCount = q.getFilteredCount();
 	int totalPage = q.getTotalPage(linesPerPage);
@@ -172,11 +174,37 @@ Page: <b><%= pgNo %></b> of <%= totalPage %>
 <a href="Javascript:gotoPage(<%=id%>, <%= pgNo + 1%>)"><img border=0 src="image/next.png" border=0 align="bottom"></a>
 <% } %>
 
-Found: <%= filteredCount %>
+Found: <b><%= filteredCount %></b>
 <% if (totalCount > filteredCount) {%>
 (of <%= totalCount %>)
 <% } %>
 
+<% if (filteredCount > 10) {%>
+&nbsp;&nbsp;&nbsp;
+Rows/Page 
+<select id="linePerPage" name="linePerPage" onChange="rowsPerPage(this.options[this.selectedIndex].value);">
+<option value="1" <%= (linesPerPage==1?"SELECTED":"") %>>1</option>
+<option value="2" <%= (linesPerPage==2?"SELECTED":"") %>>2</option>
+<option value="5" <%= (linesPerPage==5?"SELECTED":"") %>>5</option>
+<option value="10" <%= (linesPerPage==10?"SELECTED":"") %>>10</option>
+<option value="20" <%= (linesPerPage==20?"SELECTED":"") %>>20</option>
+<% if (totalCount>=20) { %>
+<option value="50" <%= (linesPerPage==50?"SELECTED":"") %>>50</option>
+<% } %>
+<% if (totalCount>=50) { %>
+<option value="100" <%= (linesPerPage==100?"SELECTED":"") %>>100</option>
+<% } %>
+<%-- <% if (totalCount>=100) { %>
+<option value="200" <%= (linesPerPage==200?"SELECTED":"") %>>200</option>
+<% } %>
+<% if (totalCount>=200) { %>
+<option value="500" <%= (linesPerPage==500?"SELECTED":"") %>>500</option>
+<% } %>
+<% if (totalCount>=500) { %>
+<option value="1000" <%= (linesPerPage==1000?"SELECTED":"") %>>1000</option>
+<% } %>
+ --%></select>
+<% } %>
 </div>
 
 <%-- <a style="float: left;" href="Javascript:showHelp(<%=id%>)">+</a>
@@ -257,7 +285,7 @@ if (!applyLayout) {
 		int colType = q.getColumnType(i);
 		numberCol[colIdx] = Util.isNumberType(colType);
 		
-		String tooltip = q.getColumnTypeName(i);
+		String tooltip = q.getColumnToolTip(i);
 		String comment =  cn.getComment(tname, colName);
 		if (comment != null && comment.length() > 0) tooltip += " " + comment;
 		
@@ -436,7 +464,7 @@ if (cpas) {
 %>
 </tr>
 <%		if (q.hasData()) counter++;
-		if (counter >= 20) break;
+		if (counter >= linesPerPage) break;
 	}
 	}
 %>

@@ -6,7 +6,6 @@
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
-
 <%
 	int counter = 0;
 	String sql = request.getParameter("sql");
@@ -261,7 +260,7 @@ Rows/Page
 		for  (int i = 0; i<= q.getColumnCount()-1; i++){
 			String colName = q.getColumnLabel(i);
 			
-			for (String[] ll: CpasUtil.logicalLink) {
+			for (String[] ll: cn.getCpasUtil().logicalLink) {
 				if (colName.equals(ll[0])) {
 					hasCpas = true;
 					break;
@@ -308,7 +307,7 @@ Rows/Page
 			int colType = q.getColumnType(i);
 			numberCol[colIdx] = Util.isNumberType(colType);
 			
-			String tooltip = q.getColumnTypeName(i);
+			String tooltip = q.getColumnToolTip(i);
 			String comment =  cn.getComment(tname, colName);
 			if (comment != null && comment.length() > 0) tooltip += " " + comment;
 		
@@ -483,23 +482,23 @@ if (fkLinkTab.size()>0 && dLink && false) {
 					linkImage ="image/download.gif";
 				} else {
 					
-					for (int j=0; j < CpasUtil.logicalLink2.length; j++) {
-						if (colName.equals(CpasUtil.logicalLink2[j][0]) && !tname.equals(CpasUtil.logicalLink2[j][2])) {
-							String theOtherVal = q.getValue( CpasUtil.logicalLink2[j][1] );
+					for (int j=0; j < cn.getCpasUtil().logicalLink2.length; j++) {
+						if (colName.equals(cn.getCpasUtil().logicalLink2[j][0]) && !tname.equals(cn.getCpasUtil().logicalLink2[j][2])) {
+							String theOtherVal = q.getValue( cn.getCpasUtil().logicalLink2[j][1] );
 
 							if (theOtherVal != null && !theOtherVal.equals("")) {
 								isLinked = true;
-								lTable = CpasUtil.logicalLink2[j][2];
-								keyValue = q.getValue(CpasUtil.logicalLink2[j][1]) + "^" + val;
+								lTable = cn.getCpasUtil().logicalLink2[j][2];
+								keyValue = q.getValue(cn.getCpasUtil().logicalLink2[j][1]) + "^" + val;
 								linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
 							}
 						}
 					}
 
-					for (int j=0; !isLinked && j < CpasUtil.logicalLink.length; j++) {
-						if (colName.equals(CpasUtil.logicalLink[j][0]) && !tname.equals(CpasUtil.logicalLink[j][1])) {
+					for (int j=0; !isLinked && j < cn.getCpasUtil().logicalLink.length; j++) {
+						if (colName.equals(cn.getCpasUtil().logicalLink[j][0]) && !tname.equals(cn.getCpasUtil().logicalLink[j][1])) {
 							isLinked = true;
-							lTable = CpasUtil.logicalLink[j][1];
+							lTable = cn.getCpasUtil().logicalLink[j][1];
 							keyValue = val;
 							linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
 						}
