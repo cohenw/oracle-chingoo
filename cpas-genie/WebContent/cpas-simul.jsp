@@ -22,7 +22,9 @@
 	String mainQry = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='MS'");
 	String subQry = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='DS'");
 	String mainLayout = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='MT'");
+	if (mainLayout != null && mainLayout.startsWith("SELECT")) mainLayout = "";
 	String subLayout = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='DT'");
+	if (subLayout != null && subLayout.startsWith("SELECT")) subLayout = "";
 	String as = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='AS'");
 	
 	if (mainQry==null) mainQry="";
@@ -361,10 +363,58 @@ function submitSub() {
 	$("#subQryEdit").hide();
 }
 
+function rowsPerPage(rows) {
+	$("#rowsPerPage").val(rows);
+	$("#pageNo").val(1);
+//	$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+	
+	reloadData(1);
+}
+
 </script>
 </head> 
 
 <body>
+
+<div style="display: none;">
+<form name="form0" id="form0" action="query.jsp">
+<input id="sql" name="sql" type="hidden" value=""/>
+<input id="sql2" name="sql2" type="hidden" value=""/>
+<input id="as" name="as" type="hidden" value=""/>
+<input id="dataLink" name="dataLink" type="hidden" value="1"/>
+<input id="id" name="id" type="hidden" value=""/>
+<input id="showFK" name="showFK" type="hidden" value="0"/>
+<input type="hidden" id="sortColumn" name="sortColumn" value="">
+<input type="hidden" id="sortDirection" name="sortDirection" value="0">
+<input type="hidden" id="hideColumn" name="hideColumn" value="">
+<input type="hidden" id="filterColumn" name="filterColumn" value="">
+<input type="hidden" id="filterValue" name="filterValue" value="">
+<input type="hidden" id="searchValue" name="searchValue" value="">
+<input type="hidden" id="pageNo" name="pageNo" value="1">
+<input type="hidden" id="rowsPerPage" name="rowsPerPage" value="10">
+<input type="hidden" id="layout" name="layout" value="">
+<input type="hidden" id="applylayout" name="applylayout" value="0">
+</form>
+</div>
+
+<div style="display: none;" id="sql-1"></div>
+<div style="display: none;" id="mode-1">sort</div>
+<div style="display: none;" id="hide-1"></div>
+<div style="display: none;" id="sort-1"></div>
+<div style="display: none;" id="sortdir-1">0</div>
+
+<div style="display: none;" id="sql-2"></div>
+<div style="display: none;" id="mode-2">sort</div>
+<div style="display: none;" id="hide-2"></div>
+<div style="display: none;" id="sort-2"></div>
+<div style="display: none;" id="sortdir-2">0</div>
+
+<form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
+<input id="sql_q" name="sql" type="hidden"/>
+<input name="norun_" type="hidden" value="YES"/>
+</form>
+
+
 
 	<table border=0>
 		<td><img src="http://icons.iconarchive.com/icons/cornmanthe3rd/plex/32/Media-play-2-icon.png"
@@ -492,44 +542,6 @@ subQry=<%= subQry %>
 	</div>
 	<div id="div-2"></div>
 </div>
-
-<div style="display: none;">
-<form name="form0" id="form0" action="query.jsp">
-<input id="sql" name="sql" type="hidden" value=""/>
-<input id="sql2" name="sql2" type="hidden" value=""/>
-<input id="as" name="as" type="hidden" value=""/>
-<input id="dataLink" name="dataLink" type="hidden" value="1"/>
-<input id="id" name="id" type="hidden" value=""/>
-<input id="showFK" name="showFK" type="hidden" value="0"/>
-<input type="hidden" id="sortColumn" name="sortColumn" value="">
-<input type="hidden" id="sortDirection" name="sortDirection" value="0">
-<input type="hidden" id="hideColumn" name="hideColumn" value="">
-<input type="hidden" id="filterColumn" name="filterColumn" value="">
-<input type="hidden" id="filterValue" name="filterValue" value="">
-<input type="hidden" id="searchValue" name="searchValue" value="">
-<input type="hidden" id="pageNo" name="pageNo" value="1">
-<input type="hidden" id="rowsPerPage" name="rowsPerPage" value="10">
-<input type="hidden" id="layout" name="layout" value="">
-<input type="hidden" id="applylayout" name="applylayout" value="0">
-</form>
-</div>
-
-<div style="display: none;" id="sql-1"></div>
-<div style="display: none;" id="mode-1">sort</div>
-<div style="display: none;" id="hide-1"></div>
-<div style="display: none;" id="sort-1"></div>
-<div style="display: none;" id="sortdir-1">0</div>
-
-<div style="display: none;" id="sql-2"></div>
-<div style="display: none;" id="mode-2">sort</div>
-<div style="display: none;" id="hide-2"></div>
-<div style="display: none;" id="sort-2"></div>
-<div style="display: none;" id="sortdir-2">0</div>
-
-<form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
-<input id="sql_q" name="sql" type="hidden"/>
-<input name="norun_" type="hidden" value="YES"/>
-</form>
 
 <hr/>
 

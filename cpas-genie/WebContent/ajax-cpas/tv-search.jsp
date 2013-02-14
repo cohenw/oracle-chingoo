@@ -10,8 +10,8 @@
 	String keyword = request.getParameter("keyword");
 	String key = keyword.toUpperCase().trim();
 
-	String qry = "SELECT * FROM TREEVIEW WHERE UPPER(CAPTION) LIKE '%" + key + "%' OR TREEKEY='" + key + "' ORDER BY sdi, caption"; 
-	
+	String qry = "SELECT * FROM TREEVIEW WHERE UPPER(CAPTION) LIKE '%" + key + "%' OR TREEKEY='" + key + "' " +
+				"ORDER BY sdi, caption"; 
 	Query q = new Query(cn, qry, false);
 	
 %>

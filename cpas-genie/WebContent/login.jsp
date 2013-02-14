@@ -81,7 +81,7 @@
 <% if (isCPAS) { %>
 	<img src="http://www.cpas.com/images/layout_01.jpg">
 <% } %>	
-  <img src="image/genie2.jpg" title="<%= Util.getVersionDate() + " Build" + Util.getBuildNo() %>"/>
+  <img src="image/genie2.jpg" title="<%= Util.getVersionDate() + " Build " + Util.getBuildNo() %>"/>
 <% if (isCPAS) { %>
     <h2>Welcome to CPAS Genie.</h2>
 <% } else {%>	
@@ -383,7 +383,7 @@ VANGUARD<br/>
 <li>Link between Treeview and Process</li>
 <li>
 CPAS Genie User's manual.
-<a href="http://vs-web-peba:8080/docs/CPAS-Genie-Manual.docx"><img src='http://www.fmi.ca/images/icon_word.jpg'>Download</a>
+<a href="http://vs-web-peba:8080/docs/CPAS-Genie-Manual.docx"><img src='https://dcb.nci.nih.gov/SiteCollectionImages/icon_word.gif'>Download</a>
 </li>
 
 
