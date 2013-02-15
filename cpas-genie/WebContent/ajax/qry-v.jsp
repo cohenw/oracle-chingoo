@@ -386,7 +386,7 @@ Rows/Page
 			linkUrlTree = "data-link.jsp?table=" + tname + "&rowid=" + Util.encodeUrl(keyValue);
 		}
 		
-		pkDataLink[rowCnt-1] = "<a href='" + linkUrlTree + "'><img src=\"image/arrows.gif\" border=0 title=\"Data Link\"></a>";
+		pkDataLink[rowCnt-1] = "<a href='" + linkUrlTree + "'><img src=\"image/star.png\" border=0 title=\"Data Link\"></a>";
 %>
 <%-- 	<td class="<%= rowClass%>">
 		<a href='<%= linkUrlTree %>'><img src="image/follow.gif" border=0 title="Data Link"></a>

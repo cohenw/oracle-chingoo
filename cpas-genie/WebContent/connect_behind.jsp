@@ -43,6 +43,7 @@
 	
 	cn = new Connect(url, username, password, ipAddress);
 	cn.setUrl(request.getRequestURL().toString());
+	cn.serverUrl = Util.getURL(request);
 	String ua = request.getHeader("user-agent");
 	cn.setUserAgent(ua);
     System.out.println ("User Agent: " + ua);
