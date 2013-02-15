@@ -415,7 +415,7 @@ Rows/Page
 		}
 %>
 	<td class="<%= rowClass%>">
-		<a href='<%= linkUrlTree %>'><img src="image/arrows.gif" border=0 title="Data Link"></a>
+		<a href='<%= linkUrlTree %>'><img src="image/star.png" border=0 title="Data Link"></a>
 	</td>
 <%
 	}

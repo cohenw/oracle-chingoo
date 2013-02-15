@@ -17,7 +17,7 @@ if ( tname.equals("BATCH") ) {
 	
 	String paramTable = cn.queryOne("SELECT PARAMTABLE FROM BATCHCAT WHERE BATCHKEY='" +q.getValue("BATCHKEY") +"'");
 //System.out.println("paramTable=" + paramTable);
-	if (!paramTable.equals("")) {
+	if (paramTable != null && !paramTable.equals("")) {
 		list.add(paramTable);
 	}
 	String qry = "SELECT BUFFERTABLE FROM BATCHCAT_BUFFER WHERE BATCHKEY='" + q.getValue("BATCHKEY") + "' " +
@@ -158,7 +158,9 @@ if ( tname.equals("ERRORCAT") ) {
 	String id = Util.getId();
 %>
 
-<img src="image/data-link.png" align="middle"/> <b>DATA LINK</b>
+<img src="image/star-big.png" align="middle"/>
+
+ <b>DATA LINK</b>
 &nbsp;&nbsp;
 <b><%= cn.getUrlString() %></b>
 

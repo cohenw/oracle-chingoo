@@ -102,7 +102,7 @@
     	<td><span style="font-size:20px; color: blue;">Password</span></td>
     	<td><input style="font-size:20px;" name="password" type="password"/></td>
     </tr>
-<% if (isCPAS) { %>
+<% if (isCPAS && Util.isInCpasNetwork(request)) { %>
     <tr>
     	<td><span style="font-size:20px; color: blue;">Your Email</span></td>
     	<td><input style="font-size:20px;" name="email" id="email" value="<%= email %>"/> Genie will send query logs by email.</td>

@@ -203,7 +203,7 @@ Found: <%= filteredCount %>
 			int colType = q.getColumnType(i);
 			numberCol[colIdx] = Util.isNumberType(colType);
 			
-			String tooltip = q.getColumnTypeName(i);
+			String tooltip = q.getColumnToolTip(i);
 			String comment =  cn.getComment(tname, colName);
 			if (comment != null && comment.length() > 0) tooltip += " " + comment;
 			
@@ -265,7 +265,7 @@ Found: <%= filteredCount %>
 		String linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
 %>
 	<td class="<%= rowClass%>">
-		<a href='<%= linkUrlTree %>'><img src="image/arrows.gif" border=0 title="Data link"></a>
+		<a href='<%= linkUrlTree %>'><img src="image/star.png" border=0 title="Data link"></a>
 	</td>
 <%
 	}
@@ -293,10 +293,10 @@ Found: <%= filteredCount %>
 				String dialogUrl = "";
 				String linkImage = "image/view.png";
 				boolean isLogicalLink = false;
-
-				if (lTable != null  && dLink) {
+//System.out.println("lTable="+lTable + " dLink="+ dLink);
+				if (lTable != null /*  && dLink */) {
 					isLinked = true;
-					linkUrl = "ajax/fk-lookup.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
+//					linkUrl = "ajax/fk-lookup.jsp?table=" + lTable + "&key=" + Util.encodeUrl(keyValue);
 					dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
 				} else if (val != null && val.startsWith("BLOB ")) {
 					isLinked = true;
@@ -324,23 +324,23 @@ Found: <%= filteredCount %>
 					linkImage ="image/download.gif";
 				} else {
 					
-					for (int j=0; j < CpasUtil.logicalLink2.length; j++) {
-						if (colName.equals(CpasUtil.logicalLink2[j][0]) && !tname.equals(CpasUtil.logicalLink2[j][2])) {
-							String theOtherVal = q.getValue( CpasUtil.logicalLink2[j][1] );
+					for (int j=0; j < cn.getCpasUtil().logicalLink2.length; j++) {
+						if (colName.equals(cn.getCpasUtil().logicalLink2[j][0]) && !tname.equals(cn.getCpasUtil().logicalLink2[j][2])) {
+							String theOtherVal = q.getValue( cn.getCpasUtil().logicalLink2[j][1] );
 
 							if (theOtherVal != null && !theOtherVal.equals("")) {
 								isLinked = true;
-								lTable = CpasUtil.logicalLink2[j][2];
+								lTable = cn.getCpasUtil().logicalLink2[j][2];
 								keyValue = theOtherVal + "^" + val;
 								dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
 							}
 						}
 					}
 
-					for (int j=0; !isLinked && j < CpasUtil.logicalLink.length; j++) {
-						if (colName.equals(CpasUtil.logicalLink[j][0]) && !tname.equals(CpasUtil.logicalLink[j][1])) {
+					for (int j=0; !isLinked && j < cn.getCpasUtil().logicalLink.length; j++) {
+						if (colName.equals(cn.getCpasUtil().logicalLink[j][0]) && !tname.equals(cn.getCpasUtil().logicalLink[j][1])) {
 							isLinked = true;
-							lTable = CpasUtil.logicalLink[j][1];
+							lTable = cn.getCpasUtil().logicalLink[j][1];
 							keyValue = val;
 							dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
 						}

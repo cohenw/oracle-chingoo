@@ -130,7 +130,9 @@ $(document).ready(function(){
 			//alert(diff);
 			var newH = h - 80;
 
-			var tmp = w - $('#tabs').width() - $('#outer-result2').width() - 45; 
+			var tmp = w - $('#tabs').width() - $('#outer-result2').width() - 45;
+			if (!$("#outer-result2").is(":visible"))
+				tmp = w - $('#tabs').width() - 45;
 
 //			$('#outer-table').height(newH-diff);
 			$('#outer-result1').height(newH);
@@ -158,6 +160,11 @@ function callserver() {
 		}
 	});
 }	
+
+function hideHist() {
+	$("#outer-result2").hide();
+	checkResize();
+}
 </script>
 
 	<style>
@@ -339,24 +346,18 @@ function callserver() {
 <span style="color: blue; font-family: Arial; font-size:28px; font-weight:bold;">Genie</span>
 </td>
 <!-- <td nowrap><h2 style="color: blue;">Genie</h2></td> -->
-<td><h3><%= cn.getUrlString() %></h3></td>
+<td><b><%= cn.getUrlString() %></b></td>
 <td nowrap>
+<% if (cn.isCpas() && isCPAS) { %>
+<a href="javascript:showCPAS()"><img border=0 src="image/cpas.jpg" width=12 height=12>
+CPAS</a> |
+<% } %>
 <a href="query.jsp" target="_blank">Query</a> |
-<!-- <a href="worksheet.jsp" target="_blank">Work Sheet</a> |
- -->
 <a href="javascript:queryHistory()">History</a> |
 <a href="javascript:clearCache()">Clear Cache</a> |
 <a href='Javascript:aboutGenie()'>About Genie</a> |
 <a href="logout.jsp">Log out</a>
 
-<% if (cn.isCpas() && isCPAS) { %>
-<br/>
-<a href="javascript:showCPAS()"><img border=0 src="image/cpas.jpg" width=12 height=12>
-CPAS Catalogs</a> | 
-<a href="cpas-treeview.jsp" target=_blank>Treeview</a> |
-<a href="cpas-process.jsp" target=_blank>Process</a> |
-<a href="cpas-online.jsp" target=_blank>Online</a>
-<% } %>
 </td>
 <td align=right nowrap>
 <b>Global Search</b> <input id="globalSearch" style="width: 200px;"/>
@@ -421,6 +422,7 @@ CPAS Catalogs</a> |
 </td>
 <td valign=top>
 <div id="outer-result2">
+	<a href="Javascript:hideHist()" style="float:right;">hide</a>
 	<div id="inner-result2"><%= addedHistory %></div>
 </div>
 </td>
