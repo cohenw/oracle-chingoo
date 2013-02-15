@@ -86,6 +86,7 @@ public class Connect implements HttpSessionBindingListener {
 	private Date lastDate;
 	private boolean isCpas = false;
 	public String pwd;
+	public String serverUrl;
 	
 	/**
 	 * Constructor
@@ -280,6 +281,9 @@ public class Connect implements HttpSessionBindingListener {
 		return res;
 	}
 	
+	public boolean isInCpasNetwork() {
+		return (this.serverUrl != null && this.serverUrl.contains("cpas.com") );
+	}
     
     public void printQueryLog() {
     	HashMap<String, QueryLog> map = this.getQueryHistory();
@@ -305,12 +309,13 @@ public class Connect implements HttpSessionBindingListener {
 		String title = "Genie - Query History ";
 		if (!this.isCpas) return;
 		
-   		if (this.email != null && email.length() > 2 && map.size() > 0) {
+   		if (this.email != null && email.length() > 2 && map.size() > 0 && isInCpasNetwork()) {
     		Email.sendEmail(email, title + this.urlString, qryHist);
     	}
 
    		qryHist =  url + "\nWho: " + who + "\nAgent: " + getUserAgent() + "\nBuild No: " + Util.getBuildNo() + "\n\n" + qryHist + "\n\n" + extractJS(this.getAddedHistory());
-   		Email.sendEmail("oracle.genie.email@gmail.com", title + this.urlString + " " + who, qryHist);
+   		if (isInCpasNetwork())
+   			Email.sendEmail("oracle.genie.email@gmail.com", title + this.urlString + " " + who, qryHist);
     }
     
 	public void valueBound(HttpSessionBindingEvent arg0) {
