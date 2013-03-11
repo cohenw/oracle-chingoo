@@ -19,6 +19,8 @@ Connect cn = (Connect) session.getAttribute("CN");
 String table = request.getParameter("tname");
 String tname = table;
 String owner = request.getParameter("owner");
+String hideEmpty = request.getParameter("hideEmpty");
+boolean isHideEmpty = (hideEmpty!=null && hideEmpty.equals("Y"));
 
 // incase owner is null & table has owner info
 if (owner==null && table!=null && table.indexOf(".")>0) {
@@ -80,6 +82,12 @@ text
 
 <img src="image/data-link.png" align="middle"/>
 <%= cn.getUrlString() %>
+&nbsp;&nbsp;
+<% if (isHideEmpty) { %>
+<a href="Javascript:form1.submit()">Show All Tables</a>
+<% } else { %>
+<a href="Javascript:form1.submit()">Hide Empty Tables</a>
+<% } %>
 
 <br/>
 
@@ -154,14 +162,17 @@ for (ForeignKey rec: fks) {
 	
 	int x = seq * 170 - 50;
 	int y = 40;
+	
+	String rn = cn.getTableRowCount(rec.rTableName);
+	String fill = "rgb(200,200,200)";
 %>
 
   <linex x1="<%= cx %>" y1="<%= cy %>" x2="<%= x %>" y2="<%= y + 50 %>" style="stroke:rgb(255,0,0);stroke-width:2"/>  
   <line x1="<%= x %>" y1="<%= y + 80 %>" x2="<%= x %>" y2="<%= y + 50 %>" style="stroke:rgb(255,0,0);stroke-width:2"/>  
   
-  <rect onclick="obj_click(evt, '<%= rec.rTableName %>')" onmouseover="obj_over(evt)" onmouseout="obj_out(evt)" x="<%= x - 80 %>" y="<%= y - 30 %>" rx="20" ry="20" width="160" height="80" fill="rgb(200,200,200)" stroke="black" stroke-width="2"/>
+  <rect onclick="obj_click(evt, '<%= rec.rTableName %>')" onmouseover="obj_over(evt)" onmouseout="obj_out(evt)" x="<%= x - 80 %>" y="<%= y - 30 %>" rx="20" ry="20" width="160" height="80" fill="<%=fill %>" stroke="black" stroke-width="2"/>
   <text onclick="obj_click(evt, '<%= rec.rTableName %>')" x="<%= x %>" y="<%= y %>" font-family="Arial" font-size="12" text-anchor="middle" fill="black"><%= rec.rTableName %></text>
-  <text onclick="obj_click(evt, '<%= rec.rTableName %>')" x="<%= x %>" y="<%= y + 15 %>" font-family="Arial" font-size="12" text-anchor="middle" fill="rgb(150,50,50)"><%= cn.getTableRowCount(rec.rTableName) %></text>
+  <text onclick="obj_click(evt, '<%= rec.rTableName %>')" x="<%= x %>" y="<%= y + 15 %>" font-family="Arial" font-size="12" text-anchor="middle" fill="rgb(150,50,50)"><%= rn %></text>
   <image onmouseover="qry_over(evt)" onmouseout="qry_out(evt)" onclick="qry(evt, '<%= rec.rTableName %>')" x="<%= x - 8 %>" y="<%= y + 20 %>" width="16" height="16" preserveAspectRatio="none" xlink:href="image/icon_query.png"></image>
   <line x1="<%= x %>" y1="<%= 90 %>" x2="<%= x - 5 %>" y2="<%= 100 %>" style="stroke:rgb(255,0,0);stroke-width:2"/>  
   <line x1="<%= x %>" y1="<%= 90 %>" x2="<%= x + 5 %>" y2="<%= 100 %>" style="stroke:rgb(255,0,0);stroke-width:2"/>  
@@ -184,7 +195,7 @@ int cnt2 = 1;
 int y = 450;
 for (String tbl: refTabs) {
 	String cnt = cn.getTableRowCount(tbl);
-	//if (cnt.equals("0")) continue;
+	if (isHideEmpty && cnt.equals("0")) continue;
 
 	if (seq > 5) {
 		seq = 1;
@@ -230,6 +241,11 @@ if (cnt2 > 1) {
 <form id="form_qry" target="_blank" action="query.jsp" method="post">
 <input id="sql" name="sql" type="hidden">
 <input name="norun" type="hidden" value="y">
+</form>
+
+<form id="form1" method="get">
+<input name="tname" type="hidden" value="<%=tname%>">
+<input name="hideEmpty" type="hidden" value="<%= (isHideEmpty?"":"Y") %>">
 </form>
 
 <script type="text/javascript">

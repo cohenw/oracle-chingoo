@@ -417,7 +417,7 @@ function rowsPerPage(rows) {
 
 
 	<table border=0>
-		<td><img src="http://icons.iconarchive.com/icons/cornmanthe3rd/plex/32/Media-play-2-icon.png"
+		<td><img src="image/Media-play-2-icon32.png"
 			title="Version <%=Util.getVersionDate()%>" /></td>
 		<td><h2 style="color: blue;">CPAS Simulator</h2></td>
 		<td>&nbsp;</td>
@@ -507,7 +507,7 @@ function rowsPerPage(rows) {
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 
 <div style="padding: 4px;">
-	<div id="mainQry" style="color: gray;"><%= mainQry %></div>
+	<div id="mainQry"><%= new HyperSyntax().getHyperSyntax(cn, mainQry, "SQL") %></div>
 	<a href="Javascript:toggleEditMain()">Edit</a>
 	<div id="mainQryEdit" style="display:none;">
 		<textarea id="mainQryText" rows="4" cols="60"><%= mainQry %></textarea>
@@ -527,13 +527,12 @@ if (subQry != null && !subQry.equals("")) {
 	
 %>
 
-subQry=<%= subQry %>
 <b>Detail</b> [<%= subLayout %>]
 <a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 
 <div style="padding: 4px;">
-	<div id="subQry" style="color: gray;"><%= subQry %></div>
+	<div id="subQry"><%= new HyperSyntax().getHyperSyntax(cn, subQry, "SQL") %></div>
 	<a href="Javascript:toggleEditSub()">Edit</a>
 	<div id="subQryEdit" style="display:none;">
 		<textarea id="subQryText" rows="4" cols="60"><%= subQry %></textarea>

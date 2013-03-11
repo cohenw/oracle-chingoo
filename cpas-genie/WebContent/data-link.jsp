@@ -8,7 +8,6 @@
 %>
 
 <%!
-
 public synchronized List<String> getLogicalChildTables(Connect cn, String tname, Query q) {
 //System.out.println("tname="+tname);	
 	List<String> list = new ArrayList<String>();
@@ -29,6 +28,8 @@ if ( tname.equals("BATCH") ) {
 	list.add("BATCH_ERROR");
 	list.add("CALC_ERROR");
 }
+
+
 /*
 if ( tname.equals("ERRORCAT") ) {
 	list.add("BATCH_ERROR");
@@ -37,7 +38,6 @@ if ( tname.equals("ERRORCAT") ) {
 */
 	return list;
 }
-
 %>
 <%
 	int counter = 0;
@@ -46,6 +46,16 @@ if ( tname.equals("ERRORCAT") ) {
 	String table = request.getParameter("table");
 	String key = request.getParameter("key");
 	String rowid = request.getParameter("rowid");
+	
+	String qry = request.getParameter("qry");
+	if (qry != null && !qry.equals("")) {
+		int idx = qry.indexOf("|");
+		table = qry.substring(0,idx);
+		key = qry.substring(idx+1).replaceAll("\\|", "^");
+//		System.out.println("table=" + table);
+//		System.out.println("key=" + key);
+	}
+	
 	List<String> refTabs = cn.getReferencedTables(table);
 
 	String sql = cn.getPKLinkSql(table, key, rowid);
@@ -61,7 +71,7 @@ if ( tname.equals("ERRORCAT") ) {
 	Query q = new Query(cn, sql);
 
 	List<String> lcTabs = getLogicalChildTables(cn, table, q); // logical child tables
-
+	lcTabs.removeAll(refTabs);
 
 	// Foreign keys - For FK lookup
 	List<ForeignKey> fks = cn.getForeignKeys(table);
@@ -158,11 +168,12 @@ if ( tname.equals("ERRORCAT") ) {
 	String id = Util.getId();
 %>
 
+<div style="background-color: #ffffff;">
 <img src="image/star-big.png" align="middle"/>
 
  <b>DATA LINK</b>
 &nbsp;&nbsp;
-<b><%= cn.getUrlString() %></b>
+<%= cn.getUrlString() %>
 
 &nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -175,7 +186,8 @@ if ( tname.equals("ERRORCAT") ) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <!-- <a href="Javascript:openWorksheet()">Open Work Sheet</a>
  -->
-Search <input id="globalSearch" style="width: 200px;"/>
+Search <input id="globalSearch" style="width: 200px;" placeholder="table or view name"/>
+</div>
 
 <br/><br/>
 
@@ -236,7 +248,7 @@ Search <input id="globalSearch" style="width: 200px;"/>
 
 
 <div style="display: none;">
-<form name="form0" id="form0" action="query.jsp">
+<form name="form0" id="form0" action="query.jsp" target="_blank">
 <input id="sql" name="sql" type="hidden" value=""/>
 <input id="dataLink" name="dataLink" type="hidden" value="1"/>
 <input id="id" name="id" type="hidden" value=""/>
@@ -254,6 +266,23 @@ Search <input id="globalSearch" style="width: 200px;"/>
 
 <%
 	int cntFK = 0;
+
+// viewTable should link to the table
+if (cn.isViewTable(table)) {
+	System.out.println("ViewTable !!!!!!");
+	String tmp = cn.getViewTableName(table);
+	//fkLinkTab.add("SV_MEMBER");
+	
+	String tmp2 = cn.getPrimaryKeyName(tmp);
+	String linkCol = cn.getConstraintCols(tmp2);
+	String rTable = cn.getTableNameByPrimaryKey(tmp2);
+	
+	fkLinkTab.add(rTable);
+	fkLinkCol.add(linkCol);
+//	hs.add(linkCol);
+}
+
+
 	for (int i=0; i<fkLinkTab.size(); i++) {
 		String ft = fkLinkTab.get(i);
 		String fc = fkLinkCol.get(i);
@@ -305,6 +334,7 @@ Search <input id="globalSearch" style="width: 200px;"/>
 <%
 // see if there is logial foreign key
   int cntLFK = 0;
+
 	for (int i=0; i< q.getColumnCount(); i++) {
 		String label = q.getColumnLabel(i);
 		String ft=null, fsql="", fc="";
@@ -328,9 +358,18 @@ Search <input id="globalSearch" style="width: 200px;"/>
 				break;
 			}
 		}
+
+		String tc = table + "." + label;
+		for (int j=0; ft==null && j < cn.getCpasUtil().logicalLinkSpec.length; j++) {
+			if (tc.equals(cn.getCpasUtil().logicalLinkSpec[j][0])) {
+				ft = cn.getCpasUtil().logicalLinkSpec[j][1];
+				fsql = cn.getPKLinkSql(ft, q.getValue(label));
+				break;
+			}
+		}
 		
 		if (ft == null) continue;
-		
+		if (fkLinkTab.contains(ft)) continue;
 		if (ft.equals(table)) continue;
 		if (q.getValue(label)==null) continue;
 		
@@ -447,6 +486,11 @@ Search <input id="globalSearch" style="width: 200px;"/>
 		fkColName = cn.queryOne("SELECT COLUMN_NAME from user_tab_columns where table_name='" + refTab + "' " + 
 				"and COLUMN_NAME in ('PROCESSID', 'PROCESSKEY')");
 		if (fkColName== null) fkColName = "PROCESSID";
+		
+		if (table.equals("REPORTCAT")) {
+			fkColName = "FILEID";
+			key = q.getValue("FILEID");
+		}
 			
 		int recCount = cn.getPKLinkCount(refTab, fkColName , key);
 		if (recCount==0) continue;

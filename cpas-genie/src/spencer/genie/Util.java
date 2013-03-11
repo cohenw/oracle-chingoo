@@ -204,21 +204,14 @@ public class Util {
 		return tables;
 	}
 	
-	public static String getBuildNo() {
-		return "CPAS-1065";
-	}
-
-	public static String getVersionDate() {
-		return "Feb 13, 2013";
-	}
-
 	public static String getScriptionVersion() {
 		return getBuildNo();
 	}
 
 	public static String getIpAddress(HttpServletRequest request) {
 		String ipAddress = request.getRemoteAddr();
-		if (ipAddress.equals("127.0.0.1")) ipAddress=request.getHeader("X-Forwarded-For");
+		if (request.getHeader("X-Forwarded-For") != null) ipAddress=request.getHeader("X-Forwarded-For");
+		//if (ipAddress.equals("127.0.0.1")) ipAddress=request.getHeader("X-Forwarded-For");
 		
 		return ipAddress;
 	}
@@ -259,6 +252,16 @@ public class Util {
 
 	public static boolean isInCpasNetwork(HttpServletRequest req) {
 		String url = getURL(req);
-		return (url != null && url.contains("cpas.com") );
+		return true;
+		//return (url != null && url.contains("cpas.com") );
 	}
+
+	public static String getBuildNo() {
+		return "CPAS-1070";
+	}
+
+	public static String getVersionDate() {
+		return "Mar 11, 2013";
+	}
+
 }

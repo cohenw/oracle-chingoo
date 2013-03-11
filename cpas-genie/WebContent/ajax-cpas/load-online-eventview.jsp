@@ -101,6 +101,18 @@
 		if (rowCnt%2 == 0) rowClass = "evenRow";		
 		String actionName = cn.queryOne("SELECT NAME FROM CPAS_ACTION WHERE ACTION ='" + action + "'");
 		String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + seclabel + "'");
+		
+		String batchTask = "";
+		if (action.equals("BT") || action.equals("BW")) {
+			String tmp[] = uparam.split(",");
+			if (tmp.length>1) {
+				String qry = "SELECT BATCHNAME || ' - ' || TASKNAME FROM BATCHCAT A, BATCHCAT_TASK B " +
+				"WHERE A.batchkey=B.batchkey AND A.batchkey = '" + tmp[0] + "'  AND B.taskkey='" + tmp[1] + "'";
+			
+				batchTask = cn.queryOne(qry);
+			}
+		}
+		
 %>
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><%= pevent==null?"":"&nbsp;&nbsp;&nbsp;&nbsp;" %><%= name %></td>
@@ -109,7 +121,7 @@
 	<td class="<%= rowClass%>" nowrap><%= position==null?"":position %></td>
 	<td class="<%= rowClass%>" nowrap><%= action==null?"":action + " <span class='cpas'>" + actionName + "</span>"%></td>
 	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel + " <span class='cpas'>" + secName + "</span>"%></td>
-	<td class="<%= rowClass%>" nowrap><%= uparam==null?"":uparam %></td>
+	<td class="<%= rowClass%>" nowrap><%= uparam==null?"":uparam %> <span class='cpas'><%= batchTask %></span></td>
 <%--
  	<td class="<%= rowClass%>" nowrap><%= log==null?"":log %></td>
 	<td class="<%= rowClass%>" nowrap><%= rkey==null?"":rkey %></td>
@@ -192,7 +204,7 @@
 	<td class="<%= rowClass%>" nowrap>
 	<% if (actionId==null) { %>
 		<%= descr==null?"":descr %>
-		<a href="javascript:openSimul('<%=sdi%>','<%=tv%>')">Simulator  <img border=0 src="http://icons.iconarchive.com/icons/cornmanthe3rd/plex/16/Media-play-2-icon.png"></a>
+		<a href="javascript:openSimul('<%=sdi%>','<%=tv%>')">Simulator  <img border=0 src="image/Media-play-2-icon.png"></a>
 		
 	<% } else { %>
 		<a href="javascript:loadSTMT('<%= sdi %>', <%= actionId %>, '<%= tv %>')"><%= descr==null?"":descr %></a>

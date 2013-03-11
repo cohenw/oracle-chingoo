@@ -78,6 +78,13 @@ public class CpasUtil {
 			{"JMLFILEID", "CPAS_DEFLOB"},
 			{"TAXTYPE", "TAXTYPE"},
 			{"REMARKID", "REMARK"},
+			{"CLNT", "CLIENT"}
+	};
+
+	// for special case (with table name)
+	public String logicalLinkSpec[][] = {
+			{"REPORTCAT.FILEID", "SYSBINFILE"},
+			{"CPAS_WIZARD_PAGE_WEB.FORMNAME", "CPAS_JML"}
 	};
 	
 	public CpasUtil(Connect cn) {
@@ -234,6 +241,9 @@ public class CpasUtil {
 			return cn.queryOne(qry);
 		} else if (temp.endsWith(".REQUESTKEY") && !tname.equals("REQUESTCAT")) {
 			String qry = "SELECT REQUESTNAME FROM REQUESTCAT WHERE REQUESTKEY='" + value + "'";
+			return cn.queryOne(qry);
+		} else if (temp.endsWith("REPORTCAT.FILEID")) {
+			String qry = "SELECT FILENAME FROM SYSBINFILE WHERE FILEID='" + value + "'";
 			return cn.queryOne(qry);
 		}
 		

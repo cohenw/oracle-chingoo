@@ -41,7 +41,7 @@
 	
 	String ipAddress = Util.getIpAddress(request);
 	
-	cn = new Connect(url, username, password, ipAddress);
+	cn = new Connect(session, url, username, password, ipAddress);
 	cn.setUrl(request.getRequestURL().toString());
 	cn.serverUrl = Util.getURL(request);
 	String ua = request.getHeader("user-agent");
@@ -51,7 +51,7 @@
 	if (cn.isConnected()) {
 		// you're connected.
 		// assign the Connect object to session
-		session.setAttribute("CN", cn);
+		//session.setAttribute("CN", cn);
 		GenieManager.getInstance().addSession(cn);
 	
 		// get cookie

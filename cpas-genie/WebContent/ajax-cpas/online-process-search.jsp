@@ -62,12 +62,12 @@
 
 <%
 	String qry2 = "SELECT A.*, (SELECT TYPE FROM CPAS_PROCESS WHERE process=A.process) TYPE FROM CPAS_PROCESS_EVENT A WHERE " +
-		"(UPPER(NAME) LIKE '%" + key + "%' OR SECLABEL = '"+key +"') AND SECLABEL != 'SC_NEVER' ORDER BY process, position"; 
+		"(UPPER(NAME) LIKE '%" + key + "%' OR SECLABEL = '"+key +"') AND SECLABEL != 'SC_NEVER' ORDER BY type, process, position"; 
 	
 	Query q2 = new Query(cn, qry2, false);
 	
 %>
-<b>Event</b>
+<b>Event 333</b>
 <br/>
 
 <table id="dataTable" border=1 class="gridBody">

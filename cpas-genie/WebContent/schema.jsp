@@ -47,7 +47,7 @@ System.out.println(new Date());
 	q1.destroy();
 	
 System.out.println(new Date());
-
+/*
 	String sql2 = "SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION, DATA_SCALE, NULLABLE, COLUMN_ID, DATA_DEFAULT FROM ALL_TAB_COLUMNS where (owner=user or owner in (select distinct table_owner from user_synonyms)) ORDER BY TABLE_NAME, COLUMN_ID";
 	Query q2 = new Query(cn, sql2, 1000000, false);
 
@@ -70,7 +70,7 @@ System.out.println(new Date());
 	}
 	q2.destroy();
 System.out.println(new Date());
-	
+*/	
 
 	String sql3 = "SELECT OWNER, CONSTRAINT_NAME, TABLE_NAME from ALL_CONSTRAINTS where (owner=user or owner in (select distinct table_owner from user_synonyms)) AND CONSTRAINT_TYPE='P'";
 	Query q3 = new Query(cn, sql3, 1000000, false);

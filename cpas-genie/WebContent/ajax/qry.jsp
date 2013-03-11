@@ -214,7 +214,7 @@ if (!hasPK && q.hasColumn("ROWID")) hasRowid = true;
 --%>
  
 <span style="color:#666666;"><%= cn.getUrlString() %> - <%= new java.util.Date() %></span> 
-<pre style="color: #0000FF; font-size: 18px;"><b id="qqq"><%= sql %></b><a title="Edit Query" style="margin-left: 10px;" href="Javascript:editQuery()"><img border=0 src="image/sql.png"></a></pre>
+<pre style="font-size: 16px;"><b id="qqq"><%=new HyperSyntax().getHyperSyntax(cn, sql, "SQL")%></b><a title="Edit Query" style="margin-left: 10px;" href="Javascript:editQuery()"><img border=0 src="image/sql.png"></a></pre>
 
 <% if (pgNo>1) { %>
 <a href="Javascript:gotoPage(<%= pgNo - 1%>)"><img border=0 src="image/btn-prev.png" align="top"></a>
@@ -265,7 +265,7 @@ Rows/Page
 <% if (totalCount > 1) { %>
 &nbsp;&nbsp;
 <img src="image/view.png">
-<input id="search" name="search" value="<%= searchValue %>" size=20 onChange="searchRecords($(this).val())">
+<input id="search" name="search" value="<%= searchValue %>" size=20 onChange="searchRecords($(this).val())" placeholder="search">
 <a href="Javascript:clearSearch()"><img border="0" src="image/clear.gif"></a>
 <% } %>
 
@@ -299,7 +299,15 @@ Rows/Page
 					break;
 				}
 			}
-			
+
+			String tc = tname + "." + colName;
+			for (String[] ll: cn.getCpasUtil().logicalLinkSpec) {
+				if (tc.equals(ll[0])) {
+					hasCpas = true;
+					break;
+				}
+			}
+
 			if (hasCpas) break;
 		}
 	}
@@ -406,16 +414,18 @@ Rows/Page
 			}
 			pkValues = keyValue;
 		
-			linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
+			//linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
+			linkUrlTree = "data-link.jsp?qry=" + tname + "|" + keyValue;
 		}
 		
 		if (hasRowid) {
 			keyValue = q.getValue("ROWID");
-			linkUrlTree = "data-link.jsp?table=" + tname + "&rowid=" + Util.encodeUrl(keyValue);
+			linkUrlTree = "data-link.jsp?table=" + tname + "&rowid=" + keyValue;
 		}
 %>
 	<td class="<%= rowClass%>">
-		<a href='<%= linkUrlTree %>'><img src="image/star.png" border=0 title="Data Link"></a>
+		<a href='<%= linkUrlTree %>'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
 	</td>
 <%
 	}
@@ -530,6 +540,17 @@ if (fkLinkTab.size()>0 && dLink && false) {
 						}
 					}
 
+					String tc = tname + "." + colName;
+					for (int j=0; !isLinked && j < cn.getCpasUtil().logicalLinkSpec.length; j++) {
+						if (tc.equals(cn.getCpasUtil().logicalLinkSpec[j][0]) && !tname.equals(cn.getCpasUtil().logicalLinkSpec[j][1])) {
+							isLinked = true;
+							lTable = cn.getCpasUtil().logicalLinkSpec[j][1];
+							keyValue = val;
+							linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
+						}
+					}
+
+					// some column end with PERSONID, ex: relpersonid -> PERSON
 					if (!isLinked && colName.endsWith("PERSONID")) {
 						isLinked = true;
 						lTable = "PERSON";

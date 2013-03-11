@@ -33,6 +33,7 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
@@ -45,15 +46,24 @@ public class Connect implements HttpSessionBindingListener {
 	private Connection conn = null;
 	private String urlString = null;
 	private String message = "";
+
 	private List<String> tables;
 	private List<String> views;
 	private List<String> synonyms;
 
+	private HashSet<String> tableSet = new HashSet<String>();
+	private HashSet<String> viewSet = new HashSet<String>();
+	private HashSet<String> synonymSet = new HashSet<String>();
+	
 	private HashSet<String> comment_tables = new HashSet<String>();
+	private HashSet<String> temp_tables = new HashSet<String>();
+	private HashSet<String> packages = new HashSet<String>();
+	
 	private Hashtable<String,String> comments;
 	private Hashtable<String,String> constraints;
 	private Hashtable<String,String> pkByTab;
 	private Hashtable<String,String> pkByCon;
+
 	private List<ForeignKey> foreignKeys;
 
 	private List<String> schemas;
@@ -66,6 +76,8 @@ public class Connect implements HttpSessionBindingListener {
 	private HashMap<String, QueryLog> queryLog;
 	private HashMap<String, ArrayList<String>> pkMap;
 //	private Stack<String> history;
+
+	private HashMap<String, String> viewTables;
 	
 	public QueryCache queryCache;
 	public ListCache listCache;
@@ -87,6 +99,9 @@ public class Connect implements HttpSessionBindingListener {
 	private boolean isCpas = false;
 	public String pwd;
 	public String serverUrl;
+	public String connectMessage = "";
+	
+	public HashSet<String> tempSet;
 	
 	/**
 	 * Constructor
@@ -96,11 +111,12 @@ public class Connect implements HttpSessionBindingListener {
 	 * @param password	database password
 	 * @param ipAddress	user's local ip address
 	 */
-    public Connect(String url, String userName, String password, String ipAddress, boolean loadData)
+    public Connect(HttpSession session, String url, String userName, String password, String ipAddress, boolean loadData)
     {
     	//pkColumn = new Hashtable<String, String>();
     	queryResult = new HashMap<String, String>();
     	pkMap = new HashMap<String, ArrayList<String>>();
+    	viewTables = new HashMap<String, String>();
     	loginDate = new Date();
     	lastDate = new Date();
     	pwd = password;
@@ -115,7 +131,8 @@ public class Connect implements HttpSessionBindingListener {
             conn.setReadOnly(true);
             
             urlString = userName + "@" + url;  
-            System.out.println ("Database connection established for " + urlString + " @" + (new Date()) + " " + ipAddress);
+            addMessage("Database connection established for " + urlString + " @" + (new Date()) + " " + ipAddress);
+            if (loadData) session.setAttribute("CN", this);
             
             if (!loadData) return; 
             	
@@ -154,8 +171,8 @@ public class Connect implements HttpSessionBindingListener {
         }
     }
 
-    public Connect(String url, String userName, String password, String ipAddress) {
-    	this(url, userName, password, ipAddress, true);
+    public Connect(HttpSession session, String url, String userName, String password, String ipAddress) {
+    	this(session, url, userName, password, ipAddress, true);
 	}    
     
     /**
@@ -282,7 +299,8 @@ public class Connect implements HttpSessionBindingListener {
 	}
 	
 	public boolean isInCpasNetwork() {
-		return (this.serverUrl != null && this.serverUrl.contains("cpas.com") );
+		return true;
+		//return (this.serverUrl != null && this.serverUrl.contains("cpas.com") );
 	}
     
     public void printQueryLog() {
@@ -351,6 +369,8 @@ public class Connect implements HttpSessionBindingListener {
 		loadPrimaryKeys();
 		loadForeignKeys();
 		loadTableRowCount();
+		loadTempTables();
+		loadViewTables();
 		
         cu = new CpasUtil(this);
         this.isCpas = cu.isCpas;
@@ -417,6 +437,58 @@ public class Connect implements HttpSessionBindingListener {
              e.printStackTrace();
              message = e.getMessage();
  		}
+		addMessage("Loaded Constraints " + constraints.size());
+
+	}
+
+	private synchronized void loadTempTables() {
+		temp_tables.clear();
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery("SELECT TABLE_NAME FROM USER_TABLES WHERE TEMPORARY='Y'");	
+
+       		while (rs.next()) {
+       			String tabName = rs.getString(1);
+       			temp_tables.add(tabName);
+       		}
+       		rs.close();
+       		stmt.close();
+
+		} catch (SQLException e) {
+             System.err.println ("loadTempTables");
+             e.printStackTrace();
+             message = e.getMessage();
+ 		}
+		addMessage("Loaded Temp TABLE " + temp_tables.size());
+
+	}
+
+	private synchronized void loadViewTables() {
+		viewTables.clear();
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery("SELECT NAME, REFERENCED_NAME from user_dependencies " +
+       				"where name in ( " +
+       				"SELECT name  from user_dependencies " + 
+       				"WHERE type='VIEW' AND REFERENCED_TYPE IN ('TABLE') " + 
+       				"group by name having count(*)=1 " +
+       				") AND REFERENCED_NAME NOT IN ('DUAL','STANDARD') AND REFERENCED_TYPE IN ('TABLE')");	
+
+       		while (rs.next()) {
+       			String viewName = rs.getString(1);
+       			String tableName = rs.getString(2);
+       			viewTables.put(viewName, tableName);
+       		}
+       		rs.close();
+       		stmt.close();
+
+		} catch (SQLException e) {
+             System.err.println ("loadViewTables");
+             e.printStackTrace();
+             message = e.getMessage();
+ 		}
+		addMessage("Loaded View/Table TABLE " + viewTables.size());
+
 	}
 
 	private synchronized void loadPrimaryKeys() {
@@ -444,14 +516,17 @@ public class Connect implements HttpSessionBindingListener {
              e.printStackTrace();
              message = e.getMessage();
  		}
+		addMessage("Loaded Primary Keys " + pkByTab.size());
+		
 	}
 
-	private synchronized void loadForeignKeys() {
+	private void loadForeignKeys() {
 		foreignKeys.clear();
 		try {
        		Statement stmt = conn.createStatement();
 //       		ResultSet rs = stmt.executeQuery("select OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE from all_constraints where CONSTRAINT_TYPE = 'R' order by table_name, constraint_type");	
-       		ResultSet rs = stmt.executeQuery("SELECT OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE from all_constraints where CONSTRAINT_TYPE = 'R' and (owner=user or owner in (select distinct table_owner from user_synonyms)) order by table_name, constraint_type");	
+       		ResultSet rs = stmt.executeQuery("SELECT OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE FROM ALL_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'R' and (owner=user or owner in (select table_owner from user_synonyms))");	
+//       		ResultSet rs = stmt.executeQuery("SELECT OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE FROM ALL_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'R' and (owner=user)");	
        		
        		while (rs.next()) {
        			ForeignKey fk = new ForeignKey();
@@ -467,24 +542,25 @@ public class Connect implements HttpSessionBindingListener {
        		}
        		rs.close();
        		stmt.close();
-       		
-       		System.out.println("foreignKeys.size()=" + foreignKeys.size());
 
 		} catch (SQLException e) {
              System.err.println ("7 Cannot connect to database server");
              e.printStackTrace();
              message = e.getMessage();
  		}
+		addMessage("Loaded Foreign Keys " + foreignKeys.size());
 	}
 
 	private synchronized void loadTableRowCount() {
+		int cnt=0;
 		// column comments
 		try {
        		Statement stmt = conn.createStatement();
 //       		ResultSet rs = stmt.executeQuery("select owner, table_name, num_rows from ALL_TABLES");	
-       		ResultSet rs = stmt.executeQuery("SELECT owner, table_name, num_rows from ALL_TABLES where (owner=user or owner in (SELECT distinct table_owner from user_synonyms))");	
+       		ResultSet rs = stmt.executeQuery("SELECT owner, table_name, num_rows from ALL_TABLES where (owner=user or owner in (SELECT table_owner from user_synonyms))");	
 
 	   		while (rs.next()) {
+	   			cnt++;
 	   			String owner = rs.getString(1);
 	   			String tname = rs.getString(2);
 	   			String numRows = rs.getString(3);
@@ -511,6 +587,7 @@ public class Connect implements HttpSessionBindingListener {
             e.printStackTrace();
             message = e.getMessage();
 		}
+		addMessage("Loaded TableRowCount " + cnt);
 	}
 	
 	private synchronized void loadComment(String tname) {
@@ -638,9 +715,14 @@ public class Connect implements HttpSessionBindingListener {
 		tables.clear();
 		views.clear();
 		synonyms.clear();
+		packages.clear();
+		
+		tableSet.clear();
+		viewSet.clear();
+		synonymSet.clear();
 		
 		Statement stmt = conn.createStatement();
-		String qry = "SELECT object_name, object_type FROM user_objects WHERE object_type in ('TABLE','VIEW','SYNONYM')";
+		String qry = "SELECT object_name, object_type FROM user_objects WHERE object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE')";
 		ResultSet rs = stmt.executeQuery(qry);
 		while (rs.next()){
 			String name = rs.getString(1);
@@ -649,14 +731,20 @@ public class Connect implements HttpSessionBindingListener {
 			if (type.equals("TABLE")) tables.add(name);
 			else if (type.equals("VIEW")) views.add(name);
 			else if (type.equals("SYNONYM")) synonyms.add(name);
+			else if (type.equals("PACKAGE")) packages.add(name);
 		}
 		
 		rs.close();
 		stmt.close();
 		
-		System.out.println("Loaded TABLE " + tables.size());
-		System.out.println("Loaded VIEW " + views.size());
-		System.out.println("Loaded SYNONYMS " + synonyms.size());
+		tableSet.addAll(tables);
+		viewSet.addAll(views);
+		synonymSet.addAll(synonyms);
+		
+		addMessage("Loaded Tables " + tables.size());
+		addMessage("Loaded Views " + views.size());
+		addMessage("Loaded Synonyms " + synonyms.size());
+		addMessage("Loaded Packages " + packages.size());
 	}
 	
 	public synchronized String genie(String value, String tab, String targetCol, String sourceCol) {
@@ -741,6 +829,9 @@ public class Connect implements HttpSessionBindingListener {
 	public synchronized ArrayList<String> getPrimaryKeys(String catalog, String tname)  {
 		ArrayList pk = null;
 		String colName = "";
+		
+		String tmp = viewTables.get(tname);
+		if (tmp!=null) tname = tmp;  // viewTable
 		
 		String key = catalog + "." + tname;
 		pk = pkMap.get(key);
@@ -843,6 +934,9 @@ public class Connect implements HttpSessionBindingListener {
 			return getPrimaryKeyName(temp[0], temp[1]);
 		}
 		
+		String tmp = viewTables.get(tname);
+		if (tmp!=null) tname = tmp;  // viewTable
+
 		String pkName = pkByTab.get(tname.toUpperCase());
 		
 		// check for Synonym
@@ -1576,16 +1670,27 @@ public class Connect implements HttpSessionBindingListener {
 				}
 			}
 		}
-		
+/*		
 		if (owner==null) {
 			return getTableDetail2(owner, tname);
 		}
-
+*/
+		if (owner==null) owner = this.schemaName;
+		
 		List<TableCol> list = tableDetailCache.get(owner, tname); 
 		if (list != null ) return list;
 		
 		// primary key
 		ArrayList<String> pk = getPrimaryKeys(owner, tname);
+		
+		// for view/Table
+		if (pk==null) {
+			String tmp = viewTables.get(tname);
+			if (tmp!=null) {
+				pk = getPrimaryKeys(owner, tmp);
+				System.out.println("***pk=" + pk);
+			}
+		}
 		
 		list = new ArrayList<TableCol>();
 		
@@ -1638,6 +1743,7 @@ public class Connect implements HttpSessionBindingListener {
 		return list;
 	}
 
+/*
 	public List<TableCol> getTableDetail2(String owner, String tname) throws SQLException {
 		List<TableCol> list = tableDetailCache.get(owner, tname); 
 		if (list != null ) return list;
@@ -1649,6 +1755,16 @@ public class Connect implements HttpSessionBindingListener {
 
 		// primary key
 		ArrayList<String> pk = getPrimaryKeys(owner, tname);
+
+		// for view/Table
+		if (pk==null) {
+			String tmp = viewTables.get(tname);
+			if (tmp!=null) {
+				pk = getPrimaryKeys(owner, tmp);
+				System.out.println("***2 pk=" + pk);
+			}
+		}
+
 		
 		//System.out.println("Detail for " + table);
 		while (rs1.next()){
@@ -1692,6 +1808,8 @@ public class Connect implements HttpSessionBindingListener {
 		tableDetailCache.add(owner, tname, list);
 		return list;
 	}
+*/
+
 /*
 	public List<String[]> queryMultiCol(String qry, int cols) {
 		return queryMultiCol(qry, cols, true);
@@ -2026,6 +2144,10 @@ public class Connect implements HttpSessionBindingListener {
 		return comment;
 	}
 	
+	public boolean isTempTable(String tname) {
+		return temp_tables.contains(tname);
+	}
+	
 	public String getCpasCodeGrup(String tname, String cname) {
 		return cu.getCodeGrup(tname, cname);
 	}
@@ -2134,10 +2256,40 @@ public class Connect implements HttpSessionBindingListener {
 
 	public boolean isTVS(String oname) {
 		
-		if (tables.contains(oname)) return true;
-		if (views.contains(oname)) return true;
-		if (synonyms.contains(oname)) return true;
+		if (tableSet.contains(oname)) return true;
+		if (viewSet.contains(oname)) return true;
+		if (synonymSet.contains(oname)) return true;
 		
 		return false;
 	}
+	
+	public boolean isPackage(String name) {
+		return packages.contains(name);
+	}
+	
+	public boolean isSynonym(String name) {
+		return synonymSet.contains(name);
+	}
+	
+	public void addMessage(String msg) {
+		connectMessage += msg + "<br/>";
+		System.out.println(msg);
+	}
+	
+	public String getConnectMessage() {
+		return this.connectMessage +"<img src='image/loading.gif'/>";
+	}
+	
+	public boolean isViewTable(String vname) {
+		String tmp = viewTables.get(vname);
+		
+		return tmp != null;
+	}
+	
+	public String getViewTableName(String vname) {
+		String tmp = viewTables.get(vname);
+		
+		return tmp;
+	}
+
 }

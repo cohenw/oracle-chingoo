@@ -336,7 +336,7 @@ var qryPage = 'ajax/qry.jsp';
 				
 				setHighlight();
 				//$('body').css('cursor', 'default'); 
-
+/*
 				$("#qqq").click(function(){
 			        editQuery();
 			    });		
@@ -345,7 +345,7 @@ var qryPage = 'ajax/qry.jsp';
 				},function(){
 					$(this).removeClass('datahighlight');
 				});	    
-
+*/
 			},
             error:function (jqXHR, textStatus, errorThrown){
             	alert(jqXHR.status + " " + errorThrown);

@@ -206,3 +206,29 @@ Build CPAS1065
 	bug fix - qry-simple-v.jsp for fk lookup when dialogUrl is empty
 	able to hide the history division
 	 
+Build CPAS1066
+	Open new page when new query is selected from data-link
+
+Build CPAS1067
+	Detect Temporary Table
+	use red star on mouse over
+	show/hide empty table option in svg ERD
+	data link url use new form
+	placeholder for input box
+	
+Build CPAS1068
+	CPAS logical link: REPORTCAT.FILEID -> SYSBINFILE, CPAS_WIZARD_PAGE_WEB.FORMNAME -> CPAS_JML
+	show connecting progress
+	show batch task on CPAS online event
+	Checkbox for hide empty tables
+
+Build CPAS1069
+	DataLink and PRK info for One table driven Views
+	For One table driven Views, show the table as Foreign key
+	Show detail link besize table/view name in Query
+	Remove duplication in data link (CPAS logical link)
+
+Build CPAS1070	
+	Fixed the tooltip for column description - lowsercase, no size for rowid type
+	Syntax Highlight for View / Trigger source
+
