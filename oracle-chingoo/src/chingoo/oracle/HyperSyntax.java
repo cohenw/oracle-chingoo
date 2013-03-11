@@ -260,7 +260,7 @@ public class HyperSyntax {
 		ArrayList<String> list = getProcedureNames(s, type);
 		set.addAll(list);
 		
-		System.out.println("SET" + set);
+		//System.out.println("SET" + set);
 		return set;
 	}
 	
@@ -303,7 +303,9 @@ public class HyperSyntax {
 			} else if (isNumeric(tmp))
 				s.append( "<span class='syntax3'>" + token + "</span>" );
 			else if (cn.isTVS(tmp))
-				s.append( "<a href='pop.jsp?key="+tmp+"' target='_blank'><span style='color: #0000A0;'>" + token + "</span></a>" );
+				s.append( "<a href='pop.jsp?key="+tmp+"' target='_blank'>" + token + "</a>" );
+			else if (cn.isProcedure(tmp))
+				s.append( "<a target='_blank' href='src.jsp?name=" + tmp + "'>" + token + "</a>" );
 			else if (hyperlink && !tmp.trim().equals("")) {
 				hyperlink = false;
 				s.append( "<a name='" + tmp.toLowerCase() + "'></a>"+ token );
@@ -336,11 +338,11 @@ public class HyperSyntax {
 		long before = System.currentTimeMillis();
 		
 		StringBuffer s = new StringBuffer();
-		System.out.println("type=" + type + ", size=" + text.length());
+		//System.out.println("type=" + type + ", size=" + text.length());
 
 		ArrayList<Range> ranges = extractComments(text);
 		long after = System.currentTimeMillis();
-		System.out.println("Elapsed Time for extractComment = " + (after - before));
+		//System.out.println("Elapsed Time for extractComment = " + (after - before));
 		
 		// build string that stripped out comment and string literals
 		StringBuffer sb2 = new StringBuffer();
@@ -352,7 +354,7 @@ public class HyperSyntax {
 		}
 		sb2.append( text.substring(start));
 		String s2 = sb2.toString();
-		System.out.println("s2 size=" + s2.length());
+		//System.out.println("s2 size=" + s2.length());
 		// if (s2.length()<5000) System.out.println(s2);
 		
 		HashSet<String> set1 = getLinkables("PROCEDURE", s2);
@@ -364,7 +366,7 @@ public class HyperSyntax {
 			cn.tempSet = GV;
 		}
 		
-		System.out.println("GV = " +GV);
+		//System.out.println("GV = " +GV);
 		
 //		HashSet<String> procedures = getProcedures(text, ranges, type);
 		HashSet<String> procedures = new HashSet<String>();
@@ -391,7 +393,8 @@ public class HyperSyntax {
 		s.append( hyperSyntax(cn, text.substring(start), procedures, GV, type) );
 		
 		after = System.currentTimeMillis();
-		System.out.println("Elapsed Time = " + (after - before));
+		if (type.equals("PACKAGE") || type.equals("PACKAGE BODY"))
+			System.out.println("Elapsed Time = " + (after - before));
 		
 		return s.toString();
 	}
