@@ -507,7 +507,7 @@ function rowsPerPage(rows) {
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 
 <div style="padding: 4px;">
-	<div id="mainQry"><%= new HyperSyntax().getHyperSyntax(cn, mainQry, "SQL") %></div>
+	<div id="mainQry"><%= mainQry /*new HyperSyntax().getHyperSyntax(cn, mainQry, "SQL")*/ %></div>
 	<a href="Javascript:toggleEditMain()">Edit</a>
 	<div id="mainQryEdit" style="display:none;">
 		<textarea id="mainQryText" rows="4" cols="60"><%= mainQry %></textarea>
@@ -532,7 +532,7 @@ if (subQry != null && !subQry.equals("")) {
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 
 <div style="padding: 4px;">
-	<div id="subQry"><%= new HyperSyntax().getHyperSyntax(cn, subQry, "SQL") %></div>
+	<div id="subQry"><%= subQry /*new HyperSyntax().getHyperSyntax(cn, subQry, "SQL")*/	%></div>
 	<a href="Javascript:toggleEditSub()">Edit</a>
 	<div id="subQryEdit" style="display:none;">
 		<textarea id="subQryText" rows="4" cols="60"><%= subQry %></textarea>
