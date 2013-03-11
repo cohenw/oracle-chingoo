@@ -176,11 +176,14 @@ public class HyperSyntax {
 			start = textU.indexOf(key, end);
 			if (start < 0) break;
 			
-			char ch = textU.charAt(start-1);
-			//System.out.println("(" + ch + ")");
-			if (delim.indexOf(ch)<0 ) {
-				continue;
-			} 
+			char ch = ' ';
+			if (start-1 >=0) {
+				 ch = textU.charAt(start-1);
+				// System.out.println("(" + ch + ")");
+				if (delim.indexOf(ch)<0 ) {
+					continue;
+				}
+			}
 			
 			ch = textU.charAt(start +key.length());
 			//System.out.println("(" + ch + ")");
