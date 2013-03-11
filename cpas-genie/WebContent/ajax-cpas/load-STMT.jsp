@@ -70,7 +70,7 @@
 %>
 <b><%= tv.get(0)[1] %></b> <%= tv.get(0)[2] %>
 <a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=sql%>"/></a>
-<a href="javascript:openSimulator()">Simulator <img border=0 src="http://icons.iconarchive.com/icons/cornmanthe3rd/plex/16/Media-play-2-icon.png"></a>
+<a href="javascript:openSimulator()">Simulator <img border=0 src="image/Media-play-2-icon.png"></a>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
 <br/>
 <%
@@ -102,7 +102,7 @@
 	<td class="<%= rowClass%>" nowrap><%= label[i][1] %></td>
 	<td class="<%= rowClass%>" nowrap><%= label[i][0] %></td>
 	<td class="<%= rowClass%>">
-<%= (label[i][0].equals("MS") || label[i][0].equals("DS")) ? "<PRE>":"" %><%= values[i] %>
+<%= (label[i][0].equals("MS") || label[i][0].equals("DS")) ? "<PRE>":"" %><%= new HyperSyntax().getHyperSyntax(cn, values[i], "SQL") %>
 <%= (label[i][0].equals("MS") || label[i][0].equals("DS")) ? "</PRE>":"" %>
 <% if ((label[i][0].equals("MT") || label[i][0].equals("DT")) && !values[i].equals("")) {
 	id = Util.getId();

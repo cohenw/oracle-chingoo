@@ -164,7 +164,7 @@ Found: <%= filteredCount %>
 
 &nbsp;&nbsp;&nbsp;&nbsp;
 <% if (totalCount>=5) { %>
-<img src="image/view.png" border=0 ><input id="search-<%=id%>" value="<%= searchValue %>" size=15 onChange="searchTable(<%=id%>,$(this).val())">
+<img src="image/view.png" border=0 ><input id="search-<%=id%>" value="<%= searchValue %>" size=15 onChange="searchTable(<%=id%>,$(this).val())" placeholder="search">
 <a href="Javascript:clearSearch(<%=id%>)"><img border="0" border=0 src="image/clear.gif"></a>
 <% } %>
 </div>
@@ -263,9 +263,10 @@ Found: <%= filteredCount %>
 		pkValues = keyValue;
 		
 		String linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
+		linkUrlTree = "data-link.jsp?qry=" + tname + "|" + keyValue;
 %>
 	<td class="<%= rowClass%>">
-		<a href='<%= linkUrlTree %>'><img src="image/star.png" border=0 title="Data link"></a>
+		<a href='<%= linkUrlTree %>'><img src="image/star.png" border=0 title="Data link" onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
 	</td>
 <%
 	}
@@ -341,6 +342,16 @@ Found: <%= filteredCount %>
 						if (colName.equals(cn.getCpasUtil().logicalLink[j][0]) && !tname.equals(cn.getCpasUtil().logicalLink[j][1])) {
 							isLinked = true;
 							lTable = cn.getCpasUtil().logicalLink[j][1];
+							keyValue = val;
+							dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+						}
+					}
+
+					String tc = tname + "." + colName;
+					for (int j=0; !isLinked && j < cn.getCpasUtil().logicalLinkSpec.length; j++) {
+						if (tc.equals(cn.getCpasUtil().logicalLinkSpec[j][0]) && !tname.equals(cn.getCpasUtil().logicalLinkSpec[j][1])) {
+							isLinked = true;
+							lTable = cn.getCpasUtil().logicalLinkSpec[j][1];
 							keyValue = val;
 							dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
 						}

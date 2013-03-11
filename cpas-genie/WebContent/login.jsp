@@ -24,6 +24,7 @@
 		for (int i = 0; i < cookies.length; i++) {
 			if (cookies [i].getName().equals ("email")) {
 				email = cookies[i].getValue();
+				if (email==null || email.equals("null")) email = "";
 				break;
 			}
 		}	

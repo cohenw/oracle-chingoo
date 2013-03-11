@@ -6,7 +6,6 @@
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
-
 <%!
 
 	ArrayList<String> getBindVariableList(String qry) {
@@ -25,7 +24,6 @@
 	}
 
 %>
-
 <%
 	response.setContentType("text/csv");
 	String disposition = "attachment; fileName=data.csv";
@@ -59,6 +57,7 @@
 	OldQuery q = new OldQuery(cn, q2, request);
 	ResultSet rs = q.getResultSet();
 	
+	out.println("Genie,downloaded at " + (new Date()));
 	out.println("database,"+ cn.getUrlString() + " catalog: " + cn.getSchemaName());
 	
 	String q1 = sql.replaceAll("\n", " ").trim();

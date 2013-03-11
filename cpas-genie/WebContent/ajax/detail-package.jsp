@@ -24,7 +24,7 @@
 	
 	String catalog = cn.getSchemaName();
 
-	String sourceUrl = "source.jsp?name=" + name;
+	String sourceUrl = "src.jsp?name=" + name;
 	if (owner != null) sourceUrl += "&owner=" + owner;
 	
 	String typeName = cn.getObjectType(owner, name);
@@ -68,8 +68,9 @@ for (int k=0;k<types.size();k++) {
 %>
 <b><a href="javascript:tDiv('div-<%=k%>')"><%= type %></a></b><br/>
 <div id="div-<%=k%>" style="display: block;">
+
 <pre class='brush: sql'>
-<%= text %>
+<%=new HyperSyntax().getHyperSyntax(cn, text, type)%>
 </pre>
 </div>
 <%
@@ -99,7 +100,7 @@ for (int k=0;k<types.size();k++) {
 		cnt = 1;
 	} 
 %>
-	<%= list.get(i).toLowerCase() %><br/>		
+	<a target="_blank" href="<%= sourceUrl%>#<%= list.get(i).toLowerCase() %>"><%= list.get(i).toLowerCase() %></a><br/>		
 <% }
 }
 %>

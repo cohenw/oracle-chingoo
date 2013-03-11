@@ -7,10 +7,10 @@
 %>
 <%!
 	String tables1[] = {"MEMBER", "PERSON", "PENSIONER", "ACCOUNT", "CALC", "BATCH", "EMPLOYER", "FUND"};
-	String tables2[] = {"BATCHCAT", "ERRORCAT", "REPORTCAT", "REQUESTCAT", "TASKCAT", "FWIZCAT", "WIZARDCAT"};
-	String tables3[] = {"CPAS_CODE", "CPAS_CALCTYPE", "CPAS_CATALOG", "CPAS_WIZARD", "CPAS_VALIDATION", "CPAS_ROLE", "CPAS_ACTION", "CPAS_TABLE", "CPAS_LAYOUT"};
-	String tables4[] = {"CPAS_DATE", "CPAS_JML", "CPAS_GROUP", "CPAS_SEARCHTYPE", "CPASFIND", "CPAS_DOC", "CPAS_FORM", "CPAS_PARAMETER", "CPAS_AGE"};
-	String tables5[] = {"EXPOSE", "EXPOSE_RULE", "FORMULA", "PLAN_RULEID"};
+	String tables2[] = {"BATCHCAT", "BATCHCAT_TASK", "ERRORCAT", "REPORTCAT", "REQUESTCAT", "TASKCAT", "FWIZCAT", "WIZARDCAT"};
+	String tables3[] = {"CPAS_CODE", "CPAS_CALCTYPE", "CPAS_CATALOG", "CPAS_WIZARD", "CPAS_VALIDATION", "CPAS_ACTION", "CPAS_TABLE", "CPAS_LAYOUT"};
+	String tables4[] = {"CPAS_DATE", "CPAS_JML", "CPAS_GROUP", "CPAS_SEARCHTYPE", "CPASFIND", "CPAS_DOC", /*"CPAS_FORM",*/ "CPAS_PARAMETER", "CPAS_AGE"};
+	String tables5[] = {"EXPOSE", "EXPOSE_RULE", "FORMULA", "PLAN_RULEID", "", "CPAS_ROLE", "SECSWITCH"};
 %>
 
 <%
@@ -74,7 +74,9 @@
 <table width=700 style="margin-left: 20px;">
 <td valign=top>
 <% for (String tbl : tables1) {%>
-	<% if (cn.isTVS(tbl)) { %>
+	<% if (tbl.equals("")) { %>
+	<br/>
+	<% } else if (cn.isTVS(tbl)) { %>
 	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
 	<% } else { %>
 	<li><span class="nullstyle"><%=tbl%></span></li>
@@ -83,7 +85,9 @@
 </td>
 <td valign=top>
 <% for (String tbl : tables2) {%>
-	<% if (cn.isTVS(tbl)) { %>
+	<% if (tbl.equals("")) { %>
+	<br/>
+	<% } else if (cn.isTVS(tbl)) { %>
 	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
 	<% } else { %>
 	<li><span class="nullstyle"><%=tbl%></span></li>
@@ -92,7 +96,9 @@
 </td>
 <td valign=top>
 <% for (String tbl : tables3) {%>
-	<% if (cn.isTVS(tbl)) { %>
+	<% if (tbl.equals("")) { %>
+	<br/>
+	<% } else if (cn.isTVS(tbl)) { %>
 	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
 	<% } else { %>
 	<li><span class="nullstyle"><%=tbl%></span></li>
@@ -101,7 +107,9 @@
 </td>
 <td valign=top>
 <% for (String tbl : tables4) {%>
-	<% if (cn.isTVS(tbl)) { %>
+	<% if (tbl.equals("")) { %>
+	<br/>
+	<% } else if (cn.isTVS(tbl)) { %>
 	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
 	<% } else { %>
 	<li><span class="nullstyle"><%=tbl%></span></li>
@@ -110,7 +118,9 @@
 </td>
 <td valign=top>
 <% for (String tbl : tables5) {%>
-	<% if (cn.isTVS(tbl)) { %>
+	<% if (tbl.equals("")) { %>
+	<br/>
+	<% } else if (cn.isTVS(tbl)) { %>
 	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
 	<% } else { %>
 	<li><span class="nullstyle"><%=tbl%></span></li>

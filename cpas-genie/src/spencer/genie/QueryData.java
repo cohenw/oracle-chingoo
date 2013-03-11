@@ -25,13 +25,14 @@ public class QueryData {
 			cDef.columnTypeName = rs.getMetaData().getColumnTypeName(i);
 			cDef.columnName = rs.getMetaData().getColumnName(i);
 			cDef.tableName = rs.getMetaData().getTableName(i);
-			cDef.tooltip = cDef.columnTypeName;
+			cDef.tooltip = cDef.columnTypeName.toLowerCase();
 			if (cDef.columnTypeName.equals("NUMBER")) {
 				int scale = rs.getMetaData().getScale(i);
 				int precision = rs.getMetaData().getPrecision(i);
 				cDef.tooltip += "(" + precision + (scale>0?"," + scale : "") + ")";
 			}
-			else if (!cDef.columnTypeName.equals("DATE")) cDef.tooltip += "(" + rs.getMetaData().getColumnDisplaySize(i) + ")";
+			else if (!(cDef.columnTypeName.equals("DATE") || cDef.columnTypeName.equals("ROWID"))) 
+					cDef.tooltip += "(" + rs.getMetaData().getColumnDisplaySize(i) + ")";
 
 			columns.add(cDef);
 			

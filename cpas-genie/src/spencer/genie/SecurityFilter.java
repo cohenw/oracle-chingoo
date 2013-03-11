@@ -25,6 +25,7 @@ public class SecurityFilter implements Filter {
 			"remove-cookie.jsp",
 			"connect_new.jsp", 
 			"connect_behind.jsp",
+			"connect-progress.jsp",
 			"no-connection.jsp"};
 
 
