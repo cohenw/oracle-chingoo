@@ -36,6 +36,8 @@
 	List<String[]> types = cn.query(q);
 	int lines_pkg = 0;
 	int lines_pkgbody = 0;
+	int lines_procedure = 0;
+	int lines_function = 0;
 %>
 <html>
 <head>
@@ -96,6 +98,10 @@ for (int k=0;k<types.size();k++) {
 		lines_pkg =  countLines(text);
 	else if (type.equals("PACKAGE BODY"))
 		lines_pkgbody =  countLines(text);
+	else if (type.equals("PROCEDURE"))
+		lines_procedure =  countLines(text);
+	else if (type.equals("FUNCTION"))
+		lines_function =  countLines(text);
 %>
 
 <b><a href="javascript:tDiv('div-<%=k%>')"><%= type %></a></b><br/>
@@ -135,5 +141,15 @@ for (int k=0;k<types.size();k++) {
 	  lines += i + "<br/>";
   $("#colnum_PACKAGEBODY").html('<span style="font-family: courier new, courier, monospace; font-size: 12px; color: gray;">'+lines+'<\span>');
   
-</script>
+  lines="";
+  for (var i=1;i <= <%=lines_procedure%>;i++)
+	  lines += i + "<br/>";
+  $("#colnum_PROCEDURE").html('<span style="font-family: courier new, courier, monospace; font-size: 12px; color: gray;">'+lines+'<\span>');
+
+  lines="";
+  for (var i=1;i <= <%=lines_function%>;i++)
+	  lines += i + "<br/>";
+  $("#colnum_FUNCTION").html('<span style="font-family: courier new, courier, monospace; font-size: 12px; color: gray;">'+lines+'<\span>');
+
+ </script>
 
