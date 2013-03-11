@@ -38,6 +38,8 @@ String imgList[] = {
     <script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
     
 <script type="text/javascript">
+var to2;
+
 $(document).ready(function(){
 //	$("#loadingDiv").append("<div id='wait'><img src='image/loading_big.gif'/></div>");
 	$.ajax({
@@ -59,6 +61,27 @@ $(document).ready(function(){
 	});	
 })
 
+    function checkConnectProgress() {
+    	clearTimeout(to2);
+    	var current = $("#connectProgress").html();
+		$.ajax({
+			type: 'POST',
+			url: "ajax/connect-progress.jsp",
+			success: function(data){
+				if (current != data) {
+	    			$("#connectProgress").html(data);
+				}
+				
+				if (data.indexOf("Finished ") < 0) {
+					to2 = setTimeout("checkConnectProgress()",1000);
+				}
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});	    	
+    }	
+    
 function slideSwitch() {
     var $active = $('#slideshow IMG.active');
 
@@ -78,11 +101,12 @@ function slideSwitch() {
 
 $(function() {
     setInterval( "slideSwitch()", 2500 );
+    setInterval( "checkConnectProgress()", 1000 );
 });
 
 function stopShow() {
 	$("#slideshow").html('');
-	$("#waiting").hide();
+//	$("#waiting").hide();
 }
 
 </script>
@@ -101,12 +125,13 @@ function stopShow() {
   <img src="image/chingoo.png"/>
     <h2>Connecting &amp; Loading Database Objects...</h2>
 
-	<div id="loadingDiv"></div>
-
+	<div id="loadingDiv" style="font-size:18px;"></div>
+	
 	<br/>
 	Chingoo is loading data dictionary.
 	- Tables, Comments, Constraints, Primary &amp; Foreign keys.
 	
+<div id="connectProgress"></div>
 <div id="slideshow">
 
 	<img src="image/nature1.jpg" alt="" class="active" />
@@ -124,7 +149,9 @@ function stopShow() {
  --%>
  </div>
 
+<%--
 <img id="waiting" src="image/waiting_big.gif" class="waitontop">  
+--%>
 	
   </body>
 </html>

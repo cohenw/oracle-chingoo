@@ -56,6 +56,10 @@ $(document).ready(function(){
 		var filter = $(this).val().toUpperCase();
 		searchWithFilter1(filter);
 	})
+	$('#hideEmpty').change(function(){
+		var filter = $('#searchFilter1').val().toUpperCase();
+		searchWithFilter1(filter);
+	})
 
  	$('#searchFilter2').change(function(){
 		var filter = $(this).val().toUpperCase();
@@ -233,7 +237,10 @@ function hideHist() {
 	}
 	
 	function searchWithFilter1(filter) {
-		gotoUrl = "ajax/list-table.jsp?filter=" + filter;
+		if($('#hideEmpty').attr('checked'))
+			gotoUrl = "ajax/list-table.jsp?filter=" + filter+"&hideEmpty=true";
+		else 
+			gotoUrl = "ajax/list-table.jsp?filter=" + filter;
 
 		$.ajax({
 			url: gotoUrl,
@@ -330,7 +337,7 @@ function hideHist() {
 
 <body>
 
-<div id="topline" style="width: 1024px;">
+<div id="topline" style="width: 1024px;" background-color: #ffffff;">
 <table width=100% border=0>
 <td width="44">
 <img align=top src="image/chingoo-small.gif" title="Oracle Chingoo - Build <%= Util.getBuildNo() %>"/>
@@ -351,7 +358,7 @@ function hideHist() {
 <b>Global Search</b> <input id="globalSearch" style="width: 200px;"/>
 <!-- <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
  -->
-<input type="button" value="Find" onClick="Javascript:globalSearch($('#globalSearch').val())"/>
+<input type="button" value="Find" onClick="Javascript:globalSearch($('#globalSearch').val())" placeholder="table, view or package name"//>
 </td>
 </table>
 </div>
@@ -370,22 +377,23 @@ function hideHist() {
 	</ul>
 <div id="tabs2" style="overflow: auto;">
 	<div id="tabs-1">
-<b>Filter</b> <input id="searchFilter1" style="width: 180px;"/>
+<b>Filter</b> <input id="searchFilter1" style="width: 180px;" placeholder="table name"/>
 <a href="Javascript:clearField1()"><img border=0 src="image/clear.gif"></a>
+<br/><input id="hideEmpty" value="1" type="checkbox">Hide Empty tables
 <div id="list-table"></div>
 	</div>
 	<div id="tabs-2">
-<b>Filter</b> <input id="searchFilter2" style="width: 180px;"/>
+<b>Filter</b> <input id="searchFilter2" style="width: 180px;" placeholder="view name"/>
 <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
 <div id="list-view"></div>
 	</div>
 	<div id="tabs-3">
-<b>Filter</b> <input id="searchFilter3" style="width: 180px;"/>
+<b>Filter</b> <input id="searchFilter3" style="width: 180px;" placeholder="synonym name"/>
 <a href="Javascript:clearField3()"><img border=0 src="image/clear.gif"></a>
 <div id="list-synonym"></div>
 	</div>
 	<div id="tabs-4">
-<b>Filter</b> <input id="searchFilter4" style="width: 180px;"/>
+<b>Filter</b> <input id="searchFilter4" style="width: 180px;" placeholder="program name"/>
 <a href="Javascript:clearField4()"><img border=0 src="image/clear.gif"></a>
 <div id="list-package"></div>
 	</div>

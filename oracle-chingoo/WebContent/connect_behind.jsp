@@ -41,7 +41,7 @@
 	
 	String ipAddress = Util.getIpAddress(request);
 	
-	cn = new Connect(url, username, password, ipAddress);
+	cn = new Connect(session, url, username, password, ipAddress);
 	cn.setUrl(request.getRequestURL().toString());
 	String ua = request.getHeader("user-agent");
 	cn.setUserAgent(ua);
@@ -50,7 +50,7 @@
 	if (cn.isConnected()) {
 		// you're connected.
 		// assign the Connect object to session
-		session.setAttribute("CN", cn);
+		//session.setAttribute("CN", cn);
 		ChingooManager.getInstance().addSession(cn);
 	
 		// get cookie

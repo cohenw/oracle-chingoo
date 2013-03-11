@@ -11,6 +11,7 @@
 	String type = request.getParameter("type");
 	String key = request.getParameter("key").toUpperCase();
 
+	if (type==null) type ="OBJECT"; 
 	if (type.equals("OBJECT")) {
 		type = cn.getObjectType(key);
 	}

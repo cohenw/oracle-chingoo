@@ -252,3 +252,25 @@ html.busy, html.busy * {
     height: 600px;
     float: left;
 }
+
+
+
+
+.syn_cmt { 
+    color: green;
+}
+
+.syn_str { 
+    color: purple;
+}
+
+.syntax1 { 
+#    font-weight: bold;
+    color: blue;
+}
+.syntax2 { 
+    color: brown;
+}
+.syntax3 { 
+    color: red;
+}

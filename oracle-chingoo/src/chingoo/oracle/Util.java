@@ -204,14 +204,6 @@ public class Util {
 		return tables;
 	}
 	
-	public static String getBuildNo() {
-		return "1057";
-	}
-
-	public static String getVersionDate() {
-		return "Feb 12, 2013";
-	}
-
 	public static String getScriptionVersion() {
 		return getBuildNo();
 	}
@@ -226,4 +218,13 @@ public class Util {
 	public static String trackingId() {
 		return "UA-34000949-1";
 	}
+
+	public static String getBuildNo() {
+		return "1058";
+	}
+
+	public static String getVersionDate() {
+		return "Mar 11, 2013";
+	}
+
 }
