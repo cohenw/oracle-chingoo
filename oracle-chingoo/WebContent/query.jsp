@@ -249,25 +249,18 @@
 
 <body>
 
-<table>
-<td>
+<div style="background-color: #ffffff;">
 <img src="image/icon_query.png" align="middle"/> <b>QUERY</b>
-</td>
-<td>
-<b><%= cn.getUrlString() %></b>
+<%= cn.getUrlString() %>
 &nbsp;&nbsp;&nbsp;
-</td>
-<td>
 <a href="query.jsp" target="_blank">Query</a> |
-<a href="q.jsp" target="_blank">Q</a> |
+<!-- <a href="q.jsp" target="_blank">Q</a> |
+ -->
 <a href="erd_svg.jsp?tname=<%= tbl %>" target="_blank">ERD</a> |
 <a href="worksheet.jsp" target="_blank">Work Sheet</a>
-</td>
-<td>&nbsp;&nbsp;&nbsp;</td>
-<td>
-Search <input id="globalSearch" style="width: 200px;"/>
-</td>
-</table>
+&nbsp;&nbsp;&nbsp;
+Search <input id="globalSearch" style="width: 200px;" placeholder="table or view name"/>
+</div>
 
 <div id="queryMain">
 
@@ -422,14 +415,10 @@ Up to
 <TD><a class="qryBtn" id="modeSort" href="Javascript:setDoMode('sort')">Sort</a>
 <TD><a class="qryBtn" id="modeCopy" href="Javascript:setDoMode('copy')">Copy&amp;Paste</a></TD>
 <TD><a class="qryBtn" id="modeCopy" href="Javascript:setTranspose()">Transpose</a></TD>
-<!-- 
 <TD><a class="qryBtn" id="modeHide" href="Javascript:setDoMode('hide')">Hide Column</a>
 	<span id="showAllCol" style="display: none;">
-		<a href="Javascript:showAllColumn()">Show All Column</a>&nbsp;
+		<a href="Javascript:showAllColumn()">Show All</a>&nbsp;
 	</span>
-</TD>
-
- -->
 </TD>
 <!-- 
 <TD><a class="qryBtn" id="modeFilter" href="Javascript:setDoMode('filter')">Filter</a></TD>
@@ -499,6 +488,7 @@ Up to
 	  //alert(rc);
 	  if (rc != "0") {
 	  	$("#queryMain").slideUp();
+/*	  	
 	    $("#qqq").click(function(){
 	        editQuery();
 	      });
@@ -506,7 +496,8 @@ Up to
 			$(this).addClass('datahighlight');
 		},function(){
 			$(this).removeClass('datahighlight');
-		});	    
+		});
+*/		
 	  }
    });
 

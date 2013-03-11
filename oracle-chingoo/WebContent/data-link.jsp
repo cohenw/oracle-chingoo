@@ -14,6 +14,16 @@
 	String table = request.getParameter("table");
 	String key = request.getParameter("key");
 	String rowid = request.getParameter("rowid");
+	
+	String qry = request.getParameter("qry");
+	if (qry != null && !qry.equals("")) {
+		int idx = qry.indexOf("|");
+		table = qry.substring(0,idx);
+		key = qry.substring(idx+1).replaceAll("\\|", "^");
+//		System.out.println("table=" + table);
+//		System.out.println("key=" + key);
+	}
+	
 	List<String> refTabs = cn.getReferencedTables(table);
 
 	String sql = cn.getPKLinkSql(table, key, rowid);
@@ -121,9 +131,12 @@
 	String id = Util.getId();
 %>
 
-<img src="image/data-link.png" align="middle"/> <b>DATA LINK</b>
+<div style="background-color: #ffffff;">
+<img src="image/star-big.png" align="middle"/>
+
+ <b>DATA LINK</b>
 &nbsp;&nbsp;
-<b><%= cn.getUrlString() %></b>
+<%= cn.getUrlString() %>
 
 &nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -136,9 +149,8 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <!-- <a href="Javascript:openWorksheet()">Open Work Sheet</a>
  -->
-Search <input id="globalSearch" style="width: 200px;"/>
-
-<br/><br/>
+Search <input id="globalSearch" style="width: 200px;" placeholder="table or view name"/>
+</div>
 
 <div id="tableList1" style="display: hidden; margin-left: 20px;">
 </div>
@@ -179,7 +191,7 @@ Search <input id="globalSearch" style="width: 200px;"/>
 
 
 <div style="display: none;">
-<form name="form0" id="form0" action="query.jsp">
+<form name="form0" id="form0" action="query.jsp" target="_blank">
 <input id="sql" name="sql" type="hidden" value=""/>
 <input id="dataLink" name="dataLink" type="hidden" value="1"/>
 <input id="id" name="id" type="hidden" value=""/>
@@ -197,6 +209,22 @@ Search <input id="globalSearch" style="width: 200px;"/>
 
 <%
 	int cntFK = 0;
+
+//viewTable should link to the table
+if (cn.isViewTable(table)) {
+	System.out.println("ViewTable !!!!!!");
+	String tmp = cn.getViewTableName(table);
+	//fkLinkTab.add("SV_MEMBER");
+	
+	String tmp2 = cn.getPrimaryKeyName(tmp);
+	String linkCol = cn.getConstraintCols(tmp2);
+	String rTable = cn.getTableNameByPrimaryKey(tmp2);
+	
+	fkLinkTab.add(rTable);
+	fkLinkCol.add(linkCol);
+//	hs.add(linkCol);
+}
+
 	for (int i=0; i<fkLinkTab.size(); i++) {
 		String ft = fkLinkTab.get(i);
 		String fc = fkLinkCol.get(i);

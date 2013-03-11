@@ -40,11 +40,13 @@ Please select a Table to see the detail.
 <%
 		return;
 	}
+	boolean isTempTable = cn.isTempTable(table);
 %>
 
 <div id="objectTitle" style="display:none">TABLE: <%= table %></div>
 
-<h2>TABLE: <%= table %> &nbsp;&nbsp;<span class="rowcountstyle"><%= cn.getTableRowCount(owner, table) %></span>
+<div id="objectTitle" style="display:none"><%=(isTempTable?"TEMPORARY TABLE":"TABLE")%>: <%= table %></div>
+<h2><%=(isTempTable?"TEMPORARY TABLE":"TABLE")%>: <%= table %> &nbsp;&nbsp;<span class="rowcountstyle"><%= cn.getTableRowCount(owner, table) %></span>
 <a href="Javascript:runQuery('','<%=tname%>')"><img border=0 src="image/icon_query.png" title="query"></a>
 <a href="erd.jsp?tname=<%=tname%>" target="_blank"><img title="ERD" border=0 src="image/erd.gif"></a>
 <a href="erd_svg.jsp?tname=<%=tname%>" target="_blank"><img title="Simple ERD" border=0 src="image/simple-erd.png"></a>

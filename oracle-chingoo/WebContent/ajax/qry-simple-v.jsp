@@ -164,7 +164,7 @@ Found: <%= filteredCount %>
  
 &nbsp;&nbsp;&nbsp;&nbsp;
 <% if (totalCount>=5) { %>
-<img src="image/view.png" border=0 ><input id="search-<%=id%>" value="<%= searchValue %>" size=15 onChange="searchTable(<%=id%>,$(this).val())">
+<img src="image/view.png" border=0 ><input id="search-<%=id%>" value="<%= searchValue %>" size=15 onChange="searchTable(<%=id%>,$(this).val())" placeholder="search">
 <a href="Javascript:clearSearch(<%=id%>)"><img border="0" border=0 src="image/clear.gif"></a>
 <% } %>
 </div>
@@ -263,7 +263,9 @@ Found: <%= filteredCount %>
 		pkValues = keyValue;
 		
 		String linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
+		linkUrlTree = "data-link.jsp?qry=" + tname + "|" + keyValue;
 		pkDataLink[rowCnt-1] = "<a href='" + linkUrlTree + "'><img src=\"image/chingoo-icon.png\" width=16 height=16 border=0 title=\"Data Link\"></a>";
+
 %>
 <%-- 	<td class="<%= rowClass%>">
 		<a href='<%= linkUrlTree %>'><img src="image/arrows.gif" border=0 title="Data link"></a>

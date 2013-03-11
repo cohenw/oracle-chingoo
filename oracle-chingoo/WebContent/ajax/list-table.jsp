@@ -26,6 +26,7 @@
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
 	String filter = request.getParameter("filter");
+	String excludeEmptytable = request.getParameter("excludeEmptytable");
 	boolean hideEmpty = request.getParameter("hideEmpty") != null;
 	//hideEmpty = true;
 	
@@ -39,6 +40,7 @@
 	for (int i=0; i<list.size();i++) {
 		if (filter != null && !list.get(i)[1].contains(filter)) continue;
 		if (hideEmpty && getNumRows(list.get(i)[2]).equals("0")) continue;
+		if (hideEmpty && list.get(i)[2] == null) continue;
 		selectedCnt ++;
 	}
 
@@ -50,6 +52,7 @@ Found <%= selectedCnt %> table(s).
 	for (int i=0; i<list.size();i++) {
 		if (filter != null && !list.get(i)[1].contains(filter)) continue;
 		if (hideEmpty && getNumRows(list.get(i)[2]).equals("0")) continue;
+		if (hideEmpty && list.get(i)[2] == null) continue;
 %>
 	<li><a href="javascript:loadTable('<%=list.get(i)[1]%>');"><%=list.get(i)[1]%></a> <span class="rowcountstyle"><%= getNumRows(list.get(i)[2]) %></span></li>
 <% 
