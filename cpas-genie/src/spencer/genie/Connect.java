@@ -54,6 +54,7 @@ public class Connect implements HttpSessionBindingListener {
 	private HashSet<String> tableSet = new HashSet<String>();
 	private HashSet<String> viewSet = new HashSet<String>();
 	private HashSet<String> synonymSet = new HashSet<String>();
+	private HashSet<String> procedureSet = new HashSet<String>();
 	
 	private HashSet<String> comment_tables = new HashSet<String>();
 	private HashSet<String> temp_tables = new HashSet<String>();
@@ -459,7 +460,7 @@ public class Connect implements HttpSessionBindingListener {
              e.printStackTrace();
              message = e.getMessage();
  		}
-		addMessage("Loaded Temp TABLE " + temp_tables.size());
+		addMessage("Loaded Temp Tabels " + temp_tables.size());
 
 	}
 
@@ -487,7 +488,7 @@ public class Connect implements HttpSessionBindingListener {
              e.printStackTrace();
              message = e.getMessage();
  		}
-		addMessage("Loaded View/Table TABLE " + viewTables.size());
+		addMessage("Loaded View/Table " + viewTables.size());
 
 	}
 
@@ -720,9 +721,10 @@ public class Connect implements HttpSessionBindingListener {
 		tableSet.clear();
 		viewSet.clear();
 		synonymSet.clear();
+		procedureSet.clear();
 		
 		Statement stmt = conn.createStatement();
-		String qry = "SELECT object_name, object_type FROM user_objects WHERE object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE')";
+		String qry = "SELECT object_name, object_type FROM user_objects WHERE object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE', 'PROCEDURE','FUNCTION')";
 		ResultSet rs = stmt.executeQuery(qry);
 		while (rs.next()){
 			String name = rs.getString(1);
@@ -732,6 +734,7 @@ public class Connect implements HttpSessionBindingListener {
 			else if (type.equals("VIEW")) views.add(name);
 			else if (type.equals("SYNONYM")) synonyms.add(name);
 			else if (type.equals("PACKAGE")) packages.add(name);
+			else if (type.equals("PROCEDURE")||type.equals("FUNCTION")) procedureSet.add(name);
 		}
 		
 		rs.close();
@@ -745,6 +748,7 @@ public class Connect implements HttpSessionBindingListener {
 		addMessage("Loaded Views " + views.size());
 		addMessage("Loaded Synonyms " + synonyms.size());
 		addMessage("Loaded Packages " + packages.size());
+		addMessage("Loaded Procedure/Functions " + procedureSet.size());
 	}
 	
 	public synchronized String genie(String value, String tab, String targetCol, String sourceCol) {
@@ -2262,6 +2266,13 @@ public class Connect implements HttpSessionBindingListener {
 		
 		return false;
 	}
+	
+	public boolean isProcedure(String oname) {
+		
+		if (procedureSet.contains(oname)) return true;
+		
+		return false;
+	} 
 	
 	public boolean isPackage(String name) {
 		return packages.contains(name);
