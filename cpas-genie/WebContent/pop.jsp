@@ -10,10 +10,12 @@
 
 	String type = request.getParameter("type");
 	String key = request.getParameter("key").toUpperCase();
+	if (key==null) key ="";
 	if (type==null) type ="OBJECT"; 
 	
 	if (type.equals("OBJECT")) {
 		type = cn.getObjectType(key);
+		if (type==null) type ="TABLE";
 	}
 	
 	System.out.println("type=" + type);
@@ -114,10 +116,12 @@ $(document).ready(function() {
 <% if (type.equals("VIEW")) { %>
 	loadView('<%= key %>');
 <% } %>
-<% if (type.equals("PACKAGE")) { %>
+<% if (type.equals("PACKAGE")||type.equals("FUNCTION")||type.equals("PROCEDURE")) { %>
 	loadPackage('<%= key %>');
 <% } %>
-
+<% if (type.equals("SYNONYM")) { %>
+loadSynonym('<%= key %>');
+<% } %>
 
 })
 

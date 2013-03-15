@@ -18,7 +18,7 @@
 		owner = view.substring(0, idx);
 		view = view.substring(idx+1);
 	}
-	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nView: " + view);
+//	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nView: " + view);
 	
 	String catalog = cn.getSchemaName();
 
@@ -97,7 +97,7 @@
 <b>Definition</b> 
 <a href="Javascript:toggleDiv('imgDef','divDef')"><img id="imgDef" src="image/minus.gif"></a>
 <div id="divDef" style="margin-left: 20px;">
-<pre>
+<pre style="font-family: Consolas;">
 <%=new HyperSyntax().getHyperSyntax(cn, text, "VIEW")%>
 </pre>
 </div>

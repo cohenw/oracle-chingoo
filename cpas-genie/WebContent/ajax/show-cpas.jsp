@@ -10,7 +10,7 @@
 	String tables2[] = {"BATCHCAT", "BATCHCAT_TASK", "ERRORCAT", "REPORTCAT", "REQUESTCAT", "TASKCAT", "FWIZCAT", "WIZARDCAT"};
 	String tables3[] = {"CPAS_CODE", "CPAS_CALCTYPE", "CPAS_CATALOG", "CPAS_WIZARD", "CPAS_VALIDATION", "CPAS_ACTION", "CPAS_TABLE", "CPAS_LAYOUT"};
 	String tables4[] = {"CPAS_DATE", "CPAS_JML", "CPAS_GROUP", "CPAS_SEARCHTYPE", "CPASFIND", "CPAS_DOC", /*"CPAS_FORM",*/ "CPAS_PARAMETER", "CPAS_AGE"};
-	String tables5[] = {"EXPOSE", "EXPOSE_RULE", "FORMULA", "PLAN_RULEID", "", "CPAS_ROLE", "SECSWITCH"};
+	String tables5[] = {"FORMULA", "RULE", "EXPOSE", "EXPOSE_RULE", "PLAN_RULEID", "", "CPAS_ROLE", "SECSWITCH"};
 %>
 
 <%
@@ -33,7 +33,7 @@
 		$("#form1").submit();
 	}	
 </script>
-	
+
 </head>
 
 <div>

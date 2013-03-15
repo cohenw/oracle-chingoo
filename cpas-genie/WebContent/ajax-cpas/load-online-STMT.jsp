@@ -105,7 +105,7 @@
 	<td class="<%= rowClass%>" nowrap><%= label[i][1] %></td>
 	<td class="<%= rowClass%>" nowrap><%= label[i][0] %></td>
 	<td class="<%= rowClass%>">
-<%= (label[i][0].equals("MS") || label[i][0].equals("DS")) ? "<PRE>":"" %><%=new HyperSyntax().getHyperSyntax(cn, values[i], "SQL")%>
+<%= (label[i][0].equals("MS") || label[i][0].equals("DS")) ? "<PRE style='font-family: Consolas;'>" + new HyperSyntax().getHyperSyntax(cn, values[i], "SQL") : values[i] %>
 <%= (label[i][0].equals("MS") || label[i][0].equals("DS")) ? "</PRE>":"" %>
 
 <% if ((label[i][0].equals("MT") || label[i][0].equals("DT")) && !values[i].equals("") && values[i].length() < 30) {

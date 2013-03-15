@@ -54,18 +54,6 @@
     <link href="css/style.css?<%= Util.getScriptionVersion() %>" rel="stylesheet" type="text/css" />
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
 
-<style>
-.comment { 
-    color: gray;
-}
-.syntax1 { 
-#    font-weight: bold;
-    color: blue;
-}
-.syntax2 { 
-    color: brown;
-}
-</style>
 </head>
 <body>
 
@@ -108,10 +96,9 @@ for (int k=0;k<types.size();k++) {
 <b><a href="javascript:tDiv('div-<%=k%>')"><%= type %></a></b><br/>
 <div id="div-<%=k%>" style="display: block;">
 <table>
-<td valign=top align=right><span id="colnum_<%=type.replace(" ","")%>"></span></td>
-<td bgcolor="gray"></td>
-<td valign=top><pre style="font-family: courier new, courier, monospace; font-size: 12px;">
-<%= new HyperSyntax().getHyperSyntax(cn, text, type)%></pre></td>
+<td valign=top align=right><pre style="font-family: Consolas; color: gray;"><span id="colnum_<%=type.replace(" ","")%>" ></span></pre></td>
+<td bgcolor="green"></td>
+<td valign=top><pre style="font-family: Consolas;"><%= new HyperSyntax().getHyperSyntax(cn, text, type)%></pre></td>
 </table>
 
 </div>
@@ -134,23 +121,38 @@ for (int k=0;k<types.size();k++) {
 
   lines="";
   for (var i=1;i <= <%=lines_pkg%>;i++)
-	  lines += i + "<br/>";
-  $("#colnum_PACKAGE").html('<span style="font-family: courier new, courier, monospace; font-size: 12px; color: gray;">'+lines+'<\span>');
+	  lines += i + "\n";
+  $("#colnum_PACKAGE").html('  ' + lines);
   
   lines="";
   for (var i=1;i <= <%=lines_pkgbody%>;i++)
-	  lines += i + "<br/>";
-  $("#colnum_PACKAGEBODY").html('<span style="font-family: courier new, courier, monospace; font-size: 12px; color: gray;">'+lines+'<\span>');
+	  lines += i + "\n";
+  $("#colnum_PACKAGEBODY").html('  ' + lines);
 
   lines="";
   for (var i=1;i <= <%=lines_procedure%>;i++)
-	  lines += i + "<br/>";
-  $("#colnum_PROCEDURE").html('<span style="font-family: courier new, courier, monospace; font-size: 12px; color: gray;">'+lines+'<\span>');
+	  lines += i + "\n";
+  $("#colnum_PROCEDURE").html('  ' + lines);
 
   lines="";
   for (var i=1;i <= <%=lines_function%>;i++)
-	  lines += i + "<br/>";
-  $("#colnum_FUNCTION").html('<span style="font-family: courier new, courier, monospace; font-size: 12px; color: gray;">'+lines+'<\span>');
+	  lines += i + "\n";
+  $("#colnum_FUNCTION").html('  ' + lines);
   
 </script>
 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', '<%= Util.trackingId() %>']);
+  _gaq.push(['_setDomainName', 'none']);
+  _gaq.push(['_trackPageview']);
+
+  _gaq.push(['_trackEvent', 'Src', 'Src <%= name %>']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>

@@ -313,6 +313,7 @@ PEPP<br/>
 
 PMRS<br/>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS', 'pmrs_client')">pmrs_client@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS', 'pmrs_client_53')">pmrs_client_53@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS</a>
 <br/>
 
 PPL<br/>
@@ -368,10 +369,11 @@ VANGUARD<br/>
 <div style="margin: 10px; padding:5px; width:450px; height:300px; overflow: scroll; border: 1px solid #666666;">
 <b>What's New.</b>
 <br/><br/>
+<li>PL/SQL Syntax highlight, hyper link</li>
 <li>Multiple Filter enabled</li>
 <li>CPAS online slave event query added</li>
 <li>Support Transpose in Query page.</li>
-<li>Suppoer queries start with WITH.</li>
+<li>Support queries start with WITH.</li>
 <li>Query support Explain Plan</li>
 <li>Calc Detail/Calc Html Detail added.</li>
 <li>Search view, trigger added.</li>
