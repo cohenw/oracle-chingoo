@@ -272,7 +272,6 @@ html.busy, html.busy * {
 }
 
 .syntax1 { 
-#    font-weight: bold;
     color: blue;
 }
 .syntax2 { 

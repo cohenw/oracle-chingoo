@@ -91,7 +91,7 @@
 	
 	if (norun==null) {
 		q = new Query(cn, sqlh, maxRow);
-		System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nQuery: " + sql);
+		//System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nQuery: " + sql);
 		if (q.isError()) System.out.println("Error: " + q.getMessage());
 		else System.out.println("Count: " + q.getRecordCount());
 
@@ -101,7 +101,10 @@
 	
 	// get table name
 	String tbl = null;
-	List<String> tbls = Util.getTables(sql); 
+	//List<String> tbls = Util.getTables(sql); 
+	List<String> tbls = new HyperSyntax().getTables(cn, sql);
+//	System.out.println("XXX TBLS=" + tbls);
+
 	if (tbls.size()>0) tbl = tbls.get(0);
 //	System.out.println("XXX TBL=" + tbl);
 	

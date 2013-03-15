@@ -85,7 +85,7 @@
 <%
 	rowCnt = 0;
 	q0.rewind(1000, 1);
-	while (q0.next() && rowCnt < 1000) {
+	while (q0 != null && q0.next() && rowCnt < 1000) {
 //		String event = q.getValue("event");
 		String pevent = q0.getValue("pevent");
 		String name = q0.getValue("name");
@@ -95,7 +95,6 @@
 		String seclabel = q0.getValue("seclabel");
 		String log = q0.getValue("log");
 		String rkey = q0.getValue("rkey");
-
 		rowCnt ++;
 		String rowClass = "oddRow";
 		if (rowCnt%2 == 0) rowClass = "evenRow";		
@@ -103,9 +102,10 @@
 		String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + seclabel + "'");
 		
 		String batchTask = "";
-		if (action.equals("BT") || action.equals("BW")) {
+		if (action==null) action="";
+		if (action != null && action.equals("BT") || action.equals("BW")) {
 			String tmp[] = uparam.split(",");
-			if (tmp.length>1) {
+			if (tmp != null && tmp.length>1) {
 				String qry = "SELECT BATCHNAME || ' - ' || TASKNAME FROM BATCHCAT A, BATCHCAT_TASK B " +
 				"WHERE A.batchkey=B.batchkey AND A.batchkey = '" + tmp[0] + "'  AND B.taskkey='" + tmp[1] + "'";
 			
@@ -222,6 +222,7 @@ String udel = "";
 String ladd = "";
 String lupd = "";
 String ldel = "";
+
 
 //cn.queryOne("SELECT actionstmt")
 if (tv!=null && sdi!=null && actionId != null) {

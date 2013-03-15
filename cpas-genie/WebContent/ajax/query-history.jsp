@@ -49,7 +49,10 @@
 %>
 	<tr class="<%=rowClass%>">
 		<td><a href="Javascript:run('<%= divName %>')">run</a></td>
-		<td><div id="<%= divName %>"><%=new HyperSyntax().getHyperSyntax(cn, ql.getQueryString(), "SQL")%></div></td>
+		<td>
+			<div style="display: none;" id="<%= divName %>"><%= ql.getQueryString() %></div>
+			<div style="font-family: Consolas;"><%=new HyperSyntax().getHyperSyntax(cn, ql.getQueryString(), "SQL")%></div>
+		</td>
 		<td><%= ql.getTime() %></td>
 	</tr>
 <%

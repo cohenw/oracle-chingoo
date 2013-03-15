@@ -78,7 +78,8 @@ public class CpasUtil {
 			{"JMLFILEID", "CPAS_DEFLOB"},
 			{"TAXTYPE", "TAXTYPE"},
 			{"REMARKID", "REMARK"},
-			{"CLNT", "CLIENT"}
+			{"CLNT", "CLIENT"},
+			{"RULEID", "RULE"}
 	};
 
 	// for special case (with table name)

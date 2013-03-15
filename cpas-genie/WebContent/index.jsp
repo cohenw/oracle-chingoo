@@ -171,8 +171,8 @@ function hideHist() {
 }
 </script>
 
-	<style>
-	.ui-autocomplete-loading { background: white url('image/ui-anim_basic_16x16.gif') right center no-repeat; }
+<style>
+.ui-autocomplete-loading { background: white url('image/ui-anim_basic_16x16.gif') right center no-repeat; }
 .ui-autocomplete {
 		max-height: 500px;
 		overflow-y: auto;
@@ -187,7 +187,7 @@ function hideHist() {
 	* html .ui-autocomplete {
 		height: 500px;
 	}	
-	</style>
+</style>
 	<script>
 	var loadCount=0;
 	$(function() {
@@ -350,7 +350,7 @@ function hideHist() {
 <% } %>
 </td>
 <td>
-<span style="color: blue; font-family: Arial; font-size:28px; font-weight:bold;">Genie</span>
+<span style="color: blue; font-family: Consolas, Arial; font-size:28px; font-weight:bold;">Genie</span>
 </td>
 <!-- <td nowrap><h2 style="color: blue;">Genie</h2></td> -->
 <td><b><%= cn.getUrlString() %></b></td>
@@ -374,7 +374,6 @@ CPAS</a> |
 </td>
 </table>
 </div>
-
 
 <table border=0 cellspacing=0>
 <td valign=top width=280>

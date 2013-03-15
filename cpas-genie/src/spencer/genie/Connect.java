@@ -55,6 +55,7 @@ public class Connect implements HttpSessionBindingListener {
 	private HashSet<String> viewSet = new HashSet<String>();
 	private HashSet<String> synonymSet = new HashSet<String>();
 	private HashSet<String> procedureSet = new HashSet<String>();
+	private HashSet<String> psynonymSet = new HashSet<String>();
 	
 	private HashSet<String> comment_tables = new HashSet<String>();
 	private HashSet<String> temp_tables = new HashSet<String>();
@@ -749,6 +750,21 @@ public class Connect implements HttpSessionBindingListener {
 		addMessage("Loaded Synonyms " + synonyms.size());
 		addMessage("Loaded Packages " + packages.size());
 		addMessage("Loaded Procedure/Functions " + procedureSet.size());
+
+		psynonymSet.clear();
+		stmt = conn.createStatement();
+		qry = "SELECT synonym_name FROM all_synonyms WHERE owner='PUBLIC' AND table_owner = 'SYS' AND synonym_name > 'A' AND synonym_name < 'a'";
+		rs = stmt.executeQuery(qry);
+		while (rs.next()){
+			String name = rs.getString(1);
+
+			psynonymSet.add(name);
+		}
+		
+		rs.close();
+		stmt.close();
+		
+		addMessage("Loaded Public Synonyms " + psynonymSet.size());
 	}
 	
 	public synchronized String genie(String value, String tab, String targetCol, String sourceCol) {
@@ -1673,6 +1689,8 @@ public class Connect implements HttpSessionBindingListener {
 					tname = temp[1];
 				}
 			}
+			
+			if (psynonymSet.contains(tname)) owner = "PUBLIC";
 		}
 /*		
 		if (owner==null) {
@@ -1698,6 +1716,7 @@ public class Connect implements HttpSessionBindingListener {
 		
 		list = new ArrayList<TableCol>();
 		
+		if (owner.equals("PUBLIC")) owner = "SYS";
 		Statement stmt = conn.createStatement();
 		String qry = "SELECT COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION, DATA_SCALE, NULLABLE, DATA_DEFAULT FROM ALL_TAB_COLUMNS WHERE OWNER='" + owner.toUpperCase() + "' AND TABLE_NAME='" + tname + "' ORDER BY column_id";
 //System.out.println("***** " + qry);
@@ -2265,6 +2284,11 @@ public class Connect implements HttpSessionBindingListener {
 		if (synonymSet.contains(oname)) return true;
 		
 		return false;
+	}
+
+	public boolean isPublicSynonym(String oname) {
+		
+		return psynonymSet.contains(oname);
 	}
 	
 	public boolean isProcedure(String oname) {

@@ -232,3 +232,6 @@ Build CPAS1070
 	Fixed the tooltip for column description - lowsercase, no size for rowid type
 	Syntax Highlight for View / Trigger source
 
+Build CPAS1071
+	Load Public Synonym
+	
