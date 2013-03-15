@@ -102,7 +102,8 @@
 	
 	// get table name
 	String tbl = null;
-	List<String> tbls = Util.getTables(sql); 
+//	List<String> tbls = Util.getTables(sql); 
+	List<String> tbls = new HyperSyntax().getTables(cn, sql);
 	if (tbls.size()>0) tbl = tbls.get(0);
 //	System.out.println("XXX TBL=" + tbl);
 	

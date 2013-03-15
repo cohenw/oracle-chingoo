@@ -68,9 +68,7 @@ for (int k=0;k<types.size();k++) {
 %>
 <b><a href="javascript:tDiv('div-<%=k%>')"><%= type %></a></b><br/>
 <div id="div-<%=k%>" style="display: block;">
-<pre class='brush: sql'>
-<%=new HyperSyntax().getHyperSyntax(cn, text, type)%>
-</pre>
+<pre style="font-family: Consolas;"><%=new HyperSyntax().getHyperSyntax(cn, text, type)%></pre>
 </div>
 <%
 }
