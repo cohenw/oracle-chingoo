@@ -182,5 +182,7 @@ Build 1058
 	Fixed the tooltip for column description - lowsercase, no size for rowid type
 	Syntax Highlight and Hyper Link for Package, View, Trigger and Query
 
+Build 1059
+	Load Public Synonyms
 	
- 	
+ 

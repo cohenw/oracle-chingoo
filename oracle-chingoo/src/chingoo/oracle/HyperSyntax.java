@@ -302,10 +302,10 @@ public class HyperSyntax {
 				s.append( "<span class='syntax2'>" + token + "</span>" );
 			} else if (isNumeric(tmp))
 				s.append( "<span class='syntax3'>" + token + "</span>" );
-			else if (cn.isTVS(tmp))
-				s.append( "<a href='pop.jsp?key="+tmp+"' target='_blank'>" + token + "</a>" );
+			else if (cn.isTVS(tmp)|| cn.isPublicSynonym(tmp))
+				s.append( "<a style='color: darkblue;' href='pop.jsp?key="+tmp+"' target='_blank'>" + token + "</a>" );
 			else if (cn.isProcedure(tmp))
-				s.append( "<a target='_blank' href='src.jsp?name=" + tmp + "'>" + token + "</a>" );
+				s.append( "<a style='color: darkblue;' target='_blank' href='src.jsp?name=" + tmp + "'>" + token + "</a>" );
 			else if (hyperlink && !tmp.trim().equals("")) {
 				hyperlink = false;
 				s.append( "<a name='" + tmp.toLowerCase() + "'></a>"+ token );
@@ -313,16 +313,16 @@ public class HyperSyntax {
 				if (type.equals("PACKAGE"))
 					s.append( "<a name='" + tmp.toLowerCase() + "'>" + token + "</a>" );
 				else
-					s.append( "<a href='#" + tmp.toLowerCase() + "'>" + token + "</a>" );
+					s.append( "<a style='color: darkblue;' href='#" + tmp.toLowerCase() + "'>" + token + "</a>" );
 			} else if (procedures.contains(tmp))
-				s.append( "<a href='#" + tmp.toLowerCase() + "'>" + token + "</a>" );
+				s.append( "<a style='color: darkblue;' href='#" + tmp.toLowerCase() + "'>" + token + "</a>" );
 			else if (tmp.indexOf('.') > 0) {
 				int idx = tmp.indexOf('.');
 				String pkg = tmp.substring(0,idx);
 				String prc = tmp.substring(idx+1);
 				
 				if (cn.isPackage(pkg)||(cn.isSynonym(pkg)))
-					s.append( "<a target='_blank' href='src.jsp?name=" + pkg + "#" + prc.toLowerCase() + "'>" + token + "</a>" );
+					s.append( "<a style='color: darkblue;' target='_blank' href='src.jsp?name=" + pkg + "#" + prc.toLowerCase() + "'>" + token + "</a>" );
 				else
 					s.append( token );
 			} else {
@@ -386,7 +386,7 @@ public class HyperSyntax {
 			else if (r.type=='S')
 				className ="syn_str";
 			s.append( "<span class='"+className+"'>" );
-			s.append( text.substring(r.start, r.end) );
+			s.append( Util.escapeHtml( text.substring(r.start, r.end) ) );
 			s.append( "</span>" );
 			start = r.end;
 		}
@@ -397,5 +397,28 @@ public class HyperSyntax {
 			System.out.println("Elapsed Time = " + (after - before));
 		
 		return s.toString();
+	}
+	
+	public ArrayList<String> getTables(Connect cn, String sql) {
+		ArrayList<String> tables = new ArrayList<String>();
+		
+		StringTokenizer st = new StringTokenizer(sql, delim, true);
+		while (st.hasMoreTokens()) {
+			String token = st.nextToken();
+			
+			if (token.length()==1 && token.indexOf(delim)>=0 ) {
+				continue;
+			} 
+			
+			String tmp = token.toUpperCase();
+			if (syntax1.contains(tmp) || syntax2.contains(tmp)) {
+				continue;
+			} else if (cn.isTVS(tmp)|| cn.isPublicSynonym(tmp)) {
+				if (!tables.contains(tmp))
+					tables.add(tmp);
+			}
+		}
+
+		return tables; 
 	}
 }

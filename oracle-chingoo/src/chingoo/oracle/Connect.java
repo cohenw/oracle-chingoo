@@ -51,6 +51,7 @@ public class Connect implements HttpSessionBindingListener {
 	private HashSet<String> tableSet = new HashSet<String>();
 	private HashSet<String> viewSet = new HashSet<String>();
 	private HashSet<String> synonymSet = new HashSet<String>();
+	private HashSet<String> psynonymSet = new HashSet<String>();
 
 	private HashSet<String> comment_tables = new HashSet<String>();
 	private HashSet<String> temp_tables = new HashSet<String>();
@@ -725,6 +726,22 @@ public class Connect implements HttpSessionBindingListener {
 		addMessage("Loaded Synonyms " + synonyms.size());
 		addMessage("Loaded Packages " + packages.size());
 		addMessage("Loaded Procedure/Functions " + procedureSet.size());
+
+
+		psynonymSet.clear();
+		stmt = conn.createStatement();
+		qry = "SELECT synonym_name FROM all_synonyms WHERE owner='PUBLIC' AND table_owner = 'SYS' AND synonym_name > 'A' AND synonym_name < 'a'";
+		rs = stmt.executeQuery(qry);
+		while (rs.next()){
+			String name = rs.getString(1);
+
+			psynonymSet.add(name);
+		}
+		
+		rs.close();
+		stmt.close();
+		
+		addMessage("Loaded Public Synonyms " + psynonymSet.size());
 	}
 
 	
@@ -1604,6 +1621,7 @@ public class Connect implements HttpSessionBindingListener {
 					tname = temp[1];
 				}
 			}
+			if (psynonymSet.contains(tname)) owner = "PUBLIC";
 		}
 /*		
 		if (owner==null) {
@@ -2132,6 +2150,11 @@ public class Connect implements HttpSessionBindingListener {
 		if (synonymSet.contains(oname)) return true;
 
 		return false;
+	}
+
+	public boolean isPublicSynonym(String oname) {
+		
+		return psynonymSet.contains(oname);
 	}
 
 	public boolean isProcedure(String oname) {
