@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 
 public class HyperSyntax {
 
-	static String delim = " \t(),\n;%|=><*+";
+	static String delim = " \t(),\n;%|=><*+-";
 	
 	static String syntaxString1[] = {"CREATE", "OR", "BODY", "IS", "PACKAGE","FUNCTION","RETURN",
 		"IN", "OUT", "CURSOR", "SELECT", "FROM", "WHERE", "AND", "TYPE", "ROWTYPE", "EXCEPTION",
