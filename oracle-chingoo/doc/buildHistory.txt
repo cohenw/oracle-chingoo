@@ -184,5 +184,6 @@ Build 1058
 
 Build 1059
 	Load Public Synonyms
-	
+	Summary for query result (Count, Min, Max, Sum)
+
  
