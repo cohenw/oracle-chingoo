@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -628,6 +629,21 @@ public class Query {
 		this.qData = null;
 	}
 	
+	public static String customFormat(String pattern, double value ) {
+		DecimalFormat myFormatter = new DecimalFormat(pattern);
+		String output = myFormatter.format(value);
+
+		return output;
+	}
+	   
+	public static String fmt(double d)
+	{
+        String tmp = customFormat("###,###,###,###.#####", d);
+	        
+        return tmp;
+        //tmp.replaceAll("[0]*$", "").replaceAll(".$", "");
+	}
+	
 	public void calcSummary() {
 		summary.clear();
 		
@@ -644,10 +660,9 @@ public class Query {
 				}
 			}
 			DataDef data = new DataDef();
-			data.value = "" + cnt;
+			data.value = fmt(cnt);
 			sumCount.row.add(data);
 		}		
-		
 		summary.add(sumCount);
 		
 		// Min
@@ -675,7 +690,7 @@ public class Query {
 			}
 			DataDef data = new DataDef();
 			if (isNumberType) {
-				data.value = "" + minNum;
+				data.value = fmt(minNum);
 				if (minNum == 9999999999.0) data.value = null;
 				if (data.value != null && data.value.endsWith(".0")) data.value = data.value.substring(0, data.value.length()-2);
 			}
@@ -684,7 +699,6 @@ public class Query {
 
 			sumMin.row.add(data);
 		}		
-		
 		summary.add(sumMin);
 		
 		// Max
@@ -712,7 +726,7 @@ public class Query {
 			}
 			DataDef data = new DataDef();
 			if (isNumberType) {
-				data.value = "" + maxNum;
+				data.value = fmt(maxNum);
 				if (maxNum == -9999999999.0) data.value = null;
 				if (data.value != null && data.value.endsWith(".0")) data.value = data.value.substring(0, data.value.length()-2);
 			}
@@ -722,7 +736,6 @@ public class Query {
 			sumMax.row.add(data);
 
 		}		
-		
 		summary.add(sumMax);
 		
 		// Sum
@@ -745,7 +758,7 @@ public class Query {
 			}
 			DataDef data = new DataDef();
 			if (isNumberType) {
-				data.value = "" + sumNum;
+				data.value = fmt(sumNum);
 				if (data.value != null && data.value.endsWith(".0")) data.value = data.value.substring(0, data.value.length()-2);
 			}
 			else
@@ -754,7 +767,6 @@ public class Query {
 			sumSum.row.add(data);
 		
 		}		
-		
 		summary.add(sumSum);
 	}
 	
