@@ -119,7 +119,9 @@ for (int k=0;k<types.size();k++) {
 	  $("#"+id).toggle();
   }
 
-  if ($.browser.msie) return;
+  if ($.browser.msie) {
+	  return;
+  }
 
   lines="";
   for (var i=1;i <= <%=lines_pkg%>;i++)

@@ -282,6 +282,7 @@ Rows/Page
 		String txt = "Format";
 %>
 <a id="preFormatText" href="Javascript:togglePreFormat()"><%= txt %></a>
+<a href="Javascript:setTranspose()">Transpose</a>
 <% } %>
 
 <%

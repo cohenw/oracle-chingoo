@@ -28,6 +28,7 @@
 //		System.out.println("*** REUSE Query");
 	}
 %>
+<b>Filter</b>
 <a href="Javascript:resetFilter()">Reset filter</a>
 &nbsp;&nbsp;
 <a href="Javascript:hideFilterWithOneValue()">Hide useless filters</a>
