@@ -19,7 +19,7 @@
 		table = table.substring(idx+1);
 	}
 	
-	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nTable: " + table);
+	//System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nTable: " + table);
 	//System.out.println("owner=" + owner);
 	
 	String catalog = null;
