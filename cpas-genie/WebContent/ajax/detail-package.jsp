@@ -18,7 +18,7 @@
 		owner = name.substring(0, idx);
 		name = name.substring(idx+1);
 	}
-	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nPackage: " + name);
+//	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nPackage: " + name);
 	
 	if (owner==null) owner = cn.getSchemaName().toUpperCase();
 	
