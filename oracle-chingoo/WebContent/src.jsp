@@ -82,6 +82,7 @@ for (int k=0;k<types.size();k++) {
 		
 	}
 
+	
 	if (type.equals("PACKAGE"))
 		lines_pkg =  countLines(text);
 	else if (type.equals("PACKAGE BODY"))
