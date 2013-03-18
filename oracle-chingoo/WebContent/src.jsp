@@ -119,25 +119,27 @@ for (int k=0;k<types.size();k++) {
 	  $("#"+id).toggle();
   }
 
+  if ($.browser.msie) return;
+  
   lines="";
   for (var i=1;i <= <%=lines_pkg%>;i++)
 	  lines += i + "\n";
-  $("#colnum_PACKAGE").html('  ' + lines);
+  $("#colnum_PACKAGE").html('   ' + lines);
   
   lines="";
   for (var i=1;i <= <%=lines_pkgbody%>;i++)
 	  lines += i + "\n";
-  $("#colnum_PACKAGEBODY").html('  ' + lines);
+  $("#colnum_PACKAGEBODY").html('   ' + lines);
 
   lines="";
   for (var i=1;i <= <%=lines_procedure%>;i++)
 	  lines += i + "\n";
-  $("#colnum_PROCEDURE").html('  ' + lines);
+  $("#colnum_PROCEDURE").html('   ' + lines);
 
   lines="";
   for (var i=1;i <= <%=lines_function%>;i++)
 	  lines += i + "\n";
-  $("#colnum_FUNCTION").html('  ' + lines);
+  $("#colnum_FUNCTION").html('   ' + lines);
 
  </script>
 

@@ -367,6 +367,7 @@ var qryPage = 'ajax/qry.jsp';
 				$("#summary-div").append(data);
 				$("#wait").remove();
 				$("#summary-div").slideDown();
+				setHighlight();
 			},
             error:function (jqXHR, textStatus, errorThrown){
             	alert(jqXHR.status + " " + errorThrown);
