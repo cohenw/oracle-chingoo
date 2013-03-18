@@ -128,8 +128,8 @@
 		if (rowCnt%2 == 0) rowClass = "evenRow";
 %>
 <tr class="simplehighlight">
-<td class="<%= rowClass%>">
-<%= rowName[row] %>
+<td style="background-color: #D6E7FF">
+<b><%= rowName[row] %></b>
 </td>
 <%
 	colIdx=0;
@@ -158,7 +158,7 @@
 			
 		}
 %>
-<td class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
+<td class="<%= rowClass%>" <%= ( row==0 || numberCol[colIdx])?"align=right":""%>><%=valDisp%>
 </td>
 <%
 		}
@@ -168,4 +168,5 @@
 	}
 %>
 </table>
+<br/>
 

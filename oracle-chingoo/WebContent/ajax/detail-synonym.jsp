@@ -17,7 +17,7 @@
 		owner = syn.substring(0, idx);
 		syn = syn.substring(idx+1);
 	}
-	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nSynonym: " + syn);
+//	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nSynonym: " + syn);
 		
 	String catalog = cn.getSchemaName();
 

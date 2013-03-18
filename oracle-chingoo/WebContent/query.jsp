@@ -420,7 +420,7 @@ Up to
 <hr noshade color="green"/>
 <br/>
 
-<div id="buttonsDiv" style="display: none;">
+<div id="buttonsDiv" style="display: block;">
 <TABLE>
 <TD><a class="qryBtn" id="modeSort" href="Javascript:setDoMode('sort')">Sort</a>
 <TD><a class="qryBtn" id="modeCopy" href="Javascript:setDoMode('copy')">Copy&amp;Paste</a></TD>
@@ -434,18 +434,18 @@ Up to
 <TD><span id="filter-div"></span></TD>
  -->
 
-<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>&nbsp;&nbsp;&nbsp;</td>
 <td>
 <input type="button" value="Summary" onClick="Javascript:toggleSummary()"/>
 <input type="button" value="Transpose" onClick="Javascript:setTranspose()"/>
 <input type="button" value="Filter" onClick="Javascript:filter2()"/>
 </td>
-<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>&nbsp;&nbsp;&nbsp;</td>
 <td>
 <input type="button" value="Download" onClick="Javascript:download()"/>
 <input type="button" value="Explain plan" onClick="Javascript:explainPlan()"/>
 </td>
-<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>&nbsp;&nbsp;&nbsp;</td>
 <td>
 <input type="button" value="Reload" onClick="Javascript:reloadQuery()"/>
 <input type="button" value="Edit Query" onClick="Javascript:editQuery()"/>
