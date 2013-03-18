@@ -144,6 +144,14 @@
     $(document).ready(function(){
     	setHighlight();
       });
+    
+    $(function() {
+        $( "input[type=button], button" )
+          .button()
+          .click(function( event ) {
+            event.preventDefault();
+          });
+      });
     </script>
     
 	<style>
@@ -382,6 +390,7 @@ Up to
 <input type="hidden" id="rowsPerPage" name="rowsPerPage" value="20">
 <input type="hidden" id="dataLink" name="dataLink" value="1">
 <input type="hidden" id="preFormat" name="preFormat" value="0">
+<input type="hidden" id="summary" name="summary" value="0">
 <input type="hidden" id="cpas" name="cpas" value="0">
 </form>
 
@@ -438,16 +447,13 @@ Up to
 -->
 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td>
+<input type="button" value="Summary" onClick="Javascript:toggleSummary()"/>
 <input type="button" value="Transpose" onClick="Javascript:setTranspose()"/>
-</td>
-<td>
 <input type="button" value="Filter" onClick="Javascript:filter2()"/>
 </td>
 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td>
 <input type="button" value="Download" onClick="Javascript:download()"/>
-</td>
-<td>
 <input type="button" value="Explain plan" onClick="Javascript:explainPlan()"/>
 </td>
 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -459,6 +465,8 @@ Up to
 </div>
 <BR/>
 <div id="filter2-div" style="display:none"></div>
+
+<div id="summary-div"></div>
 
 <div id="data-div">
 <jsp:include page="ajax/qry.jsp">
