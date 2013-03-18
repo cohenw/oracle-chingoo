@@ -354,6 +354,26 @@ var qryPage = 'ajax/qry.jsp';
 		
 	}
 	
+	function reloadSummary() {
+		$("#summary-div").hide();
+		$("#summary-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		
+		//$('body').css('cursor', 'wait'); 
+		$.ajax({
+			type: 'POST',
+			url: 'qry-summary.jsp',
+			data: $("#form0").serialize(),
+			success: function(data){
+				$("#summary-div").append(data);
+				$("#wait").remove();
+				$("#summary-div").slideDown();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+            	alert(jqXHR.status + " " + errorThrown);
+            }  
+		});	
+	}
+
 	function applyFilter(value) {
 		$("#pageNo").val(1);
 		$("#filterValue").val(value);
@@ -650,6 +670,17 @@ function togglePreFormat() {
 	$("#preFormat").val(v);
 //	alert(v);
 	reloadData();
+}
+
+function toggleSummary() {
+	var v = $("#summary").val();
+	v = (v=="1"?"0":"1");
+	$("#summary").val(v);
+	//alert(v);
+	if (v=='1') {
+		reloadSummary();
+	} else
+		$("#summary-div").slideUp();
 }
 
 function toggleCpas() {
