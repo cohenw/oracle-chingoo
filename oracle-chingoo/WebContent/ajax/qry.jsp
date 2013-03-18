@@ -280,6 +280,7 @@ Rows/Page
 		String txt = "Format";
 %>
 <a id="preFormatText" href="Javascript:togglePreFormat()"><%= txt %></a>
+<a href="Javascript:setTranspose()">Transpose</a>
 <% } %>
 
 <table id="dataTable" border=1 class="gridBody">

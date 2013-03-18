@@ -429,15 +429,10 @@ Up to
 		<a href="Javascript:showAllColumn()">Show All</a>&nbsp;
 	</span>
 </TD>
-<!-- 
-<TD><a class="qryBtn" id="modeFilter" href="Javascript:setDoMode('filter')">Filter</a></TD>
-<TD><span id="filter-div"></span></TD>
- -->
 
 <td>&nbsp;&nbsp;&nbsp;</td>
 <td>
 <input type="button" value="Summary" onClick="Javascript:toggleSummary()"/>
-<input type="button" value="Transpose" onClick="Javascript:setTranspose()"/>
 <input type="button" value="Filter" onClick="Javascript:filter2()"/>
 </td>
 <td>&nbsp;&nbsp;&nbsp;</td>
@@ -454,9 +449,8 @@ Up to
 </TABLE>
 </div>
 <BR/>
+<div id="summary-div" style="display:none"></div>
 <div id="filter2-div" style="display:none"></div>
-
-<div id="summary-div"></div>
 
 <div id="data-div">
 <jsp:include page="ajax/qry.jsp">
