@@ -87,9 +87,9 @@ td.evenRow {
     float: left;
 }
 
-#inner-result1 { margin: 5px; }
-#inner-result2 { margin: 5px; }
-#inner-result3 { margin: 5px; }
+#inner-result1 { margin-left: 5px; }
+#inner-result2 { margin-left: 5px; }
+#inner-result3 { margin-left: 5px; }
 
 #tableList {
     width: 250px;
