@@ -76,11 +76,14 @@
   </head>
   
   <body>
-  <img src="image/chingoo.png" title="<%= Util.getVersionDate() + " Build" + Util.getBuildNo() %>"/>
     <h2>Welcome to Oracle Chingoo.</h2>
 
-	<form action="connect_new.jsp" method="POST">
-    <table border=0 style="margin-left: 20px;">
+   <img src="image/chingoo.png" title="<%= Util.getVersionDate() + " Build" + Util.getBuildNo() %>" width=128 height=128/>
+   
+<form action="connect_new.jsp" method="POST">
+
+
+    <table border=0>
     <tr>
     	<td><span style="font-size:20px; color: blue;">JDBC URL</span></td>
     	<td><input style="font-size:20px;" size=60 name="url" id="url" value="<%= initJdbcUrl %>"/></td>

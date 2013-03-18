@@ -143,6 +143,14 @@
     $(document).ready(function(){
     	setHighlight();
       });
+    
+    $(function() {
+        $( "input[type=button], button" )
+          .button()
+          .click(function( event ) {
+            event.preventDefault();
+          });
+      });
     </script>
     
 	<style>
@@ -381,6 +389,7 @@ Up to
 <input type="hidden" id="rowsPerPage" name="rowsPerPage" value="20">
 <input type="hidden" id="dataLink" name="dataLink" value="1">
 <input type="hidden" id="preFormat" name="preFormat" value="0">
+<input type="hidden" id="summary" name="summary" value="0">
 </form>
 
 <form id="FormPop" name="FormPop" target="_blank" method="post" action="pop.jsp">
@@ -415,7 +424,6 @@ Up to
 <TABLE>
 <TD><a class="qryBtn" id="modeSort" href="Javascript:setDoMode('sort')">Sort</a>
 <TD><a class="qryBtn" id="modeCopy" href="Javascript:setDoMode('copy')">Copy&amp;Paste</a></TD>
-<TD><a class="qryBtn" id="modeCopy" href="Javascript:setTranspose()">Transpose</a></TD>
 <TD><a class="qryBtn" id="modeHide" href="Javascript:setDoMode('hide')">Hide Column</a>
 	<span id="showAllCol" style="display: none;">
 		<a href="Javascript:showAllColumn()">Show All</a>&nbsp;
@@ -425,20 +433,16 @@ Up to
 <TD><a class="qryBtn" id="modeFilter" href="Javascript:setDoMode('filter')">Filter</a></TD>
 <TD><span id="filter-div"></span></TD>
  -->
-<TD><a class="qryBtn" id="modeFilter2" href="Javascript:setDoMode('filter2')">Filter</a></TD>
 
 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td>
+<input type="button" value="Summary" onClick="Javascript:toggleSummary()"/>
 <input type="button" value="Transpose" onClick="Javascript:setTranspose()"/>
-</td>
-<td>
 <input type="button" value="Filter" onClick="Javascript:filter2()"/>
 </td>
 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td>
 <input type="button" value="Download" onClick="Javascript:download()"/>
-</td>
-<td>
 <input type="button" value="Explain plan" onClick="Javascript:explainPlan()"/>
 </td>
 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -451,6 +455,8 @@ Up to
 </div>
 <BR/>
 <div id="filter2-div" style="display:none"></div>
+
+<div id="summary-div"></div>
 
 <div id="data-div">
 <jsp:include page="ajax/qry.jsp">
