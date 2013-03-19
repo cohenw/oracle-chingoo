@@ -336,16 +336,7 @@ var qryPage = 'ajax/qry.jsp';
 				
 				setHighlight();
 				//$('body').css('cursor', 'default'); 
-/*
-				$("#qqq").click(function(){
-			        editQuery();
-			    });		
-				$('#qqq').hover(function(){
-					$(this).addClass('datahighlight');
-				},function(){
-					$(this).removeClass('datahighlight');
-				});	    
-*/
+				refreshSummary();
 			},
             error:function (jqXHR, textStatus, errorThrown){
             	alert(jqXHR.status + " " + errorThrown);
@@ -367,6 +358,24 @@ var qryPage = 'ajax/qry.jsp';
 				$("#summary-div").append(data);
 				$("#wait").remove();
 				$("#summary-div").slideDown();
+				setHighlight();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+            	alert(jqXHR.status + " " + errorThrown);
+            }  
+		});	
+	}
+
+	function refreshSummary() {
+		var v = $("#summary").val();
+		if (v==0) return;
+
+		$.ajax({
+			type: 'POST',
+			url: 'qry-summary.jsp',
+			data: $("#form0").serialize(),
+			success: function(data){
+				$("#summary-div").html(data);
 				setHighlight();
 			},
             error:function (jqXHR, textStatus, errorThrown){

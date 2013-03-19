@@ -670,6 +670,7 @@ public class Query {
 			boolean isNumberType = Util.isNumberType(colType);				
 
 			for (int i=0;i<rowSize;i++) {
+				if (hideRow[i]) continue;
 				DataDef v = qData.rows.get(i).row.get(j);
 				if (v.value != null && !v.value.equals("")) { 
 					cnt ++;
