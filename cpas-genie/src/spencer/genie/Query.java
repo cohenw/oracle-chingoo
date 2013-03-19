@@ -647,129 +647,82 @@ public class Query {
 	public void calcSummary() {
 		summary.clear();
 		
-		// Count
 		RowDef sumCount = new RowDef();
+		RowDef sumMin = new RowDef();
+		RowDef sumMax = new RowDef();
+		RowDef sumSum = new RowDef();
+		
 		int rowSize = qData.rows.size();
 		int colSize = qData.columns.size();
+
 		for (int j=0;j<colSize;j++) {
-			int cnt=0;
-			for (int i=0;i<rowSize;i++) {
-				DataDef v = qData.rows.get(i).row.get(j);
-				if (v.value != null && !v.value.equals("")) { 
-					cnt ++;
-				}
-			}
-			DataDef data = new DataDef();
-			data.value = fmt(cnt);
-			sumCount.row.add(data);
-		}		
-		summary.add(sumCount);
 		
-		// Min
-		RowDef sumMin = new RowDef();
-		for (int j=0;j<colSize;j++) {
+			int cnt=0;
 			double minNum= 9999999999.0;
 			String minStr = null;
 
-			int colType = this.getColumnType(j);
-			boolean isNumberType = Util.isNumberType(colType);				
-			
-			for (int i=0;i<rowSize;i++) {
-				
-				DataDef v = qData.rows.get(i).row.get(j);
-				if (v.value != null && !v.value.equals("")) { 
-					if (isNumberType) {
-						double value = Double.parseDouble(v.value);
-						if (value < minNum) minNum = value;
-					} else {
-						String value = v.value;
-						if ( minStr==null || value.compareTo(minStr) < 0)
-							minStr = value;
-					}
-				}
-			}
-			DataDef data = new DataDef();
-			if (isNumberType) {
-				data.value = fmt(minNum);
-				if (minNum == 9999999999.0) data.value = null;
-				if (data.value != null && data.value.endsWith(".0")) data.value = data.value.substring(0, data.value.length()-2);
-			}
-			else
-				data.value = minStr;
-
-			sumMin.row.add(data);
-		}		
-		summary.add(sumMin);
-		
-		// Max
-		RowDef sumMax = new RowDef();
-		for (int j=0;j<colSize;j++) {
 			double maxNum= -9999999999.0;
 			String maxStr = null;
 
-			int colType = this.getColumnType(j);
-			boolean isNumberType = Util.isNumberType(colType);				
-			
-			for (int i=0;i<rowSize;i++) {
-				
-				DataDef v = qData.rows.get(i).row.get(j);
-				if (v.value != null && !v.value.equals("")) { 
-					if (isNumberType) {
-						double value = Double.parseDouble(v.value);
-						if (value > maxNum) maxNum = value;
-					} else {
-						String value = v.value;
-						if ( maxStr==null || value.compareTo(maxStr) > 0)
-							maxStr = value;
-					}
-				}
-			}
-			DataDef data = new DataDef();
-			if (isNumberType) {
-				data.value = fmt(maxNum);
-				if (maxNum == -9999999999.0) data.value = null;
-				if (data.value != null && data.value.endsWith(".0")) data.value = data.value.substring(0, data.value.length()-2);
-			}
-			else
-				data.value = maxStr;
-
-			sumMax.row.add(data);
-
-		}		
-		summary.add(sumMax);
-		
-		// Sum
-		RowDef sumSum = new RowDef();
-		for (int j=0;j<colSize;j++) {
 			double sumNum= 0;
 
 			int colType = this.getColumnType(j);
 			boolean isNumberType = Util.isNumberType(colType);				
-			
-			for (int i=0;isNumberType && i<rowSize;i++) {
-				
+
+			for (int i=0;i<rowSize;i++) {
 				DataDef v = qData.rows.get(i).row.get(j);
 				if (v.value != null && !v.value.equals("")) { 
+					cnt ++;
+
 					if (isNumberType) {
 						double value = Double.parseDouble(v.value);
+						if (value < minNum) minNum = value;
+						if (value > maxNum) maxNum = value;
 						sumNum += value;
+					} else {
+						String value = v.value;
+						if ( minStr==null || value.compareTo(minStr) < 0) minStr = value;
+						if ( maxStr==null || value.compareTo(maxStr) > 0) maxStr = value;
 					}
 				}
 			}
-			DataDef data = new DataDef();
+			DataDef data1 = new DataDef();
+			data1.value = fmt(cnt);
+			sumCount.row.add(data1);
+
+			DataDef data2 = new DataDef();
 			if (isNumberType) {
-				data.value = fmt(sumNum);
-				if (data.value != null && data.value.endsWith(".0")) data.value = data.value.substring(0, data.value.length()-2);
+				data2.value = fmt(minNum);
+				if (minNum == 9999999999.0) data2.value = null;
 			}
 			else
-				data.value = null;
+				data2.value = minStr;
+			sumMin.row.add(data2);
 
-			sumSum.row.add(data);
-		
+			DataDef data3 = new DataDef();
+			if (isNumberType) {
+				data3.value = fmt(maxNum);
+				if (maxNum == -9999999999.0) data3.value = null;
+			}
+			else
+				data3.value = maxStr;
+			sumMax.row.add(data3);
+
+			DataDef data4 = new DataDef();
+			if (isNumberType) {
+				data4.value = fmt(sumNum);
+			}
+			else
+				data4.value = null;
+			sumSum.row.add(data4);
 		}		
+
+		summary.add(sumCount);
+		summary.add(sumMin);
+		summary.add(sumMax);
 		summary.add(sumSum);
 	}
-	
+
 	public String getSummaryCount(int col) {
 		return summary.get(0).row.get(col-1).value;
 	}
