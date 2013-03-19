@@ -235,3 +235,5 @@ Build CPAS1070
 Build CPAS1071
 	Load Public Synonym
 	Summary for query result (Count, Min, Max, Sum)
+	Dynamic Summary based on search / filter
+	
