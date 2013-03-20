@@ -51,8 +51,8 @@
     <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
     <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
     <link href="css/style.css?<%= Util.getScriptionVersion() %>" rel="stylesheet" type="text/css" />
-	<link rel="icon" type="image/png" href="image/Genie-icon.png">
-
+	<link rel="icon" type="image/png" href="image/chingoo-icon.png">
+	
 </head>
 <body>
 
