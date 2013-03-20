@@ -355,10 +355,10 @@ function hideHist() {
 
 </td>
 <td align=right nowrap>
-<b>Global Search</b> <input id="globalSearch" style="width: 200px;"/>
+<b>Global Search</b> <input id="globalSearch" style="width: 200px;" placeholder="table, view or package name"/>
 <!-- <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
  -->
-<input type="button" value="Find" onClick="Javascript:globalSearch($('#globalSearch').val())" placeholder="table, view or package name"//>
+<input type="button" value="Find" onClick="Javascript:globalSearch($('#globalSearch').val())" />
 </td>
 </table>
 </div>
