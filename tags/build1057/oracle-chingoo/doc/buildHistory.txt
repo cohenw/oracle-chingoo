@@ -1,0 +1,165 @@
+Build 1011
+	CpasUtil.planTable for SV_PLAN / PLAN
+
+Build 1012
+	Foreign key - delete rule
+	
+Build 1013
+	Add user-agent (browser) to email notification
+	Add user-agent, plan table to console log
+
+Build 1014
+	Role / Privileges show the differences
+
+Build 1015
+	Privilege (SECLABEL) search for Process/Event/TreeView
+	Added 250, 500 milliseconds on loadEvent, loadEventView respectively
+	
+Build 1016
+	Process/Event exclude SC_NEVER
+	Shoe CRUD in Process/Event
+	Indent Event name if pevent is not null
+
+Build 1017
+	CPAS Online view
+
+Build 1018
+	keyword = $.trim(keyword);  // IE does not support trim() method.
+	Hide Tabs with 'SC_NEVER'
+
+Build 1019
+	Set highlight on tab search (cpas online companion)
+	Show Process, Event detail in EventView pane
+
+Build 1020
+ 	Search View
+ 	Search Trigger
+ 	Rename search db content to search table
+ 
+Build 1021
+	Bug fix: table search (java script)
+	keyword = $.trim(keyword);  // IE does not support trim() method.
+	Enhance Search View/Trigger: added progress bar and status
+
+Build 1022
+	Slide show picture comes from outside (fall images)
+
+Build 1023
+	Show Treeview info inside CPAS online
+
+Build 1024
+	NAV Canada added to CPAS database list
+	download.jsp change NULL to ""
+	TASKCAT added to CPAS hint
+	
+Build 1025
+	Pop-up for Table, View and Package
+	Added search box on pop.jsp
+
+Build 1026
+	Bug fix - null pointer error in CpasUtil.java
+	Pop - style fix for autocomplete (define max height)
+	Added global search in Query and Datalink
+
+Build 1027
+	Title change on detail table/view/package
+	Load Event added indentation
+	Load Event hides with PEVENT IS NOT NULL
+
+Build 1028
+	Request.status, Request_task.status code/value
+	Latest Batches, Latest Requests
+	WIZARDCAT added	 
+	
+Build 1029
+	qry.jsp format do not use <pre> when starts with <
+
+Build 1030
+	Compile for JDK5
+
+Build 1031
+	CPAS Simulator use Code/Value for layout
+	CALC Detail page, Link to calc detail page 
+
+Build 1032
+	CALC Detail page support dynamic tabs
+	CALC HTML Detail page / applied SIGMA CSS
+
+Build 1033
+	Query support dynamic binding
+
+Build 1034
+	Data-Link by rowid
+
+Build 1035
+	CPAS Online - Slave event
+
+Build 1036
+	CPAS - Extract Member script
+	Schema Diff - use Tab UI
+	Schema Diff - logout for Schema 2
+	
+Build 1037
+	Auto complete - trim the keyword
+	SEARSDB added
+	Bug fix - Query with parameter(s) ex: COL=:MKEY)
+
+Build 1038
+	No datalink for group by query
+	No datalink if all PK columns are not selected
+
+Build 1039
+	Google Analytics include custom variable - BuildNo
+
+Build 1040
+	Query support Explain Plan
+
+Build 1041
+	No email for non-CPAS
+	Hide null-value parameter name in SecurityFilter
+	Remove link if the value is empty
+	Google Analytic issue for IE fixed
+
+Build 1042
+	Show sql statement in the query result (for screen copy)
+	
+Build 1043	
+	handle null value in qry.sql
+	fix download and query issue
+
+Build 1044
+	Schema Diff - trigger - ignore the 1st line
+
+Build 1045
+	Support queries that start with WITH
+	
+Build 1046
+	Support ajax page tracking
+	Bug Fix - queries that start with WITH
+
+Build 1047
+	Bug Fix - Table lookup in Query
+
+Build 1048
+	Support Transpose in Query page
+	
+
+Build 1051
+	Data Link support Transpose
+
+Build 1053
+	Filter2 for multiple filters 
+
+Build 1054
+	Fixed UTF-8 issue
+	
+Build 1055
+	GA track custom variable5 - website url
+	Support JDK5
+	Encode for url redirect
+	
+Build 1056
+	Fix CLOB/BLOB Download servlet when there is no PK
+	Query shows column list only for TVS
+	removed loading TVS
+		
