@@ -736,9 +736,12 @@ function openQuery(id) {
 	var sql = $("#sql-" + id).html();
 	var divName = "div-" + id;
 	//alert(sql);
-	
+/*	
 	$("#sql1").val(sql);
 	document.form1.submit();
+*/
+	$("#sql-query").val(sql);
+	$("#FORM_query").submit();
 }
 
 function hideNullColumnTable(id) {
@@ -795,4 +798,21 @@ function setHighlight() {
 
 function removeFilterCol(col) {
 	$('table#filterTable').hideCol(col);
+}
+
+function showCpasCode(key) {
+	var id = "id"+(new Date().getTime());
+	var temp ="<div id='" + id + "' title='CPAS_CODE " + key + "'  style='background-color: #ffffcc;'>"
+	$.ajax({
+		url: "ajax-cpas/cpas-code.jsp?key=" + key,
+		success: function(data){
+			temp = temp + data + "</div>";
+			$("BODY").append(temp);
+			$("#"+id).dialog({ width: 700, height: 350 });
+			setHighlight();
+		},
+        error:function (jqXHR, textStatus, errorThrown){
+            alert(jqXHR.status + " " + errorThrown);
+        }  
+	});		
 }

@@ -10,6 +10,9 @@ package spencer.genie;
  * 
  */
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -18,8 +21,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -131,10 +137,20 @@ public class Connect implements HttpSessionBindingListener {
             Class.forName ("oracle.jdbc.driver.OracleDriver").newInstance ();
             conn = DriverManager.getConnection (url, userName, password);
             conn.setReadOnly(true);
+/*            
+            Statement oStatement = null;
+            oStatement = conn.createStatement();
+            oStatement.execute("ALTER SESSION SET CURRENT_SCHEMA=CLIENT_CAAT_DEV");
+            oStatement.close();
             
+            oStatement = conn.createStatement();
+            oStatement.execute("SET ROLE CPAS_PROXY identified by CPAS_BATCH");
+            oStatement.close();
+*/            
             urlString = userName + "@" + url;  
             addMessage("Database connection established for " + urlString + " @" + (new Date()) + " " + ipAddress);
             if (loadData) session.setAttribute("CN", this);
+
             
             if (!loadData) return; 
             	
@@ -307,12 +323,21 @@ public class Connect implements HttpSessionBindingListener {
     
     public void printQueryLog() {
     	HashMap<String, QueryLog> map = this.getQueryHistory();
+        List<QueryLog> logs = new ArrayList<QueryLog>(map.values());
+
+        Collections.sort(logs, new Comparator<QueryLog>() {
+
+            public int compare(QueryLog o1, QueryLog o2) {
+                return o1.getTime().compareTo(o2.getTime());
+            }
+        });    	
+    	
     	String qryHist = "";
     	if (map == null /* || map.size()==0 */) return;
     	
     	if (url.indexOf("8888")>0) return; // local test
     	
-    	Iterator iterator = map.values().iterator();
+    	Iterator iterator = logs.iterator();
     	int idx = 0;
     	while  (iterator.hasNext()) {
     		idx ++;
@@ -336,6 +361,23 @@ public class Connect implements HttpSessionBindingListener {
    		qryHist =  url + "\nWho: " + who + "\nAgent: " + getUserAgent() + "\nBuild No: " + Util.getBuildNo() + "\n\n" + qryHist + "\n\n" + extractJS(this.getAddedHistory());
    		if (isInCpasNetwork())
    			Email.sendEmail("oracle.genie.email@gmail.com", title + this.urlString + " " + who, qryHist);
+   		
+   		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
+   		Date date = new Date();
+   		String filename = dateFormat.format(date);
+   		filename += ".log";
+//   		filename = filename.replaceAll(" ", "-");
+System.out.println("filename=" + filename);   		
+   		PrintWriter out = null; 
+   		try {
+   			out = new PrintWriter(new FileWriter("/tmp/cpas-genie/" + filename));
+   			out.print(qryHist);
+   			out.flush();
+   			out.close();
+   			} catch (IOException e) {
+   			// TODO Auto-generated catch block
+   			e.printStackTrace();
+   		}
     }
     
 	public void valueBound(HttpSessionBindingEvent arg0) {
@@ -432,7 +474,8 @@ public class Connect implements HttpSessionBindingListener {
        		stmt.close();
 
        		//temp += ")";
-			constraints.put(prevConName, temp);
+       		if (prevConName != null)
+       			constraints.put(prevConName, temp);
 
 		} catch (SQLException e) {
              System.err.println ("5.1 Cannot connect to database server");
@@ -1633,6 +1676,9 @@ public class Connect implements HttpSessionBindingListener {
 		}
 
 		String condition = Util.buildCondition(pkColName,  keys);
+		if (condition.equals("ERROR")) {
+			if (tname.equals("ERRORCAT")) condition = "ERRORID=" + keys;
+		}
 		qry += " WHERE " + condition;
 		
 		return qry;

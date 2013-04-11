@@ -23,6 +23,7 @@
 	if (sql.endsWith(";")) sql = sql.substring(0, sql.length()-1);
 	sql = sql.replaceAll("&gt;",">").replace("&lt;","<");
 
+System.out.println("sql=" + sql);	
 	String searchValue = request.getParameter("searchValue");
 	if (searchValue==null) searchValue = "";
 	
@@ -58,7 +59,7 @@
 
 <div style="float: left;">
 <% if (pgNo>1) { %>
-<a href="Javascript:gotoPage(<%=id%>, <%= pgNo - 1%>)"><img border=0 src="image/prev.png" border=0 align="bottom"></a>
+<a href="Javascript:gotoPageWork(<%=id%>, <%= pgNo - 1%>)"><img border=0 src="image/prev.png" border=0 align="bottom"></a>
 <% } %>
 
 <% if (totalPage > 1) { %>
@@ -66,7 +67,7 @@ Page: <b><%= pgNo %></b> of <%= totalPage %>
 <% } %>
 
 <% if (q.getTotalPage(linesPerPage) > pgNo) { %>
-<a href="Javascript:gotoPage(<%=id%>, <%= pgNo + 1%>)"><img border=0 src="image/next.png" border=0 align="bottom"></a>
+<a href="Javascript:gotoPageWork(<%=id%>, <%= pgNo + 1%>)"><img border=0 src="image/next.png" border=0 align="bottom"></a>
 <% } %>
 
 Found: <%= filteredCount %>
@@ -85,8 +86,8 @@ Found: <%= filteredCount %>
 
 &nbsp;&nbsp;&nbsp;&nbsp;
 <% if (totalCount>=10) { %>
-<img src="image/view.png" border=0 ><input id="search-<%=id%>" value="<%= searchValue %>" size=15 onChange="searchTable(<%=id%>,$(this).val())">
-<a href="Javascript:clearSearch(<%=id%>)"><img border="0" border=0 src="image/clear.gif"></a>
+<img src="image/view.png" border=0 ><input id="search-<%=id%>" value="<%= searchValue %>" size=15 onChange="searchTableWork(<%=id%>,$(this).val())">
+<a href="Javascript:clearSearchWork(<%=id%>)"><img border="0" border=0 src="image/clear.gif"></a>
 <% } %>
 </div>
 <br clear="all"/>

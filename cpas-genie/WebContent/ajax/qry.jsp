@@ -374,11 +374,21 @@ Rows/Page
 				String capt = cn.getCpasCodeCapt(tname, colName);
 				if (capt != null) 
 					cpasDisp += "<br/> &gt;  <span class='cpas'>" + capt + "</span>";
-			}			
+			}
+			
+			String grup = cn.getCpasCodeGrup(tname, colName);
+			if (grup == null || grup.equals("_")) grup = "";
+			
+			if (grup != null && !grup.equals("")) {
+				String codeTable = cn.getCpasUtil().getCpasCodeTable();
+//				grup = " -&gt; <a href=\"javascript:showDialog('" + codeTable + "','"+grup+"')\">" + grup + "</a>";
+				grup = " <a href=\"javascript:showCpasCode('"+grup+"')\">" + grup + "</a>";
+			}
+			
 %>
 <th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
 	href="Javascript:doAction('<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colDisp%></a>
-	<%= extraImage %><%= cpasDisp %>
+	<%= extraImage %><%= cpasDisp %> <%= cpas?grup:"" %>
 </th>
 <%
 	} 
@@ -473,10 +483,10 @@ if (fkLinkTab.size()>0 && dLink && false) {
 					String id_x = Util.getId();
 					valDisp = valDisp.substring(0,200) + "<a id='"+id_x+"' href='Javascript:toggleText2(" +id_x + "," +id +")'>...</a><span id='"+id+"' style='display: none;'>" + valDisp.substring(200) + "</span>";
 					
-					if (preFormat) valDisp = "<pre>" + Util.escapeHtml(val) + "</pre>";
+					if (preFormat) valDisp = "<pre style='font-family: Consolas;'>" + Util.escapeHtml(val) + "</pre>";
 					if (preFormat && val.startsWith("<")) valDisp = Util.escapeHtml(val);
 				} else {
-					if (preFormat) valDisp = "<pre>" + Util.escapeHtml(val) + "</pre>";
+					if (preFormat) valDisp = "<pre style='font-family: Consolas;'>" + Util.escapeHtml(val) + "</pre>";
 					if (preFormat && val.startsWith("<")) valDisp = Util.escapeHtml(val);
 				}
 

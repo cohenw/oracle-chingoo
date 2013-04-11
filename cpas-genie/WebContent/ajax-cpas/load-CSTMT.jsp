@@ -102,7 +102,7 @@
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><%= label[i][1] %></td>
 	<td class="<%= rowClass%>" nowrap><%= label[i][0] %></td>
-	<td class="<%= rowClass%>"><PRE><%= values[i] %>	</PRE>
+	<td class="<%= rowClass%>"><PRE style='font-family: Consolas;'><%= values[i] %>	</PRE>
 <% if ((label[i][0].equals("MT") || label[i][0].equals("DT")) && !values[i].equals("")) {
 	id = Util.getId();
 	qry = "SELECT * FROM CPAS_LAYOUT WHERE TNAME = '" + values[i] + "'";

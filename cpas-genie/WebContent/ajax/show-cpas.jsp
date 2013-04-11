@@ -15,8 +15,6 @@
 
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
-	HashMap<String, QueryLog> map = cn.getQueryHistory();
-	
 	
 	String cntCustom = cn.queryOne("SELECT count(*) FROM USER_OBJECTS WHERE OBJECT_NAME='CUSTOMTREEVIEW'");
 	boolean hasCustomTV = cntCustom.equals("1");

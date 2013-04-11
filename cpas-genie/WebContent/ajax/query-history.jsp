@@ -10,6 +10,15 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	HashMap<String, QueryLog> map = cn.getQueryHistory();
 	
+    List<QueryLog> logs = new ArrayList<QueryLog>(map.values());
+
+    Collections.sort(logs, new Comparator<QueryLog>() {
+
+        public int compare(QueryLog o1, QueryLog o2) {
+            return o1.getTime().compareTo(o2.getTime());
+        }
+    });
+
 %>
 <head>
 <script type="text/javascript">
@@ -38,7 +47,7 @@
 </tr>
 
 <%
-	Iterator iterator = map.values().iterator();
+	Iterator iterator = logs.iterator();
 	int idx = 0;
 	while  (iterator.hasNext()) {
 		idx ++;

@@ -1,0 +1,3520 @@
+
+
+
+
+
+<html>
+<head> 
+	<title>SELECT * FROM BD_MASSTRANSFER2 WHERE PROCESSID='418537'</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+
+    <script src="../script/jquery-1.7.2.min.js" type="text/javascript"></script>
+
+    <script src="../script/data-methods.js?CPAS-1071" type="text/javascript"></script>
+    <script src="../script/query-methods.js?CPAS-1071" type="text/javascript"></script>
+
+    <link rel='../stylesheet' type='text/css' href='css/style.css?CPAS-1071'>
+	<link rel="icon" type="image/png" href="image/Genie-icon.png">
+
+	<link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css"/>
+	<script src="../script/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
+    
+    <script type="text/javascript">
+	$(document).ready(function() {
+
+		showTable('BD_MASSTRANSFER2');
+
+		setDoMode('sort');
+		var cnt = $("#recordCount").val();
+		if (cnt != "0") $("#buttonsDiv").slideDown();
+	});	    
+	
+    $(document).ready(function(){
+    	setHighlight();
+      });
+    
+    $(function() {
+        $( "input[type=button], button" )
+          .button()
+          .click(function( event ) {
+            event.preventDefault();
+          });
+      });
+    
+    function summaryColumn(tableID, columnIndex) {
+    	  var tot = 0.0;
+    	  var test = "";
+    	  var v ="";
+    	  var nullCnt = 0;
+    	  var cnt = 0;
+    	  $("#" + tableID + " tr:gt(0)")
+    	  .children("td:nth-child(" + columnIndex + ")")
+    	  .each(function() {
+    		  v = $(this).html();
+    		  if (v.indexOf("<") >= 0)
+    			  v = $(v).text();
+    	      //alert($(this).html() + " : " + v);
+    		  if (v == "null") nullCnt++;
+    		  else cnt++;
+    	      tot += parseFloat(v);
+    	      test = $(this).html();
+    	  });
+    	  //return tot;
+    	  alert("Count = " + cnt + "\nSum = " + tot)
+    	}
+    
+    </script>
+    
+	<style>
+	.ui-autocomplete-loading { background: white url('image/ui-anim_basic_16x16.gif') right center no-repeat; }
+.ui-autocomplete {
+		max-height: 300px;
+		overflow-y: auto;
+		/* prevent horizontal scrollbar */
+		overflow-x: hidden;
+		/* add padding to account for vertical scrollbar */
+		padding-right: 20px;
+	}
+	/* IE 6 doesn't support max-height
+	 * we use height instead, but this forces the menu to always be this tall
+	 */
+	* html .ui-autocomplete {
+		height: 300px;
+	}	
+	</style>
+	<script>
+	$(function() {
+		function addTable( tname ) {
+			if (tname == "") return;
+			showTable(tname);
+		}
+
+		$( "#tablesearch-xxx" ).autocomplete({
+			source: "ajax/auto-complete.jsp",
+			minLength: 2,
+			select: function( event, ui ) {
+				addTable( ui.item ?
+					ui.item.value: "" );
+			}
+		});
+
+		$( "#tablesearch" ).autocomplete({
+			source: "ajax/auto-complete.jsp",
+			minLength: 2,
+			select: function( event, ui ) {
+				addTable( ui.item ?
+					ui.item.value: "" );
+			}
+		}).data( "autocomplete" )._renderItem = function( ul, item ) {
+			return $( "<li></li>" )
+			.data( "item.autocomplete", item )
+			.append( "<a>" + item.label + " <span class='rowcountstyle'>" + item.desc + "</span></a>" )
+			.appendTo( ul );
+		};
+	
+	});
+	
+	$(function() {
+		$( "#globalSearch" ).autocomplete({
+			source: "ajax/auto-complete2.jsp",
+			minLength: 2,
+			select: function( event, ui ) {
+				popObject( ui.item ?
+					ui.item.value: "" );
+			}
+		}).data( "autocomplete" )._renderItem = function( ul, item ) {
+			return $( "<li></li>" )
+			.data( "item.autocomplete", item )
+			.append( "<a>" + item.label + " <span class='rowcountstyle'>" + item.desc + "</span></a>" )
+			.appendTo( ul );
+		};
+	});	
+
+	function popObject(oname) {
+//		alert(oname);
+		$("#popKey").val(oname);
+    	$("#FormPop").submit();
+	}
+	
+	function explainPlan() {
+		if ($("#explainPlan").is(':visible')) {
+			$("#explainPlan").slideUp();
+			return;
+		}
+		
+		$.ajax({
+			type: 'POST',
+			url: "ajax/explain-plan.jsp",
+			data: $("#form1").serialize(),
+			success: function(data){
+				$("#explainPlan").html(data);
+				$("#explainPlan").slideDown();
+//				$("#wait").remove();
+			},
+	        error:function (jqXHR, textStatus, errorThrown){
+	            alert(jqXHR.status + " " + errorThrown);
+	        }  
+		});	
+	}	
+
+	function editQuery() {
+		$("#queryMain").slideToggle();		
+	}
+
+	function reloadQuery() {
+		$("#form1").submit();		
+	}
+	
+	</script>    
+</head> 
+
+<body>
+
+<div style="background-color: #ffffff;">
+<img src="image/icon_query.png" align="middle"/> <b>QUERY</b>
+prd_pepp@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP
+&nbsp;&nbsp;&nbsp;
+<a href="query.jsp" target="_blank">Query</a> |
+<!-- <a href="q.jsp" target="_blank">Q</a> |
+ -->
+<a href="erd_svg.jsp?tname=BD_MASSTRANSFER2" target="_blank">ERD</a> |
+<a href="worksheet.jsp" target="_blank">Work Sheet</a>
+&nbsp;&nbsp;&nbsp;
+Search <input id="globalSearch" style="width: 200px;" placeholder="table or view name"/>
+</div>
+
+<div id="queryMain">
+
+<a href="Javascript:toggleHelp()"><img  style="float: left" id="helpDivImage" border="0" src="image/minus.gif"></a>
+<div id="div-help" style="float: left">
+	<a id="showERD" href="Javascript:showERD('BD_MASSTRANSFER2')">Show ERD</a>
+	<div id="tableList1" style="margin-left: 5px;">
+
+ 	</div>
+
+<div class="ui-widget">
+	<label for="tablesearch">Table/View: </label>
+	<input id="tablesearch" style="width: 200px;"/>
+</div>
+
+	<div id="table-detail"></div>
+
+	<div>
+	<a href="Javascript:copyPaste('SELECT');">SELECT</a>&nbsp;
+	<a href="Javascript:copyPaste('*');">*</a>&nbsp;
+	<a href="Javascript:copyPaste('FROM');">FROM</a>&nbsp;
+	<a href="Javascript:copyPaste('WHERE');">WHERE</a>&nbsp;
+	<a href="Javascript:copyPaste('=');">=</a>&nbsp;
+	<a href="Javascript:copyPaste('LIKE');">LIKE</a>&nbsp;
+	<a href="Javascript:copyPaste('\'%\'');">'%'</a>&nbsp;
+	<a href="Javascript:copyPaste('IS');">IS</a>&nbsp;
+	<a href="Javascript:copyPaste('NOT');">NOT</a>&nbsp;
+	<a href="Javascript:copyPaste('NULL');">NULL</a>&nbsp;
+	<a href="Javascript:copyPaste('AND');">AND</a>&nbsp;
+	<a href="Javascript:copyPaste('OR');">OR</a>&nbsp;
+	<a href="Javascript:copyPaste('IN');">IN</a>&nbsp;
+	<a href="Javascript:copyPaste('( )');">( )</a>&nbsp;
+	<a href="Javascript:copyPaste('EXISTS');">EXISTS</a>&nbsp;
+	<a href="Javascript:copyPaste('ORDER BY');">ORDER-BY</a>&nbsp;
+	<a href="Javascript:copyPaste('DESC');">DESC</a>&nbsp;
+<!-- 
+	<br/>
+	&nbsp;&nbsp;&nbsp;
+	<a href="Javascript:copyPaste('LOWER( )');">LOWER( )</a>&nbsp;
+	<a href="Javascript:copyPaste('UPPER( )');">UPPER( )</a>&nbsp;
+	<a href="Javascript:copyPaste('SUBSTR( )');">SUBSTR( )</a>&nbsp;
+	<a href="Javascript:copyPaste('TRIM( )');">TRIM( )</a>&nbsp;
+	<a href="Javascript:copyPaste('LENGTH( )');">LENGTH( )</a>&nbsp;
+	&nbsp;&nbsp;&nbsp;
+	<a href="Javascript:copyPaste('TO_DATE( )');">TO_DATE( )</a>&nbsp;
+	<a href="Javascript:copyPaste('TO_NUMBER( )');">TO_NUMBER( )</a>&nbsp;
+	<a href="Javascript:copyPaste('TO_CHAR( )');">TO_CHAR( )</a>&nbsp;
+
+ -->
+ 	<br/>
+	&nbsp;&nbsp;&nbsp;
+	<a href="Javascript:copyPaste('GROUP BY');">GROUP-BY</a>&nbsp;
+	<a href="Javascript:copyPaste('HAVING');">HAVING</a>&nbsp;
+	<a href="Javascript:copyPaste('COUNT(*)');">COUNT(*)</a>&nbsp;
+	<a href="Javascript:copyPaste('SUM( )');">SUM( )</a>&nbsp;
+	<a href="Javascript:copyPaste('AVG( )');">AVG( )</a>&nbsp;
+	<a href="Javascript:copyPaste('MIN( )');">MIN( )</a>&nbsp;
+	<a href="Javascript:copyPaste('MAX( )');">MAX( )</a>&nbsp;
+	
+	</div>
+</div>
+<br clear="all"/>
+
+<form name="form1" id="form1" method="post" action="query.jsp">
+<textarea id="sql1" name="sql" cols=100 rows=4>SELECT * FROM BD_MASSTRANSFER2 WHERE PROCESSID='418537'</textarea><br/>
+
+
+
+
+Up to 
+<select name="upto">
+<option value="100" >100</option>
+<option value="500" >500</option>
+<option value="1000" SELECTED>1,000</option>
+<option value="5000" >5,000</option>
+<option value="10000" >10,000</option>
+<option value="50000" >50,000</option>
+</select>
+<!-- 
+<input type="submit" name="submit" value="Submit"/>
+ -->
+<input type="button" value="Submit" onClick="Javascript:submitQuery()"/>
+<!-- &nbsp;
+<input type="button" value="Download" onClick="Javascript:download()"/>
+&nbsp;
+<input type="button" value="Explain plan" onClick="Javascript:explainPlan()"/>
+ -->
+</form>
+
+<form name="form0" id="form0">
+<textarea style="display: none;" id="sql" name="sql" >SELECT * FROM BD_MASSTRANSFER2 WHERE PROCESSID='418537'</textarea>
+<input type="hidden" id="sortColumn" name="sortColumn" value="">
+<input type="hidden" id="sortDirection" name="sortDirection" value="0">
+<input type="hidden" id="hideColumn" name="hideColumn" value="">
+<input type="hidden" id="filterColumn" name="filterColumn" value="">
+<input type="hidden" id="filterValue" name="filterValue" value="">
+<input type="hidden" id="searchValue" name="searchValue" value="">
+<input type="hidden" id="filter2" name="filter2" value="">
+<input type="hidden" id="pageNo" name="pageNo" value="1">
+<input type="hidden" id="rowsPerPage" name="rowsPerPage" value="20">
+<input type="hidden" id="dataLink" name="dataLink" value="1">
+<input type="hidden" id="preFormat" name="preFormat" value="0">
+<input type="hidden" id="summary" name="summary" value="0">
+<input type="hidden" id="cpas" name="cpas" value="0">
+</form>
+
+<form id="FormPop" name="FormPop" target="_blank" method="post" action="pop.jsp">
+<input id="popType" name="type" type="hidden" value="OBJECT">
+<input id="popKey" name="key" type="hidden">
+</form>
+
+</div> <!-- end of query main -->
+
+<div id="explainPlan" style="display: none;"></div>
+
+
+
+
+
+<hr noshade color="green"/>
+<br/>
+
+<div id="buttonsDiv" style="display: block;">
+<TABLE>
+<TD><a class="qryBtn" id="modeSort" href="Javascript:setDoMode('sort')">Sort</a>
+<TD><a class="qryBtn" id="modeCopy" href="Javascript:setDoMode('copy')">Copy&amp;Paste</a></TD>
+<TD><a class="qryBtn" id="modeHide" href="Javascript:setDoMode('hide')">Hide Column</a>
+	<span id="showAllCol" style="display: none;">
+		<a href="Javascript:showAllColumn()">Show All</a>&nbsp;
+	</span>
+</TD>
+
+<td>&nbsp;&nbsp;&nbsp;</td>
+<td>
+<input type="button" value="Summary" onClick="Javascript:toggleSummary()"/>
+<input type="button" value="Filter" onClick="Javascript:filter2()"/>
+</td>
+<td>&nbsp;&nbsp;&nbsp;</td>
+<td>
+<input type="button" value="Download" onClick="Javascript:download()"/>
+<input type="button" value="Explain plan" onClick="Javascript:explainPlan()"/>
+</td>
+<td>&nbsp;&nbsp;&nbsp;</td>
+<td>
+<input type="button" value="Reload" onClick="Javascript:reloadQuery()"/>
+<input type="button" value="Edit Query" onClick="Javascript:editQuery()"/>
+</td>
+</TABLE>
+</div>
+<BR/>
+<div id="summary-div" style="display:none"></div>
+<div id="filter2-div" style="display:none"></div>
+
+<div id="data-div">
+
+
+
+
+
+ 
+<span style="color:#666666;">prd_pepp@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP - Tue Mar 19 13:14:19 EDT 2013</span> 
+<pre style="font-family: Consolas; font-size: 16px;"><b id="qqq"><span class='syntax1'>SELECT</span> * <span class='syntax1'>FROM</span> <a style='color: darkblue;' href='pop.jsp?key=BD_MASSTRANSFER2' target='_blank'>BD_MASSTRANSFER2</a> <span class='syntax1'>WHERE</span> PROCESSID=<span class='syn_str'>'418537'</span></b><a title="Edit Query" style="margin-left: 10px;" href="Javascript:editQuery()"><img border=0 src="image/sql.png"></a></pre>
+
+
+
+
+Page: <b>1</b> of 50
+
+
+
+<a href="Javascript:gotoPage(2)"><img border=0 src="image/btn-next.png" align="top"></a>
+
+
+
+Records: <b>1000</b>
+
+
+
+&nbsp;&nbsp;&nbsp;
+Rows/Page 
+<select id="linePerPage" name="linePerPage" onChange="rowsPerPage(this.options[this.selectedIndex].value);">
+<option value="1" >1</option>
+<option value="2" >2</option>
+<option value="5" >5</option>
+<option value="10" >10</option>
+<option value="20" SELECTED>20</option>
+
+<option value="50" >50</option>
+
+
+<option value="100" >100</option>
+
+
+<option value="200" >200</option>
+
+
+<option value="500" >500</option>
+
+
+<option value="1000" >1000</option>
+
+</select>
+
+
+
+
+&nbsp;&nbsp;
+<img src="image/view.png">
+<input id="search" name="search" value="" size=20 onChange="searchRecords($(this).val())" placeholder="search">
+<a href="Javascript:clearSearch()"><img border="0" src="image/clear.gif"></a>
+
+
+
+
+
+
+
+<a id="preFormatText" href="Javascript:togglePreFormat()">Format</a>
+<a href="Javascript:setTranspose()">Transpose</a>
+
+
+
+
+ 
+&nbsp;<a id="cpas" href="Javascript:toggleCpas()"><img border=0 src="image/cpas.jpg" width="16" height="16" title="Toggle CPAS Code Value"></a>
+
+
+
+<table id="dataTable" border=1 class="gridBody">
+<tr>
+
+
+	<th class="headerRow"><b>PK</b></th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('PROCESSID', 2);" title="number(12) Batch Process ID"><b>processid</b></a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('ACCOUNTID', 3);" title="number(12) Account ID"><b>accountid</b></a>
+	<a href="Javascript:summaryColumn('dataTable', 3)">Sum</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('CLNT', 4);" title="varchar2(4) Client Key">clnt</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('MKEY', 5);" title="varchar2(10) Member Key">mkey</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('PLAN', 6);" title="varchar2(1) Plan Number">plan</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('FUND', 7);" title="varchar2(5) Fund"><b>fund</b></a>
+	<a href="Javascript:summaryColumn('dataTable', 7)">Sum</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('FUTYPE', 8);" title="varchar2(1) Fund Type">futype</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('SOURCE', 9);" title="varchar2(5) Source"><b>source</b></a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('DATE_FROM', 10);" title="date Date">date_from</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('TOFUND', 11);" title="varchar2(5) To Fund">tofund</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('POSTED', 12);" title="varchar2(1) Posted Flag">posted</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('FULLNAME', 13);" title="varchar2(100) Name">fullname</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('AMOUNT', 14);" title="number(22,2) Amount">amount</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('INTAMT', 15);" title="number(22,2) Interest">intamt</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('UNITS', 16);" title="number(22,7) Units">units</a>
+	
+	<a href="Javascript:summaryColumn('dataTable', 16)">Sum</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('STREET1', 17);" title="varchar2(40)">street1</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('STREET2', 18);" title="varchar2(40)">street2</a>
+	<a href="Javascript:summaryColumn('dataTable', 18)">Sum</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('CITY', 19);" title="varchar2(20)">city</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('PROVINCE', 20);" title="varchar2(20)">province</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('COUNTRY', 21);" title="varchar2(3)">country</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('POSTAL', 22);" title="varchar2(10)">postal</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('RATE', 23);" title="number(22,7)">rate</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('TOAMOUNT', 24);" title="number(22,2)">toamount</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('TOUNITS', 25);" title="number(22,7)">tounits</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('TORATE', 26);" title="number(22,7)">torate</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('RECONCILED', 27);" title="varchar2(1)">reconciled</a>
+	
+</th>
+
+<th class="headerRow"><a 
+	href="Javascript:doAction('SRC', 28);" title="varchar2(1)">src</a>
+	
+</th>
+
+</tr>
+
+
+
+<tr class="simplehighlight">
+
+
+	<td class="oddRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151233^BFU^E'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="oddRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" align=right><span class='pk'>151233</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151233' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1346873
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346873' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >U
+
+
+</td>
+
+<td class="oddRow" ><span class='pk'>E</span>
+
+
+</td>
+
+<td class="oddRow" >2013-03-19
+
+
+</td>
+
+<td class="oddRow" >PS7
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >BRYCE A BRYCE
+
+
+</td>
+
+<td class="oddRow" align=right>19886.48
+
+
+</td>
+
+<td class="oddRow" align=right>0
+
+
+</td>
+
+<td class="oddRow" align=right>994.323887
+
+
+</td>
+
+<td class="oddRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="oddRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >BENGOUGH
+
+
+</td>
+
+<td class="oddRow" >SK
+
+
+</td>
+
+<td class="oddRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >S4P4W3
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="evenRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151233^BFU^M'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="evenRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" align=right><span class='pk'>151233</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151233' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1346873
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346873' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >U
+
+
+</td>
+
+<td class="evenRow" ><span class='pk'>M</span>
+
+
+</td>
+
+<td class="evenRow" >2013-03-19
+
+
+</td>
+
+<td class="evenRow" >PS7
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >BRYCE A BRYCE
+
+
+</td>
+
+<td class="evenRow" align=right>16372.7
+
+
+</td>
+
+<td class="evenRow" align=right>0
+
+
+</td>
+
+<td class="evenRow" align=right>818.635175
+
+
+</td>
+
+<td class="evenRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="evenRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >BENGOUGH
+
+
+</td>
+
+<td class="evenRow" >SK
+
+
+</td>
+
+<td class="evenRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >S4P4W3
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="oddRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151233^BFU^V'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="oddRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" align=right><span class='pk'>151233</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151233' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1346873
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346873' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >U
+
+
+</td>
+
+<td class="oddRow" ><span class='pk'>V</span>
+
+
+</td>
+
+<td class="oddRow" >2013-03-19
+
+
+</td>
+
+<td class="oddRow" >PS7
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >BRYCE A BRYCE
+
+
+</td>
+
+<td class="oddRow" align=right>2500.81
+
+
+</td>
+
+<td class="oddRow" align=right>0
+
+
+</td>
+
+<td class="oddRow" align=right>125.040468
+
+
+</td>
+
+<td class="oddRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="oddRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >BENGOUGH
+
+
+</td>
+
+<td class="oddRow" >SK
+
+
+</td>
+
+<td class="oddRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >S4P4W3
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="evenRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151234^BFU^E'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="evenRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" align=right><span class='pk'>151234</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151234' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1346881
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346881' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >U
+
+
+</td>
+
+<td class="evenRow" ><span class='pk'>E</span>
+
+
+</td>
+
+<td class="evenRow" >2013-03-19
+
+
+</td>
+
+<td class="evenRow" >PS10
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >PHILIP A PHILIP
+
+
+</td>
+
+<td class="evenRow" align=right>42843
+
+
+</td>
+
+<td class="evenRow" align=right>0
+
+
+</td>
+
+<td class="evenRow" align=right>2142.149766
+
+
+</td>
+
+<td class="evenRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="evenRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >SASKATOON
+
+
+</td>
+
+<td class="evenRow" >SK
+
+
+</td>
+
+<td class="evenRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >S4P4W3
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="oddRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151234^BFU^M'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="oddRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" align=right><span class='pk'>151234</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151234' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1346881
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346881' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >U
+
+
+</td>
+
+<td class="oddRow" ><span class='pk'>M</span>
+
+
+</td>
+
+<td class="oddRow" >2013-03-19
+
+
+</td>
+
+<td class="oddRow" >PS10
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >PHILIP A PHILIP
+
+
+</td>
+
+<td class="oddRow" align=right>39239.43
+
+
+</td>
+
+<td class="oddRow" align=right>0
+
+
+</td>
+
+<td class="oddRow" align=right>1961.971644
+
+
+</td>
+
+<td class="oddRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="oddRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >SASKATOON
+
+
+</td>
+
+<td class="oddRow" >SK
+
+
+</td>
+
+<td class="oddRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >S4P4W3
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="evenRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151234^BFU^V'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="evenRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" align=right><span class='pk'>151234</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151234' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1346881
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346881' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >U
+
+
+</td>
+
+<td class="evenRow" ><span class='pk'>V</span>
+
+
+</td>
+
+<td class="evenRow" >2013-03-19
+
+
+</td>
+
+<td class="evenRow" >PS10
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >PHILIP A PHILIP
+
+
+</td>
+
+<td class="evenRow" align=right>2121.43
+
+
+</td>
+
+<td class="evenRow" align=right>0
+
+
+</td>
+
+<td class="evenRow" align=right>106.071277
+
+
+</td>
+
+<td class="evenRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="evenRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >SASKATOON
+
+
+</td>
+
+<td class="evenRow" >SK
+
+
+</td>
+
+<td class="evenRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >S4P4W3
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="oddRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151234^BFU^V1'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="oddRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" align=right><span class='pk'>151234</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151234' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1346881
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346881' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >U
+
+
+</td>
+
+<td class="oddRow" ><span class='pk'>V1</span>
+
+
+</td>
+
+<td class="oddRow" >2013-03-19
+
+
+</td>
+
+<td class="oddRow" >PS10
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >PHILIP A PHILIP
+
+
+</td>
+
+<td class="oddRow" align=right>597.27
+
+
+</td>
+
+<td class="oddRow" align=right>0
+
+
+</td>
+
+<td class="oddRow" align=right>29.8635
+
+
+</td>
+
+<td class="oddRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="oddRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >SASKATOON
+
+
+</td>
+
+<td class="oddRow" >SK
+
+
+</td>
+
+<td class="oddRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >S4P4W3
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="evenRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151235^BFU^E'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="evenRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" align=right><span class='pk'>151235</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151235' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1346899
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346899' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >U
+
+
+</td>
+
+<td class="evenRow" ><span class='pk'>E</span>
+
+
+</td>
+
+<td class="evenRow" >2013-03-19
+
+
+</td>
+
+<td class="evenRow" >PS5
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >JAN A JAN
+
+
+</td>
+
+<td class="evenRow" align=right>33.64
+
+
+</td>
+
+<td class="evenRow" align=right>0
+
+
+</td>
+
+<td class="evenRow" align=right>1.682034
+
+
+</td>
+
+<td class="evenRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="evenRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >ESTEVAN
+
+
+</td>
+
+<td class="evenRow" >SK
+
+
+</td>
+
+<td class="evenRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >S4P4W3
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="oddRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151235^BFU^M'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="oddRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" align=right><span class='pk'>151235</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151235' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1346899
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346899' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >U
+
+
+</td>
+
+<td class="oddRow" ><span class='pk'>M</span>
+
+
+</td>
+
+<td class="oddRow" >2013-03-19
+
+
+</td>
+
+<td class="oddRow" >PS5
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >JAN A JAN
+
+
+</td>
+
+<td class="oddRow" align=right>33.64
+
+
+</td>
+
+<td class="oddRow" align=right>0
+
+
+</td>
+
+<td class="oddRow" align=right>1.682034
+
+
+</td>
+
+<td class="oddRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="oddRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >ESTEVAN
+
+
+</td>
+
+<td class="oddRow" >SK
+
+
+</td>
+
+<td class="oddRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >S4P4W3
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="evenRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151236^BFU^E'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="evenRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" align=right><span class='pk'>151236</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151236' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1346907
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346907' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >U
+
+
+</td>
+
+<td class="evenRow" ><span class='pk'>E</span>
+
+
+</td>
+
+<td class="evenRow" >2013-03-19
+
+
+</td>
+
+<td class="evenRow" >PS8
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >COLLEEN A COLLEEN
+
+
+</td>
+
+<td class="evenRow" align=right>24492.53
+
+
+</td>
+
+<td class="evenRow" align=right>0
+
+
+</td>
+
+<td class="evenRow" align=right>1224.626466
+
+
+</td>
+
+<td class="evenRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="evenRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >MELVILLE
+
+
+</td>
+
+<td class="evenRow" >SK
+
+
+</td>
+
+<td class="evenRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >S4P4W3
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="oddRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151236^BFU^M'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="oddRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" align=right><span class='pk'>151236</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151236' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1346907
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346907' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >U
+
+
+</td>
+
+<td class="oddRow" ><span class='pk'>M</span>
+
+
+</td>
+
+<td class="oddRow" >2013-03-19
+
+
+</td>
+
+<td class="oddRow" >PS8
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >COLLEEN A COLLEEN
+
+
+</td>
+
+<td class="oddRow" align=right>24492.53
+
+
+</td>
+
+<td class="oddRow" align=right>0
+
+
+</td>
+
+<td class="oddRow" align=right>1224.626466
+
+
+</td>
+
+<td class="oddRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="oddRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >MELVILLE
+
+
+</td>
+
+<td class="oddRow" >SK
+
+
+</td>
+
+<td class="oddRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >S4P4W3
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="evenRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151237^BFU^E'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="evenRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" align=right><span class='pk'>151237</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151237' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1346915
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346915' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >U
+
+
+</td>
+
+<td class="evenRow" ><span class='pk'>E</span>
+
+
+</td>
+
+<td class="evenRow" >2013-03-19
+
+
+</td>
+
+<td class="evenRow" >PS6
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >DONNA A DONNA
+
+
+</td>
+
+<td class="evenRow" align=right>183.34
+
+
+</td>
+
+<td class="evenRow" align=right>0
+
+
+</td>
+
+<td class="evenRow" align=right>9.1668
+
+
+</td>
+
+<td class="evenRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="evenRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >WEYBURN
+
+
+</td>
+
+<td class="evenRow" >SK
+
+
+</td>
+
+<td class="evenRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >S4P4W3
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="oddRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151237^BFU^M'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="oddRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" align=right><span class='pk'>151237</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151237' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1346915
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346915' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >U
+
+
+</td>
+
+<td class="oddRow" ><span class='pk'>M</span>
+
+
+</td>
+
+<td class="oddRow" >2013-03-19
+
+
+</td>
+
+<td class="oddRow" >PS6
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >DONNA A DONNA
+
+
+</td>
+
+<td class="oddRow" align=right>183.34
+
+
+</td>
+
+<td class="oddRow" align=right>0
+
+
+</td>
+
+<td class="oddRow" align=right>9.1668
+
+
+</td>
+
+<td class="oddRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="oddRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >WEYBURN
+
+
+</td>
+
+<td class="oddRow" >SK
+
+
+</td>
+
+<td class="oddRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >S4P4W3
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="evenRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151238^BFU^E'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="evenRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" align=right><span class='pk'>151238</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151238' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1346923
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346923' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >U
+
+
+</td>
+
+<td class="evenRow" ><span class='pk'>E</span>
+
+
+</td>
+
+<td class="evenRow" >2013-03-19
+
+
+</td>
+
+<td class="evenRow" >PS7
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >TODD A TODD
+
+
+</td>
+
+<td class="evenRow" align=right>25536.33
+
+
+</td>
+
+<td class="evenRow" align=right>0
+
+
+</td>
+
+<td class="evenRow" align=right>1276.816386
+
+
+</td>
+
+<td class="evenRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="evenRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >REGINA
+
+
+</td>
+
+<td class="evenRow" >SK
+
+
+</td>
+
+<td class="evenRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >S4P4W3
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="oddRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151238^BFU^M'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="oddRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" align=right><span class='pk'>151238</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151238' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1346923
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346923' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >U
+
+
+</td>
+
+<td class="oddRow" ><span class='pk'>M</span>
+
+
+</td>
+
+<td class="oddRow" >2013-03-19
+
+
+</td>
+
+<td class="oddRow" >PS7
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >TODD A TODD
+
+
+</td>
+
+<td class="oddRow" align=right>21764.32
+
+
+</td>
+
+<td class="oddRow" align=right>0
+
+
+</td>
+
+<td class="oddRow" align=right>1088.216108
+
+
+</td>
+
+<td class="oddRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="oddRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >REGINA
+
+
+</td>
+
+<td class="oddRow" >SK
+
+
+</td>
+
+<td class="oddRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >S4P4W3
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="evenRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151239^BFU^E'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="evenRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" align=right><span class='pk'>151239</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151239' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1346931
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346931' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >U
+
+
+</td>
+
+<td class="evenRow" ><span class='pk'>E</span>
+
+
+</td>
+
+<td class="evenRow" >2013-03-19
+
+
+</td>
+
+<td class="evenRow" >PS10
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >BRENDA A BRENDA
+
+
+</td>
+
+<td class="evenRow" align=right>316
+
+
+</td>
+
+<td class="evenRow" align=right>0
+
+
+</td>
+
+<td class="evenRow" align=right>15.800012
+
+
+</td>
+
+<td class="evenRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="evenRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >ST WALBURG
+
+
+</td>
+
+<td class="evenRow" >SK
+
+
+</td>
+
+<td class="evenRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >S4P4W3
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="oddRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151239^BFU^M'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="oddRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" align=right><span class='pk'>151239</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151239' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1346931
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346931' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >U
+
+
+</td>
+
+<td class="oddRow" ><span class='pk'>M</span>
+
+
+</td>
+
+<td class="oddRow" >2013-03-19
+
+
+</td>
+
+<td class="oddRow" >PS10
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >BRENDA A BRENDA
+
+
+</td>
+
+<td class="oddRow" align=right>316
+
+
+</td>
+
+<td class="oddRow" align=right>0
+
+
+</td>
+
+<td class="oddRow" align=right>15.800012
+
+
+</td>
+
+<td class="oddRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="oddRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >ST WALBURG
+
+
+</td>
+
+<td class="oddRow" >SK
+
+
+</td>
+
+<td class="oddRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >S4P4W3
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="evenRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151242^BFU^E'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="evenRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" align=right><span class='pk'>151242</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151242' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1346964
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346964' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >U
+
+
+</td>
+
+<td class="evenRow" ><span class='pk'>E</span>
+
+
+</td>
+
+<td class="evenRow" >2013-03-19
+
+
+</td>
+
+<td class="evenRow" >PS5
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >D A D
+
+
+</td>
+
+<td class="evenRow" align=right>813.15
+
+
+</td>
+
+<td class="evenRow" align=right>0
+
+
+</td>
+
+<td class="evenRow" align=right>40.657629
+
+
+</td>
+
+<td class="evenRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="evenRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >REGINA
+
+
+</td>
+
+<td class="evenRow" >SK
+
+
+</td>
+
+<td class="evenRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >S4P4W3
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="oddRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151242^BFU^M'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="oddRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" align=right><span class='pk'>151242</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151242' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1346964
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346964' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >U
+
+
+</td>
+
+<td class="oddRow" ><span class='pk'>M</span>
+
+
+</td>
+
+<td class="oddRow" >2013-03-19
+
+
+</td>
+
+<td class="oddRow" >PS5
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >D A D
+
+
+</td>
+
+<td class="oddRow" align=right>813.15
+
+
+</td>
+
+<td class="oddRow" align=right>0
+
+
+</td>
+
+<td class="oddRow" align=right>40.657629
+
+
+</td>
+
+<td class="oddRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="oddRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >REGINA
+
+
+</td>
+
+<td class="oddRow" >SK
+
+
+</td>
+
+<td class="oddRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="oddRow" >S4P4W3
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="oddRow" >N
+
+
+</td>
+
+<td class="oddRow" >F
+
+
+</td>
+
+</tr>
+
+<tr class="simplehighlight">
+
+
+	<td class="evenRow">
+		<a href='data-link.jsp?qry=BD_MASSTRANSFER2|418537^151243^BFU^E'><img src="image/star.png" border=0 title="Data Link" 
+			onmouseover="this.src='image/star2.png';" onmouseout="this.src='image/star.png';"></a>
+	</td>
+
+<td class="evenRow" align=right><span class='pk'>418537</span>
+
+<a href="Javascript:showDialog('BATCH','418537' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" align=right><span class='pk'>151243</span>
+
+<a href="Javascript:showDialog('ACCOUNT','151243' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >0001
+
+<a href="Javascript:showDialog('CLIENT','0001' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1346972
+
+<a href="Javascript:showDialog('MEMBER','0001%5E1346972' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >1
+
+<a href="Javascript:showDialog('PLAN','0001%5E1' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" ><span class='pk'>BFU</span>
+
+<a href="Javascript:showDialog('FUND','BFU' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >U
+
+
+</td>
+
+<td class="evenRow" ><span class='pk'>E</span>
+
+
+</td>
+
+<td class="evenRow" >2013-03-19
+
+
+</td>
+
+<td class="evenRow" >PS10
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >SHARON A SHARON
+
+
+</td>
+
+<td class="evenRow" align=right>134.44
+
+
+</td>
+
+<td class="evenRow" align=right>0
+
+
+</td>
+
+<td class="evenRow" align=right>6.7222
+
+
+</td>
+
+<td class="evenRow" >1000 - 1801 Hamilton Street
+
+
+</td>
+
+<td class="evenRow" ><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >REGINA
+
+
+</td>
+
+<td class="evenRow" >SK
+
+
+</td>
+
+<td class="evenRow" >CAN
+
+<a href="Javascript:showDialog('COUNTRY','CAN' )"><img border=0 src='image/view2.png'></a>
+</td>
+
+<td class="evenRow" >S4P4W3
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" align=right><span class='nullstyle'>null</span>
+
+
+</td>
+
+<td class="evenRow" >N
+
+
+</td>
+
+<td class="evenRow" >F
+
+
+</td>
+
+</tr>
+
+</table>
+
+
+
+
+Page: <b>1</b> of 50
+
+
+
+<a href="Javascript:gotoPage(2)"><img border=0 src="image/btn-next.png" align="top"></a>
+
+
+Records: <b>1000</b>
+
+
+
+&nbsp;&nbsp;&nbsp;
+Rows/Page 
+<select id="linePerPage" name="linePerPage" onChange="rowsPerPage(this.options[this.selectedIndex].value);">
+<option value="1" >1</option>
+<option value="2" >2</option>
+<option value="5" >5</option>
+<option value="10" >10</option>
+<option value="20" SELECTED>20</option>
+
+<option value="50" >50</option>
+
+
+<option value="100" >100</option>
+
+
+<option value="200" >200</option>
+
+
+<option value="500" >500</option>
+
+
+<option value="1000" >1000</option>
+
+</select>
+
+
+
+
+<input id="recordCount" value="1000" type="hidden">
+
+
+</div>
+
+<br/>
+<a href="Javascript:window.close()">Close</a>
+<br/><br/>
+
+
+
+
+</body>
+</html>
