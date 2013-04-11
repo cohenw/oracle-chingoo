@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 
 public class HyperSyntax {
 
-	static String delim = " \t(),\n;%|=><*+-";
+	static String delim = " \r\n\t(),;%|=><*+-";
 	
 	static String syntaxString1[] = {"CREATE", "OR", "BODY", "IS", "PACKAGE","FUNCTION","RETURN",
 		"IN", "OUT", "CURSOR", "SELECT", "FROM", "WHERE", "AND", "TYPE", "ROWTYPE", "EXCEPTION",
@@ -48,6 +48,13 @@ public class HyperSyntax {
 	static HashSet<String> syntax1 = new HashSet<String>(Arrays.asList(syntaxString1));
 	static HashSet<String> syntax2 = new HashSet<String>(Arrays.asList(syntaxString2));
 	
+	HashSet<String> vars = new HashSet<String>();
+	String procName = "";
+	int cntProc = 0;
+	
+	public HyperSyntax() {
+	}
+
 	public static ArrayList<Range> extractComments(String text) {
 
 		ArrayList<Range> list = new ArrayList<Range>();
@@ -78,7 +85,8 @@ public class HyperSyntax {
 			if (start < 0) break;
 			
 			int end = text.indexOf("\n", start+2);
-			if (end < 0) break;
+			//if (end < 0) break;
+			if (end < 0) end = text.length()-1;
 
 			// check if start is in between any of comment
 			boolean isComment = false;
@@ -150,7 +158,7 @@ public class HyperSyntax {
 			String token = st.nextToken();
 			
 			String tmp = token.toUpperCase();
-			if (tmp.equals("PROCEDURE")|| tmp.equals("FUNCTION")){
+			if (tmp.equals("PROCEDURE")|| tmp.equals("FUNCTION")|| tmp.equals("TRIGGER")){
 				String name="";
 				while (true) {
 					name = st.nextToken();
@@ -230,6 +238,10 @@ public class HyperSyntax {
 			StringTokenizer st = new StringTokenizer(tmp, delim, false);
 			if (st.hasMoreTokens()) {
 				String token = st.nextToken();
+				if (token.equals("CURSOR") || token.equals("TYPE")) {
+					if (st.hasMoreTokens()) token = st.nextToken();
+				}
+				
 				if (!syntax1.contains(token)) {
 					set.add(token.toUpperCase());
 					//System.out.println(" gv=" + token);
@@ -283,6 +295,7 @@ public class HyperSyntax {
 		boolean hyperlink = false;
 		while (st.hasMoreTokens()) {
 			String token = st.nextToken();
+			if (token.equals("\t")) token = "   ";	// convert tab to 3 spaces
 			
 			if (token.length()==1 && token.indexOf(delim)>=0 ) {
 				s.append( Util.escapeHtml(token) );
@@ -290,12 +303,20 @@ public class HyperSyntax {
 			} 
 			
 			String tmp = token.toUpperCase();
-			if (tmp.equals("PROCEDURE")|| tmp.equals("FUNCTION")){
+/*			
+			if (this.procName==null && !tmp.trim().equals("")) {
+				procName = tmp;
+				//System.out.println("procName " + tmp);
+			}
+*/
+			if (tmp.equals("PROCEDURE")|| tmp.equals("FUNCTION")|| tmp.equals("TRIGGER")){
 				//s += "<a name='chapter'></a>"+ "<span class='syntax1'>" + token + "</span>";
 				s.append( "<span class='syntax1'>" + token + "</span>" );
 				if (!type.equals("PACKAGE"))
 					hyperlink = true;
 				
+				cntProc++;
+				this.procName = "P" + cntProc;
 			} else if (syntax1.contains(tmp)) {
 				s.append( "<span class='syntax1'>" + token + "</span>" );
 			} else if (syntax2.contains(tmp)) {
@@ -305,7 +326,7 @@ public class HyperSyntax {
 			else if (cn.isTVS(tmp)|| cn.isPublicSynonym(tmp))
 				s.append( "<a style='color: darkblue;' href='pop.jsp?key="+tmp+"' target='_blank'>" + token + "</a>" );
 			else if (cn.isProcedure(tmp))
-				s.append( "<a style='color: darkblue;' target='_blank' href='src.jsp?name=" + tmp + "'>" + token + "</a>" );
+				s.append( "<a style='color: darkblue;' target='_blank' href='src2.jsp?name=" + tmp + "'>" + token + "</a>" );
 			else if (hyperlink && !tmp.trim().equals("")) {
 				hyperlink = false;
 				s.append( "<a name='" + tmp.toLowerCase() + "'></a>"+ token );
@@ -316,13 +337,15 @@ public class HyperSyntax {
 					s.append( "<a style='color: darkblue;' href='#" + tmp.toLowerCase() + "'>" + token + "</a>" );
 			} else if (procedures.contains(tmp))
 				s.append( "<a style='color: darkblue;' href='#" + tmp.toLowerCase() + "'>" + token + "</a>" );
+			else if (vars.contains(procName+"-"+tmp))
+				s.append( "<span class='"+procName+"-"+tmp+"' onmouseover='hi_on(\"" + procName+"-"+tmp + "\")' onmouseout='hi_off(\"" + procName+"-"+tmp + "\")'>" + token + "</span>" );
 			else if (tmp.indexOf('.') > 0) {
 				int idx = tmp.indexOf('.');
 				String pkg = tmp.substring(0,idx);
 				String prc = tmp.substring(idx+1);
 				
 				if (cn.isPackage(pkg)||(cn.isSynonym(pkg)))
-					s.append( "<a style='color: darkblue;' target='_blank' href='src.jsp?name=" + pkg + "#" + prc.toLowerCase() + "'>" + token + "</a>" );
+					s.append( "<a style='color: darkblue;' target='_blank' href='src2.jsp?name=" + pkg + "#" + prc.toLowerCase() + "'>" + token + "</a>" );
 				else
 					s.append( token );
 			} else {
@@ -354,6 +377,11 @@ public class HyperSyntax {
 		}
 		sb2.append( text.substring(start));
 		String s2 = sb2.toString();
+		
+		PlsqlAnalyzer pa = new PlsqlAnalyzer(s2);
+		this.vars = pa.getVariables();
+//System.out.println("s2 vars=" + this.vars);
+		
 		//System.out.println("s2 size=" + s2.length());
 		// if (s2.length()<5000) System.out.println(s2);
 		
@@ -376,6 +404,8 @@ public class HyperSyntax {
 		after = System.currentTimeMillis();
 		//System.out.println("Elapsed Time for getProcedures = " + (after - before));
 		
+		this.procName = "";
+		this.cntProc=0;
 		start=0;
 		String className="";
 		for (Range r:ranges) {
@@ -396,6 +426,7 @@ public class HyperSyntax {
 		if (type.equals("PACKAGE") || type.equals("PACKAGE BODY"))
 			System.out.println("Elapsed Time = " + (after - before));	
 		
+//		return slimIt(s.toString());
 		return s.toString();
 	}
 	
@@ -411,6 +442,7 @@ public class HyperSyntax {
 			} 
 			
 			String tmp = token.toUpperCase();
+			//System.out.println("[" + tmp + "]");
 			if (syntax1.contains(tmp) || syntax2.contains(tmp)) {
 				continue;
 			} else if (cn.isTVS(tmp) || cn.isPublicSynonym(tmp)) {
@@ -421,4 +453,73 @@ public class HyperSyntax {
 
 		return tables; 
 	}
+	
+	static String slimIt(String src) {
+System.out.println("before slim " + src.length());
+		StringBuffer sb = new StringBuffer();
+		
+		int processedUpto=0;
+		int start = getNextSpanIndex(src, 0);
+
+		String prevSpan = null;
+		String span = getSpanString(src, start);
+		while (span != null) {
+	//		System.out.println(span);
+			if (prevSpan == null) {
+				sb.append(src.substring(0, start));
+				//System.out.println("[" + sb.toString() + "]");
+				prevSpan = span;
+				processedUpto = start;
+			} else if (!span.equals(prevSpan)){
+				//System.out.println("   "+ prevSpan + " " + span);
+				String temp = src.substring(processedUpto, start);
+				int s1 = temp.indexOf(">");
+				int s2 = temp.lastIndexOf("</span>");
+				
+//				System.out.println("s1,s2 "+s1+","+s2);
+				String temp3 = "";
+				if (s1>0 && s2>0) {
+					String temp2 = temp.substring(s1+1, s2);
+					temp3 = temp.substring(s2+7);
+//					System.out.println("temp2=[" + temp2 + "]");
+//					System.out.println("temp3=[" + temp3 + "]");
+					
+					temp = temp2;
+				}
+				
+				String newString = temp.replace("</span>", "");
+				newString = newString.replace(prevSpan, "");
+				newString = prevSpan + newString + "</span>" + temp3;
+				
+//				System.out.println("    ["+ temp + "] ]" + newString + "[");
+				sb.append(newString);
+				prevSpan = span;
+				processedUpto = start;
+			}
+			
+			start = getNextSpanIndex(src, start + span.length());
+			if (start <0) break;
+			span = getSpanString(src, start);
+		}
+		String temp = src.substring(processedUpto);
+//		System.out.println("    ["+ temp + "]");
+		sb.append(temp);
+
+		System.out.println("after slim " + sb.length());
+
+		return sb.toString();
+	}
+
+	static int getNextSpanIndex(String str, int start) {
+		int i = str.indexOf("<span ", start);
+		
+		return i;
+	}
+	
+	static String getSpanString(String str, int start) {
+		int end = str.indexOf(">", start);
+		if (end <0) return null;
+		
+		return str.substring(start, end+1);
+	}	
 }

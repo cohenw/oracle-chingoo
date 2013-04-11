@@ -26,8 +26,8 @@
 	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
 	<script src="script/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
     <script src="script/genie.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
-<%--
     <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
+<%--
 	<script src="script/main.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
     <script src="script/query-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
 --%>
@@ -39,6 +39,19 @@
     <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="script/shCore.js"></script>
 	<script type="text/javascript" src="script/shBrushSql.js"></script>
+
+<style>
+  .highlight { background:yellow; }
+</style>
+
+<script type="text/javascript">
+function hi_on(v) {
+	$("." + v).addClass("highlight");
+}
+function hi_off(v) {
+	$("." + v).removeClass("highlight");
+}
+</script>
 	
 <script type="text/javascript">
 var CATALOG="";
@@ -360,7 +373,7 @@ function hideHist() {
 CPAS</a> |
 <% } %>
 <a href="query.jsp" target="_blank">Query</a> |
-<a href="javascript:queryHistory()">History</a> |
+<a target=_blank href="history.jsp">History</a> |
 <a href="javascript:clearCache()">Clear Cache</a> |
 <a href='Javascript:aboutGenie()'>About Genie</a> |
 <a href="logout.jsp">Log out</a>
@@ -435,7 +448,7 @@ CPAS</a> |
 </td>
 </table>
 <form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
-<input id="sql" name="sql" type="hidden"/>
+<input id="sql-query" name="sql" type="hidden"/>
 <input name="norun" type="hidden" value="YES"/>
 </form>
 

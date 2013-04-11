@@ -12,30 +12,27 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 //System.out.println("tname="+tname);	
 	List<String> list = new ArrayList<String>();
 
-if ( tname.equals("BATCH") ) {
-	
-	String paramTable = cn.queryOne("SELECT PARAMTABLE FROM BATCHCAT WHERE BATCHKEY='" +q.getValue("BATCHKEY") +"'");
-//System.out.println("paramTable=" + paramTable);
-	if (paramTable != null && !paramTable.equals("")) {
-		list.add(paramTable);
+	if ( tname.equals("BATCH") ) {
+		String paramTable = cn.queryOne("SELECT PARAMTABLE FROM BATCHCAT WHERE BATCHKEY='" +q.getValue("BATCHKEY") +"'");
+		//System.out.println("paramTable=" + paramTable);
+		if (paramTable != null && !paramTable.equals("")) {
+			list.add(paramTable);
+		}
+		String qry = "SELECT BUFFERTABLE FROM BATCHCAT_BUFFER WHERE BATCHKEY='" + q.getValue("BATCHKEY") + "' " +
+			"AND EXISTS (SELECT 1 FROM USER_OBJECTS WHERE OBJECT_NAME=BUFFERTABLE)";
+
+		//System.out.println("qry="+qry);	
+		List<String> lst = cn.queryMulti(qry);
+		list.addAll(lst);
+
+		list.add("BATCH_ERROR");
+		list.add("CALC_ERROR");
+
+	} else if ( tname.equals("ERRORCAT") ) {
+		if (cn.isTVS("CPAS_VALIDATION")) list.add("CPAS_VALIDATION");
+		if (cn.isTVS("BATCHCAT_PREVALSET")) list.add("BATCHCAT_PREVALSET");
 	}
-	String qry = "SELECT BUFFERTABLE FROM BATCHCAT_BUFFER WHERE BATCHKEY='" + q.getValue("BATCHKEY") + "' " +
-		"AND EXISTS (SELECT 1 FROM USER_OBJECTS WHERE OBJECT_NAME=BUFFERTABLE)";
-//System.out.println("qry="+qry);	
-	List<String> lst = cn.queryMulti(qry);
-	list.addAll(lst);
 
-	list.add("BATCH_ERROR");
-	list.add("CALC_ERROR");
-}
-
-
-/*
-if ( tname.equals("ERRORCAT") ) {
-	list.add("BATCH_ERROR");
-	list.add("CALC_ERROR");
-}
-*/
 	return list;
 }
 %>
@@ -269,7 +266,7 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 
 // viewTable should link to the table
 if (cn.isViewTable(table)) {
-	System.out.println("ViewTable !!!!!!");
+//	System.out.println("ViewTable !!!!!!");
 	String tmp = cn.getViewTableName(table);
 	//fkLinkTab.add("SV_MEMBER");
 	
@@ -355,6 +352,7 @@ if (cn.isViewTable(table)) {
 			if (label.equals(cn.getCpasUtil().logicalLink[j][0])) {
 				ft = cn.getCpasUtil().logicalLink[j][1];
 				fsql = cn.getPKLinkSql(ft, q.getValue(label));
+				System.out.println("*** " + fsql);
 				break;
 			}
 		}
@@ -490,16 +488,19 @@ if (cn.isViewTable(table)) {
 		if (table.equals("REPORTCAT")) {
 			fkColName = "FILEID";
 			key = q.getValue("FILEID");
-		}
+		} else if (refTab.equals("CPAS_VALIDATION") || refTab.equals("BATCHCAT_PREVALSET")) {
+			fkColName = "ERRORID";
+			key = q.getValue("ERRORID");
+		} 
 			
 		int recCount = cn.getPKLinkCount(refTab, fkColName , key);
 		if (recCount==0) continue;
 		String refsql = cn.getRelatedLinkSql(refTab, fkColName, key);
 
 		if (refTab.equals("CALC_ERROR")) {
-//			recCount = cn.getQryCount("SELECT * FROM CALC_ERROR WHERE CALC_ID IN (SELECT CALCID FROM CALC WHERE PROCESSID='"+key+"')");
-//			if (recCount == 0) continue;
 			refsql = "SELECT * FROM CALC_ERROR WHERE CALCID IN (SELECT CALCID FROM CALC WHERE PROCESSID='"+key+"')";
+		} else if (refTab.equals("CPAS_VALIDATION")) {
+			refsql = "SELECT * FROM CPAS_VALIDATION WHERE ERRORID IN ('"+key+"')";
 		}
 		
 		id = Util.getId();
@@ -596,6 +597,9 @@ toggleLFK();
 
 </script>
 
+<form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
+<input id="sql-query" name="sql" type="hidden"/>
+</form>
 
 </body>
 </html>

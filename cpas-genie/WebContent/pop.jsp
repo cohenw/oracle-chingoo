@@ -29,14 +29,13 @@
 	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
 	<script src="script/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
     <script src="script/genie.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
+    <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
 
 	<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css"/>
     <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'> 
 
     <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
     <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="script/shCore.js"></script>
-	<script type="text/javascript" src="script/shBrushSql.js"></script>
 
     <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'>
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
@@ -129,6 +128,9 @@ loadSynonym('<%= key %>');
 </head> 
 
 <body>
+<form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
+<input id="sql-query" name="sql" type="hidden"/>
+</form>
 
 <img align=top src="image/lamp.png" alt="Ver. <%= Util.getVersionDate() %>"/>
 <b><%= cn.getUrlString() %></b>
@@ -199,7 +201,6 @@ Search <input id="globalSearch" style="width: 200px;"/>
 	}
 	
 </script>
-
 
 </body>
 </html>

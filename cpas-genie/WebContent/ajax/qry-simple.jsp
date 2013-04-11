@@ -117,7 +117,7 @@
 			}
 		}
 
-		hasPK = pkColList.size() > 0;
+		hasPK = pkColList.size() > 0 && (pkColList.size() == matchCount);
 	}
 	
 	int linesPerPage = 10;

@@ -236,4 +236,16 @@ Build CPAS1071
 	Load Public Synonym
 	Summary for query result (Count, Min, Max, Sum)
 	Dynamic Summary based on search / filter
+
+Build CPAS1072
+	Syntax mouse-over Highlight for variables, parameters and cursors
+	Bug fixed for one line comment at the end
+	Link to package header's cursor and type from package body
+	Column index for Table and View
+	CPAS_CODE shows values list		
+	Query does not hide edit box when the result set is not fully loaded
+	Logical child for ERRORCAT
+
+Build CPAS1073
+	Replaced JDBC driver - ojdbc5.jar
 	

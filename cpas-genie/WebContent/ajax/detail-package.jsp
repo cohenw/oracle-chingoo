@@ -24,7 +24,7 @@
 	
 	String catalog = cn.getSchemaName();
 
-	String sourceUrl = "src.jsp?name=" + name;
+	String sourceUrl = "src2.jsp?name=" + name;
 	if (owner != null) sourceUrl += "&owner=" + owner;
 	
 	String typeName = cn.getObjectType(owner, name);

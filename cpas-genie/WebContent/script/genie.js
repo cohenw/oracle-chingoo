@@ -257,7 +257,7 @@
     	
     	var query = "SELECT " + sList + "\n" + "FROM " + tab + " A"
     	
-    	$("#sql").val(query);
+    	$("#sql-query").val(query);
     	$("#FORM_query").submit();
     }
 
@@ -507,6 +507,23 @@
 		});		
 	}
 	
+	function showCpasCode(key) {
+		var id = "id"+(new Date().getTime());
+		var temp ="<div id='" + id + "' title='CPAS_CODE " + key + "' style='background-color: #ffffcc;'>"
+		$.ajax({
+			url: "ajax-cpas/cpas-code.jsp?key=" + key,
+			success: function(data){
+				temp = temp + data + "</div>";
+				$("BODY").append(temp);
+				$("#"+id).dialog({ width: 700, height: 350 });
+				setHighlight();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});		
+	}
+
 	function hideNullColumn() {
 		$("table ").each(function() {
 			var divName = $(this).attr('id');
@@ -632,8 +649,9 @@
 		var divName = "div-" + id;
 		//alert(sql);
 		
-		$("#sql").val(sql);
-		document.FORM_query.submit();
+		$("#sql-query").val(sql);
+		$("#FORM_query").submit();
+//		document.FORM_query.submit();
 	}
 	
 	
@@ -687,4 +705,52 @@
     }
 
     
+	function gotoPageWork(id, pageNo) {
+		$("#pageNo").val(pageNo);
+
+		reloadDataWork(id);
+	}
+	    
+	function reloadDataWork(id) {
+		var divName = "div-" + id;
+		var sql = $("#sql-" + id).html();
+		var ori = $("#ori-" + id).html();
+		pageUrl = "ajax/qry-work.jsp";
+//alert("sql=" + sql);	
+		$("#sql").val(sql);
+		$("#id").val(id);
+		$("#sortColumn").val($("#sort-"+id).val());
+		$("#sortDirection").val($("#sortdir-"+id).val());
+
+		//$('body').css('cursor', 'wait'); 
+		$.ajax({
+			type: 'POST',
+			url: pageUrl,
+			data: $("#form0").serialize(),
+			success: function(data){
+				$("#"+divName).html(data);
+				hideIfAny(id);
+				
+				setHighlight();
+				//$('body').css('cursor', 'default'); 
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});	
+	}
+
+	function searchTableWork(id, key) {
+		$("#pageNo").val(1);
+		$("#searchValue").val(key);
+
+		reloadDataWork(id);
+		$("#searchValue").val('');
+	}
+
+	function clearSearchWork(id) {
+		$("#search"+id).val("");
+		$("#pageNo").val(1);
+		searchTableWork(id, '');
+	}
     

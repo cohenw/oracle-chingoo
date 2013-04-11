@@ -1,0 +1,127 @@
+
+
+
+
+<html>
+<head>
+	<title>Source for AGE2DATE</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+
+	<script src="../script/jquery-1.7.2.min.js" type="text/javascript"></script>
+	<script src="../script/main.js?CPAS-1072" type="text/javascript"></script>
+    <link href="../css/style.css?CPAS-1072" rel="stylesheet" type="text/css" />
+	<link rel="icon" type="image/png" href="../image/Genie-icon.png">
+
+<style>
+  .highlight { background:yellow; }
+</style>
+
+<script type="text/javascript">
+function hi_on(v) {
+	$("." + v).addClass("highlight");
+}
+function hi_off(v) {
+	$("." + v).removeClass("highlight");
+}
+</script>
+</head>
+<body>
+
+
+<img src="image/icon_query.png" align="middle"/>
+test_pepp@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP
+
+<br/>
+
+<h2>AGE2DATE</h2>
+
+
+<br/>
+<b><a href="javascript:tDiv('div-0')">FUNCTION</a></b><br/>
+<div id="div-0" style="display: block;">
+<table>
+<td valign=top align=right><pre style="font-family: Consolas; color: gray;"><span id="colnum_FUNCTION" ></span></pre></td>
+<td bgcolor="green"></td>
+<td valign=top><pre style="font-family: Consolas;"><span class='syntax1'>FUNCTION</span> <a style='color: darkblue;' target='_blank' href='src2.jsp?name=AGE2DATE'>Age2Date</a><a name='('></a>(<span class='P1-DBIRTH' onmouseover='hi_on("P1-DBIRTH")' onmouseout='hi_off("P1-DBIRTH")'>dBirth</span> <span class='syntax1'>IN DATE</span>,<span class='P1-NAGE' onmouseover='hi_on("P1-NAGE")' onmouseout='hi_off("P1-NAGE")'>nAge</span> <span class='syntax1'>IN NUMBER) RETURN DATE AS</span>
+<span class='P1-DTMP' onmouseover='hi_on("P1-DTMP")' onmouseout='hi_off("P1-DTMP")'>dTmp</span> <span class='syntax1'>DATE</span>;
+<span class='P1-NTMP' onmouseover='hi_on("P1-NTMP")' onmouseout='hi_off("P1-NTMP")'>nTmp</span> <span class='syntax1'>NUMBER</span>;
+<span class='P1-NADD' onmouseover='hi_on("P1-NADD")' onmouseout='hi_off("P1-NADD")'>nAdd</span> <span class='syntax1'>NUMBER;
+BEGIN</span>
+   <span class='P1-DTMP' onmouseover='hi_on("P1-DTMP")' onmouseout='hi_off("P1-DTMP")'>dTmp</span> := <span class='syntax2'>TRUNC</span>(<span class='P1-DBIRTH' onmouseover='hi_on("P1-DBIRTH")' onmouseout='hi_off("P1-DBIRTH")'>dBirth</span>);
+   <span class='P1-NTMP' onmouseover='hi_on("P1-NTMP")' onmouseout='hi_off("P1-NTMP")'>nTmp</span> := <span class='syntax3'>0.00</span>;
+   WHILE <span class='P1-NTMP' onmouseover='hi_on("P1-NTMP")' onmouseout='hi_off("P1-NTMP")'>nTmp</span> &lt; <span class='P1-NAGE' onmouseover='hi_on("P1-NAGE")' onmouseout='hi_off("P1-NAGE")'>nAge</span> <span class='syntax1'>LOOP</span>
+      <span class='syn_cmt'>-- estimate number of days to add
+</span>      <span class='P1-NADD' onmouseover='hi_on("P1-NADD")' onmouseout='hi_off("P1-NADD")'>nAdd</span> := (<span class='P1-NAGE' onmouseover='hi_on("P1-NAGE")' onmouseout='hi_off("P1-NAGE")'>nAge</span> - <span class='P1-NTMP' onmouseover='hi_on("P1-NTMP")' onmouseout='hi_off("P1-NTMP")'>nTmp</span>) * <span class='syntax3'>365</span>;
+      <span class='syn_cmt'>-- integer part only
+</span>      <span class='P1-NADD' onmouseover='hi_on("P1-NADD")' onmouseout='hi_off("P1-NADD")'>nAdd</span> := <span class='syntax2'>Floor</span>(<span class='P1-NADD' onmouseover='hi_on("P1-NADD")' onmouseout='hi_off("P1-NADD")'>nAdd</span>);
+      <span class='syn_cmt'>-- user defined age may add extra day
+</span>      <span class='P1-NADD' onmouseover='hi_on("P1-NADD")' onmouseout='hi_off("P1-NADD")'>nAdd := nAdd</span> - <span class='syntax3'>1</span>;
+      <span class='syn_cmt'>-- add at least one day
+</span>      <span class='P1-NADD' onmouseover='hi_on("P1-NADD")' onmouseout='hi_off("P1-NADD")'>nAdd</span> := <span class='syntax2'>Greatest</span>(<span class='P1-NADD' onmouseover='hi_on("P1-NADD")' onmouseout='hi_off("P1-NADD")'>nAdd</span>,<span class='syntax3'>1</span>);
+      <span class='syn_cmt'>-- new estimate of date
+</span>      <span class='P1-DTMP' onmouseover='hi_on("P1-DTMP")' onmouseout='hi_off("P1-DTMP")'>dTmp := dTmp</span> + <span class='P1-NADD' onmouseover='hi_on("P1-NADD")' onmouseout='hi_off("P1-NADD")'>nAdd</span>;
+      <span class='syn_cmt'>-- new age
+</span>      <span class='P1-NTMP' onmouseover='hi_on("P1-NTMP")' onmouseout='hi_off("P1-NTMP")'>nTmp</span> := <a style='color: darkblue;' target='_blank' href='src2.jsp?name=EXPOSED#age'>Exposed.Age</a>(<span class='P1-DBIRTH' onmouseover='hi_on("P1-DBIRTH")' onmouseout='hi_off("P1-DBIRTH")'>dBirth</span>,<span class='P1-DTMP' onmouseover='hi_on("P1-DTMP")' onmouseout='hi_off("P1-DTMP")'>dTmp</span>);
+   <span class='syntax1'>END LOOP;
+   RETURN</span> <span class='P1-DTMP' onmouseover='hi_on("P1-DTMP")' onmouseout='hi_off("P1-DTMP")'>dTmp</span>;
+<span class='syntax1'>END</span>;
+</pre></td>
+</table>
+
+</div>
+<br/>
+
+
+
+<br/></br/>
+<a href="javascript:window.close()">Close</a>
+
+</body>
+</html>
+
+<script type="text/javascript">
+  function tDiv(id) {
+	  $("#"+id).toggle();
+  }
+
+  if ($.browser.msie && !$.browser.webkit) {
+	  return;
+  }
+
+  lines="";
+  for (var i=1;i <= 0;i++)
+	  lines += i + "\n";
+  $("#colnum_PACKAGE").html('   ' + lines);
+  
+  lines="";
+  for (var i=1;i <= 0;i++)
+	  lines += i + "\n";
+  $("#colnum_PACKAGEBODY").html('   ' + lines);
+
+  lines="";
+  for (var i=1;i <= 0;i++)
+	  lines += i + "\n";
+  $("#colnum_PROCEDURE").html('   ' + lines);
+
+  lines="";
+  for (var i=1;i <= 23;i++)
+	  lines += i + "\n";
+  $("#colnum_FUNCTION").html('   ' + lines);
+  
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34000949-1']);
+  _gaq.push(['_setDomainName', 'none']);
+  _gaq.push(['_trackPageview']);
+
+  _gaq.push(['_trackEvent', 'Src', 'Src AGE2DATE']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>

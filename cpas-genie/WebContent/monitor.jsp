@@ -69,10 +69,18 @@ public String extractJS(String str) {
 	int rowCnt = 0;
 	for (Connect cn : ss) {
 		HashMap<String,QueryLog> map = cn.getQueryHistory();
-		
+	    List<QueryLog> logs = new ArrayList<QueryLog>(map.values());
+
+	    Collections.sort(logs, new Comparator<QueryLog>() {
+
+	        public int compare(QueryLog o1, QueryLog o2) {
+	            return o1.getTime().compareTo(o2.getTime());
+	        }
+	    });
+	    
 		String qry = "";
     	if (map != null) {
-	    	Iterator iterator = map.values().iterator();
+	    	Iterator iterator = logs.iterator();
     		int idx = 0;
     		while  (iterator.hasNext()) {
     			idx ++;

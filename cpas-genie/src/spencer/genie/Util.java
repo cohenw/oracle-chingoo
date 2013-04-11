@@ -257,11 +257,11 @@ public class Util {
 	}
 
 	public static String getBuildNo() {
-		return "CPAS-1071";
+		return "CPAS-1073";
 	}
 
 	public static String getVersionDate() {
-		return "Mar 18, 2013";
+		return "Apr 11, 2013";
 	}
 
 }
