@@ -187,4 +187,10 @@ Build 1059
 	Summary for query result (Count, Min, Max, Sum)
 	Dynamic Summary based on search / filter
 
- 
+Build 1060
+	Syntax mouse-over Highlight for variables, parameters and cursors
+	Link to package header's cursor and type from package body
+	Column index for Table and View
+	Query does not hide edit box when the result set is not fully loaded
+	Replaced JDBC driver - ojdbc5.jar
+	

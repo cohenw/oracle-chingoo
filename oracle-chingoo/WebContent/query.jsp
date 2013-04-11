@@ -487,7 +487,7 @@ Up to
   $(document).ready(function(){
 	  var rc = $("#recordCount").val();
 	  //alert(rc);
-	  if (rc != "0") {
+	  if (rc != "0" && rc < <%=upto%>) {
 	  	$("#queryMain").slideUp();
 /*	  	
 	    $("#qqq").click(function(){
@@ -505,6 +505,9 @@ Up to
 
 </script>
 
+<form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
+<input id="sql-query" name="sql" type="hidden"/>
+</form>
 
 </body>
 </html>

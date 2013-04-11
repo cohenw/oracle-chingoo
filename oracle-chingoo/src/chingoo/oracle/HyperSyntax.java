@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 
 public class HyperSyntax {
 
-	static String delim = " \t(),\n;%|=><*+-";
+	static String delim = " \r\n\t(),;%|=><*+-";
 	
 	static String syntaxString1[] = {"CREATE", "OR", "BODY", "IS", "PACKAGE","FUNCTION","RETURN",
 		"IN", "OUT", "CURSOR", "SELECT", "FROM", "WHERE", "AND", "TYPE", "ROWTYPE", "EXCEPTION",
@@ -48,6 +48,13 @@ public class HyperSyntax {
 	static HashSet<String> syntax1 = new HashSet<String>(Arrays.asList(syntaxString1));
 	static HashSet<String> syntax2 = new HashSet<String>(Arrays.asList(syntaxString2));
 	
+	HashSet<String> vars = new HashSet<String>();
+	String procName = "";
+	int cntProc = 0;
+	
+	public HyperSyntax() {
+	}
+
 	public static ArrayList<Range> extractComments(String text) {
 
 		ArrayList<Range> list = new ArrayList<Range>();
@@ -61,7 +68,8 @@ public class HyperSyntax {
 			if (start < 0) break;
 			
 			int end = text.indexOf("*/", start+2);
-			if (end < 0) break;
+//			if (end < 0) break;
+			if (end < 0) end = text.length()-1;
 			
 			end +=2;
 			
@@ -150,7 +158,7 @@ public class HyperSyntax {
 			String token = st.nextToken();
 			
 			String tmp = token.toUpperCase();
-			if (tmp.equals("PROCEDURE")|| tmp.equals("FUNCTION")){
+			if (tmp.equals("PROCEDURE")|| tmp.equals("FUNCTION")|| tmp.equals("TRIGGER")){
 				String name="";
 				while (true) {
 					name = st.nextToken();
@@ -230,6 +238,10 @@ public class HyperSyntax {
 			StringTokenizer st = new StringTokenizer(tmp, delim, false);
 			if (st.hasMoreTokens()) {
 				String token = st.nextToken();
+				if (token.equals("CURSOR") || token.equals("TYPE")) {
+					if (st.hasMoreTokens()) token = st.nextToken();
+				}
+				
 				if (!syntax1.contains(token)) {
 					set.add(token.toUpperCase());
 					//System.out.println(" gv=" + token);
@@ -290,12 +302,14 @@ public class HyperSyntax {
 			} 
 			
 			String tmp = token.toUpperCase();
-			if (tmp.equals("PROCEDURE")|| tmp.equals("FUNCTION")){
+			if (tmp.equals("PROCEDURE")|| tmp.equals("FUNCTION")|| tmp.equals("TRIGGER")){
 				//s += "<a name='chapter'></a>"+ "<span class='syntax1'>" + token + "</span>";
 				s.append( "<span class='syntax1'>" + token + "</span>" );
 				if (!type.equals("PACKAGE"))
 					hyperlink = true;
 				
+				cntProc++;
+				this.procName = "P" + cntProc;
 			} else if (syntax1.contains(tmp)) {
 				s.append( "<span class='syntax1'>" + token + "</span>" );
 			} else if (syntax2.contains(tmp)) {
@@ -305,7 +319,7 @@ public class HyperSyntax {
 			else if (cn.isTVS(tmp)|| cn.isPublicSynonym(tmp))
 				s.append( "<a style='color: darkblue;' href='pop.jsp?key="+tmp+"' target='_blank'>" + token + "</a>" );
 			else if (cn.isProcedure(tmp))
-				s.append( "<a style='color: darkblue;' target='_blank' href='src.jsp?name=" + tmp + "'>" + token + "</a>" );
+				s.append( "<a style='color: darkblue;' target='_blank' href='src2.jsp?name=" + tmp + "'>" + token + "</a>" );
 			else if (hyperlink && !tmp.trim().equals("")) {
 				hyperlink = false;
 				s.append( "<a name='" + tmp.toLowerCase() + "'></a>"+ token );
@@ -316,13 +330,15 @@ public class HyperSyntax {
 					s.append( "<a style='color: darkblue;' href='#" + tmp.toLowerCase() + "'>" + token + "</a>" );
 			} else if (procedures.contains(tmp))
 				s.append( "<a style='color: darkblue;' href='#" + tmp.toLowerCase() + "'>" + token + "</a>" );
+			else if (vars.contains(procName+"-"+tmp))
+				s.append( "<span class='"+procName+"-"+tmp+"' onmouseover='hi_on(\"" + procName+"-"+tmp + "\")' onmouseout='hi_off(\"" + procName+"-"+tmp + "\")'>" + token + "</span>" );
 			else if (tmp.indexOf('.') > 0) {
 				int idx = tmp.indexOf('.');
 				String pkg = tmp.substring(0,idx);
 				String prc = tmp.substring(idx+1);
 				
 				if (cn.isPackage(pkg)||(cn.isSynonym(pkg)))
-					s.append( "<a style='color: darkblue;' target='_blank' href='src.jsp?name=" + pkg + "#" + prc.toLowerCase() + "'>" + token + "</a>" );
+					s.append( "<a style='color: darkblue;' target='_blank' href='src2.jsp?name=" + pkg + "#" + prc.toLowerCase() + "'>" + token + "</a>" );
 				else
 					s.append( token );
 			} else {
@@ -357,6 +373,11 @@ public class HyperSyntax {
 		//System.out.println("s2 size=" + s2.length());
 		// if (s2.length()<5000) System.out.println(s2);
 		
+		
+		PlsqlAnalyzer pa = new PlsqlAnalyzer(s2);
+		this.vars = pa.getVariables();
+//System.out.println("s2 vars=" + this.vars);
+		
 		HashSet<String> set1 = getLinkables("PROCEDURE", s2);
 		HashSet<String> set2 = getLinkables("FUNCTION", s2);
 		
@@ -376,6 +397,9 @@ public class HyperSyntax {
 		after = System.currentTimeMillis();
 		//System.out.println("Elapsed Time for getProcedures = " + (after - before));
 		
+		this.procName = "";
+		this.cntProc=0;
+
 		start=0;
 		String className="";
 		for (Range r:ranges) {
