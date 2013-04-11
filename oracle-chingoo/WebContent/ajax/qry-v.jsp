@@ -405,10 +405,10 @@ if (fkLinkTab.size()>0 && dLink && false) {
 					String id_x = Util.getId();
 					valDisp = valDisp.substring(0,200) + "<a id='"+id_x+"' href='Javascript:toggleText2(" +id_x + "," +id +")'>...</a><span id='"+id+"' style='display: none;'>" + valDisp.substring(200) + "</span>";
 					
-					if (preFormat) valDisp = "<pre>" + Util.escapeHtml(val) + "</pre>";
+					if (preFormat) valDisp = "<pre style='font-family: Consolas;'>" + Util.escapeHtml(val) + "</pre>";
 					if (preFormat && val.startsWith("<")) valDisp = Util.escapeHtml(val);
 				} else {
-					if (preFormat) valDisp = "<pre>" + Util.escapeHtml(val) + "</pre>";
+					if (preFormat) valDisp = "<pre style='font-family: Consolas;'>" + Util.escapeHtml(val) + "</pre>";
 					if (preFormat && val.startsWith("<")) valDisp = Util.escapeHtml(val);
 				}
 

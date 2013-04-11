@@ -728,8 +728,12 @@ function openQuery(id) {
 	var divName = "div-" + id;
 	//alert(sql);
 	
+	/*	
 	$("#sql1").val(sql);
 	document.form1.submit();
+*/
+	$("#sql-query").val(sql);
+	$("#FORM_query").submit();
 }
 
 function hideNullColumnTable(id) {

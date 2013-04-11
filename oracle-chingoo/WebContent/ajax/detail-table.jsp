@@ -61,6 +61,7 @@ Please select a Table to see the detail.
 <input name="query" type="hidden" value=""/>
 <table id="dataTable" border=1 class="gridBody" style="margin-left: 10px;">
 <tr>
+	<th class="headerRow">Idx</th>
 	<th class="headerRow">Column Name</th>
 	<th class="headerRow">Type</th>
 	<th class="headerRow">Null</th>
@@ -83,6 +84,7 @@ Please select a Table to see the detail.
 		if (rowCnt%2 == 0) rowClass = "evenRow";		
 %>
 <tr class="simplehighlight">
+	<td align=right class="<%= rowClass%>"><%= i+1 %></td>
 	<td class="<%= rowClass%>"><%= col_disp.toLowerCase() %></td>
 	<td class="<%= rowClass%>"><%= rec.getTypeName() %></td>
 	<td class="<%= rowClass%>"><%= rec.getNullable()==0?"N":"" %></td>
@@ -384,3 +386,22 @@ Please select a Table to see the detail.
 
 
 </div>
+
+
+<div style="display: none;">
+<form name="form0" id="form0" action="query.jsp" target="_blank">
+<input id="sql" name="sql" type="hidden" value=""/>
+<input id="dataLink" name="dataLink" type="hidden" value="1"/>
+<input id="id" name="id" type="hidden" value=""/>
+<input id="showFK" name="showFK" type="hidden" value="0"/>
+<input type="hidden" id="sortColumn" name="sortColumn" value="">
+<input type="hidden" id="sortDirection" name="sortDirection" value="0">
+<input type="hidden" id="hideColumn" name="hideColumn" value="">
+<input type="hidden" id="filterColumn" name="filterColumn" value="">
+<input type="hidden" id="filterValue" name="filterValue" value="">
+<input type="hidden" id="searchValue" name="searchValue" value="">
+<input type="hidden" id="pageNo" name="pageNo" value="1">
+<input type="hidden" id="rowsPerPage" name="rowsPerPage" value="20">
+</form>
+</div>
+

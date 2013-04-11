@@ -36,6 +36,7 @@
 
 <table id="dataTable" border=1 class="gridBody" style="margin-left: 10px;">
 <tr>
+	<th class="headerRow">Idx</th>
 	<th class="headerRow">Column Name</th>
 	<th class="headerRow">Type</th>
 	<th class="headerRow">Null</th>
@@ -58,6 +59,7 @@
 		if (rowCnt%2 == 0) rowClass = "evenRow";		
 %>
 <tr class="simplehighlight">
+	<td align=right class="<%= rowClass%>"><%= i+1 %></td>
 	<td class="<%= rowClass%>"><%= col_disp %></td>
 	<td class="<%= rowClass%>"><%= rec.getTypeName() %></td>
 	<td class="<%= rowClass%>"><%= rec.getNullable()==0?"N":"" %></td>

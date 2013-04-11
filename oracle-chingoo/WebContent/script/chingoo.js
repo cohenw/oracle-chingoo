@@ -257,7 +257,7 @@
     	
     	var query = "SELECT " + sList + "\n" + "FROM " + tab + " A"
     	
-    	$("#sql").val(query);
+    	$("#sql-query").val(query);
     	$("#FORM_query").submit();
     }
 
@@ -617,8 +617,9 @@
 		var divName = "div-" + id;
 		//alert(sql);
 		
-		$("#sql").val(sql);
-		document.FORM_query.submit();
+		$("#sql-query").val(sql);
+		$("#FORM_query").submit();
+//		document.FORM_query.submit();
 	}
 	
 	

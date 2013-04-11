@@ -71,8 +71,12 @@
 		var divName = "div-" + id;
 		//alert(sql);
 		
+		/*		
 		$("#sql").val(sql);
 		document.form0.submit();
+*/
+		$("#sql-query").val(sql);
+		$("#FORM_query").submit();	
 	}
 
     $(document).ready(function() {

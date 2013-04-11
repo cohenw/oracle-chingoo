@@ -13,4 +13,4 @@
 %>
 <hr noshade color="green">
 <b>PLAN_TABLE_OUTPUT</b>
-<pre><%= ep %></pre>
+<pre style='font-family: Consolas;'><%= ep %></pre>

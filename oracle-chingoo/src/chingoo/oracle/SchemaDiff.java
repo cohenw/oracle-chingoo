@@ -440,7 +440,7 @@ public class SchemaDiff {
 				+ "\",\"div-" + id + "\")'><img id='img-" + id
 				+ "' border=0 src=\"image/minus.gif\"></a><br/>";
 		resultStr += "<div id='div-" + id
-				+ "' style='margin-left: 20px;'><pre>" + getDiff(s1, s2)
+				+ "' style='margin-left: 20px;'><pre style='font-family: Consolas;'>" + getDiff(s1, s2)
 				+ "</pre></div>";
 	}
 

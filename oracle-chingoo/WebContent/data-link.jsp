@@ -212,7 +212,7 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 
 //viewTable should link to the table
 if (cn.isViewTable(table)) {
-	System.out.println("ViewTable !!!!!!");
+//	System.out.println("ViewTable !!!!!!");
 	String tmp = cn.getViewTableName(table);
 	//fkLinkTab.add("SV_MEMBER");
 	
@@ -438,6 +438,9 @@ toggleLFK();
 
 </script>
 
+<form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
+<input id="sql-query" name="sql" type="hidden"/>
+</form>
 
 </body>
 </html>

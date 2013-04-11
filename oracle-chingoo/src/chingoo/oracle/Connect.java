@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -297,12 +298,21 @@ public class Connect implements HttpSessionBindingListener {
     
     public void printQueryLog() {
     	HashMap<String, QueryLog> map = this.getQueryHistory();
+        List<QueryLog> logs = new ArrayList<QueryLog>(map.values());
+
+        Collections.sort(logs, new Comparator<QueryLog>() {
+
+            public int compare(QueryLog o1, QueryLog o2) {
+                return o1.getTime().compareTo(o2.getTime());
+            }
+        });    	
+    	
     	String qryHist = "";
     	if (map == null /* || map.size()==0 */) return;
     	
     	if (url.indexOf("8888")>0) return; // local test
     	
-    	Iterator iterator = map.values().iterator();
+    	Iterator iterator = logs.iterator();
     	int idx = 0;
     	while  (iterator.hasNext()) {
     		idx ++;
