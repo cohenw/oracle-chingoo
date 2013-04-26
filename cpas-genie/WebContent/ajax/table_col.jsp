@@ -37,7 +37,7 @@ Please select a Table to see the detail.
 	
 	String divId="div_" + table;
 	divId = divId.replaceAll("\\.","-");
-
+System.out.println("catalog=" + catalog);
 	ArrayList<String> pk = cn.getPrimaryKeys(catalog, tname);
 	List<TableCol> cols = cn.getTableDetail(catalog, tname);
 
