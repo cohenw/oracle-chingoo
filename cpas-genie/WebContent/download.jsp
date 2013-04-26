@@ -5,8 +5,7 @@
 	import="spencer.genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
-%>
-<%!
+%><%!
 
 	ArrayList<String> getBindVariableList(String qry) {
 		ArrayList<String> al = new ArrayList<String>();
@@ -23,8 +22,7 @@
 		return al;
 	}
 
-%>
-<%
+%><%
 	response.setContentType("text/csv");
 	String disposition = "attachment; fileName=data.csv";
     response.setHeader("Content-Disposition", disposition);
@@ -58,7 +56,8 @@
 	ResultSet rs = q.getResultSet();
 	
 	out.println("Genie,downloaded at " + (new Date()));
-	out.println("database,"+ cn.getUrlString() + " catalog: " + cn.getSchemaName());
+//	out.println("database,"+ cn.getUrlString() + " catalog: " + cn.getSchemaName());
+	out.println("database,"+ cn.getUrlString());
 	
 	String q1 = sql.replaceAll("\n", " ").trim();
 	out.println("query,\"" + q1 + "\",");

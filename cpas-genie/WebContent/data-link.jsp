@@ -18,13 +18,26 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 		if (paramTable != null && !paramTable.equals("")) {
 			list.add(paramTable);
 		}
-		String qry = "SELECT BUFFERTABLE FROM BATCHCAT_BUFFER WHERE BATCHKEY='" + q.getValue("BATCHKEY") + "' " +
+		String batchKey = q.getValue("BATCHKEY");
+		String qry = "SELECT BUFFERTABLE FROM BATCHCAT_BUFFER WHERE BATCHKEY='" + batchKey + "' " +
 			"AND EXISTS (SELECT 1 FROM USER_OBJECTS WHERE OBJECT_NAME=BUFFERTABLE)";
-
+		if (cn.getTargetSchema() != null) {
+			qry = "SELECT BUFFERTABLE FROM BATCHCAT_BUFFER WHERE BATCHKEY='" + batchKey + "' " +
+					"AND EXISTS (SELECT 1 FROM ALL_OBJECTS WHERE OWNER = '" + cn.getTargetSchema() + "' AND OBJECT_NAME=BUFFERTABLE)";
+		}
+		
 		//System.out.println("qry="+qry);	
 		List<String> lst = cn.queryMulti(qry);
 		list.addAll(lst);
 
+		if (batchKey.equals("PBR")) {
+			list.add("BATCH_BUF$DATA$PBRHR$BUFF");
+			list.add("BATCH_BUF$DATA$PBRFR$BUFF");
+			list.add("BATCH_BUF$DATA$PBR$STATUS");
+			list.add("BATCH_BUF$DATA$PBR$ERR");
+			list.add("BATCH_BUF$DATA$PBR$ELOG");
+		}
+		
 		list.add("BATCH_ERROR");
 		list.add("CALC_ERROR");
 
@@ -481,8 +494,15 @@ if (cn.isViewTable(table)) {
 	for (int i=0; i<lcTabs.size(); i++) {
 		String refTab = lcTabs.get(i);
 		String fkColName = "PROCESSID";
-		fkColName = cn.queryOne("SELECT COLUMN_NAME from user_tab_columns where table_name='" + refTab + "' " + 
-				"and COLUMN_NAME in ('PROCESSID', 'PROCESSKEY')");
+		
+		String qr = "SELECT COLUMN_NAME from user_tab_columns where table_name='" + refTab + "' " + 
+				"and COLUMN_NAME in ('PROCESSID', 'PROCESSKEY')";
+		if (cn.getTargetSchema() != null) {
+			qr = "SELECT COLUMN_NAME from all_tab_columns where owner='" + cn.getTargetSchema() + "' and table_name='" + refTab + "' " + 
+					"and COLUMN_NAME in ('PROCESSID', 'PROCESSKEY')";
+		}
+		
+		fkColName = cn.queryOne(qr);
 		if (fkColName== null) fkColName = "PROCESSID";
 		
 		if (table.equals("REPORTCAT")) {

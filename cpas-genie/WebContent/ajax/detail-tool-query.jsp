@@ -168,8 +168,7 @@
 %>
 <td <%= (numberCol[colIdx])?"align=right":""%>>
 <% if (colIdx==1 && ttype.equals("SEARCH_PROGRAM")) { %>
-<%-- 	<a href="javascript:loadPackage('<%=valDisp%>');"><%=valDisp%></a>
- --%>	<a target=_blank href="pop.jsp?type=PACKAGE&key=<%=valDisp%>"><%=valDisp%></a>
+	<a target=_blank href="pop.jsp?type=PACKAGE&key=<%=valDisp%>"><%=valDisp%></a>
 <% } else if (colIdx==2 && ttype.equals("SEARCH_COLUMN")) { %>
 	<a target=_blank href="pop.jsp?type=TABLE&key=<%=valDisp%>"><%=valDisp%></a>
 <% } else { %>

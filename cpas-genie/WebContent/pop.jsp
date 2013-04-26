@@ -128,10 +128,6 @@ loadSynonym('<%= key %>');
 </head> 
 
 <body>
-<form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
-<input id="sql-query" name="sql" type="hidden"/>
-</form>
-
 <img align=top src="image/lamp.png" alt="Ver. <%= Util.getVersionDate() %>"/>
 <b><%= cn.getUrlString() %></b>
 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -151,8 +147,7 @@ Search <input id="globalSearch" style="width: 200px;"/>
 
 
 <form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
-<input id="sql" name="sql" type="hidden"/>
-<input name="norun" type="hidden" value="YES"/>
+<input id="sql-query" name="sql" type="hidden"/>
 </form>
 
 <form id="FormPop" name="FormPop" target="_blank" method="post" action="pop.jsp">

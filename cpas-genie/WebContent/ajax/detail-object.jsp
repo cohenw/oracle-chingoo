@@ -15,6 +15,9 @@
 	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nObject: " + object);
 
 	String qry = "SELECT object_type FROM user_objects where object_name='" + object + "'";
+	if (cn.getTargetSchema() != null) {
+		qry = "SELECT object_type FROM all_objects where owner='" + cn.getTargetSchema() + "' and object_name='" + object + "'";
+	}
 //System.out.println(qry);
 	String oType = cn.queryOne(qry);
 

@@ -287,6 +287,7 @@ Rows/Page
 
 <%
 	boolean hasCpas = cn.hasCpas(tname);
+hasCpas = true;
 	// check for known columns
 	if (!hasCpas) {
 		boolean hasData = q.hasMetaData();

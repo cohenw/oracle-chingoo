@@ -30,7 +30,9 @@
 	boolean hideEmpty = request.getParameter("hideEmpty") != null;
 	//hideEmpty = true;
 	
-	String qry = "SELECT TABLE_NAME, NUM_ROWS FROM USER_TABLES ORDER BY 1"; 	
+	String qry = "SELECT TABLE_NAME, NUM_ROWS FROM USER_TABLES ORDER BY 1"; 
+	if (cn.getTargetSchema() != null)
+		qry = "SELECT TABLE_NAME, NUM_ROWS FROM ALL_TABLES WHERE OWNER='" + cn.getTargetSchema() + "' ORDER BY 1";
 	//List<String> list = cn.queryMulti(qry);
 	List<String[]> list = cn.query(qry, true);
 	

@@ -21,6 +21,7 @@
 //	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nView: " + view);
 	
 	String catalog = cn.getSchemaName();
+	if (cn.getTargetSchema() != null) owner = cn.getTargetSchema();
 
 	String qry = "SELECT TEXT FROM USER_VIEWS WHERE VIEW_NAME='" + view +"'";
 	if (owner != null) 

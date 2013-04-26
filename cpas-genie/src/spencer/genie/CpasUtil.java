@@ -47,6 +47,18 @@ public class CpasUtil {
 			{"C", "Cancelled"}
 	};
 	
+	String tranId[][] = {
+			{"EO", "Row Edited"},
+			{"PE", "Post Error"},
+			{"PO", "Post OK"},
+			{"PR", "Post Reversed"},
+			{"TE", "Test Error"},
+			{"TI", "Test Imported"},
+			{"TO", "Test OK"},
+			{"TW", "Test Warning"},
+			{"TU", "Test Unknown"}
+	};
+	
 	public String logicalLink2[][] = {
 			{"MKEY", "CLNT", "MEMBER"},
 			{"ERKEY", "CLNT", "EMPLOYER"},
@@ -104,6 +116,10 @@ public class CpasUtil {
 		if (cn.isTVS("CPAS_TABLE")) { 
 			String qry = "SELECT distinct table_name FROM user_tab_cols where column_name in ('CLNT','ERKEY','CTYPE') UNION  "
 					+ "SELECT TNAME FROM CPAS_TABLE A WHERE EXISTS (SELECT 1 FROM TAB WHERE TNAME=A.TNAME)";
+			if (cn.getTargetSchema() != null)
+				qry = "SELECT distinct table_name FROM all_tab_cols where owner = '" + cn.getTargetSchema()+ "' and column_name in ('CLNT','ERKEY','CTYPE') UNION  "
+						+ "SELECT TNAME FROM CPAS_TABLE A WHERE EXISTS (SELECT 1 FROM TAB WHERE TNAME=A.TNAME)";
+			
 			List<String> tbls = cn.queryMulti(qry);
 			for (String tbl : tbls) {
 				hsTable.add(tbl);
@@ -139,6 +155,7 @@ public class CpasUtil {
 			logicalLink2[2][2] = "PLAN";
 		}
 		
+		System.out.println("isCpas="+isCpas);
 		System.out.println("cpasType="+cpasType);
 		System.out.println("plan table=" + planTable);
 	}
@@ -246,6 +263,11 @@ public class CpasUtil {
 		} else if (temp.endsWith("REPORTCAT.FILEID")) {
 			String qry = "SELECT FILENAME FROM SYSBINFILE WHERE FILEID='" + value + "'";
 			return cn.queryOne(qry);
+		} else if (temp.endsWith(".TRANID") && tname.startsWith("BATCH_BUF")) {
+			for (int i=0; i<tranId.length;i++) {
+				if (value.equals(tranId[i][0])) return tranId[i][1];
+			}
+			return null;
 		}
 		
 		String key = (tname + "." + cname).toUpperCase();
@@ -482,7 +504,7 @@ public class CpasUtil {
 		if (!isCpas)
 			return false;
 		loadTable(tname);
-		return hsTable.contains(tname);
+		return hsTableLoaded.contains(tname);
 	}
 
 	public void loadTable(String tname) {
@@ -507,7 +529,6 @@ public class CpasUtil {
 			String capt = row[4];
 
 			String key = tname + "." + cname;
-
 			if (code != null && !code.equals(""))
 				htCode.put(key, code);
 			if (capt != null && !capt.equals(""))

@@ -37,6 +37,14 @@
 		" SELECT LOWER(synonym_name) FROM USER_SYNONYMS A " +
 		" where exists (select 1 from all_tables where owner=A.table_owner and table_name=A.table_name) " +
 		" order by 1";
+	if (cn.getTargetSchema() != null) {
+		qry = "SELECT LOWER(object_name) FROM all_objects where owner='" + cn.getTargetSchema() + "' and object_type in ('VIEW','TABLE') " +
+				" union all " +
+				" SELECT LOWER(synonym_name) FROM ALL_SYNONYMS A " +
+				" where owner='" + cn.getTargetSchema() + "' and exists (select 1 from all_tables where owner=A.table_owner and table_name=A.table_name) " +
+				" order by 1";
+	}
+	
 	
 //	String qry = "SELECT TABLE_NAME, NUM_ROWS FROM USER_TABLES ORDER BY 1"; 	
 	List<String[]> list = cn.query(qry, true);
