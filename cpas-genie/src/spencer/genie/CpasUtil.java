@@ -145,11 +145,18 @@ public class CpasUtil {
 		
 		if (cpasType==1) {
 			// check for CPAS_TAB table
-			String tmp = cn.queryOne("SELECT COUNT(*) FROM USER_OBJECTS WHERE OBJECT_NAME='CPAS_TAB'");
+			String qry = "SELECT COUNT(*) FROM USER_OBJECTS WHERE OBJECT_NAME='CPAS_TAB'";
+			if (cn.getTargetSchema() != null)
+				qry = "SELECT COUNT(*) FROM ALL_OBJECTS WHERE OWNER = '" + cn.getTargetSchema() + "' AND OBJECT_NAME='CPAS_TAB'";
+			String tmp = cn.queryOne(qry);
 			if (tmp.equals("0")) cpasType = 2;
 		}
 		
-		String tmp = cn.queryOne("SELECT COUNT(*) FROM USER_OBJECTS WHERE OBJECT_NAME='SV_PLAN'");
+		String qry = "SELECT COUNT(*) FROM USER_OBJECTS WHERE OBJECT_NAME='SV_PLAN'";
+		if (cn.getTargetSchema() != null)
+			qry = "SELECT COUNT(*) FROM ALL_OBJECTS WHERE OWNER = '" + cn.getTargetSchema() + "' AND OBJECT_NAME='SV_PLAN'";
+		
+		String tmp = cn.queryOne(qry);
 		if (tmp.equals("0")) {
 			this.planTable = "PLAN";
 			logicalLink2[2][2] = "PLAN";
