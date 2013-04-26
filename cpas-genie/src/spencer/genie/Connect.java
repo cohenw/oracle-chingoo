@@ -1802,7 +1802,7 @@ System.out.println("filename=" + filename);
 	public synchronized List<TableCol> getTableDetail(String owner, String tname) throws SQLException {
 		if (owner==null) {
 			// see if the table is users
-			if (tables.contains(tname)) {
+			if (tables.contains(tname)||views.contains(tname)) {
 				owner = schemaName.toUpperCase();
 				if(this.targetSchema != null) owner = this.targetSchema;
 			} else {
@@ -1822,6 +1822,7 @@ System.out.println("filename=" + filename);
 		}
 */
 		if (owner==null) owner = this.schemaName;
+//		if (this.targetSchema != null) owner = this.targetSchema;
 		
 		List<TableCol> list = tableDetailCache.get(owner, tname); 
 		if (list != null ) return list;
