@@ -15,6 +15,7 @@
 	String catalog = null;
 	String tname = table;
 	
+//	if (cn.getTargetSchema() != null) catalog = cn.getTargetSchema();
 	if (cn.isPublicSynonym(tname)) catalog = "SYS";
 	
 	int idx = table.indexOf(".");

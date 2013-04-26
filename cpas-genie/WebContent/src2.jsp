@@ -127,11 +127,11 @@ for (int k=0;k<types.size();k++) {
   function tDiv(id) {
 	  $("#"+id).toggle();
   }
-
+/*
   if ($.browser.msie && !$.browser.webkit) {
 	  return;
   }
-
+*/
   lines="";
   for (var i=1;i <= <%=lines_pkg%>;i++)
 	  lines += i + "\n";

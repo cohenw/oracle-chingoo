@@ -261,6 +261,17 @@
     	$("#FORM_query").submit();
     }
 
+    function replaceAll(oldStr, removeStr, replaceStr, caseSenitivity){
+        if(caseSenitivity == 1){
+            cs = "g";
+            }else{
+            cs = "gi";  
+        }
+        var myPattern=new RegExp(removeStr,cs);
+        newStr =oldStr.replace(myPattern,replaceStr);
+        return newStr;
+    }
+    
     function runToolQuery(cnt) {
     	var p1, p2, p3, p4, p5;
     	
@@ -271,11 +282,11 @@
     	if (cnt >=5) p5 = $("#param-5").val();
     	
     	var sql = $("#paramQuery").html();
-    	if (cnt >=1) sql = sql.replace("[1]", p1);
-    	if (cnt >=2) sql = sql.replace("[2]", p2);
-    	if (cnt >=3) sql = sql.replace("[3]", p3);
-    	if (cnt >=4) sql = sql.replace("[4]", p4);
-    	if (cnt >=5) sql = sql.replace("[5]", p5);
+    	if (cnt >=1) sql = sql.replace("[1]", replaceAll(p1, "'", "''", 1));
+    	if (cnt >=2) sql = sql.replace("[2]", replaceAll(p2, "'", "''", 1));
+    	if (cnt >=3) sql = sql.replace("[3]", replaceAll(p3, "'", "''", 1));
+    	if (cnt >=4) sql = sql.replace("[4]", replaceAll(p4, "'", "''", 1));
+    	if (cnt >=5) sql = sql.replace("[5]", replaceAll(p5, "'", "''", 1));
     	$("#param-sql").val(sql);
     	
 		$("#paramQueryResult").html("<div id='wait'><img src='image/loading.gif'/></div>");

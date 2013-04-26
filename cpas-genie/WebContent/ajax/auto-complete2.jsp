@@ -36,6 +36,10 @@
 //System.out.println("xlist=" + xlist.size());
 	
 	String qry = "SELECT LOWER(object_name) FROM user_objects WHERE object_type in ('TABLE','VIEW','PACKAGE','SYNONYM','PROCEDURE','FUNCTION') order by 1";
+	if (cn.getTargetSchema() != null) {
+		qry = "SELECT LOWER(object_name) FROM all_objects WHERE owner='" + cn.getTargetSchema() + "' and object_type in ('TABLE','VIEW','PACKAGE','SYNONYM','PROCEDURE','FUNCTION') order by 1";
+	}
+	
 	List<String[]> list = cn.query(qry, 10000, true);
 	
 	int totalCnt = list.size();

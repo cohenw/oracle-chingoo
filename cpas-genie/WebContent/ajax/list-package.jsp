@@ -11,6 +11,9 @@
 	String filter = request.getParameter("filter");
 
 	String qry = "SELECT OBJECT_NAME FROM USER_OBJECTS WHERE object_type IN ('PACKAGE','PROCEDURE','FUNCTION','TYPE') order by 1"; 	
+	if (cn.getTargetSchema() != null)
+		qry = "SELECT OBJECT_NAME FROM ALL_OBJECTS WHERE OWNER='" + cn.getTargetSchema() + "' and object_type IN ('PACKAGE','PROCEDURE','FUNCTION','TYPE') order by 1";
+
 	List<String> list = cn.queryMulti(qry);
 	int totalCnt = list.size();
 	int selectedCnt = 0;

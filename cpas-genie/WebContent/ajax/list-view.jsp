@@ -11,6 +11,8 @@
 	String filter = request.getParameter("filter");
 
 	String qry = "SELECT VIEW_NAME FROM USER_VIEWS ORDER BY 1"; 	
+	if (cn.getTargetSchema() != null)
+		qry = "SELECT VIEW_NAME FROM ALL_VIEWS WHERE OWNER='" + cn.getTargetSchema() + "' ORDER BY 1";
 	List<String> list = cn.queryMulti(qry);
 
 	int totalCnt = list.size();

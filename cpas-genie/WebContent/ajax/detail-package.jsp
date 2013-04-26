@@ -21,6 +21,7 @@
 //	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nPackage: " + name);
 	
 	if (owner==null) owner = cn.getSchemaName().toUpperCase();
+	if (cn.getTargetSchema() != null) owner = cn.getTargetSchema();
 	
 	String catalog = cn.getSchemaName();
 

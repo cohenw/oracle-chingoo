@@ -248,4 +248,13 @@ Build CPAS1072
 
 Build CPAS1073
 	Replaced JDBC driver - ojdbc5.jar
-	
+	Fixed OpenQuery() issues for sql-query
+
+Build CPAS1074
+	source code line number for FireFox
+	search source code with '
+	TRANID added for CPAS code
+	PBR logical child tables
+	Login as CPAS_WEB and switch to target schema
+	Table detail for COMMON schema
+

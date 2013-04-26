@@ -268,7 +268,7 @@ function callserver() {
 </td>
 </table>
 <form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
-<input id="sql" name="sql" type="hidden"/>
+<input id="sql-query" name="sql" type="hidden"/>
 <input name="norun" type="hidden" value="YES"/>
 </form>
 

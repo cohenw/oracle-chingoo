@@ -84,7 +84,7 @@
 <% } %>	
   <img src="image/genie2.jpg" title="<%= Util.getVersionDate() + " Build " + Util.getBuildNo() %>"/>
 <% if (isCPAS) { %>
-    <h2>Welcome to CPAS Genie.</h2>
+    <h2>Welcome to CPAS Genie.</h2> <a href="login_cpas.jsp">CPAS login</a>
 <% } else {%>	
     <h2>Welcome to Oracle Genie.</h2>
 <% } %>	

@@ -76,6 +76,7 @@ public class Connect implements HttpSessionBindingListener {
 
 	private List<String> schemas;
 	private String schemaName;
+	private String targetSchema = null;
 	private String ipAddress;
 	private String userAgent;
 	
@@ -119,8 +120,12 @@ public class Connect implements HttpSessionBindingListener {
 	 * @param password	database password
 	 * @param ipAddress	user's local ip address
 	 */
-    public Connect(HttpSession session, String url, String userName, String password, String ipAddress, boolean loadData)
+    public Connect(HttpSession session, String url, String userName, String password, String ipAddress, boolean loadData, String target)
     {
+    	if (target != null && target.length() > 4)
+    		targetSchema  = target.toUpperCase();
+//    	if (userName.equalsIgnoreCase("cpas_web")) targetSchema = "CLIENT_CAAT_DC";
+    	
     	//pkColumn = new Hashtable<String, String>();
     	queryResult = new HashMap<String, String>();
     	pkMap = new HashMap<String, ArrayList<String>>();
@@ -137,16 +142,19 @@ public class Connect implements HttpSessionBindingListener {
             Class.forName ("oracle.jdbc.driver.OracleDriver").newInstance ();
             conn = DriverManager.getConnection (url, userName, password);
             conn.setReadOnly(true);
-/*            
-            Statement oStatement = null;
-            oStatement = conn.createStatement();
-            oStatement.execute("ALTER SESSION SET CURRENT_SCHEMA=CLIENT_CAAT_DEV");
-            oStatement.close();
             
-            oStatement = conn.createStatement();
-            oStatement.execute("SET ROLE CPAS_PROXY identified by CPAS_BATCH");
-            oStatement.close();
-*/            
+            if (targetSchema !=null ) {
+                System.out.println("Switching to " + targetSchema);
+            	Statement oStatement = null;
+            	oStatement = conn.createStatement();
+            	oStatement.execute("ALTER SESSION SET CURRENT_SCHEMA=" + targetSchema);
+            	oStatement.close();
+            
+            	oStatement = conn.createStatement();
+            	oStatement.execute("SET ROLE CPAS_PROXY identified by CPAS_BATCH");
+            	oStatement.close();
+            }
+            
             urlString = userName + "@" + url;  
             addMessage("Database connection established for " + urlString + " @" + (new Date()) + " " + ipAddress);
             if (loadData) session.setAttribute("CN", this);
@@ -168,6 +176,7 @@ public class Connect implements HttpSessionBindingListener {
 
 //       		this.schemaName = conn.getCatalog();
        		this.schemaName = userName;
+       		this.targetSchema = targetSchema;
 //       		System.out.println("this.schemaName=" + this.schemaName);
 
             queryCache = QueryCache.getInstance();
@@ -190,7 +199,7 @@ public class Connect implements HttpSessionBindingListener {
     }
 
     public Connect(HttpSession session, String url, String userName, String password, String ipAddress) {
-    	this(session, url, userName, password, ipAddress, true);
+    	this(session, url, userName, password, ipAddress, true, null);
 	}    
     
     /**
@@ -246,7 +255,9 @@ public class Connect implements HttpSessionBindingListener {
     }
     
     public String getUrlString() {
-    	return urlString;
+    	String res = urlString;
+    	if (this.targetSchema != null) res += " for " + this.targetSchema;
+    	return res;
     }
 
     public String getIPAddress() {
@@ -443,7 +454,10 @@ System.out.println("filename=" + filename);
 		constraints.clear();
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("SELECT CONSTRAINT_NAME, TABLE_NAME, COLUMN_NAME, POSITION from user_cons_columns where position is not null order by 1,2,4");	
+       		String sql = "SELECT CONSTRAINT_NAME, TABLE_NAME, COLUMN_NAME, POSITION from user_cons_columns where position is not null order by 1,2,4";
+       		if (this.targetSchema != null)
+       			sql = "SELECT CONSTRAINT_NAME, TABLE_NAME, COLUMN_NAME, POSITION from all_cons_columns where owner='" + this.targetSchema + "' and position is not null order by 1,2,4";
+       		ResultSet rs = stmt.executeQuery(sql);	
 
        		String prevConName = null;
        		String temp = "";
@@ -488,9 +502,12 @@ System.out.println("filename=" + filename);
 
 	private synchronized void loadTempTables() {
 		temp_tables.clear();
+		String sql = "SELECT TABLE_NAME FROM USER_TABLES WHERE TEMPORARY='Y'";
+		if (this.targetSchema != null)
+			sql = "SELECT TABLE_NAME FROM ALL_TABLES WHERE OWNER='"+ this.targetSchema + "' AND TEMPORARY='Y'";
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("SELECT TABLE_NAME FROM USER_TABLES WHERE TEMPORARY='Y'");	
+       		ResultSet rs = stmt.executeQuery(sql);	
 
        		while (rs.next()) {
        			String tabName = rs.getString(1);
@@ -510,14 +527,26 @@ System.out.println("filename=" + filename);
 
 	private synchronized void loadViewTables() {
 		viewTables.clear();
+		
+		String sql = "SELECT NAME, REFERENCED_NAME from user_dependencies " +
+   				"where name in ( " +
+   				"SELECT name  from user_dependencies " + 
+   				"WHERE type='VIEW' AND REFERENCED_TYPE IN ('TABLE') " + 
+   				"group by name having count(*)=1 " +
+   				") AND REFERENCED_NAME NOT IN ('DUAL','STANDARD') AND REFERENCED_TYPE IN ('TABLE')";
+		
+		if (this.targetSchema != null) {
+			sql = "SELECT NAME, REFERENCED_NAME from all_dependencies " +
+	   				"where owner='" + this.targetSchema + "' and name in ( " +
+	   				"SELECT name  from all_dependencies " + 
+	   				"WHERE owner='" + this.targetSchema + "' and type='VIEW' AND REFERENCED_TYPE IN ('TABLE') " + 
+	   				"group by name having count(*)=1 " +
+	   				") AND REFERENCED_NAME NOT IN ('DUAL','STANDARD') AND REFERENCED_TYPE IN ('TABLE')";
+		}
+		
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("SELECT NAME, REFERENCED_NAME from user_dependencies " +
-       				"where name in ( " +
-       				"SELECT name  from user_dependencies " + 
-       				"WHERE type='VIEW' AND REFERENCED_TYPE IN ('TABLE') " + 
-       				"group by name having count(*)=1 " +
-       				") AND REFERENCED_NAME NOT IN ('DUAL','STANDARD') AND REFERENCED_TYPE IN ('TABLE')");	
+       		ResultSet rs = stmt.executeQuery(sql);	
 
        		while (rs.next()) {
        			String viewName = rs.getString(1);
@@ -541,8 +570,11 @@ System.out.println("filename=" + filename);
 		pkByCon.clear();
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("SELECT CONSTRAINT_NAME, TABLE_NAME  from user_constraints where CONSTRAINT_TYPE = 'P'");	
-
+       		String sql = "SELECT CONSTRAINT_NAME, TABLE_NAME  from user_constraints where CONSTRAINT_TYPE = 'P'";
+       		if (this.targetSchema != null) 
+       			sql = "SELECT CONSTRAINT_NAME, TABLE_NAME  from all_constraints where owner='" + this.targetSchema + "' and CONSTRAINT_TYPE = 'P'";
+       				
+       		ResultSet rs = stmt.executeQuery(sql);	
        		String prevConName = null;
        		String temp = "";
        		while (rs.next()) {
@@ -569,9 +601,15 @@ System.out.println("filename=" + filename);
 		foreignKeys.clear();
 		try {
        		Statement stmt = conn.createStatement();
-//       		ResultSet rs = stmt.executeQuery("select OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE from all_constraints where CONSTRAINT_TYPE = 'R' order by table_name, constraint_type");	
-       		ResultSet rs = stmt.executeQuery("SELECT OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE FROM ALL_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'R' and (owner=user or owner in (select table_owner from user_synonyms))");	
+       		String sql = "SELECT OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE FROM ALL_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'R' and (owner=user or owner in (select table_owner from user_synonyms))";
+
+       		if (this.targetSchema != null) 
+       			sql = "SELECT OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE FROM ALL_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'R' and (owner='" + this.targetSchema +"')";
+
+       		ResultSet rs = stmt.executeQuery(sql);	
 //       		ResultSet rs = stmt.executeQuery("SELECT OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE FROM ALL_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'R' and (owner=user)");	
+
+       				
        		
        		while (rs.next()) {
        			ForeignKey fk = new ForeignKey();
@@ -601,8 +639,13 @@ System.out.println("filename=" + filename);
 		// column comments
 		try {
        		Statement stmt = conn.createStatement();
-//       		ResultSet rs = stmt.executeQuery("select owner, table_name, num_rows from ALL_TABLES");	
-       		ResultSet rs = stmt.executeQuery("SELECT owner, table_name, num_rows from ALL_TABLES where (owner=user or owner in (SELECT table_owner from user_synonyms))");	
+//       		ResultSet rs = stmt.executeQuery("select owner, table_name, num_rows from ALL_TABLES");
+       		
+       		String sql = "SELECT owner, table_name, num_rows from ALL_TABLES where (owner=user or owner in (SELECT table_owner from user_synonyms))";
+       		
+       		if (this.targetSchema != null)
+       			sql = "SELECT owner, table_name, num_rows from ALL_TABLES where (owner='"+ this.targetSchema+ "')";
+       		ResultSet rs = stmt.executeQuery(sql);	
 
 	   		while (rs.next()) {
 	   			cnt++;
@@ -637,10 +680,14 @@ System.out.println("filename=" + filename);
 	
 	private synchronized void loadComment(String tname) {
 		
+		String sql = "SELECT table_name, column_name, comments from USER_COL_COMMENTS where TABLE_NAME='" + tname + "'";
+		if (this.targetSchema != null)
+			sql = "SELECT table_name, column_name, comments from ALL_COL_COMMENTS where OWNER='" + this.targetSchema + "' AND TABLE_NAME='" + tname + "'";
+		
 		// column comments
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("SELECT * from USER_COL_COMMENTS where TABLE_NAME='" + tname + "'");	
+       		ResultSet rs = stmt.executeQuery(sql);	
 
 	   		while (rs.next()) {
 	   			String tab = rs.getString(1);
@@ -663,7 +710,10 @@ System.out.println("filename=" + filename);
 		// table comments
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("SELECT * from USER_TAB_COMMENTS where TABLE_NAME='" + tname + "'");	
+       		String sql2 = "SELECT table_name, table_type, comments from USER_TAB_COMMENTS where TABLE_NAME='" + tname + "'";
+       		if (this.targetSchema != null)
+       			sql2 = "SELECT table_name, table_type, comments from ALL_TAB_COMMENTS where OWNER='" + this.targetSchema + "' AND TABLE_NAME='" + tname + "'";
+       		ResultSet rs = stmt.executeQuery(sql2);	
 
 	   		while (rs.next()) {
 	   			String tab = rs.getString(1);
@@ -698,7 +748,9 @@ System.out.println("filename=" + filename);
 	
 	// get column comments
 	public String getComment(String tname, String cname) {
-
+		if (this.targetSchema != null) {
+			return getSynColumnComment(this.targetSchema, tname, cname);
+		}
 		if (!comment_tables.contains(tname))
 			loadComment(tname);
 		
@@ -769,6 +821,8 @@ System.out.println("filename=" + filename);
 		
 		Statement stmt = conn.createStatement();
 		String qry = "SELECT object_name, object_type FROM user_objects WHERE object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE', 'PROCEDURE','FUNCTION')";
+		if (this.targetSchema != null)
+			qry = "SELECT object_name, object_type FROM all_objects WHERE owner='" +this.targetSchema + "' AND object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE', 'PROCEDURE','FUNCTION')";
 		ResultSet rs = stmt.executeQuery(qry);
 		while (rs.next()){
 			String name = rs.getString(1);
@@ -1238,9 +1292,12 @@ System.out.println("filename=" + filename);
 	public synchronized List<String> getReferencedPackages(String tname) {
 		List<String> list = new ArrayList<String>();
 
+		String sql = "SELECT distinct NAME from user_dependencies WHERE REFERENCED_NAME='" + tname + "' AND TYPE IN ('TYPE BODY','PACKAGE BODY','PACKAGE','TYPE','PROCEDURE','FUNCTION') ORDER BY NAME";
+		if (this.targetSchema != null)
+			sql = "SELECT distinct NAME from all_dependencies WHERE OWNER='" + this.targetSchema + "' AND REFERENCED_NAME='" + tname + "' AND TYPE IN ('TYPE BODY','PACKAGE BODY','PACKAGE','TYPE','PROCEDURE','FUNCTION') ORDER BY NAME";
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("SELECT distinct NAME from user_dependencies WHERE REFERENCED_NAME='" + tname + "' AND TYPE IN ('TYPE BODY','PACKAGE BODY','PACKAGE','TYPE','PROCEDURE','FUNCTION') ORDER BY NAME");	
+       		ResultSet rs = stmt.executeQuery(sql);	
 
        		int count = 0;
        		while (rs.next()) {
@@ -1263,9 +1320,12 @@ System.out.println("filename=" + filename);
 	public synchronized List<String> getReferencedViews(String tname) {
 		List<String> list = new ArrayList<String>();
 
+		String sql = "SELECT distinct NAME from user_dependencies WHERE REFERENCED_NAME='" + tname + "' AND TYPE IN ('VIEW') ORDER BY NAME";
+		if (this.targetSchema != null)
+			sql = "SELECT distinct NAME from all_dependencies WHERE OWNER='" + this.targetSchema + "' AND REFERENCED_NAME='" + tname + "' AND TYPE IN ('VIEW') ORDER BY NAME";
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("SELECT distinct NAME from user_dependencies WHERE REFERENCED_NAME='" + tname + "' AND TYPE IN ('VIEW') ORDER BY NAME");	
+       		ResultSet rs = stmt.executeQuery(sql);	
 
        		int count = 0;
        		while (rs.next()) {
@@ -1289,6 +1349,7 @@ System.out.println("filename=" + filename);
 		List<String[]> list = new ArrayList<String[]>();
 
 		if (owner == null) owner = this.getSchemaName().toUpperCase();
+		if (this.targetSchema != null) owner = this.targetSchema; 
 		try {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT INDEX_NAME, UNIQUENESS FROM ALL_INDEXES WHERE OWNER='" + owner + "' AND TABLE_NAME='" + tname +"'");
@@ -1321,6 +1382,7 @@ System.out.println("filename=" + filename);
 		List<String> list = new ArrayList<String>();
 
 		if (owner == null) owner = this.getSchemaName().toUpperCase();
+		if (this.targetSchema != null) owner = this.targetSchema; 
 		try {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT CONSTRAINT_NAME, SEARCH_CONDITION FROM ALL_CONSTRAINTS WHERE OWNER='" + owner + "' AND TABLE_NAME='" + tname +"' AND constraint_type='C'");
@@ -1345,9 +1407,13 @@ System.out.println("filename=" + filename);
 	public synchronized List<String> getReferencedTriggers(String tname) {
 		List<String> list = new ArrayList<String>();
 
+		String sql = "SELECT distinct NAME from user_dependencies WHERE REFERENCED_NAME='" + tname + "' AND TYPE IN ('TRIGGER') ORDER BY NAME";
+
+		if (this.targetSchema != null)
+			sql = "SELECT distinct NAME from all_dependencies WHERE OWNER = '" + this.targetSchema + "' AND REFERENCED_NAME='" + tname + "' AND TYPE IN ('TRIGGER') ORDER BY NAME";
 		try {
        		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery("SELECT distinct NAME from user_dependencies WHERE REFERENCED_NAME='" + tname + "' AND TYPE IN ('TRIGGER') ORDER BY NAME");	
+       		ResultSet rs = stmt.executeQuery(sql);	
 
        		int count = 0;
        		while (rs.next()) {
@@ -1370,6 +1436,7 @@ System.out.println("filename=" + filename);
 	public synchronized String getIndexColumns(String owner, String iname) {
 		String res = "(";
 		if (owner == null) owner = this.getSchemaName().toUpperCase();
+		if (this.targetSchema != null) owner = this.targetSchema; 
 		try {
        		Statement stmt = conn.createStatement();
        		ResultSet rs = stmt.executeQuery("SELECT * from ALL_IND_COLUMNS WHERE " +
@@ -1492,6 +1559,7 @@ System.out.println("filename=" + filename);
 	public synchronized String getDependencySynonym(String owner, String name) {
 		String res = "";
 		if (owner==null) owner = this.getSchemaName().toUpperCase();
+		if (this.targetSchema != null) owner = this.targetSchema;
 		try {
        		Statement stmt = conn.createStatement();
        		ResultSet rs = stmt.executeQuery("SELECT distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + "' and NAME='" + name + "' AND REFERENCED_TYPE IN ('SYNONYM') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME");	
@@ -1506,9 +1574,12 @@ System.out.println("filename=" + filename);
        			if(!rowner.equalsIgnoreCase(this.getSchemaName()))
        				rname = rowner + "." + rname;
 
-       			String qry = "SELECT TABLE_OWNER, TABLE_NAME FROM USER_SYNONYMS WHERE SYNONYM_NAME='" + rname + "'"; 	
+       			String qry = "SELECT TABLE_OWNER, TABLE_NAME FROM USER_SYNONYMS WHERE SYNONYM_NAME='" + rname + "'";
+       			if (this.targetSchema != null)
+       				qry = "SELECT TABLE_OWNER, TABLE_NAME FROM ALL_SYNONYMS WHERE OWNER='" + this.targetSchema + "' AND SYNONYM_NAME='" + rname + "'";
        			List<String[]> list = query(qry);
        			
+       			if (list.size() > 0)
        			res += "<a href='javascript:loadSynonym(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;<span class='rowcountstyle'>" + getTableRowCount(list.get(0)[1], list.get(0)[2]) + "</span><br/>";
        		}
        		
@@ -1601,7 +1672,10 @@ System.out.println("filename=" + filename);
 	}
 
 	public String getSynonym(String sname) {
-		String qry = "SELECT SYNONYM_NAME,  table_owner||'.'||table_name FROM USER_SYNONYMS ORDER BY 1"; 	
+		String qry = "SELECT SYNONYM_NAME,  table_owner||'.'||table_name FROM USER_SYNONYMS ORDER BY 1";
+		if (this.targetSchema != null)
+			qry = "SELECT SYNONYM_NAME,  table_owner||'.'||table_name FROM ALL_SYNONYMS WHERE OWNER='" + this.targetSchema + "' ORDER BY 1";
+		
 		List<String[]> list = query(qry);
 
 		for (String[] syn : list) {
@@ -1676,7 +1750,7 @@ System.out.println("filename=" + filename);
 		}
 
 		String condition = Util.buildCondition(pkColName,  keys);
-		if (condition.equals("ERROR")) {
+		if (condition != null && condition.equals("ERROR")) {
 			if (tname.equals("ERRORCAT")) condition = "ERRORID=" + keys;
 		}
 		qry += " WHERE " + condition;
@@ -1690,6 +1764,9 @@ System.out.println("filename=" + filename);
 		}
 		
 		String qry = "SELECT OBJECT_TYPE FROM USER_OBJECTS WHERE OBJECT_NAME='" + oname + "'";
+		if (this.targetSchema != null)
+			qry = "SELECT OBJECT_TYPE FROM ALL_OBJECTS WHERE OWNER='" + this.targetSchema + "' AND OBJECT_NAME='" + oname + "'";
+		
 		return queryOne(qry);
 	}
 
@@ -1727,6 +1804,7 @@ System.out.println("filename=" + filename);
 			// see if the table is users
 			if (tables.contains(tname)) {
 				owner = schemaName.toUpperCase();
+				if(this.targetSchema != null) owner = this.targetSchema;
 			} else {
 				String syn = this.getSynonym(tname);
 				if (syn != null) {
@@ -2096,7 +2174,12 @@ System.out.println("filename=" + filename);
 		
 		String owner = schemaName.toUpperCase();
 		String cacheKey = "ROWCOUNT." + owner + "." + tname;
-		
+/*		
+		if (isSynonym(tname)) {
+			cacheKey = "ROWCOUNT." + getSynonym(tname);
+		}
+		//if (this.targetSchema != null) owner = this.targetSchema; 
+*/		
 		String cacheValue = stringCache.get(cacheKey);
 		if (cacheValue != null) return cacheValue;
 
@@ -2112,8 +2195,10 @@ System.out.println("filename=" + filename);
 		}
 		
 		String numRows = null;
-
-		numRows = queryOne("SELECT NUM_ROWS FROM USER_TABLES WHERE TABLE_NAME ='" + tname + "'");
+		String sql = "SELECT NUM_ROWS FROM USER_TABLES WHERE TABLE_NAME ='" + tname + "'";
+		if (this.targetSchema != null)
+			sql = "SELECT NUM_ROWS FROM ALL_TABLES WHERE OWNER='" + this.targetSchema + "' AND TABLE_NAME ='" + tname + "'";
+		numRows = queryOne(sql);
 
 		if (numRows==null) numRows = "";
 		else {
@@ -2132,6 +2217,7 @@ System.out.println("filename=" + filename);
 	}
 	
 	public String getTableRowCount(String owner, String tname) {
+		//if (this.targetSchema != null) owner = this.targetSchema;
 		String cacheKey = "ROWCOUNT." + owner + "." + tname;
 		
 		String cacheValue = stringCache.get(cacheKey);
@@ -2373,4 +2459,7 @@ System.out.println("filename=" + filename);
 		return tmp;
 	}
 
+	public String getTargetSchema() {
+		return this.targetSchema;
+	}
 }

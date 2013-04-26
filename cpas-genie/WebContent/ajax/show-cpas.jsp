@@ -150,11 +150,17 @@
 <table>
 <td valign=top>
 <b>Quick Query</b><br/>
-<table style="margin-left: 20px;"><td>
-<% if (cn.isTVS("BATCHCAT")) { %>
+<table style="margin-left: 20px;"><td nowrap>
+<% if (cn.isTVS("BATCH")) { %>
 	<li><a href="Javascript:qr('SELECT * FROM BATCH ORDER BY PROCESSID DESC')">Latest Batches</a></li>
 <% } else { %>
 	<li><span class="nullstyle">Latest Batches</span></li>
+<% } %>
+
+<% if (cn.isTVS("BATCH_QUEUE")) { %>
+	<li><a href="Javascript:qr('SELECT * FROM BATCH_QUEUE ORDER BY SPROCESSID DESC')">Latest Batch Tasks</a></li>
+<% } else { %>
+	<li><span class="nullstyle">Latest Batch Tasks</span></li>
 <% } %>
 
 <% if (cn.isTVS("REQUEST")) { %>
@@ -196,7 +202,7 @@
 <td valign=top>
 <b>Query</b><br/>
 <form target="_blank" action="query.jsp" method="post">
-<textarea style="margin-left:20px;" name="sql" cols=50 rows=4>SELECT * FROM TAB</textarea>
+<textarea style="margin-left:20px;" name="sql" cols=50 rows=6>SELECT * FROM TAB</textarea>
 <input type="submit">
 </form>
 

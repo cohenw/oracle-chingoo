@@ -22,6 +22,8 @@
 	String catalog = cn.getSchemaName();
 
 	String qry = "SELECT TABLE_OWNER, TABLE_NAME FROM USER_SYNONYMS WHERE SYNONYM_NAME='" + syn +"'";
+	if (cn.getTargetSchema() != null)
+		qry = "SELECT TABLE_OWNER, TABLE_NAME FROM ALL_SYNONYMS WHERE OWNER='" + cn.getTargetSchema() + "' AND SYNONYM_NAME='" + syn +"'";
 	List<String[]> list = cn.query(qry);
 	
 	String oname = "";

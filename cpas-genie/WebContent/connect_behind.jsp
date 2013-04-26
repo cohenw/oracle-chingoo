@@ -38,10 +38,11 @@
 	String username = request.getParameter("username");
 	String password = request.getParameter("password");
 	String email = request.getParameter("email");
+	String targetSchema = request.getParameter("targetSchema");
 	
 	String ipAddress = Util.getIpAddress(request);
 	
-	cn = new Connect(session, url, username, password, ipAddress);
+	cn = new Connect(session, url, username, password, ipAddress, true, targetSchema);
 	cn.setUrl(request.getRequestURL().toString());
 	cn.serverUrl = Util.getURL(request);
 	String ua = request.getHeader("user-agent");
