@@ -27,7 +27,7 @@
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 	
-		cn2 = new Connect(session, url, username, password, Util.getIpAddress(request), false);	
+		cn2 = new Connect(session, url, username, password, Util.getIpAddress(request), false, null);	
 	
 		connected = cn2.isConnected();
 
