@@ -98,6 +98,7 @@ public class Connect implements HttpSessionBindingListener {
 	public ContentSearchTrigger contentSearchTrigger;
 	
 	private boolean workSheetTableCreated = false;
+	private boolean linkTableCreated = false;
 	private String savedHistory = "";
 	private String email = "";
 	private String url = "";
@@ -2098,6 +2099,54 @@ System.out.println("filename=" + filename);
         conn.setReadOnly(true);
 	}
 
+	public void createLinkTable() throws SQLException {
+		String cnt = this.queryOne("SELECT count(*) FROM USER_TABLES WHERE TABLE_NAME='GENIE_LINK'", false);
+		if (!cnt.equals("0")) return;
+        conn.setReadOnly(false);
+		String stmt1 = 
+				"CREATE TABLE GENIE_LINK (	"+
+				"TNAME		VARCHAR2(30), " +
+				"SQL_STMTS	VARCHAR2(4000), " +
+				"PRIMARY KEY (TNAME) )";
+
+		Statement stmt = conn.createStatement();
+		stmt.execute(stmt1);
+		stmt.close();
+		
+		stmt.close();		
+        conn.setReadOnly(true);
+        linkTableCreated = true;
+	}
+
+	public void saveLink(String tname, String sqlStmt) throws SQLException {
+		if (!linkTableCreated) createLinkTable();
+		try {
+	        conn.setReadOnly(false);
+
+	        Statement stmt = conn.createStatement();
+	        String sql = "DELETE FROM GENIE_LINK WHERE TNAME='" + Util.escapeQuote(tname) + "'";
+	        stmt.executeUpdate(sql);
+	        stmt.close();
+	        
+	        if (!sqlStmt.trim().equals("")) {
+	        
+	        	sql = "INSERT INTO GENIE_LINK VALUES (?,?)";
+	        	PreparedStatement pstmt = conn.prepareStatement(sql);
+	        
+	        	pstmt.setString(1, tname);
+	        	pstmt.setString(2, sqlStmt);
+	        	pstmt.executeUpdate();
+		        pstmt.close();
+	        }
+	        
+	        conn.setReadOnly(true);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public void createTable4WorkSheet() {
 		String stmt1 = 
 				"CREATE TABLE GENIE_WORK_SHEET (	"+

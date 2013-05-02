@@ -279,7 +279,7 @@ Found: <%= filteredCount %>
 				String val = q.getValue(i);
 				String valDisp = Util.escapeHtml(val);
 				if (val != null && val.endsWith(" 00:00:00")) valDisp = val.substring(0, val.length()-9);
-				if (val==null) valDisp = "<span class='nullstyle'>null</span>";
+				if (val==null || val.equals("")) valDisp = "<span class='nullstyle'>null</span>";
 				if (val !=null && val.length() > 50) {
 					id = Util.getId();
 					String id_x = Util.getId();

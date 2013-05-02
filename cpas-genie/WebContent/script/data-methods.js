@@ -225,6 +225,18 @@
     	//$('#div-child').toggle();
     }
 
+    function toggleCustom() {
+    	var img = $("#img-custom").attr("src"); 
+    	//alert(img);
+    	if (img.indexOf("minus") > 0) {
+    		$("#img-custom").attr("src","image/plus.gif");
+    		$('#div-custom').slideUp();
+    	} else {
+    		$("#img-custom").attr("src","image/minus.gif");
+    		$('#div-custom').slideDown();
+    	}
+    }
+
     function toggleText(arg1, arg2) {
     	$('#'+arg1).toggle();
     	$('#'+arg2).toggle();

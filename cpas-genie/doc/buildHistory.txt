@@ -258,3 +258,6 @@ Build CPAS1074
 	Login as CPAS_WEB and switch to target schema
 	Table detail for COMMON schema
 
+Build CPAS1075
+	GENIE_LINK table for custom data link
+
