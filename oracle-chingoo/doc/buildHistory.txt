@@ -193,4 +193,10 @@ Build 1060
 	Column index for Table and View
 	Query does not hide edit box when the result set is not fully loaded
 	Replaced JDBC driver - ojdbc5.jar
-	
+
+Build 1061
+	Fixed OpenQuery() issues for sql-query
+	source code line number for FireFox
+	search source code with '
+	GENIE_LINK table for custom data link
+

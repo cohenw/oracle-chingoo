@@ -6,7 +6,41 @@
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
+<%!
+public String getQryStmt(String sql, Query q) {
+//	System.out.println("tname="+tname);
+	
+	// replace [colname] to 'XXX' where XXX is the value of colname
+	boolean needInput = false;
+	List<String> params = new ArrayList<String>();
+	
+	String tmp ="";
+	if (sql.contains("[") && sql.contains("]")) {
+		needInput = true;
 
+		int prev = 0;
+		while (true) {
+			int start = sql.indexOf("[", prev);
+			if (start <0) break;
+			int end = sql.indexOf("]", start);
+			if (end <0) break;
+			tmp = sql.substring(start+1, end);
+		
+			params.add(tmp);
+			prev = end+1;
+		}
+	}
+	
+	System.out.println("params=" + params);
+	for (String param: params) {
+		sql = sql.replaceAll("\\[" + param + "\\]" , q.getValue(param));
+	}
+	
+	
+	return sql;
+}
+
+%>
 <%
 	int counter = 0;
 	Connect cn = (Connect) session.getAttribute("CN");
@@ -66,6 +100,9 @@
 	if (rowid!=null) {
 		title = table + " " + rowid;
 	}
+
+	// custom link
+	String customLinks = cn.queryOne("SELECT SQL_STMTS FROM CHINGOO_LINK WHERE TNAME ='" + table + "'", false);
 %>
 
 
@@ -378,8 +415,43 @@ if (cn.isViewTable(table)) {
 	</div>
 <% } %>
 
+<% if (customLinks != null) {%>
+	<b><a style="margin-left: 20px;" href="Javascript:toggleCustom()">Custom Link <img id="img-custom" border=0 src="image/minus.gif"></a></b><br/>
+<div id="div-custom">
+<%
+	StringTokenizer st = new StringTokenizer(customLinks, ";");
+
+	while (st.hasMoreTokens()) {
+		String stmt = st.nextToken();
+		List<String> tbls = Util.getTables(stmt);
+		
+		
+		id = Util.getId();
+		String refTab = tbls.get(0);
+		String refsql = getQryStmt(stmt, q);
+%>
+<div id="div-custom-<%=id%>">
+<a style="margin-left: 40px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
+
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle border=0 title="<%=refsql%>"/></a>
+&nbsp;&nbsp;<a href="javascript:hideDiv('div-child-<%=id%>')"><img src="image/clear.gif" border=0/></a>
+<div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>
+<div style="display: none;" id="hide-<%=id%>"></div>
+<div style="display: none;" id="sort-<%=id%>"></div>
+<div style="display: none;" id="sortdir-<%=id%>">0</div>
+<div style="display: none;" id="mode-<%=id%>">sort</div>
+<div style="display: none;" id="ori-<%=id%>">H</div>
+<div id="div-<%=id%>" style="margin-left: 40px; display: none;"></div>
+<br/>
+</div>
+<% 	} %>
+</div>
+<%} %>
+
 <br/><br/>
 <a href="Javascript:window.close()">Close</a>
+&nbsp;&nbsp;&nbsp;
+<a href="custom_link.jsp?tname=<%= table %>" target="_blank">Edit Custom DataLink</a>
 <br/><br/>
 
 <script type="text/javascript">
