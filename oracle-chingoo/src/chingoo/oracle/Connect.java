@@ -1922,6 +1922,8 @@ public class Connect implements HttpSessionBindingListener {
 		stmt.close();		
         conn.setReadOnly(true);
         linkTableCreated = true;
+        
+        this.tables.add("CHINGOO_LINK");
 	}
 
 	public void saveLink(String tname, String sqlStmt) throws SQLException {
