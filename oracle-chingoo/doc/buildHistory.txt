@@ -198,5 +198,5 @@ Build 1061
 	Fixed OpenQuery() issues for sql-query
 	source code line number for FireFox
 	search source code with '
-	GENIE_LINK table for custom data link
+	CHINGOO_LINK table for custom data link
 
