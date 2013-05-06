@@ -2,6 +2,8 @@ package chingoo.oracle;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -148,9 +150,118 @@ public class Util {
 		return tables;
 	}
 	
+	public static ArrayList<Range> extractComments(String text) {
+
+		ArrayList<Range> list = new ArrayList<Range>();
+
+		// extract multiple line comments - ex: /* .... */
+		int last = 0;
+		int start = 0;
+		while (true) {
+			start = text.indexOf("/*", last);
+			
+			if (start < 0) break;
+			
+			int end = text.indexOf("*/", start+2);
+			if (end < 0) break;
+			
+			end +=2;
+			
+			//System.out.println(start + " - " + (end));
+			list.add(new Range(start, end, 'C'));
+			last = end;
+		}
+		
+		// extract single line comments
+		last = 0;
+		while (true) {
+			start = text.indexOf("--", last);
+			
+			if (start < 0) break;
+			
+			int end = text.indexOf("\n", start+2);
+			//if (end < 0) break;
+			if (end < 0) end = text.length()-1;
+
+			// check if start is in between any of comment
+			boolean isComment = false;
+			for (int i=0;i<list.size();i++) {
+				if (list.get(i).start < start && list.get(i).end > start) {
+					isComment = true;
+					break;
+				}
+			}
+			if (isComment) {
+				last = start+1;
+				continue;
+			}
+			
+			end += 1;
+			
+			//System.out.println(start + " : " + end);
+			list.add(new Range(start, end, 'C'));
+			last = end;
+		}
+		
+		// extract string literals
+		// extract single line comments
+		last = 0;
+		while (true) {
+			start = text.indexOf("'", last);
+			
+			if (start < 0) break;
+
+			// check if start is in between any of comment
+			boolean isComment = false;
+			for (int i=0;i<list.size();i++) {
+				if (list.get(i).start < start && list.get(i).end > start) {
+					isComment = true;
+					break;
+				}
+			}
+			if (isComment) {
+				last = start+1;
+				continue;
+			}
+			
+			int end = text.indexOf("'", start+1);
+			if (end < 0) break;
+			
+			end += 1;
+			
+			// System.out.println(start + " # " + end + ":" + text.substring(start,end));
+			list.add(new Range(start, end, 'S'));
+			last = end;
+		}		
+		
+		Collections.sort(list, new Comparator<Range>(){
+			 
+            public int compare(Range o1, Range o2) {
+        		return o1.start - o2.start;
+            }
+ 
+        });		
+		return list;
+	}
+
 	public static String getMainTable(String sql) {
 		String tname = "";
-		String temp=sql.replaceAll("[\n\r\t]", " ").toUpperCase();
+		
+		// remove comments
+		ArrayList<Range> ranges = extractComments(sql);
+		// build string that stripped out comment and string literals
+		StringBuffer sb2 = new StringBuffer();
+		int start=0;
+		for (Range r:ranges) {
+			if (start > r.start) continue;
+			sb2.append(sql.substring(start, r.start));
+			start = r.end;
+		}
+		sb2.append( sql.substring(start));
+		String s2 = sb2.toString();		
+//System.out.println("s2=" + s2);		
+		String temp=s2.replaceAll("[\n\r\t]", " ").toUpperCase();
+//		String temp=sql.replaceAll("[\n\r\t]", " ").toUpperCase();
 
 		String froms[] = temp.split(" FROM ");
 		
@@ -224,7 +335,7 @@ public class Util {
 	}
 
 	public static String getVersionDate() {
-		return "May 2, 2013";
+		return "May 6, 2013";
 	}
 
 }

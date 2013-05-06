@@ -126,6 +126,36 @@ for (int k=0;k<types.size();k++) {
   function tDiv(id) {
 	  $("#"+id).toggle();
   }
+
+  function lineIE() {
+	  lines="";
+	  for (var i=1;i <= <%=lines_pkg%>;i++)
+		  lines += i + "\n";
+	  $("#colnum_PACKAGE").html('<pre>' + lines + '</pre>');
+	  
+	  lines="";
+	  for (var i=1;i <= <%=lines_pkgbody%>;i++)
+		  lines += i + "\n";
+	  $("#colnum_PACKAGEBODY").html('<pre>' + lines + '</pre>');
+
+	  lines="";
+	  for (var i=1;i <= <%=lines_procedure%>;i++)
+		  lines += i + "\n";
+	  $("#colnum_PROCEDURE").html('<pre>' + lines + '</pre>');
+
+	  lines="";
+	  for (var i=1;i <= <%=lines_function%>;i++)
+		  lines += i + "\n";
+	  $("#colnum_FUNCTION").html('<pre>' + lines + '</pre>');
+  }
+  
+$(document).ready(function() {
+  if (navigator.userAgent.indexOf("MSIE") > 0) {
+	  //alert(navigator.userAgent.indexOf("MSIE"));
+	  lineIE();
+	  return;
+  }
+
 /*
   if ($.browser.msie && !$.browser.webkit) {
 	  return;
@@ -150,8 +180,10 @@ for (int k=0;k<types.size();k++) {
   for (var i=1;i <= <%=lines_function%>;i++)
 	  lines += i + "\n";
   $("#colnum_FUNCTION").html('   ' + lines);
-  
+});
+
 </script>
+
 
 <script type="text/javascript">
 
