@@ -383,6 +383,7 @@ System.out.println("filename=" + filename);
    		PrintWriter out = null; 
    		try {
    			out = new PrintWriter(new FileWriter("/tmp/cpas-genie/" + filename));
+   			out.print(this.getUrlString() + "\n");
    			out.print(qryHist);
    			out.flush();
    			out.close();
@@ -2116,6 +2117,8 @@ System.out.println("filename=" + filename);
 		stmt.close();		
         conn.setReadOnly(true);
         linkTableCreated = true;
+        
+        this.tables.add("GENIE_LINK");
 	}
 
 	public void saveLink(String tname, String sqlStmt) throws SQLException {

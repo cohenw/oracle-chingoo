@@ -147,7 +147,10 @@ public String getQryStmt(String sql, Query q) {
 	}
 	
 	// custom link
-	String customLinks = cn.queryOne("SELECT SQL_STMTS FROM GENIE_LINK WHERE TNAME ='" + table + "'", false);
+	String customLinks = null;
+	
+	if (cn.isTVS("GENIE_LINK"))
+		customLinks = cn.queryOne("SELECT SQL_STMTS FROM GENIE_LINK WHERE TNAME ='" + table + "'", false);
 %>
 
 
