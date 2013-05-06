@@ -260,4 +260,7 @@ Build CPAS1074
 
 Build CPAS1075
 	GENIE_LINK table for custom data link
-
+	handle comments in query
+	code, code2 lookup for CPAS_CODE
+	Bug fix for source line number for IE and FF
+	Notice for IE (Genie works best with Chrome / FireFox)

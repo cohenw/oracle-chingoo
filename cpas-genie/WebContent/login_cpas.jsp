@@ -147,6 +147,7 @@
 <option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1521/SDCERA">S-ORA-002.SDCERA</option>
 <option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1521/SSGQA">S-ORA-002.SSGQA</option>
 <option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1526/KCERA">S-ORA-002.KCERA</option>
+<option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED">S-ORA-002.MERCED</option>
 <option></option>
 
 <option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR">S-ORA-003.BALTIMOR</option>
@@ -291,10 +292,10 @@ MCERA<br/>
 <br/>
 
 MERCED<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED', 'CLIENT_55MD')">CLIENT_55MD@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED', 'CLIENT_55MDT')">CLIENT_55MDT@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED', 'CLIENT_55MDM')">CLIENT_55MDM@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED', 'CLIENT_55MDC')">CLIENT_55MDC@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED', 'CLIENT_55MD')">CLIENT_55MD@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED', 'CLIENT_55MDT')">CLIENT_55MDT@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED', 'CLIENT_55MDM')">CLIENT_55MDM@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED', 'CLIENT_55MDC')">CLIENT_55MDC@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED</a>
 <br/>
 
 NAV Canada <br/>

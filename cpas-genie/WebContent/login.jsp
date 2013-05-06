@@ -79,6 +79,14 @@
   </head>
   
   <body>
+  
+<div id="ienotice" style="display: none;">
+<h1>Genie works best with 
+<a target="_blank" href="https://www.google.com/intl/en/chrome/browser/"><img src="https://www.google.com/intl/en/chrome/assets/common/images/chrome_logo_2x.png"></a> 
+or 
+<a target="_blank" href="http://www.mozilla.org/en-US/firefox/new/"><img src="http://mozorg.cdn.mozilla.net/media/img/firefox/new/header-firefox.png"></a></h1>
+</div>  
+  
 <% if (isCPAS) { %>
 	<img src="http://www.cpas.com/images/layout_01.jpg">
 <% } %>	
@@ -143,6 +151,7 @@
 <option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1521/SDCERA">S-ORA-002.SDCERA</option>
 <option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1521/SSGQA">S-ORA-002.SSGQA</option>
 <option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1526/KCERA">S-ORA-002.KCERA</option>
+<option value="jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED">S-ORA-002.MERCED</option>
 <option></option>
 
 <option value="jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR">S-ORA-003.BALTIMOR</option>
@@ -287,10 +296,10 @@ MCERA<br/>
 <br/>
 
 MERCED<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED', 'CLIENT_55MD')">CLIENT_55MD@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED', 'CLIENT_55MDT')">CLIENT_55MDT@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED', 'CLIENT_55MDM')">CLIENT_55MDM@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED', 'CLIENT_55MDC')">CLIENT_55MDC@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/MERCED</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED', 'CLIENT_55MD')">CLIENT_55MD@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED', 'CLIENT_55MDT')">CLIENT_55MDT@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED', 'CLIENT_55MDM')">CLIENT_55MDM@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED', 'CLIENT_55MDC')">CLIENT_55MDC@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED</a>
 <br/>
 
 NAV Canada <br/>
@@ -439,6 +448,13 @@ Please contact Spencer Hwang(<a href="mailto:spencerh@cpas.com">spencerh@cpas.co
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 
+  $(document).ready(function () {
+	  if (navigator.userAgent.indexOf("MSIE") > 0) {
+		  $("#ienotice").slideDown();
+	  }
+  });
+  
+  
 </script>
 
 

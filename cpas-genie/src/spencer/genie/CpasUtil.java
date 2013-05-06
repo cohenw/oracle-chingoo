@@ -91,7 +91,9 @@ public class CpasUtil {
 			{"TAXTYPE", "TAXTYPE"},
 			{"REMARKID", "REMARK"},
 			{"CLNT", "CLIENT"},
-			{"RULEID", "RULE"}
+			{"RULEID", "RULE"},
+			{"CODE", "CPAS_CODE"},
+			{"CODE2", "CPAS_CODE"}
 	};
 
 	// for special case (with table name)
@@ -275,6 +277,12 @@ public class CpasUtil {
 				if (value.equals(tranId[i][0])) return tranId[i][1];
 			}
 			return null;
+		} else if (temp.endsWith(".CODE") && !tname.equals("CPAS_CODE")) {
+			String qry = "SELECT CAPTION FROM CPAS_CODE WHERE GRUP='" + value + "'";
+			return cn.queryOne(qry);
+		} else if (temp.equals("CPAS_TABLE_COL.CODE2")) {
+			String qry = "SELECT CAPTION FROM CPAS_CODE WHERE GRUP='" + value + "'";
+			return cn.queryOne(qry);
 		}
 		
 		String key = (tname + "." + cname).toUpperCase();

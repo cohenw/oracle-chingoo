@@ -43,7 +43,7 @@ Please select a Table to see the detail.
 	}
 	
 	boolean hasCpas = cn.hasCpas(tname);
-System.out.println("hasCpas=" +hasCpas);
+//System.out.println("hasCpas=" +hasCpas);
 	String cpasComment = cn.getCpasComment(table);
 	boolean isTempTable = cn.isTempTable(table);
 %>

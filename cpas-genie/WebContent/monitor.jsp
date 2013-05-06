@@ -85,7 +85,9 @@ public String extractJS(String str) {
     		while  (iterator.hasNext()) {
     			idx ++;
     			QueryLog ql = (QueryLog) iterator.next();
-				qry += ql.getQueryString() + "; " + ql.getCount() + "<br/>";
+//				qry += ql.getQueryString() + "; " + ql.getCount() + "<br/>";
+				qry += new HyperSyntax().getHyperSyntax(cn, ql.getQueryString(), "SQL") + "; " + ql.getCount() + "<br/>";
+				
     		}
     	}		
     	String savedHistory = cn.getAddedHistory();
@@ -107,7 +109,8 @@ public String extractJS(String str) {
 	</td>
 	<td nowrap valign=top class="<%= rowClass%>"><%= extractJS(savedHistory) %>&nbsp;</td>
 	<td nowrap valign=top class="<%= rowClass%>"><%= map.size() %>&nbsp;</td>
-	<td valign=top class="<%= rowClass%>"><p style="white-space:pre;"><%= qry %>&nbsp;</p></td>
+<!--	<td valign=top class="<%= rowClass%>"><p style="white-space:pre;"><%= qry %>&nbsp;</p></td>  -->
+	<td valign=top class="<%= rowClass%>"><div style="font-family: Consolas;"><%= qry %>&nbsp;</div></td>
 </tr>
 
 <% 
