@@ -13,7 +13,7 @@
 	String key = request.getParameter("key");
 	String sql = "SELECT SOURCE, CAPTION, SELECTSTMT FROM CPAS_CODE WHERE GRUP = '" + key + "'";
 	
-	List<String[]> res = cn.query(sql);
+	List<String[]> res = cn.query(sql, false);
 
 	String id = Util.getId();
 	String source = res.get(0)[1];

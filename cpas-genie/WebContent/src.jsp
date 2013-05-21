@@ -34,7 +34,7 @@
 	String q = "SELECT DISTINCT TYPE FROM USER_SOURCE WHERE NAME='" + name +"'  ORDER BY TYPE";
 	if (owner != null) q = "SELECT DISTINCT TYPE FROM ALL_SOURCE WHERE OWNER='" + owner + "' AND NAME='" + name +"' ORDER BY TYPE";
 
-	List<String[]> types = cn.query(q);
+	List<String[]> types = cn.query(q, false);
 	int lines_pkg = 0;
 	int lines_pkgbody = 0;
 	int lines_procedure = 0;

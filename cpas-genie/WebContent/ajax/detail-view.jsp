@@ -29,6 +29,7 @@
 	
 	boolean hasCpas = cn.hasCpas(view);
 	String cpasComment = cn.getCpasComment(view);
+	List<String> refProc = cn.getReferencedProc(view);
 %>
 <div id="objectTitle" style="display:none">VIEW: <%= view %></div>
 <h2>VIEW: <%= view %> &nbsp;&nbsp;<a href="Javascript:runQuery('<%=catalog%>','<%=view%>')"><img border=0 src="image/icon_query.png" title="query"></a>
@@ -165,6 +166,48 @@
 </tr>
 </table>
 <br/>
+
+<% 
+	if (refProc.size() > 0) { 
+%>
+<img src="image/Genie-icon.png"> <b>Referenced By</b>
+<a href="Javascript:toggleDiv('imgRef','divRef')"><img id="imgRef" border=0 src="image/minus.gif"></a>
+<div id="divRef">
+<table border=0 width=800>
+<td width=4%>&nbsp;</td>
+<td valign=top width=32%>
+<%
+	int listSize = (refProc.size() / 2) + 1;
+	int cnt = 0;
+	int cols = 1;
+	for (int i=0; i<refProc.size(); i++) {
+		String refPrc = refProc.get(i);
+		String temp[] = refPrc.split("\\.");
+		cnt++;
+%>
+
+<% if ((cnt-1)>=listSize) { %>
+		</td><td valign=top width=50%>
+<%
+		cnt = 1;
+		cols ++;
+	} 
+%>
+
+		<a target=_blank href="package-browser.jsp?name=<%= refPrc %>"><%= refPrc %></a>&nbsp;&nbsp;<%= cn.getCRUD(temp[0],temp[1].toUpperCase(), view) %><br/>		
+<% }
+	for (; cols<=2; cols++) {
+%>
+	</td><td valign=top width=50%>
+<% } %>
+
+</td>
+</table>
+</div>
+
+<%
+}
+%>
 
 <div style="display: none;">
 <form name="form0" id="form0" action="query.jsp" target="_blank">

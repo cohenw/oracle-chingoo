@@ -9,6 +9,7 @@
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
 
+	boolean hasGenieTable = cn.isTVS("GENIE_PA");
 	String owner = request.getParameter("owner");
 	String name = request.getParameter("name");
 
@@ -33,6 +34,9 @@
 <div id="objectTitle" style="display:none"><%= typeName %>: <%= name %></div>
 <h2><%= typeName %>: <%= name %> &nbsp;&nbsp;<a href="<%=sourceUrl%>" target="_blank"><img border=0 src="image/icon_query.png" title="Source code"></a>
 <a href="pop.jsp?type=PACKAGE&key=<%=name%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
+<% if (hasGenieTable) { %>
+<a target=_blank href="package-browser.jsp?name=<%= name %>">Package Browser</a>
+<% } %>
 </h2>
 
 
@@ -48,7 +52,7 @@
 		String q = "SELECT DISTINCT TYPE FROM USER_SOURCE WHERE NAME='" + name +"' ORDER BY TYPE";
 		if (owner != null) q = "SELECT DISTINCT TYPE FROM ALL_SOURCE WHERE OWNER='" + owner + "' AND NAME='" + name +"' ORDER BY TYPE";
 
-		List<String[]> types = cn.query(q);
+		List<String[]> types = cn.query(q, false);
 %>
 <%
 for (int k=0;k<types.size();k++) {
@@ -57,7 +61,7 @@ for (int k=0;k<types.size();k++) {
 	String qry2 = "SELECT TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME='" + name +"' AND TYPE = '" + type + "' ORDER BY TYPE, LINE";
 	if (owner != null) qry2 = "SELECT TYPE, LINE, TEXT FROM ALL_SOURCE WHERE OWNER='" + owner + "' AND NAME='" + name +"' AND TYPE = '" + type + "' ORDER BY TYPE, LINE";
 
-	List<String[]> list2 = cn.query(qry2);
+	List<String[]> list2 = cn.query(qry2, false);
 	
 	String text = "";
 	for (int i=0;i<list2.size();i++) {
@@ -69,7 +73,7 @@ for (int k=0;k<types.size();k++) {
 %>
 <b><a href="javascript:tDiv('div-<%=k%>')"><%= type %></a></b><br/>
 <div id="div-<%=k%>" style="display: block;">
-<pre style="font-family: Consolas;"><%=new HyperSyntax().getHyperSyntax(cn, text, type)%></pre>
+<pre style="font-family: Consolas;"><%=new HyperSyntax().getHyperSyntax(cn, text, type, name)%></pre>
 </div>
 <%
 }
@@ -98,7 +102,12 @@ for (int k=0;k<types.size();k++) {
 		cnt = 1;
 	} 
 %>
-	<a target="_blank" href="<%= sourceUrl%>#<%= list.get(i).toLowerCase() %>"><%= list.get(i).toLowerCase() %></a><br/>		
+	<a target="_blank" href="<%= sourceUrl%>#<%= list.get(i).toLowerCase() %>"><%= list.get(i).toLowerCase() %></a>
+	&nbsp;
+<% if (hasGenieTable) { %>	
+ 	<a target="_blank" href="package-browser.jsp?name=<%= name + "." + list.get(i) %>"><img src="image/link.gif"></a>
+
+<% } %> 	<br/>		
 <% }
 }
 %>
@@ -120,10 +129,10 @@ for (int k=0;k<types.size();k++) {
 </tr>
 <tr>
 	<td>&nbsp;</td>
-	<td valign=top><%= cn.getDependencyPackage(owner, name) %></td>
-	<td valign=top><%= cn.getDependencyTable(owner, name) %></td>
-	<td valign=top><%= cn.getDependencyView(owner, name) %></td>
-	<td valign=top><%= cn.getDependencySynonym(owner, name) %></td>
+	<td valign=top nowrap><%= cn.getDependencyPackage(owner, name) %></td>
+	<td valign=top nowrap><%= cn.getDependencyTable(owner, name) %></td>
+	<td valign=top nowrap><%= cn.getDependencyView(owner, name) %></td>
+	<td valign=top nowrap><%= cn.getDependencySynonym(owner, name) %></td>
 </tr>
 </table>
 <br/>

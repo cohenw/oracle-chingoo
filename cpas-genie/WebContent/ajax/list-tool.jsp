@@ -38,6 +38,7 @@
 
 	list.add("");
 	list.add("Saved Query");
+	list.add("Package Analysis");
 //	list.add("Preferenceses");
 
 %>

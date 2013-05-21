@@ -31,7 +31,7 @@
 	if (subQry==null) subQry="";
 	if (as==null) as="";
 
-	List<String[]> q = cn.query("SELECT caption, treekey FROM TREEVIEW WHERE SDI='"+sdi+"' and actionid="+actionid);
+	List<String[]> q = cn.query("SELECT caption, treekey FROM TREEVIEW WHERE SDI='"+sdi+"' and actionid="+actionid, false);
 	
 	if (actionid==null || actionid.equals("")) {
 		if (actionid==null && tv != null) {
@@ -48,7 +48,7 @@
 		if (subQry==null) subQry="";
 		if (as==null) as="";
 
-		q = cn.query("SELECT caption, treekey FROM CUSTOMTREEVIEW WHERE SDI='"+sdi+"' and actionid="+actionid);
+		q = cn.query("SELECT caption, treekey FROM CUSTOMTREEVIEW WHERE SDI='"+sdi+"' and actionid="+actionid, false);
 	}
 	
 	String caption = "";
@@ -72,7 +72,7 @@
 	String userid = "";
 	String language = "";
 		
-	q = cn.query("SELECT tagname, tagcvalue, tagnvalue, tagdvalue, tagtype FROM CONNSESSION_DATA A WHERE SESSIONID=(SELECT  MAX(SESSIONID) FROM CONNSESSION)");
+	q = cn.query("SELECT tagname, tagcvalue, tagnvalue, tagdvalue, tagtype FROM CONNSESSION_DATA A WHERE SESSIONID=(SELECT  MAX(SESSIONID) FROM CONNSESSION)", false);
 	for (String[] row : q) {
 		String value = row[2];
 		if (row[5].equals("N")) value = row[3];

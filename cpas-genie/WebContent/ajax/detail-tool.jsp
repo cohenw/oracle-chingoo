@@ -91,3 +91,7 @@
 <% if (tool.equalsIgnoreCase("Preferenceses")) { %>
 <jsp:include page="pref.jsp"/>
 <% } %>
+
+<% if (tool.equalsIgnoreCase("Package Analysis")) { %>
+<jsp:include page="refresh-package-table.jsp"/>
+<% } %>

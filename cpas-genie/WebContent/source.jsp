@@ -18,7 +18,7 @@
 	String q = "SELECT DISTINCT TYPE FROM USER_SOURCE WHERE NAME='" + name +"' ORDER BY TYPE";
 	if (owner != null) q = "SELECT DISTINCT TYPE FROM ALL_SOURCE WHERE OWNER='" + owner + "' AND NAME='" + name +"' ORDER BY TYPE";
 
-	List<String[]> types = cn.query(q);
+	List<String[]> types = cn.query(q, false);
 %>
 <html>
 <head>
@@ -51,7 +51,7 @@ for (int k=0;k<types.size();k++) {
 	String qry = "SELECT TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME='" + name +"' AND TYPE = '" + type + "' ORDER BY TYPE, LINE";
 	if (owner != null) qry = "SELECT TYPE, LINE, TEXT FROM ALL_SOURCE WHERE OWNER='" + owner + "' AND NAME='" + name +"' AND TYPE = '" + type + "' ORDER BY TYPE, LINE";
 
-	List<String[]> list = cn.query(qry);
+	List<String[]> list = cn.query(qry, false);
 	
 	String text = "";
 	for (int i=0;i<list.size();i++) {
