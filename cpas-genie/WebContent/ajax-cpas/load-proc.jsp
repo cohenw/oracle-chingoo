@@ -95,7 +95,7 @@ for (int i=0;i<list.size();i++) {
 <br/><br/>
 <% id = Util.getId(); %>
 <b><a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
-<div id="div-<%=id %>" style="display: none; margin-left: 20px;">
+<div id="div-<%=id %>" style="display: none; margin-left: 20px; background-color: #eeeeee;">
 <%
 for (int i=0;i<proc0.size();i++) {
 	int start = Integer.parseInt(proc0.get(i)[1]);
