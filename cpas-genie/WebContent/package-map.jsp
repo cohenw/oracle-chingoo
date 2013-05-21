@@ -3,7 +3,6 @@
 	pageEncoding="utf-8"%>
 
 <%!
-
 public void DFS(Connect cn, String pkg, String prc, ArrayList<PTree> pt, HashSet<String> explored, ArrayList<String> path, int level) {
 
 	if (level >=5) return;
@@ -204,7 +203,7 @@ function hi_off(v) {
 </h2>
 
 <b><a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
-<div id="div-<%=id %>" style="display: none; margin-left: 20px;">
+<div id="div-<%=id %>" style="display: none; margin-left: 20px; background-color: #eeeeee;">
 <%
 for (int i=0;i<proc0.size();i++) {
 	int start = Integer.parseInt(proc0.get(i)[1]);
@@ -313,7 +312,7 @@ for (int i=0;i<list0.size();i++) {
 	
 	String q1 = "SELECT TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE FROM GENIE_PA_TABLE WHERE PACKAGE_NAME='" + pkg +"' AND PROCEDURE_NAME='" + prc + "' ORDER BY table_name";
 //	System.out.println(q);
-List<String[]> list = cn.query(q, false);
+List<String[]> list = cn.query(q1, false);
 
 for (int k=0;k<list.size();k++) {
 		String tname = list.get(k)[1];
