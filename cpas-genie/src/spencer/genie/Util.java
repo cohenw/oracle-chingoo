@@ -379,11 +379,11 @@ public class Util {
 	}
 
 	public static String getBuildNo() {
-		return "CPAS-1075";
+		return "CPAS-1076";
 	}
 
 	public static String getVersionDate() {
-		return "May 2, 2013";
+		return "May 21, 2013";
 	}
 
 }

@@ -64,7 +64,7 @@
 <%
 	//qry = "SELECT OBJECT_NAME FROM USER_OBJECTS WHERE object_type='SYNONYM' AND OBJECT_NAME LIKE '%" + Util.escapeQuote(keyword) +"%' ORDER BY OBJECT_NAME";
 	qry = "SELECT SYNONYM_NAME, TABLE_OWNER, TABLE_NAME FROM USER_SYNONYMS WHERE SYNONYM_NAME LIKE '%" + Util.escapeQuote(keyword) +"%' ORDER BY 1";
-	List<String[]> lst0 = cn.query(qry);
+	List<String[]> lst0 = cn.query(qry, false);
 
 	for (String[] rec : lst0) {
 		String sname = rec[1];
@@ -81,7 +81,7 @@
 <b>Column:</b><br/>
 <%
 	qry = "SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION, DATA_SCALE, OWNER FROM ALL_TAB_COLUMNS WHERE COLUMN_NAME='" + Util.escapeQuote(keyword) +"' ORDER BY TABLE_NAME";
-	List<String[]> lst = cn.query(qry);
+	List<String[]> lst = cn.query(qry, false);
 	
 	for (String[] rec : lst) {
 		String owner = rec[7];
@@ -119,7 +119,7 @@
 <b>Table Comments:</b><br/>
 <%
 	qry = "SELECT TABLE_NAME, COMMENTS FROM USER_TAB_COMMENTS WHERE UPPER(COMMENTS) LIKE '%" + Util.escapeQuote(keyword) +"%' ORDER BY TABLE_NAME";
-	lst = cn.query(qry);
+	lst = cn.query(qry, false);
 
 	for (String[] rec : lst) {
 		String tname = rec[1];
@@ -136,7 +136,7 @@
 <b>Column Comments:</b><br/>
 <%
 	qry = "SELECT TABLE_NAME, COLUMN_NAME, COMMENTS FROM USER_COL_COMMENTS WHERE UPPER(COMMENTS) LIKE '%" + Util.escapeHtml(keyword) +"%' ORDER BY TABLE_NAME";
-	lst = cn.query(qry);
+	lst = cn.query(qry, false);
 
 	for (String[] rec : lst) {
 		String tname = rec[1];

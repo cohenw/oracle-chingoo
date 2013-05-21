@@ -39,7 +39,7 @@ public class ContentSearchTrigger {
 		running = true;
 		this.progressStr = "";
 
-		List<String[]> tlist = cn.query(qry);
+		List<String[]> tlist = cn.query(qry, false);
 		totalTableCount = tlist.size();
 		currentTableIndex = 0;
 		for (String[] row : tlist) {

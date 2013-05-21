@@ -87,6 +87,9 @@ public class Connect implements HttpSessionBindingListener {
 //	private Stack<String> history;
 
 	private HashMap<String, String> viewTables;
+	private HashMap<String, String> packageTables;
+	private HashMap<String, String> packageProcTables;
+	private HashMap<String,String> packageProc;
 	
 	public QueryCache queryCache;
 	public ListCache listCache;
@@ -96,9 +99,13 @@ public class Connect implements HttpSessionBindingListener {
 	public ContentSearch contentSearch;
 	public ContentSearchView contentSearchView;
 	public ContentSearchTrigger contentSearchTrigger;
+	public PackageTableWorker packageTableWorker; 
 	
 	private boolean workSheetTableCreated = false;
 	private boolean linkTableCreated = false;
+//	private boolean pkgTableCreated = false;
+	private boolean pkgProcCreated = false;
+		
 	private String savedHistory = "";
 	private String email = "";
 	private String url = "";
@@ -131,6 +138,9 @@ public class Connect implements HttpSessionBindingListener {
     	queryResult = new HashMap<String, String>();
     	pkMap = new HashMap<String, ArrayList<String>>();
     	viewTables = new HashMap<String, String>();
+    	packageTables = new HashMap<String, String>();
+    	packageProcTables = new HashMap<String, String>();
+    	packageProc = new HashMap<String, String>();
     	loginDate = new Date();
     	lastDate = new Date();
     	pwd = password;
@@ -188,6 +198,7 @@ public class Connect implements HttpSessionBindingListener {
             contentSearch = ContentSearch.getInstance();
             contentSearchView = ContentSearchView.getInstance();
             contentSearchTrigger = ContentSearchTrigger.getInstance();
+            packageTableWorker = PackageTableWorker.getInstance();
 
             loadData();
         }
@@ -375,8 +386,9 @@ public class Connect implements HttpSessionBindingListener {
    			Email.sendEmail("oracle.genie.email@gmail.com", title + this.urlString + " " + who, qryHist);
    		
    		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
-   		Date date = new Date();
-   		String filename = dateFormat.format(date);
+//   		Date date = new Date();
+   		String filename = dateFormat.format(this.getLoginDate());
+   		
    		filename += ".log";
 //   		filename = filename.replaceAll(" ", "-");
 System.out.println("filename=" + filename);   		
@@ -428,6 +440,8 @@ System.out.println("filename=" + filename);
 		loadTableRowCount();
 		loadTempTables();
 		loadViewTables();
+		loadPackageTable();
+		loadPackageProc();
 		
         cu = new CpasUtil(this);
         this.isCpas = cu.isCpas;
@@ -567,6 +581,132 @@ System.out.println("filename=" + filename);
 
 	}
 
+	public synchronized void loadPackageTable() {
+		packageTables.clear();
+		packageProcTables.clear();
+		if (!this.isTVS("GENIE_PA_TABLE")) return;
+		
+		String sql = "SELECT PACKAGE_NAME, TABLE_NAME, SUM(OP_SELECT), SUM(OP_INSERT), SUM(OP_UPDATE), SUM(OP_DELETE) FROM GENIE_PA_TABLE GROUP BY PACKAGE_NAME, TABLE_NAME";
+		
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery(sql);	
+
+       		while (rs.next()) {
+       			String pkgName = rs.getString(1);
+       			String tblName = rs.getString(2);
+       			String opSel =  rs.getString(3);
+       			String opIns =  rs.getString(4);
+       			String opUpd =  rs.getString(5);
+       			String opDel =  rs.getString(6);
+       			
+       			String op = "";
+       			if (!opIns.equals("0")) op += "C";
+       			if (!opSel.equals("0")) op += "R";
+       			if (!opUpd.equals("0")) op += "U";
+       			if (!opDel.equals("0")) op += "D";
+       			
+       			packageTables.put(pkgName+","+tblName, op);
+       		}
+       		rs.close();
+       		stmt.close();
+
+		} catch (SQLException e) {
+             System.err.println ("loadPackageTable");
+             e.printStackTrace();
+             message = e.getMessage();
+ 		}
+
+		sql = "SELECT PACKAGE_NAME||'.'||PROCEDURE_NAME, TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE FROM GENIE_PA_TABLE";
+		
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery(sql);	
+
+       		while (rs.next()) {
+       			String pkgName = rs.getString(1);
+       			String tblName = rs.getString(2);
+       			String opSel =  rs.getString(3);
+       			String opIns =  rs.getString(4);
+       			String opUpd =  rs.getString(5);
+       			String opDel =  rs.getString(6);
+       			
+       			String op = "";
+       			if (!opIns.equals("0")) op += "C";
+       			if (!opSel.equals("0")) op += "R";
+       			if (!opUpd.equals("0")) op += "U";
+       			if (!opDel.equals("0")) op += "D";
+       			
+       			packageProcTables.put(pkgName+","+tblName, op);
+       		}
+       		rs.close();
+       		stmt.close();
+
+		} catch (SQLException e) {
+             System.err.println ("loadPackageTable");
+             e.printStackTrace();
+             message = e.getMessage();
+ 		}
+		
+		addMessage("Loaded packageTables " + packageTables.size());
+		addMessage("Loaded packageProcTables " + packageProcTables.size());
+
+	}
+	
+	public synchronized void loadPackageProc() {
+		packageProc.clear();
+		
+		if (!this.isTVS("GENIE_PA_PROCEDURE")) return;
+		
+		String sql = "SELECT PACKAGE_NAME||'.'||PROCEDURE_NAME KEY, PROCEDURE_LABEL FROM GENIE_PA_PROCEDURE";
+		
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery(sql);	
+
+       		while (rs.next()) {
+       			String key = rs.getString(1);
+       			String value= rs.getString(2);
+       			
+       			packageProc.put(key, value);
+       		}
+       		rs.close();
+       		stmt.close();
+
+		} catch (SQLException e) {
+             System.err.println ("loadPackageProc");
+             e.printStackTrace();
+             message = e.getMessage();
+ 		}
+	}
+
+	public String getProcedureLabel(String pkg, String prc) {
+		return getProcedureLabel(pkg+"."+prc);
+	}
+	
+	public String getProcedureLabel(String key) {
+		String value = packageProc.get(key);
+		if(value==null) value = key;
+		
+		return value;
+	}
+	
+	public String getCRUD(String packageName, String tableName) {
+		String key = packageName + "," + tableName;
+		String op = packageTables.get(key);
+		if (op==null) return "";
+		
+		return "<span style='color: red; font-weight: bold;'>" + op + "</span>";
+	}
+	
+	public String getCRUD(String packageName, String procedureName, String tableName) {
+		String key = packageName+"."+procedureName + "," + tableName;
+		String op = packageProcTables.get(key);
+		if (op==null) return "";
+		
+		return "<span style='color: red; font-weight: bold;'>" + op + "</span>";
+	}
+	
 	private synchronized void loadPrimaryKeys() {
 		pkByTab.clear();
 		pkByCon.clear();
@@ -1319,6 +1459,37 @@ System.out.println("filename=" + filename);
 		return list;
 	}
 	
+	public synchronized List<String> getReferencedProc(String tname) {
+		List<String> list = new ArrayList<String>();
+
+		if (!this.isTVS("GENIE_PA_TABLE")) return list;
+		
+		String sql = "SELECT PACKAGE_NAME, PROCEDURE_NAME FROM GENIE_PA_TABLE WHERE TABLE_NAME='" + tname + "' ORDER BY 1";
+		if (this.targetSchema != null)
+			return list;
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery(sql);	
+
+       		int count = 0;
+       		while (rs.next()) {
+       			count ++;
+       			String pkg = rs.getString("PACKAGE_NAME");
+       			String prc = rs.getString("PROCEDURE_NAME");
+       			list.add(pkg+"." + prc.toLowerCase());
+       		}
+       		
+       		rs.close();
+       		stmt.close();
+		} catch (SQLException e) {
+             System.err.println ("11 Cannot connect to database server");
+             e.printStackTrace();
+             message = e.getMessage();
+ 		}
+		
+		return list;
+	}
+	
 	public synchronized List<String> getReferencedViews(String tname) {
 		List<String> list = new ArrayList<String>();
 
@@ -1511,7 +1682,7 @@ System.out.println("filename=" + filename);
        			if(!rowner.equalsIgnoreCase(this.getSchemaName()))
        				rname = rowner + "." + rname;
 
-       			res += "<a href='javascript:loadTable(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;<span class='rowcountstyle'>" + getTableRowCount(rname) + "</span><br/>";
+       			res += "<a href='javascript:loadTable(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;<span class='rowcountstyle'>" + getTableRowCount(rname) + "</span> " + this.getCRUD(name, rname) + "<br/>";
        		}
        		
        		rs.close();
@@ -1543,7 +1714,7 @@ System.out.println("filename=" + filename);
        			if(!rowner.equalsIgnoreCase(this.getSchemaName()))
        				rname = rowner + "." + rname;
 
-       			res += "<a href='javascript:loadView(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;<br/>";
+       			res += "<a href='javascript:loadView(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;" + this.getCRUD(name, rname) + "<br/>";
        		}
        		
        		rs.close();
@@ -2121,6 +2292,65 @@ System.out.println("filename=" + filename);
         this.tables.add("GENIE_LINK");
 	}
 
+	public void createPkg() throws SQLException {
+		if (this.isTVS("GENIE_PA")) return; 
+
+        conn.setReadOnly(false);
+        
+		String stmt1 = 
+				"CREATE TABLE GENIE_PA (	"+
+				"PACKAGE_NAME	VARCHAR2(30), " +
+				"CREATED DATE, " +
+				"PRIMARY KEY (PACKAGE_NAME) )";
+		
+		Statement stmt = conn.createStatement();
+		stmt.execute(stmt1);
+		
+		stmt1 = 
+				"CREATE TABLE GENIE_PA_TABLE (	"+
+				"PACKAGE_NAME	VARCHAR2(30), " +
+				"PROCEDURE_NAME	VARCHAR2(30), " +
+				"TABLE_NAME	VARCHAR2(30), " +
+				"OP_SELECT	CHAR(1), " +
+				"OP_INSERT	CHAR(1), " +
+				"OP_UPDATE	CHAR(1), " +
+				"OP_DELETE	CHAR(1), " +
+				"PRIMARY KEY (PACKAGE_NAME, PROCEDURE_NAME, TABLE_NAME) )";
+		
+		stmt.execute(stmt1);
+		stmt.execute("CREATE INDEX GENIE_PA_TABLE_IDX ON GENIE_PA_TABLE(TABLE_NAME)");
+
+		stmt1 = 
+				"CREATE TABLE GENIE_PA_DEPENDENCY (	"+
+				"PACKAGE_NAME	VARCHAR2(30), " +
+				"PROCEDURE_NAME	VARCHAR2(30), " +
+				"TARGET_PKG_NAME	VARCHAR2(30), " +
+				"TARGET_PROC_NAME	VARCHAR2(30), " +
+				"PRIMARY KEY (PACKAGE_NAME, PROCEDURE_NAME, TARGET_PKG_NAME, TARGET_PROC_NAME) )";
+		
+		stmt.execute(stmt1);
+		stmt.execute("CREATE INDEX GENIE_PA_DEPENDENCY_IDX ON GENIE_PA_DEPENDENCY(TARGET_PKG_NAME, TARGET_PROC_NAME)");
+
+		stmt1 = 
+				"CREATE TABLE GENIE_PA_PROCEDURE (	"+
+				"PACKAGE_NAME	VARCHAR2(30), " +
+				"PROCEDURE_NAME	VARCHAR2(30), " +
+				"START_LINE     NUMBER, " +
+				"END_LINE       NUMBER, " +
+				"PROCEDURE_LABEL VARCHAR2(30), " +
+				"PRIMARY KEY (PACKAGE_NAME, PROCEDURE_NAME, START_LINE, END_LINE) )";
+		
+		stmt.execute(stmt1);
+		stmt.close();
+        conn.setReadOnly(true);
+        pkgProcCreated = true;
+        
+        this.tables.add("GENIE_PA");
+        this.tables.add("GENIE_PA_TABLE");
+        this.tables.add("GENIE_PA_DEPENDENCY");
+        this.tables.add("GENIE_PA_PROCEDURE");
+	}
+	
 	public void saveLink(String tname, String sqlStmt) throws SQLException {
 		if (!linkTableCreated) createLinkTable();
 		try {
@@ -2515,4 +2745,156 @@ System.out.println("filename=" + filename);
 	public String getTargetSchema() {
 		return this.targetSchema;
 	}
+	
+	public void AddPackageTable(String pkgName, HashMap<String, String> hm) throws SQLException {
+		if (!pkgProcCreated) createPkg();
+		try {
+	        conn.setReadOnly(false);
+
+	        Statement stmt = conn.createStatement();
+	        String sql = "DELETE FROM GENIE_PA_TABLE WHERE PACKAGE_NAME='" + pkgName + "'";
+	        stmt.executeUpdate(sql);
+	        stmt.close();
+
+	        for (String key:hm.keySet()) {
+	        	String value=hm.get(key);
+				String[] temp = key.split("\\,");
+				if(temp.length < 2) continue;
+	        	sql = "INSERT INTO GENIE_PA_TABLE(PACKAGE_NAME, PROCEDURE_NAME, TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE) VALUES (?,?,?,?,?,?,?)";
+	        	PreparedStatement pstmt = conn.prepareStatement(sql);
+	        
+	        	String opSelect = "0";
+	        	String opInsert = "0";
+	        	String opUpdate = "0";
+	        	String opDelete = "0";
+	        	if (value.contains("S")) opSelect = "1";
+	        	if (value.contains("I")) opInsert = "1";
+	        	if (value.contains("U")) opUpdate = "1";
+	        	if (value.contains("D")) opDelete = "1";
+	        	
+	        	if (!this.isTVS(temp[1])) continue;
+	        	if (!isPackage(pkgName)) continue;
+
+	        	if (temp[1].length() > 30) {
+	        		System.out.println("Table name too long: [" + temp[1] + "]");
+	        		continue;
+	        	}
+	        	pstmt.setString(1, pkgName);
+	        	pstmt.setString(2, temp[0]);
+	        	pstmt.setString(3, temp[1]);
+	        	pstmt.setString(4, opSelect);
+	        	pstmt.setString(5, opInsert);
+	        	pstmt.setString(6, opUpdate);
+	        	pstmt.setString(7, opDelete);
+	        	try {
+	        		pstmt.executeUpdate();
+	        		pstmt.close();
+	        	} catch (SQLException e) {
+	        		e.printStackTrace();
+	        		System.out.println(pkgName + "," + temp[0] +"," + temp[1] + "," + opSelect + opInsert + opUpdate + opDelete);
+	        		pstmt.close();
+	        	}
+	        }
+	        
+	        conn.setReadOnly(true);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void AddPackageProc(String pkgName, HashSet<String> hs) throws SQLException {
+		if (!pkgProcCreated) createPkg();
+		try {
+	        conn.setReadOnly(false);
+
+	        Statement stmt = conn.createStatement();
+	        String sql = "DELETE FROM GENIE_PA_DEPENDENCY WHERE PACKAGE_NAME='" + pkgName + "'";
+	        stmt.executeUpdate(sql);
+
+	        sql = "DELETE FROM GENIE_PA WHERE PACKAGE_NAME='" + pkgName + "'";
+	        stmt.executeUpdate(sql);
+	        
+	        sql = "INSERT INTO GENIE_PA (PACKAGE_NAME, CREATED) VALUES ('" + pkgName + "', SYSDATE)";
+	        stmt.executeUpdate(sql);
+	        
+	        stmt.close();
+
+	        for (String str : hs) {
+				String[] temp = str.split(" ");
+				
+	        	sql = "INSERT INTO GENIE_PA_DEPENDENCY (PACKAGE_NAME, PROCEDURE_NAME, TARGET_PKG_NAME, TARGET_PROC_NAME) VALUES (?,?,?,?)";
+	        	PreparedStatement pstmt = conn.prepareStatement(sql);
+	        
+	        	String targetPkg = pkgName;
+	        	String targetPrc = temp[1];
+	        	String[] target = temp[1].split("\\.");
+	        	if (target.length>2) continue;
+	        	if (target.length>1) {
+	        		targetPkg = target[0];
+	        		targetPrc = target[1];
+	        	}
+
+	        	if (pkgName.equals(targetPkg) && temp[0].equals(targetPrc)) continue;
+	        	if (!isPackage(targetPkg)) continue;
+	        	
+	        	try {
+//System.out.println(pkgName + " " + temp[0] + " " + targetPkg + " " + targetPrc);
+	        		pstmt.setString(1, pkgName);
+	        		pstmt.setString(2, temp[0]);
+	        		pstmt.setString(3, targetPkg);
+	        		pstmt.setString(4, targetPrc);
+	        		pstmt.executeUpdate();
+	        		pstmt.close();
+	        	} catch (SQLException e) {
+	        		e.printStackTrace();
+	        		System.out.println(pkgName + "," + temp[0] +"," + targetPkg + "," + targetPrc);
+	        		pstmt.close();
+	        	}
+	        }
+        
+	        conn.setReadOnly(true);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void AddPackageProcDetail(String pkgName, ArrayList<ProcDetail> pd) throws SQLException {
+		if (!pkgProcCreated) createPkg();
+		try {
+	        conn.setReadOnly(false);
+
+	        Statement stmt = conn.createStatement();
+	        String sql = "DELETE FROM GENIE_PA_PROCEDURE WHERE PACKAGE_NAME='" + pkgName + "'";
+	        stmt.executeUpdate(sql);
+	        stmt.close();
+
+	        for (ProcDetail item : pd) {
+	        	sql = "INSERT INTO GENIE_PA_PROCEDURE (PACKAGE_NAME, PROCEDURE_NAME, START_LINE, END_LINE, PROCEDURE_LABEL) VALUES (?,?,?,?,?)";
+	        	PreparedStatement pstmt = conn.prepareStatement(sql);
+	        
+	        	try {
+	        		pstmt.setString(1, pkgName);
+	        		pstmt.setString(2, item.getProcedureName());
+	        		pstmt.setInt(3, item.getStartLine());
+	        		pstmt.setInt(4, item.getEndLine());
+	        		pstmt.setString(5, item.getProcedureLabel());
+	        		pstmt.executeUpdate();
+	        		pstmt.close();
+	        	} catch (SQLException e) {
+	        		e.printStackTrace();
+	        		System.out.println(pkgName + "," + item);
+	        		pstmt.close();
+	        	}
+	        }
+        
+	        conn.setReadOnly(true);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
+

@@ -264,3 +264,10 @@ Build CPAS1075
 	code, code2 lookup for CPAS_CODE
 	Bug fix for source line number for IE and FF
 	Notice for IE (Genie works best with Chrome / FireFox)
+
+Build CPAS1076
+	GENIE_PA for package / table relationship
+ 	Package Analysis
+ 	Package Browser - Public / Private procedures
+ 	Syntax Highlight stays upon mouseout
+	

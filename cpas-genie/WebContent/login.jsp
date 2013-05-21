@@ -43,8 +43,10 @@
 	    if (st.hasMoreTokens()) {
 	    	String token = st.nextToken();
 	    	int idx = token.indexOf("@");
-	    	initUserName = token.substring(0, idx);
-	    	initJdbcUrl = token.substring(idx+1);
+	    	if (idx >0) {
+	    		initUserName = token.substring(0, idx);
+	    		initJdbcUrl = token.substring(idx+1);
+	    	}
 	    }
 	}
 	
@@ -92,7 +94,11 @@ or
 <% } %>	
   <img src="image/genie2.jpg" title="<%= Util.getVersionDate() + " Build " + Util.getBuildNo() %>"/>
 <% if (isCPAS) { %>
-    <h2>Welcome to CPAS Genie.</h2> <a href="login_cpas.jsp">CPAS login</a>
+    <h2>Welcome to CPAS Genie.<br/> 
+    Are you new to Genie? Please watch the tutorial videos. \\picard\training\CPAS Genie
+    
+    </h2>
+    <a href="login_cpas.jsp">CPAS login</a>
 <% } else {%>	
     <h2>Welcome to Oracle Genie.</h2>
 <% } %>	
@@ -378,6 +384,8 @@ VANGUARD<br/>
 <div style="margin: 10px; padding:5px; width:450px; height:300px; overflow: scroll; border: 1px solid #666666;">
 <b>What's New.</b>
 <br/><br/>
+<li>Package Analysis / Package Browser / Drill Down</li>
+<li>Custom Data Link</li>
 <li>PL/SQL Syntax highlight, hyper link</li>
 <li>Multiple Filter enabled</li>
 <li>CPAS online slave event query added</li>

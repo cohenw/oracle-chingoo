@@ -43,8 +43,10 @@
 	    if (st.hasMoreTokens()) {
 	    	String token = st.nextToken();
 	    	int idx = token.indexOf("@");
-	    	initUserName = token.substring(0, idx);
-	    	initJdbcUrl = token.substring(idx+1);
+	    	if (idx > 0) {
+	    		initUserName = token.substring(0, idx);
+	    		initJdbcUrl = token.substring(idx+1);
+	    	}
 	    }
 	}
 	

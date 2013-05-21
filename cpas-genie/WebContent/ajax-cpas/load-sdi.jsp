@@ -10,14 +10,14 @@
 	
 	String qry = "SELECT SDI, NAME FROM CPAS_SDI WHERE ORDERBY > 0 ORDER BY NAME";
 	
-	List<String[]> list = cn.query(qry);
+	List<String[]> list = cn.query(qry, false);
 	
 	int totalCnt = list.size();
 
 	if (totalCnt==0) {
 //		qry = "SELECT sdi, sdi FROM TREEACTION group by sdi";
 		qry = "SELECT sdi, name FROM CPAS_SDI order by orderby, sdi";
-		list = cn.query(qry);
+		list = cn.query(qry, false);
 		totalCnt = list.size();
 	}
 String id = Util.getId();

@@ -248,7 +248,7 @@ Rows/Page
 	boolean hasData = q.hasMetaData();
 	int colIdx = 0;
 
-	List<String[]> layoutCols = cn.query("SELECT CNAME, CPOS, CWIDTH,  (select code from cpas_table_col where tname=A.tname and cname=A.cname) code FROM CPAS_LAYOUT_COL A WHERE USERNAME='DEFAULT_SETUP' AND TNAME='" + layout + "' AND CPOS > 0 ORDER BY CPOS");
+	List<String[]> layoutCols = cn.query("SELECT CNAME, CPOS, CWIDTH,  (select code from cpas_table_col where tname=A.tname and cname=A.cname) code FROM CPAS_LAYOUT_COL A WHERE USERNAME='DEFAULT_SETUP' AND TNAME='" + layout + "' AND CPOS > 0 ORDER BY CPOS", false);
 	
 	boolean applyLayout = false;
 	if (appLayout!=null && appLayout.equals("1")) applyLayout = true;

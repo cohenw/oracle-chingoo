@@ -78,13 +78,15 @@ To compare schema object, you need to connect to 2nd database.
     while (st.hasMoreTokens()) {
     	String token = st.nextToken();
     	int idx = token.indexOf("@");
-    	String userid = token.substring(0, idx);
-    	String jdbcUrl = token.substring(idx+1);
+    	if (idx > 0) {
+    		String userid = token.substring(0, idx);
+    		String jdbcUrl = token.substring(idx+1);
 %>
 <a href="javascript:setLogin('<%= jdbcUrl %>', '<%= userid %>')"><%= token %></a>
 <br/>
 
 <%
+    	}
 	}
 %>
 	

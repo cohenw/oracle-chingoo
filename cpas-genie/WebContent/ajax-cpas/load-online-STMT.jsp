@@ -11,12 +11,12 @@
 	String actionid = request.getParameter("actionid");
 
 	String qry = "SELECT actiontype, actionstmt FROM TREEACTION_STMT WHERE SDI = '" + sdi + "' AND ACTIONID=" + actionid + ""; 	
-	List<String[]> list = cn.query(qry);
+	List<String[]> list = cn.query(qry, false);
 
 	int totalCnt = list.size();
 	
 	qry = "SELECT CAPTION, TREEKEY FROM TREEVIEW where sdi='" + sdi + "' and actionid=" + actionid; 	
-	List<String[]> tv = cn.query(qry);
+	List<String[]> tv = cn.query(qry, false);
 	
 	String label[][] = {
 			{"AW", "Display when"},
