@@ -1,0 +1,2876 @@
+/* == Basic Links == */
+
+a:link, a:visited, a:active {color:#00C; text-decoration:none;} 
+a:hover, a:visited:hover, a:active:hover, a:link:hover {color:#600; text-decoration:underline;}
+
+a.underline {
+   font-size: 12px; 
+   font-family: Arial, sans-serif; 
+	font-style: normal;	
+   font-weight: normal;
+   text-decoration: underline;
+	color: #00F;
+}
+.logout {	
+	display: block;
+	margin-top: 15px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+a.underline:visited, a.underline:hover {
+	color: #00F;
+	text-decoration: underline;
+}
+
+
+/* standard dropdown appearance */
+select.browserView {
+   font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; 
+   font-size: 10pt;  
+   font-weight: normal; 
+   color: #6C2336;
+}
+
+
+/* Browser columns' title */
+
+td.browserColsTitles {
+   height: 30px; 
+   color: #022335; 
+   font-size: 12px; 
+   font-family: Arial, MS Sans Serif; 
+   font-weight: normal; 
+   background-color: #E6EDF2; 
+   border-top: solid 1px #CCCCCC;
+   border-bottom: solid 1px #CCCCCC;
+   padding-bottom: 4px;  
+   text-align:center;
+   vertical-align: bottom;
+   border: 1px solid #CCC;
+}
+
+/* Normal text in a browser row */
+table.browserTextNormalRow, table.browserTextNormalRowb, table.browserTextHighlightRow, table.browserTextHighlightRowB, table.browserNumNormalRow, table.browserNumNormalRowB, table.browserNumHighlightRow, table.browserNumHighlightRowB, table.browserExtendedType, table.browserExtendedTypeB, table.browserTextNormalRow-radio {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 80%; 
+   color: #333;
+}
+
+pre.browserExtendedType, pre.browserExtendedTypeB {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 100%; 
+   color: #333;
+   margin: 0; 
+   padding: 0;			
+}
+
+td.formattedCell{
+   border: 1px solid #CCC;
+   padding-bottom: 4px;
+   padding-top: 4px;
+   padding-left: 5px;
+   padding-right: 5px;
+   vertical-align: bottom;
+   text-align: left;     
+}
+
+td.browserTextNormalRow, td.browserTextNormalRow-radio {
+   background-color: #FFF;	
+   border: 1px solid #CCC;
+   padding-bottom: 4px;
+   padding-top: 4px;
+   padding-left: 5px;
+   padding-right: 5px;
+   vertical-align: top;
+   text-align: left;     
+}
+
+td.browserTextNormalRow-radio {
+   vertical-align: middle;
+}
+a.browserTextNormalRow:link, a.browserTextHighlightRowB:link, a.browserTextHighlightRow:link, a.browserTextNormalRow:visited, a.browserTextHighlightRowB:visited, a.browserTextHighlightRow:visited {
+	color: #00C;    
+}
+
+a.browserTextNormalRow:hover, a.browserTextHighlightRowB:hover, a.browserTextHighlightRow:hover {
+	color: #660000;
+}
+
+
+/* Highlighted text in a browser row */
+td.browserTextHighlightRow {
+   background-color: #F9F9F9; 
+   border: 1px solid #CCC;
+   padding-bottom: 4px;
+   padding-top: 4px;
+   padding-left: 5px;
+   padding-right: 5px; 
+   vertical-align: bottom;
+   text-align: left;     
+}
+
+/* Normal numbers in a browser row */
+td.browserNumNormalRow {
+   background-color: #FFF;	
+   border: 1px solid #CCC;
+   padding-bottom: 4px;
+   padding-top: 4px;
+   padding-left: 5px;
+   padding-right: 5px; 
+   vertical-align: top;
+   text-align: right;     
+}
+
+/* Highlighted numbers in a browser row */
+td.browserNumHighlightRow {
+   background-color: #F9F9F9; 
+   border: 1px solid #CCC;
+   padding-bottom: 4px;
+   padding-top: 4px;
+   padding-left: 5px;
+   padding-right: 5px; 
+   vertical-align: top;
+   text-align: right;        
+}
+
+/* Normal text in a browser row (even rows)*/
+td.browserTextNormalRowB {
+   background-color: #FFF; 
+   border: 1px solid #CCC;
+   padding-bottom: 4px;
+   padding-top: 4px;
+   padding-left: 5px;
+   padding-right: 5px; 
+   vertical-align: top;
+   text-align: left;     
+}
+/* Highlighted text in a browser row (even rows)*/
+td.browserTextHighlightRowB, tr.browserTextHighlightRowB {
+   background-color: #F2F2ED; 
+   border: 1px solid #CCC;
+   padding-bottom: 4px;
+   padding-top: 4px;
+   padding-left: 5px;
+   padding-right: 5px; 
+   vertical-align: top;
+   text-align: left;       
+}
+
+
+/* Normal numbers in a browser row (even rows)*/
+td.browserNumNormalRowB {
+   background-color: #F9F9F9; 
+   border: 1px solid #CCC;
+   padding-bottom: 4px;
+   padding-top: 4px;
+   padding-left: 5px;
+   padding-right: 5px;
+   vertical-align: top;
+   text-align: right;     
+}
+
+/* Highlighted numbers in a browser row (even rows)*/
+td.browserNumHighlightRowB {
+   border: 1px solid #CCC;
+   background-color: #FFF; 
+   background-color: #F2F2ED; 
+   padding-bottom: 4px;
+   padding-top: 4px;
+   padding-left: 5px;
+   padding-right: 5px;
+   vertical-align: top;
+   text-align: right;     
+}
+
+/* Browser columns' title - edit view */
+td.browserEditColsTitles {
+   height: 24px; 
+   color: #454545; 
+   font-size: 8pt; 
+   font-family: MS Sans Serif; 
+   font-weight: bold; 
+   background-color: #FFFFFF; 
+   padding: 3px;  
+}
+
+/* Normal text in a browser row */
+td.browserEditTextNormalRow {
+
+   height: 24; 
+   color: #454545; 
+   font-size: 8pt; 
+   font-family: MS Sans Serif; 
+   background-color: #FFFFFF; 
+   padding: 0px;
+}
+
+
+/* Browser Input style - view */
+.browserView {
+   border: solid 1px #E0DFDF; 
+   font-size: smaller; 
+}
+
+a.menuText {
+   font-family: MS Sans Serif;
+   font-size: 9pt;
+   font-style: normal;
+   color: #454545;
+   line-height: 12pt;
+   font-weight: normal;
+   text-decoration: none;
+   text-align: right;
+}
+
+a.menuText:visited {color: #454545}
+a.menuText:hover {color: #454545}
+
+/* Title in message/error pages */
+
+table.messageInfo {
+   border: solid 2px #E0DFDF;
+   border-spacing: 5px;
+}   
+
+td.messageInfo {   
+   font-size: 9pt; 
+   font-family: MS Sans Serif; 
+   font-weight: bold; 
+   line-height: 9pt;
+	vertical-align: middle;
+   color: #454545;
+   background-color: #FFFFFF; 
+}   
+
+td.errorText {
+   
+   font-size: 9pt; 
+   font-family: MS Sans Serif; 
+   font-weight: bold; 
+   line-height: 9pt;
+   color: #EE0000;
+   background-color: #FFFFFF; 
+}
+
+/* Text in message/error pages */
+font.messageText {
+   font-family: MS Sans Serif;
+   font-size: 75%;
+   font-style: normal;
+   font-weight: bold;
+   color: #454545;
+   text-decoration: none;  
+   text-align: left;
+}
+
+/* == footer == */
+
+.footer p {font:65% Geneva,arial,sans-serif; margin: 7px 0; text-align: center;} 
+.footer p.footer {font:65% Geneva,arial,sans-serif; margin: 7px 0; text-align: center;} 
+
+
+td.TreeViewItem {
+   font-family: MS Sans Serif;
+   font-style: normal;
+   font-weight: normal;
+   color: #FFFFFF;
+   text-decoration: none;
+   text-align: left;
+   background-color: #1171FF;
+   margin-top: 18px;
+   top: 18px;
+}
+
+body    { background-color: #FFFFFF; background-repeat: no-repeat; margin: 0; padding: 0 }
+
+.TextParticipant   { color: #6C2336; font-size: 9pt; font-family: MS Sans Serif; font-weight: bold; line-height: 9pt }
+.TextTableTitle { font-size: 9pt; font-family: MS Sans Serif; font-weight: bold; line-height: 9pt }
+.TablesForms   { color: #454545; font-size: 10pt; font-family: MS Sans Serif; line-height: 16pt; /*padding: 2px*/ }
+
+a { text-decoration: none }
+a:hover { text-decoration: underline }
+
+td.AdminCalcDetails {
+   font-family: Arial, MS Sans Serif;
+   font-size: 11px;   
+   padding: 0;
+   margin: 0;
+}
+
+.WizardTableGeneric {
+	width: 100%;
+	color: #6C2336;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: Arial, MS Sans Serif;
+	line-height: 9pt;
+	background-color: #FFFFFF;
+	text-align: right;
+}
+
+.WizardActionButton { 
+	BACKGROUND: #c2d2ee;
+	FONT: 11px Verdana, sans-serif;
+	PADDING-BOTTOM: 3px; PADDING-TOP: 3px;
+  	text-align: center;
+}
+
+td.WizardActionButton {
+	BORDER-RIGHT: #666 2px solid;
+	BORDER-TOP: #aaa 1px solid;
+	BORDER-LEFT: #aaa 1px solid;
+	BORDER-BOTTOM: #666 2px solid;
+	PADDING-BOTTOM: 3px; PADDING-TOP: 3px;
+	width: 75px;
+}
+	
+a.WizardActionButton { color: #00C}	
+a.WizardActionButton:visited, a.WizardActionButton:hover { color: #FFF }
+
+td.wizMemo {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 10px;  
+   font-weight:normal;
+   color: #607892;
+}
+
+
+input.wizInput {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 12px;  
+   font-weight: normal;
+   color: #607892;
+}  
+
+textarea.wizInput {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 12px;  
+   font-weight: normal;
+   color: #607892;
+}  
+
+input.wizInputAmount {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 12px;  
+   font-weight: normal;
+   color: #607892;
+   text-align: right;
+}  
+
+input.wizNumber {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 12px;  
+   font-weight: normal;
+   color: #607892;
+   text-align: right;
+}  
+/*VM ?? */
+font.wizInput {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 12px;  
+   font-weight: normal;
+   color: #607892;
+}  
+/*VM ?? */
+font.wizNumber {   
+   font-family: Arial, MS Sans Serif; 
+   font-size: 12px;  
+   font-weight: normal;
+   color: #607892;
+   text-align: right;
+}  
+
+font.remarkDisabled {   
+   font-family: MS Sans Serif; 
+   font-size: 10pt;  
+   font-weight: normal;
+   color: gray;
+}  
+   
+select.wizSelect {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 12px;  
+   font-weight: normal; 
+   color: #607892;
+}
+
+tr.wizSumHeader {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 12px;   
+   font-weight: bold;
+   color: #ffffff;
+   background-color: #5b6b91;
+}
+
+td.wizSumLeft {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 12px;   
+   font-weight: bold;   
+   background-color: #ffffff;
+}
+
+tr.wizSum {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 12px;   
+   font-weight: bold;   
+   background-color: #acaac5;
+}
+
+.wizSum {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 12px;
+   font-weight: normal; 
+   background-color: #ffffff;
+}
+
+td.wizSumRight {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 12px;
+   font-weight: normal; 
+   background-color: #ffffff;
+}
+
+table.wiz {
+   margin-left: 12px;
+}
+
+.wizRadio {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 11px;
+   font-weight: normal;
+   color: #454545;
+}
+
+.mandatory {
+  font-family: Arial, MS Sans Serif; 
+  font-size: 120%;
+}
+
+table.form {
+   font-family: Arial, MS Sans Serif;
+   color: #454545;
+	width: 100%;
+	height: 100%;
+   padding: 0;
+   }
+   
+/* VM ?? */
+td.control {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 12pt;
+   font-weight:bold;
+   color: #454545;
+   }  
+
+.CalcSummary {
+   font-family: Arial, MS Sans Serif;
+   padding: 0;
+   color: #454545;
+   font-size: 11px; 
+}
+
+/* Calculation window menutab separator and tabs */
+td.calcdetailsBottomRow {
+   background-color: #EEEDE9;
+}
+
+a.calcdetailsOff {
+   font-size: 8pt;
+   font-family: MS Sans Serif;
+   line-height: 8pt;
+   font-style: normal;
+   color: black;
+   font-weight: bold;
+   text-align: center;
+}
+a.calcdetailsOff:visited {color: #B2B2B2}
+a.calcdetailsOff:hover {color: #B2B2B2}
+
+font.calcdetailsOn {
+   font-size: 8pt;
+   font-family: MS Sans Serif;
+   line-height: 8pt;
+   font-style: normal;
+   color: white;
+   font-weight: bold;
+   text-align: center;
+}
+/* Browser edit controls in form view mode - no edit */
+.brControl {
+   font-family: MS Sans Serif;    
+   color: #454545;       
+   height: 21; 
+   font-size: 10pt; 
+   background-color: #FFFFFF; 
+   padding-left: 1px;   
+}
+
+td.browserExtendedType {
+   background-color: #FFF; 
+   border: 1px solid #CCC;
+   padding-bottom: 4px;
+   padding-top: 4px;
+   padding-left: 5px;
+   padding-right: 5px;
+   vertical-align: top;
+   text-align: center;      
+/*	white-space: pre;	*/
+}
+
+
+td.browserExtendedTypeB {
+   background-color: #F2F2ED;
+   border: 1px solid #CCC;
+   padding-bottom: 4px;
+   padding-top: 4px;
+   padding-left: 5px;
+   padding-right: 5px;
+   vertical-align: top;
+   text-align: center;      
+/*	white-space: pre; */
+}
+
+td.calcTombstone {
+   height: 24; 
+   color: #607892; 
+   font-size: 10pt; 
+   font-family: MS Sans Serif; 
+   font-weight: bold;
+   background-color: white; 
+   padding: 2px;
+}
+
+td.calcPayments {
+   height: 24; 
+   color: #607892; 
+   font-size: 10pt; 
+   font-family: MS Sans Serif; 
+   background-color: white; 
+   padding: 2px;
+}
+
+td.contactusLegend {
+   color: #607892; 
+   font-size: 10pt; 
+   font-family: MS Sans Serif; 
+   padding: 2px;
+}
+
+td.contactusSubTitle {
+   height: 24; 
+   color: #FFFFFF; 
+   font-size: 10pt; 
+   font-family: MS Sans Serif; 
+   background-color: #2d4988; 
+   font-weight: bold;
+   padding: 2px; 
+}
+
+.contactusLinks {
+   color: #607892; 
+   font-size: 10pt; 
+   font-family: MS Sans Serif; 
+   padding: 2px;
+}
+
+a.contactusLinks:visited { color: #607892; }
+a.contactusLinks:hover { color: #607892; }
+
+body.strip {
+	background-color: #CCCCCC;
+}
+
+
+/* Used by calendar */
+/* VM ?? */
+table.calendar {
+	width: 220;
+   border-style: solid;
+   border-width: 1;
+	border-color: #003366;
+   background-color: #ffffff; 
+}
+
+
+.calClickable {
+	border: 1px solid white;
+	cursor: pointer;
+   font-family: MS Sans Serif; 
+   font-size: 9pt;  
+   font-weight: normal;
+   line-height: 10pt; 
+}
+
+.calSelected {
+	cursor: pointer;
+   font-family: MS Sans Serif; 
+   font-size: 9pt;  
+   font-weight: normal;
+   line-height: 10pt; 
+	text-decoration: underline;
+}
+
+.calClickable_hover {
+   border: 1px solid black;
+	cursor: pointer;
+   font-family: MS Sans Serif; 
+   font-size: 9pt;  
+   line-height: 10pt; 
+}
+
+.calLabel {
+   border-width: 1;
+   font-family: MS Sans Serif; 
+   font-size: 9pt;
+   font-weight:bold;
+   color: #454545;
+}
+
+.calButton { 
+   font-size: 9pt; 
+   font-family: MS Sans Serif; 
+   font-weight: bold; 
+}
+
+
+
+/* == toolMenu == */
+
+table.toolMenuCaption {
+   width: 100%;	
+   background-color: #D6DFDD;
+   border-collapse: collapse;
+   padding: 0;
+   height: 23px;   
+}
+
+td.toolMenuCaption {
+   font: 11px Arial;
+   letter-spacing: 1px;
+   color: #422F11;	
+   font-weight: bold;    
+   white-space: nowrap;
+   padding-left: 5px;
+}
+
+.toolMenu, .toolMenuSpecial {
+	font: normal 11px Arial, sans-serif;
+	letter-spacing: 1px;
+	color: #77725C;
+	 z-index: 1;
+   border: 0;
+   padding: 0;
+	margin: 0;
+   white-space: nowrap;	
+}
+	
+table.toolMenu { margin-right: 13px }
+
+a.toolMenu, a.toolMenuSpecial {
+   padding-left: 3px;
+   text-decoration: none;
+   color: #000;   
+}
+
+a.toolMenuSpecial { font-weight: bold }
+   
+a.toolMenu:hover, a.toolMenuSpecial:hover, a.toolMenu:visited { text-decoration: none;
+color: #3a3a3a;  }
+
+.toolMenuLogo {
+	height: 50;	
+	width: 100%;
+}
+
+a.toolMenuLinks {
+   padding: 0 20px 0 20px;
+   font: 11px Arial;
+   font-weight: normal;
+   letter-spacing: 1px;
+   color: #422F11;	
+   white-space: nowrap;
+}	
+
+a.toolMenuLogo {
+	background: url(../images/Cpaslogo40.gif) no-repeat left bottom;
+	width: 200px;
+}
+
+.processMenu, .processMenuSelected {
+	font-family: Arial;
+	font-weight: normal;
+	font-size: 11px;
+	color: #F4F1D9;	
+}
+
+table.processMenu {
+   width: 100%;	
+   height: 25px; 	
+   background-color: #345A7F;	
+}
+
+a.processMenu, a.processMenuSelected {
+height:10px;
+vertical-align:middle;
+   color: #FFF;
+   padding-left: 10px;
+   padding-right: 10px;
+   border-right: 1px solid #F4F1D9;
+}    
+ 
+a.processMenu, a.processMenu:visited {
+	color: #F4F1D9;
+	font: normal 11px Arial, sans-serif;	
+}
+
+a.processMenuSelected, a.processMenuSelected:visited {
+	color: #FFF;
+	font: bold 11px Arial, sans-serif;
+}   
+
+a.processMenu:hover{
+	color: #F4F1D9;
+	font: normal 11px Arial, sans-serif;	
+   text-decoration: underline;
+}
+
+a.processMenuSelected:hover {
+	color: #FFF;
+	font: bold 11px Arial, sans-serif;	
+   text-decoration: underline;
+}
+ 
+a.processMenuSelected {
+    padding-left: 16px;
+	background-image:url(../images/greater_than.gif); 
+	background-position: 0px 1px;
+	background-repeat:no-repeat;
+}
+
+/* == mainMenuFiller == */
+
+.mainMenuFiller {
+  background-color: #9C2F4F; 
+  border-spacing: 0px;
+  left: -100px;
+}	
+	
+/* == subviewMenu == */
+
+.subviewMenu, .subviewMenuHighlight {
+	font: normal 11px Arial, sans-serif;
+	letter-spacing: 1px;
+	margin: 0;
+	border: 0;
+	padding: 0;
+	border-collapse: collapse;
+}
+
+a.subviewMenuHighlight {font-weight: bold; color: #3A3A3A;}
+
+table.subviewMenu {
+	position: absolute;
+	left: -400px;
+	visibility: hidden;
+	z-index: 5;
+	background-color: #D6DFDD;
+}	
+
+a.subviewMenu, a.subviewMenu:hover, a.subviewMenu:visited {
+	padding-left: 7px;	
+	padding-right: 7px;
+	padding-top: 3px;
+	padding-bottom: 2px;
+	color: #3A3A3A;
+}
+
+
+
+/* == actionFrame and Panel == */
+
+.actionFrameBody {
+   margin: 0px;
+   margin-top: 7px; 
+/*   height: 100%;*/
+   overflow-x: hidden;
+   overflow-y: hidden;     
+}
+
+.actionFrame {
+   margin: 0;
+/*   margin-top: 7px; */
+   border-right: 1px dashed #996;
+   height:100%;
+   width:99%;
+   overflow-x: hidden;
+   overflow-y: auto;     
+}
+
+td.empty {	
+	margin: 0;
+	border: 0;
+	padding: 0;
+	border-collapse:collapse;
+}
+
+a.actionMenu:hover { color: #454545}
+
+.actionSelected  {
+   font-family:  MS Sans Serif;
+   font-size: 9px;
+   font-weight: bold;
+   color: #454545;
+   line-height: 15pt; 
+}
+
+
+a.actionSelected {
+   font-family: MS Sans Serif; 
+   color: #454545; 
+   font-size: 9pt;
+   font-weight: bold;
+   background: none;   
+}
+
+a.actionSelected:hover { color: #454545}
+
+#calContainer {
+	position : absolute;
+	BACKGROUND-COLOR: #f7f7e8;
+}
+
+
+td.Logo { 
+	font-family: Arial, MS Sans Serif;
+	font-size: 12px;
+	color: Aqua;
+	background-color: #FFFFFF;
+	background-image:url(../images/logo.gif);
+	background-repeat: no-repeat;
+	text-align: right;
+	vertical-align: middle;
+	font-weight: bold;
+	border-right-width:1px;
+	border-right-color:black;
+	border-right-style:solid;	
+}
+
+/* == Details of Calculation settings == */
+
+.doc_subParaDesc {
+	font-family: Arial, Verdana, MS Sans Serif; 
+	font-size: 80%;
+	font-weight: normal;	
+}
+
+td.doc_subParaDesc {
+   color: Black;
+	font-size: 100%;
+	font-weight: bold; 
+	padding-left: 7px;	
+	background-color: #C5D9ED; 
+}
+
+
+
+/* Details of Calculation Item description STRING*/
+td.doc_singleDataCellDesc {
+	color: #2d4988; 
+	font: 80% Arial, sans-serif;
+	font-size: 80%; 
+	text-align: left;
+	border-bottom: 1px solid #d7dfee;
+}
+
+/* Details of Calculation Item description DATE*/
+td.doc_singleDataCellDescD {
+	color: #2d4988; 
+	font: 80% Arial, sans-serif;
+	font-size: 80%; 
+   text-align: left;
+   border-bottom: 1px solid #d7dfee;
+}
+/* Details of Calculation Item description NUMBER*/
+td.doc_singleDataCellDescN {
+   color: #2d4988; 
+	font: 80% Arial, sans-serif;
+	font-size: 80%; 
+   text-align: left;
+   border-bottom: 1px solid #d7dfee;
+}
+/* Details of Calculation Item description CURRENCY*/
+td.doc_singleDataCellDescR {
+   color: #2d4988; 
+	font: 80% Arial, sans-serif;
+	font-size: 80%; 
+   text-align: left;
+   border-bottom: 1px solid #d7dfee;
+}
+
+
+/* Data cell */
+
+/* Details of Calculation Item data STRING*/
+td.doc_singleDataCellData {
+   color: Black; 
+	font: 80% Arial, sans-serif;
+	font-size: 80%; 
+	font-weight: bold; 
+   text-align: left;
+   border-bottom: 1px solid #d7dfee;
+}
+
+/* Details of Calculation Item data DATE*/
+td.doc_singleDataCellDataD {
+   color: Black; 
+	font: 80% Arial, sans-serif;
+	font-size: 80%; 
+	font-weight: bold; 
+   text-align: left;
+   border-bottom: 1px solid #d7dfee;
+}
+
+/* Details of Calculation Item data NUMBER*/
+td.doc_singleDataCellDataN {
+   color: Black; 
+	font: 80% Arial, sans-serif;
+	font-size: 80%; 
+	font-weight: bold; 
+   text-align: left;
+   border-bottom: 1px solid #d7dfee;
+}
+
+/* Details of Calculation Item data CURRENCY*/
+td.doc_singleDataCellDataR {
+   color: Black; 
+	font: 80% Arial, sans-serif;
+	font-size: 80%; 
+	font-weight: bold; 
+   text-align: left;
+   border-bottom: 1px solid #d7dfee;
+
+}
+
+/* Details of Calculation Item description STRING*/
+td.doc_arrayDataCellDesc {
+   color: black; 
+   font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; 
+	font-size: 9pt; 
+	font-weight: bold; 
+   text-align: left;
+}
+/* Details of Calculation Item description STRING*/
+td.doc_arrayDataCellDescS {
+   color: black; 
+   font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; 
+	font-size: 9pt; 
+	font-weight: bold; 
+   text-align: left;
+}
+/* Details of Calculation Item description DATE*/
+td.doc_arrayDataCellDescD {
+   color: black; 
+   font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; 
+	font-size: 9pt; 
+	font-weight: bold; 
+   text-align: center;
+}
+/* Details of Calculation Item description NUMBER*/
+td.doc_arrayDataCellDescN {
+   color: black; 
+   font-family: Arial, Helvetica, Geneva, SunSans-Regular, sans-serif; 
+	font-size: 9pt; 
+	font-weight: bold; 
+   text-align: center;
+}
+/* Details of Calculation Item description CURRENCY*/
+td.doc_arrayDataCellDescR {
+   color: black; 
+   font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; 
+	font-size: 9pt; 
+	font-weight: bold; 
+   text-align: center;
+}
+
+
+/* Data cell */
+
+/* Details of Calculation Item data STRING*/
+td.doc_arrayDataCellData {
+   color: black; 
+   font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; 
+	font-size: 9pt; 
+   text-align: left;
+}
+
+/* Details of Calculation Item data STRING*/
+td.doc_arrayDataCellDataS {
+   color: black; 
+   font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; 
+	font-size: 9pt; 
+   text-align: left;
+}
+
+/* Details of Calculation Item data DATE*/
+td.doc_arrayDataCellDataD {
+   color: black; 
+   font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; 
+	font-size: 9pt; 
+   text-align: right;
+}
+
+/* Details of Calculation Item data NUMBER*/
+td.doc_arrayDataCellDataN {
+   color: black; 
+   font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; 
+	font-size: 9pt; 
+   text-align: right;
+}
+
+/* Details of Calculation Item data CURRENCY*/
+td.doc_arrayDataCellDataR {
+   color: black; 
+   font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; 
+	font-size: 9pt; 
+   text-align: right;
+}
+/* Added by vadim*/
+div.separator {
+	margin: 0;
+	padding: 0;
+	height: 1px;
+	line-height: 1px;
+	border-top: 1px dashed #ccc;
+}
+
+
+/* Event Menu tabs */
+td.eventMenu {
+	font-size: 80%;
+	font-weight: bold;
+	white-space: nowrap;
+	border-bottom-width: 0px;
+}
+a.eventMenu {
+	background-color: #f0f0f0;
+	border: 1px solid #000000;
+	border-bottom-width: 0px;
+	padding: 2px 1em 2px 1em;
+	text-decoration: none;
+	line-height: 18px;
+}
+a.eventMenu, a.tab:visited {
+  color: #808080;
+}
+a.eventMenu:hover {
+  background-color: #d0d0d0;
+  color: #606060;
+}
+a.eventMenuSelected {
+	background-color: #a0a0a0;
+	border: 1px solid #000000;
+	border-bottom-width: 0px;
+	padding: 2px 1em 2px 1em;
+	text-decoration: none;
+	line-height: 18px;
+}
+a.eventMenuSelected:hover {
+  background-color: #a0a0a0;
+  color: #606060;
+}
+
+/*<group=utilities>*/
+#util {position: absolute; font: normal 11px Arial, sans-serif; letter-spacing: 1px; height: 23px; top: 0; left: 0; width: 100%; color: #77725C; z-index: 1;}
+#util a {text-decoration: none; color: #3a3a3a; white-space: nowrap; }
+#util a.thread {float: left; padding: 0 10px 0 0;}
+#util form.thread {float: right; margin: 0; padding: 2px 13px 0 0; display: inline;}
+#util select {font-size: 11px; margin: 0 0 0 0;}
+#util .util-link {float: right; padding: 4px 13px 0 0; }
+#util .util-bin {position: absolute; top: 31px; right: 0;}
+.search {float: right; padding: 2px 7px 0 0;}
+.search form {padding: 0; margin: 0; display: inline;}
+.search .box {font-size: 10px; height: 17px; voice-family: "\"}\""; voice-family: inherit; height: 12px;}
+.search .button	{background:#ece3d2; font: normal 11px Verdana, sans-serif; border-top: solid 1px #aaa; border-left: solid 1px #aaa; border-right: solid 2px #666; border-bottom: solid 2px #666;}
+
+/* be nice to opera */
+html>body .search .box {height: 12px;}
+#subutil {position: absolute; top: 50px; right: 7px; padding: 0; color: #FFF; font-family: Arial, sans-serif; font-size: 11px; color: #333; margin-left: 170px;}
+#subutil a {text-decoration: none; color: #333;}
+#subutil a:hover {text-decoration: underline;}
+/*</group>*/
+
+/*<group=DIS specific>*/
+#gh .dis {background: #FFF;}
+.dis #util {background: #F4F1D9;}
+/*</group>*/
+
+#brand {width: 100%; height: 47px; background: url(../images/Cpaslogo40.gif) no-repeat left bottom; position: relative; width:200px; left: 5px; bottom: 5px; border: none; z-index: 2;}
+#brand img {position: relative; margin: 28px 0 0 10px; border: none; z-index: 2;}
+
+#spacer {width: 100%; height: 20px; position: relative;}
+#button {position: absolute; left: 50%; border-top: solid 1px #aaa; border-left: solid 1px #aaa; border-right: solid 2px #666; border-bottom: solid 2px #666;}
+#info	{width: 100%; padding: 10px 0px 20px 0px;}
+
+/*<group=headings>*/
+.a-head {display:inline; font:120%/110% Arial,sans-serif; margin: 0 0 .3em 0;}
+h1 {font:120%/110% Arial,sans-serif; margin: 0 0 .3em 0;}
+h2 {font: bold 80%/130% Verdana,sans-serif; color: #036; margin: 0 0 0.25em 0;}
+h2 a {color: #422F11 !important}
+.b-head {display:inline; font: bold 80%/130% Verdana,sans-serif; color: #036; margin: 0 0 0.25em 0;}
+h3 {font:bold 75%/130% Verdana,sans-serif; color: #333; margin: 0 0 .1em 0;}
+h3.plan {font-family: Arial, sans-serif !important; margin-bottom: 0.5em !important;}
+.c-head {display: inline; font:bold 75%/130% Verdana,sans-serif; color: #333; margin: 0 0 .1em 0;}
+h4 {font:bold 80%/130% Verdana,sans-serif; color: #422F11; margin: 0 0 .5em 0;}
+.d-head {display:inline; font:bold 80%/130% Verdana,sans-serif; color: #422F11; margin: 0 0 .5em 0;}
+
+h1.option2 {font:120%/110% Arial,sans-serif; margin: 0 0 .3em 0; color: #666;}
+h3.option2 {font:bold 75%/130% Verdana,sans-serif; margin: 0 0 .1em 0; color: #235577;}
+/*</group>*/
+
+/*group=body copy*/
+
+body {font:100% Verdana,sans-serif; margin:0px;}
+p, blockquote {font:75%/150% Verdana,sans-serif; margin: 0 0 1.25em 0; color: #333;}
+.inline {display:inline;}
+.symbol {font-family:Verdana,sans-serif; font-size:75%;}
+.vprop {font: 80%/150% Verdana, sans-serif; color:#666; margin: 0 0 1em 0; display: block;}
+cite { font: normal 90%/150% Arial, sans-serif; margin-bottom: .5em; color: #000; display: block;}
+/*</group>*/
+
+table.mainMenu {
+	margin-left: 5px; 
+	padding: 0; 
+	border-collapse: collapse; 
+	border:0;
+}
+tr.mainMenu {
+	position: relative; 
+	margin: 0; 
+	padding: 0; 
+	font: normal 11px Arial, sans-serif; 
+	list-style-type: none; 
+	width: 775px;
+}
+tr.mainMenu td {
+	display: block; 
+	float: left; 
+	margin: 0; 
+	padding: 0;
+}
+td.mainMenu {
+	background-image:  url(../images/r_curve.gif); 
+	background-repeat: no-repeat; 
+	background-position: right top; 
+	background-color: #77725C; 
+	border-bottom: solid 1px #fff;
+	border-left: solid 1px #fff;
+	max-width: 100px;
+	min-width: 90px;
+	width: 20%;
+	vertical-align: top;
+}
+td.mainMenu a {
+	font: normal 11px Arial, sans-serif; 
+	background-image:  url(../images/l_curve.gif); 
+	background-repeat: no-repeat; 
+	background-position: left top; 
+	color: #F4F1D9;
+	width: 80%;
+}
+a.mainMenu {
+	display: block; 
+	padding: 5px 10px 4px 10px; 
+	text-decoration: none; 
+	letter-spacing: 1px; 
+	white-space: normal;
+	width: 80%;
+}/* Commented Backslash Hack hides rule from IE5-Mac \*/
+a.mainMenu a {
+	float: none; 
+	padding: 5px 10px 4px 10px; 
+} /* End IE5-Mac hack */
+a.mainMenu:hover { 
+	text-decoration: none; color: #FFF
+}
+a.mainMenu:visited { 
+	text-decoration: none; color: #FFF
+}
+
+table.mainMenuSelected {
+   width: 100%;
+   background-color: #C5D9ED;
+}
+tr.mainMenuSelected {
+	position: relative; 
+	margin: 0; 
+	padding: 0; 
+	font: normal 11px Arial, sans-serif; 
+	list-style-type: none; 
+	width: 775px;
+}
+tr.mainMenuSelected td {
+	display: block; 
+	float: left; 
+	margin: 0; 
+	padding: 0;
+}
+td.mainMenuSelected {
+	background-image:  url(../images/r_curve.gif); 
+	background-repeat: no-repeat; 
+	background-position: right top; 
+	background-color: #345A7F; 
+	border-bottom: solid 1px #345A7F;
+	border-left: solid 1px #fff;
+	max-width: 110px;
+	min-width: 90px;
+	width: 20%;
+	vertical-align: top;
+}
+td.mainMenuSelected a {
+	font: bold 11px Arial, sans-serif; 
+	background-image:  url(../images/l_curve.gif); 
+	background-repeat: no-repeat; 
+	background-position: left top; 
+	color: #FFF;
+	width: 80%; 
+}
+a.mainMenuSelected {
+	display: block; 
+	padding: 5px 10px 4px 10px; 
+	text-decoration: none; 
+	letter-spacing: 1px; 
+	white-space: normal;
+	width: 80%;
+}/* Commented Backslash Hack hides rule from IE5-Mac \*/
+a.mainMenuSelected a {
+	float: none; 
+	padding: 5px 10px 4px 10px; 
+} /* End IE5-Mac hack */
+a.mainMenuSelected:hover { 
+	text-decoration: none; color: #FFF
+}
+a.mainMenuSelected:visited { 
+	text-decoration: none; color: #FFF
+}
+
+
+.frameTable {
+	width: 100%; margin: 0; padding: 0; border-collapse: collapse; border: 0; 
+}
+
+table.topPanel, table.topPanelLine {
+	width: 100%;
+	border: 0;
+	margin: 0px;
+	background: #FFF;    	
+	padding: 0;
+	border-collapse: collapse;	
+}
+
+table.topPanelLine {
+	margin-top: 1px;
+}
+
+td.contextName-left, td.contextName-right, td.contextName-middle, td.contextName-left-notop, td.contextName-right-notop { 
+   font-family: Arial, Helvetica, Geneva, SunSans-Regular, sans-serif;    
+   font-size: 75%;  
+   font-weight: bold;
+   color: #000;
+   vertical-align: middle;
+   padding-top: 5px;   
+   padding-left: 7px;   
+   padding-right: 7px;   	
+   padding-bottom: 0px;
+   white-space: nowrap;   
+   border-collapse: collapse;	   
+}
+
+td.contextName-right, td.contextName-right-notop { 
+	text-align: right;
+}
+
+td.contextName-left, td.contextName-left-notop, td.contextName-middle { 
+	text-align: left;
+}
+
+td.contextName-middle { 
+   color: #1F3664;
+}
+
+td.contextName-left-notop, td.contextName-right-notop, td.contextName-left-notop {
+   font-weight: normal;	
+   padding-top: 3px;
+   padding-left: 7px;   	
+}
+
+select.contextSelect {
+   font-family: Arial, Helvetica, Geneva, SunSans-Regular, sans-serif;
+   font-size: 12px;  
+   font-weight: normal; 
+   color: #000;
+   text-align: left;
+   vertical-align: middle;      
+	margin: 0;
+	padding: 0;
+}
+
+
+td.gridSpacer2 {
+	width: 100%;
+	border-collapse: collapse;	
+	margin-bottom: 0px;
+	border-bottom: 1px solid #B6B6B6;	
+}	
+
+table.gridSubFoot { 
+	margin-top: 0px;
+	background-color: #E6EDF2; 
+	border-bottom: 1px solid #B6B6B6;
+}
+
+table.gridSubHead3 {
+	margin-top: 0;
+	border-bottom: 1px solid #B6B6B6;
+	border-top: 1px solid #B6B6B6;
+	background-color: #FFF;	
+}	
+
+.wizInstr {
+	margin: 10px;
+	text-align: left;
+	font-family: Arial, Helvetica, Geneva, SunSans-Regular, sans-serif;    
+	font-size: 12px;
+	font-weight: bold;
+	color: #036;
+}	
+
+td.wizInfo-img {
+	background-image: url(../images/info.gif);
+	width: 25px;
+/*	height: 15px;*/
+	background-position: 7px 15px;
+	background-repeat: no-repeat; 
+	padding-top: 10px;
+	padding-bottom: 10px;		
+}
+
+td.wizInfo-text {
+	font: 75%/150% Verdana, sans-serif;
+	color: #333;
+	margin: 0;
+	padding-top: 10px;
+	padding-bottom: 10px;	
+}
+
+/* == bct or Bread Crumb Trail related == */
+
+/* Div for bread crumb trail */
+
+table.bct {
+	margin: 0;
+	padding: 0;
+	border: 0;	
+	border-collapse: collapse;      	
+	width: 100%;	
+}
+
+.bctPastImage, .bctPastConnector, .bctPastText, .bctPresentImage, .bctPresentConnector, .bctPresentText, .bctFutureImage, .bctFutureConnector,  .bctFutureText {
+   margin: 0;
+   border: 0;
+   padding: 0;
+   border-collapse: collapse;      
+}	
+
+td.bctPastText, td.bctPresentText, td.bctFutureText {
+   font-family:  Verdana, Arial, MS Sans Serif;
+   font-size: 70%;
+   color: #036;   
+   text-decoration: none;	
+	border-bottom: solid 1px #CCC;
+	border-top: solid 1px #CCC;   
+	padding-left:5px; padding-top:8px; padding-bottom:8px;   
+}
+
+td.bctPastConnector, td.bctPresentConnector, td.bctFutureConnector {
+	border-bottom: solid 1px #CCC;
+	border-top: solid 1px #CCC;      
+	border-right: solid 1px #CCC;      
+	width: 0;	
+}
+
+td.bctPastImage, td.bctPresentImage, td.bctFutureImage {
+	border-bottom: solid 1px #CCC;
+	border-top: solid 1px #CCC;   
+	border-left: solid 1px #CCC;      	
+	padding-left:10px;	
+	padding-right:10px;	
+	width: 0;   
+}
+
+td.bctPastImage, td.bctPastText, td.bctPastConnector {
+	background-color: #E8E7C8;
+	color: #0E104D;
+}
+td.bctPresentImage, td.bctPresentText, td.bctPresentConnector {
+	background-color: #F0F8E0;	
+	color: #0E104D;
+}
+
+td.bctFutureImage, td.bctFutureText, td.bctFutureConnector {
+	color: #6D6D6F;
+}
+
+td.bctPresentImage {
+   background-image: url(../images/selbullet.gif); background-repeat: no-repeat; background-position: 7px 10px;     
+}
+
+td.bctPastImage {
+   background-image: url(../images/ok.gif); background-repeat: no-repeat;background-position: 7px 10px;     
+}
+
+.searchForm, .searchSubForm {
+	margin: 0;
+	border: 0;
+	font-family: Arial, Helvetica, Geneva, SunSans-Regular, sans-serif;    
+	font-weight: normal;
+	color: #036;
+	text-align: left;
+	line-height: 16pt;
+}
+
+table.searchForm {
+	font-size: 80%;	
+}
+table.searchSubForm {
+	font-size: 100%;	
+	height: 100%;
+}
+td.searchForm {
+	font-size: 100%;	
+}
+
+select.dualList {
+	width: 175px;
+}
+
+td.dualList {
+	background-color: #F0F0E6;
+	padding: 10px;
+	width: 120px;
+}
+
+td.dualList-center {
+	padding: 10px;
+	width: 50px;
+	vertical-align: middle;
+	background-color: #F0F0E6;
+}
+
+td.dualList-Filler {
+	padding: 10px;
+	vertical-align: middle;
+	background-color: #F0F0E6;
+}
+
+div.dual-up, div.dual-down, div.dual-add, div.dual-remove, div.dual-addall, div.dual-removeall {
+	padding-top: 3px;
+	padding-bottom: 3px;	
+	border: 0;
+	width: 75px;	
+	display:block;
+	padding-left: 9px;
+	padding-right: 9px;	
+	padding-bottom: 1px;
+	padding-top: 1px;	
+	margin:2px;
+	text-align: center;
+	background-color: #C2D2EE;		
+	border-top: solid 1px #aaa; border-left: solid 1px #aaa; border-right: solid 2px #666; border-bottom: solid 2px #666;		
+}
+a.dual-up, a.dual-down, a.dual-add, a.dual-remove, a.dual-addall, a.dual-removeall {
+	font: normal 11px Verdana, sans-serif;
+	color: #000;
+	text-decoration: none;		
+	cursor: default;
+	padding-left: 15px;
+	padding-right: 15px;	
+}
+
+div.dual-addall, div.dual-removeall {
+	display: none;
+}
+
+a.formviewLabel-tip:link, a.formviewLabel-tip:hover, a.formviewLabel-tip:visited, a.formviewLabel-tip:active {
+	text-decoration: none;
+	cursor: default;
+	color: #00F;	
+}
+td.formviewLabel, td.formviewLabel-tip, td.formviewLabel2 {
+	width: 20%;
+	min-width: 153px;
+	margin: 0;
+   color: #022335; 
+   font: 80% Arial, sans-serif;
+   font-weight: normal; 
+   background-color: #E6EDF2; 
+   padding-top: 4px;   
+   padding-bottom: 4px;  
+   padding-right: 7px;
+   padding-left: 7px;   
+   text-align: right;
+   vertical-align: top;
+   border: 1px solid #DCDCDC;
+}
+td.formviewLabel2 {
+	width: 50%;
+}
+td.formviewLabel-tip {
+	color: #00F;	
+	cursor: default;
+}
+
+td.formviewValue, td.formviewValue-long {
+   font: 80% Arial, sans-serif;
+   font-weight: normal;    
+   color: #454545;       
+   background-color: #FFF;    
+   text-align: left;	
+   vertical-align: top;	
+   padding-top: 4px;   
+   padding-bottom: 4px;  
+   padding-right: 7px;
+   padding-left: 7px;     
+  }  
+  
+td.formviewValue-long {
+	white-space: pre;
+}
+a.formviewValue, a.formviewValue-long {
+   font: 100% Arial, sans-serif;
+   color: #454545;       
+   background-color: #FFF;  
+}
+
+table.formviewBody {
+	width: 100%;
+	border: 0;
+	margin-top: -3px;
+	background: #FFF;    	
+	padding: 0;
+	border-collapse: collapse;
+	border-top: 1px solid #B6B6B6;
+		
+}
+
+.formeditValue {
+   font-family: Arial, MS Sans Serif;    
+   color: #454545;       
+   font-size: 12px; 
+   background-color: #FFFFFF; 
+   padding-left: 2px;   
+   margin-left: 5px;
+	vertical-align: middle;
+}
+
+a.formeditValue {
+   font-family: Arial, MS Sans Serif;    
+   color: #454545;       
+   font-size: 12px; 
+   background-color: #FFFFFF; 
+   padding-left: 2px;   
+   margin-left: 5px;
+}
+
+td.obsolete1 {
+	border-top: 1px solid #B6B6B6;	
+}
+
+table.wizPanel {
+	width: 100%;
+	background: #FFF;    		
+	margin: 0;
+	border: 0;	
+	border-collapse: collapse;	
+	padding: 0;	
+}	
+
+td.wizFrame {
+	vertical-align: top;   	
+	margin: 0;
+	border: 0;
+	border-collapse: collapse;			
+	width: 80%;	
+	padding-right: 10px;
+	padding-top: 5px;
+}
+
+td.bctFrame {
+	vertical-align: top;	
+	margin-right: 0px;	
+	border: 0;
+	border-collapse: collapse;
+	padding-right: 10px;	
+	padding-left: 10px;	
+	padding-top: 5px;	
+}
+
+
+table.wizHead, table.wizBody, table.wizFoot {
+	margin: 0 0 0 6px;	
+	padding: 0;
+	border: 0;	
+	border-collapse: collapse;		
+	width: 100%;		
+}
+
+table.wizHead {
+	border: 1px solid #B6B6B6;	
+	border-top: 2px solid #B6B6B6;	
+	background-color: #C5D9ED;
+	vertical-align: top;   
+}	
+
+table.wizBody {
+	margin: 0 0 0 6px;
+	border-left: 1px solid #B6B6B6;	
+	border-right: 1px solid #B6B6B6;	
+	border-bottom: 1px solid #B6B6B6;		
+}
+
+table.wizFoot {
+	margin: 5px 0 0 6px;	
+}
+
+td.wizHeadTitle {
+	font-family: Verdana, sans-serif;
+	font-size: 14px;
+	color: #000;
+	margin: 0;	
+	padding-left: 4px;
+	padding-top: 5px;
+	padding-bottom: 5px;	
+	border-top: 2px solid #B6B6B6;
+	border-left: 1px solid #B6B6B6;
+	border-right: 1px solid #B6B6B6;
+	width: 100%;		
+}
+
+td.wizHeadTrail {
+	margin: 0;	
+	padding: 0;
+	border: 1px solid #B6B6B6;
+	width: 100%;		
+	height: 20px;
+}
+
+td.wizHeadInstr {
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 80%;
+	font-weight: bold;
+	padding-left: 7px;
+	padding-top: 5px;
+	padding-bottom: 6px;		
+	color: #000;
+	margin: 0;	
+	width: 100%;		
+}
+
+.wizBreak {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	height: 0;
+}
+
+td.wizLabelTall {
+   height: 75px;    
+   vertical-align: middle;   
+}
+
+td.wizLabelMedium {
+   height: 50px;    
+}
+
+a.wizLabel:hover, a.wizLabel:link,a.wizLabel:visited,a.wizLabel:active{
+	cursor: default;
+	text-decoration: none;
+	color: #022335; 
+}
+
+a.wizLabelMedium:hover, a.wizLabelMedium:link, a.wizLabelMedium:visited, a.wizLabelMedium:active {
+	cursor: default;
+	text-decoration: none;
+	color: #022335; 
+}
+
+a.wizLabelTall:hover, a.wizLabelTall:link, a.wizLabelTall:visited, a.wizLabelTall:active {
+	cursor: default;
+	text-decoration: none;
+	color: #022335; 
+}
+
+a.wizLabel-tip:hover, a.wizLabel-tip:link, a.wizLabel-tip:visited, a.wizLabel-tip:active {
+	cursor: default;
+	text-decoration: none;
+	color: #00F;
+}
+
+a.wizLabelMedium-tip:hover, a.wizLabelMedium-tip:link, a.wizLabelMedium-tip:visited, a.wizLabelMedium-tip:active {
+	cursor: default;
+	text-decoration: none;
+	color: #00F;
+}
+
+a.wizLabelTall-tip:hover, a.wizLabelTall-tip:link, a.wizLabelTall-tip:visited, a.wizLabelTall-tip:active {
+	cursor: default;
+	text-decoration: none;
+	color: #00F;
+}
+
+td.wizLabel, td.wizLabelTall, td.wizLabelMedium, td.wizLabel-tip, td.wizLabelTall-tip, td.wizLabelMedium-tip, td.wizSubLabel, td.wizLabel-top, td.wizLabel-left {
+   width: 25%;	   
+   min-width: 153px;
+   color: #022335; 
+   font: 80% Arial, sans-serif; 
+   font-weight: normal; 
+   background-color: #E6EDF2; 
+   padding-top: 4px;  
+   padding-bottom: 4px;  
+   padding-right: 7px;
+   padding-left: 7px;  	
+   text-align: right;
+   border-bottom: 1px solid #CCC;
+   border-right: 1px solid #CCC;
+   border-left: 1px solid #CCC;      
+}
+
+td.wizLabel-top {
+   border-top: 1px solid #CCC;
+   background-color: #F5F6C7;
+   padding: 0px;  
+}
+
+td.wizLabel-left {
+   text-align: left;   
+}
+
+font.wizLabel-bold {
+   font-family: Arial, MS Sans Serif; 
+   font-weight: bold; 
+   font-size: 80%;   
+}
+td.wizSubLabel {
+   font-size: 110%;   
+}
+td.wizLabel-tip, td.wizLabelTall-tip, td.wizLabelMedium-tip {
+	color: #00F;	
+	cursor: default;
+}
+
+.wizValue, .wizValueAmount, .wizValue-bold, .wizValue-spacer {
+	font-family: Arial, MS Sans Serif;    
+	font-size: 12px; 
+	font-weight: normal;	
+	color: #454545;       	
+/*	background-color: #FFFFFF; */
+	padding-left: 2px;   
+	margin-left: 5px;
+	vertical-align: middle;	
+}
+
+.wizValue-bold {
+	font-weight: bold;	
+}
+
+.wizValue-spacer {
+	margin-left: 25px;
+}
+
+.wizSubValue {
+	font-family: Arial, MS Sans Serif;    
+	font-size: 120%;
+	font-size: 12px; 
+	font-weight: normal;	
+	color: #454545;       	
+	background-color: #FFF;
+	padding-left: 2px;   
+	margin-left: 5px;
+}
+
+.wizValueAmount {
+	text-align: right;
+}
+
+td.wizSummary, td.wizSummaryTall {
+   font-family: Arial, MS Sans Serif;    
+   color: #454545;       
+   font-size: 80%; 
+   background-color: #FFF; 
+   padding-left: 7px;      
+   padding-right: 5px;      
+}
+
+td.wizText, td.wizText-bold {
+	font-family: Arial, MS Sans Serif;    
+	font-size: 80%; 
+	font-weight: normal;	
+	color: #454545;       	
+	background-color: #FFF;
+	padding-left: 10px;   
+	margin-left: 5px;	
+}
+
+td.wizText-bold {
+	font-weight: bold;
+	color: #000;       	
+}
+
+.wizValueBold {
+	font-family: Arial, MS Sans Serif;    
+	font-size: 80%;
+	font-weight: normal;	
+	color: #454545;       	
+	background-color: #FFF;
+	padding-left: 2px;   
+	margin-left: 5px;
+	font-weight: bold;
+	color: #000;      	
+}
+
+td.wizHidden {
+	border: 0;
+	padding: 0;
+	height: 0;
+}
+
+.wizSummary {
+   vertical-align: bottom;   
+   padding-bottom: 4px;     
+}
+
+.wizSummaryTall {
+   vertical-align: middle;     
+}
+
+td.wizardLabel {
+	margin: 0;	
+	padding: 0;
+	border: 0;	
+	width: 35%;	
+}
+
+.wizFootNav {
+	width: 100%;
+	color: #6C2336;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: Arial, MS Sans Serif;
+	background-color: #FFFFFF;
+	text-align: right;
+	padding-top: 3px;
+}
+
+body.wizMain {
+	margin: 0;	
+	padding-left: 12px;
+	border: 0;	
+	border-collapse: collapse;		
+	border: 1px solid #B6B6B6;	
+	width: 50%;
+}
+
+.wizFootNavLeft, .wizFootNavRight, .wizFootNavMiddle, .wizFootNavLeftdisabled, .wizFootNavRightdisabled, .wizFootNavMiddle input {
+	border: 0;
+	margin: 0;
+	font: normal 11px Verdana, sans-serif;
+	color: #000;
+	padding-bottom: 1px;
+	padding-top: 1px;
+	display:inline;
+	background-color: #C2D2EE;	
+}
+
+div.wizFootNavLeft, div.wizFootNavRight, div.wizFootNavLeftdisabled, div.wizFootNavRightdisabled {
+	border-top: solid 1px #aaa; border-left: solid 1px #aaa; border-right: solid 2px #666; border-bottom: solid 2px #666;	
+	margin-left: 9px;	
+	float: right;		
+}
+
+div.wizFootNavLeftdisabled, div.wizFootNavRightdisabled {
+	padding-left: 9px;
+	padding-right: 9px;	
+	background-color: #EEE;
+}
+
+td.wizFootNavMiddle, div.wizFootNavMiddle{
+	border-top: solid 1px #aaa; border-left: solid 1px #aaa; border-right: solid 2px #666; border-bottom: solid 2px #666;	
+	margin-left: 9px;	
+	text-align:center;
+}
+
+div.wizFootNavMiddle {
+	float: left;		
+}
+.wizFootNavMiddle input {
+	padding-bottom: 0px;
+	padding-top: 0px;
+}
+
+div.wizFootNavLeft {
+	float: left;
+	margin-left: 0px;	
+} 
+
+div.wizFootNavLeft a, div.wizFootNavRight a {
+	display: inline;
+}
+
+div.wizButton, div.wizButtonWide {
+	padding-top: 3px;
+	padding-bottom: 3px;	
+	border: 0;
+	width: 60px;	
+	display:block;
+	padding-left: 9px;
+	padding-right: 9px;	
+	padding-bottom: 1px;
+	padding-top: 1px;	
+	margin:2px;
+	text-align: center;
+	background-color: #C2D2EE;		
+	border-top: solid 1px #aaa; border-left: solid 1px #aaa; border-right: solid 2px #666; border-bottom: solid 2px #666;		
+}
+div.wizButtonWide {
+	width: 150px;	
+	padding-left: 2px;
+	padding-right: 2px;		
+}
+
+a.wizButton, a.wizButtonWide {
+	font: normal 11px Verdana, sans-serif;
+	color: #000;
+	text-decoration: none;		
+	cursor: default;
+}
+
+a.wizButton, a.wizButtonWide, a.wizFootNavLeft, a.wizFootNavRight, a.wizFootNavMiddle, a.wizButton:hover, a.wizButtonWide:hover, a.wizFootNavLeft:hover, a.wizFootNavRight:hover, a.wizFootNavMiddle:hover, a.wizButton:visited, a.wizButtonWide:visited, a.wizFootNavLeft:visited, a.wizFootNavRight:visited, a.wizFootNavMiddle:visited {
+	cursor: default;
+	padding-left: 9px;
+	padding-right: 9px;	
+	text-decoration: none;
+	color: #000;
+}
+
+.wizError, .wizError2 {
+	font: 75%/150% Verdana, sans-serif;
+	background-color: #FDE366;
+	border-top: #F4420C 3px solid;
+	border-bottom: #F4420C 1px solid;
+	color: #000;	
+	font-weight: bold;	
+	vertical-align: middle;	
+	text-indent: 0px;	
+}
+
+.wizWarning, .wizWarning2 {
+	font: 75%/150% Verdana, sans-serif;
+	background-color: #F8E8A8;
+	border-top: #C8A868 3px solid;
+	border-bottom: #C8A868 1px solid;
+	color: #000;	
+	font-weight: bold;	
+	vertical-align: middle;	
+	text-indent: 0px;	
+}
+
+font.wizError, font.wizWarning {
+	font: 75%/150% Verdana, sans-serif;
+	background-image: url(../images/error.gif);
+	background-repeat: no-repeat; 
+	background-position: 7px 10px;
+	font-weight: bold;
+	color: #000;
+	text-align: left;
+	vertical-align: middle;
+	padding: 3px 30px;			
+}
+
+div.wizError, div.wizError2 {
+	background-image: url(../images/error.gif); background-repeat: no-repeat; background-position: 7px 10px;
+	padding: 10px 0 10px 35px;
+}
+
+div.wizError2 {
+ visibility: visible;
+}
+
+div.wizWarning, div.wizWarning2 {
+	background-image: url(../images/warning.gif); background-repeat: no-repeat; background-position: 7px 10px;
+	padding: 10px 0 10px 35px;
+}
+
+div.wizWarning2 {
+ visibility: visible;
+}
+
+ul.errorList {
+	margin: 0 0 0 0; 
+	padding: 0; 
+}
+
+div.wizError-field {
+	font: 75%/150% Verdana, sans-serif;
+	background-color: #FDE366;
+	background-image: url(../images/error.gif); background-repeat: no-repeat; background-position: 5px 2px;	
+	border-top: #F4420C 1px solid;
+	border-bottom: #F4420C 1px solid;
+	color: #B3453B;	
+	font-weight: bold;	
+	vertical-align: top;	
+	text-indent: 30px;	
+}
+
+div.formError-field {
+	background-color: #FDE366;
+	border-top: #F4420C 1px solid;
+	border-bottom: #F4420C 1px solid;
+	padding-top: 5px; 
+	padding-bottom: 5px;
+}
+
+li.formError-field {
+
+	list-style-image:url(../images/error.gif); 
+	list-style-position:inside;
+	margin-bottom:5px;
+	font: 100% Verdana, sans-serif;
+	font-size: 12px; 
+	color: #B3453B;	
+	font-weight: bold;	
+	vertical-align:middle;	
+	padding-left:5px;  
+}
+
+div.formWarning-field {
+	background-color: #F8E8A8;
+	border-top: #F4420C 1px solid;
+	border-bottom: #F4420C 1px solid;
+	padding-top: 5px; 
+	padding-bottom: 5px; 
+}
+
+
+li.formWarning-field {
+	list-style-image:url(../images/warning.gif);
+	list-style-position:inside;
+	margin-bottom:5px;
+	font: 100% Verdana, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #B3453B;	
+	vertical-align:middle;
+	padding-left:5px;  
+}
+
+
+div.formInfo-field {
+	background-color: #FEFCF3;
+	border-top: #0000FF 1px solid;
+	border-bottom: #0000FF 1px solid;
+	padding-top: 5px; 
+	padding-bottom: 5px; 
+}
+
+li.formInfo-field {
+	list-style-image:url(../images/info.gif);
+	list-style-position:inside;
+	margin-bottom:5px;
+	font: 100% Verdana, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #004D73;	
+	vertical-align:middle;
+	padding-left:5px;  
+}
+
+
+.upld-iframe {
+}
+
+input.upld-input {
+   margin-left: 2px;
+}
+
+div.upld-files {
+	vertical-align: middle;
+	font-family: Arial, MS Sans Serif;    
+	color: #454545;       
+	font-size: 12px; 
+	background-color: #FFF; 
+	
+}
+
+.upld-remove {
+	text-align: right;
+	font-weight: normal;
+	font-size: 14px;
+	color: #000000;
+	font-family: "Franklin Gothic Medium";
+	vertical-align:top;
+	cursor: pointer;	
+}
+
+div.upld-add {
+	text-align: left;
+	font-weight: normal;
+	font-size: 14px;
+	color:#000000;
+	font-family: "Franklin Gothic Medium";
+	vertical-align:top;
+	cursor: pointer;
+}
+
+div.upld-submitter {
+	vertical-align: bottom;
+}
+
+.upld-buttn {
+	border: 0;
+	margin: 0;
+	font: normal 11px Verdana, sans-serif;
+	color: #000;
+	padding-bottom: 1px;
+	padding-top: 1px;
+	display: inline;
+	background-color: #C2D2EE;
+}
+
+div.upld-buttn	{
+	border-top: solid 1px #aaa; border-left: solid 1px #aaa; border-right: solid 2px #666; border-bottom: solid 2px #666;	
+	margin-left: 9px;	
+	float: right;
+	display: inline;
+}
+
+a.upld-buttn {
+	cursor: default;
+	padding-left: 9px;
+	padding-right: 9px;	
+	text-decoration: none;
+}
+
+div.upld-buttn a {
+	display: inline;
+}
+
+div.upload-confirm {
+   color: #022335; 
+   font-size: 12px; 
+   font-family: "Arial, MS Sans Serif"; 
+   font-weight: normal; 
+   padding-left: 3px;
+   padding-top: 3px;
+}
+
+/* == grid == */
+
+body.grid {
+	padding-left: 6px;
+	padding-right: 7px;
+	padding-top: 0px;
+	margin: 0px;
+	border: 0px;
+	border-collapse: collapse;		
+}
+
+.gridHead, .gridSubHead, .gridSubFoot, .gridSubHeadPag, .gridSubHead3, .gridBody, .gridSummary {
+	font-family: Arial, Verdana, MS Sans Serif; 
+	font-size: 80%;
+	font-weight: normal;
+	color: #000;	
+}
+
+table.gridHead {
+	width: 100%;
+	border-collapse: collapse;	
+	margin-top: 5px;
+	margin-bottom: 0px;		
+	border-left: 1px solid #B6B6B6;
+	border-right: 1px solid #B6B6B6;
+	border-top: 2px solid #B6B6B6;		
+	background-color: #C5D9ED; 
+	height: 30px;
+	font-size: 100%;
+}	
+
+td.gridHead {
+	padding-left: 7px;
+	padding-bottom:6px;
+	padding-top:5px;
+	font-weight: bold;
+	font-size: 80%;	
+}	
+
+table.gridSubHead, table.gridSubHead3 {
+	width: 100%;
+	border-collapse: collapse;	
+	margin-top: 0px;
+	margin-bottom: 0px;		
+	border-left: 1px solid #B6B6B6;
+	border-right: 1px solid #B6B6B6;
+	border-top: 1px solid  #B6B6B6;
+	background-color: #FFF;
+	height: 30px;
+}	
+
+table.gridSubHead3 {
+	border-bottom: 1px solid  #B6B6B6;
+}
+
+td.gridSubHead {
+	font-size: 100%;
+	padding-left: 7px;	
+}
+
+td.gridSubHeadPag {
+	font-size: 100%;
+	text-align: right;
+	padding-right: 7px;
+	color: #000;
+}
+
+a.gridSubHead { 
+	font-size: 100%;	
+   	text-decoration: underline;
+	padding-right: 3px;   	
+	color: #00F;	
+}
+
+a.gridSubHead:hover, a.gridSubHead:hover:visited {
+   text-decoration: underline;
+}
+
+table.gridBody {
+	width: 100%;
+	border-collapse: collapse;	
+	margin-top: 0px;
+	margin-bottom: 0px;		
+	border-left: 1px solid #B6B6B6;
+	border-right: 1px solid #B6B6B6;
+	background-color: #FFF;
+}
+
+table.gridSummary {
+	width: 100%;
+	border-collapse: collapse;	
+	margin-top: 0px;
+	margin-bottom: 0px;		
+	margin-left: 10px;
+	background-color: #FFF;
+}
+
+.gridColLabel, .gridColLabel-tip, .gridColLabel-dis, .gridColLabel-tip-dis {
+   font-family: Arial, MS Sans Serif; 
+   font-weight: normal; 
+   color: #000000;
+   background-color: #E6EDF2;    
+   text-align: center;   
+}
+
+td.gridColLabel, tr.gridColLabel, td.gridColLabel-tip, td.gridColLabel-dis, td.gridColLabel-tip-dis {
+	font-size: 100%;
+   height: 30px; 
+   padding-bottom: 4px;  
+   vertical-align: bottom;
+	border: 1px solid #B6B6B6;
+   cursor: pointer;
+}
+
+td.gridSubTitle {
+   height: 30px; 
+   padding-bottom: 4px;  
+   padding-left: 6px;  
+   vertical-align: bottom;
+	border: 1px solid #B6B6B6;
+   font-family: Arial, MS Sans Serif; 
+   font-weight: normal; 
+   color: #000000;
+   background-color: #E6EDF2;    
+}
+
+td.gridColLabel-tip, td.gridColLabel-tip-dis {
+	color: #00F;
+}
+
+a.gridColLabel, a.gridColLabel:link, a.gridColLabel:visited, a.gridColLabel:active, a.gridColLabel:hover {
+	text-decoration: none;
+	color: #000000;
+	cursor: default;
+}
+
+a.gridColLabel-tip-dis:link, a.gridColLabel-tip-dis:visited, a.gridColLabel-tip-dis:active, a.gridColLabel-tip:link, a.gridColLabel-tip:visited, a.gridColLabel-tip:active{
+	text-decoration: none;
+	color: #00F;
+}
+
+a.gridColLabel-tip-dis:link:hover, a.gridColLabel-tip-dis:visited:hover, a.gridColLabel-tip:link:hover, a.gridColLabel-tip:visited:hover{
+	text-decoration: none;
+	color: #00F;
+}
+
+a.gridColLabel-tip-dis:link, a.gridColLabel-tip-dis:visited, a.gridColLabel-tip-dis:active{
+	cursor: default;
+}
+
+
+td.gridColLabel-dis, td.gridColLabel-tip-dis {
+   cursor: default;	
+}
+
+a.gridHead {
+	color: #0000CC;
+}
+
+a.gridLink {
+	font-family: Arial, sans-serif; 
+	font-style: normal;	
+	font-weight: normal;
+	color: #00F;
+	text-decoration: none;
+}
+
+a.gridLink:hover {
+	text-decoration: underline;	
+}
+
+
+
+.msgErr  {border-color: #F4420C; background-color: #FDE366; color: #333; font: 75%/150% Verdana, sans-serif;}
+.msgWarn {border-color: #CCAE69; background-color: #F9EAAF; color: #333; font: 75%/150% Verdana, sans-serif;}
+.msgInfo {border-color: #CCCC99; background-color: #F5F6C7; color: #333; font: 75%/150% Verdana, sans-serif;}
+.msgInstr {border-color: #CCCC99; background-color: #F5F6C7; color: #333; font: 75%/150% Verdana, sans-serif;}
+
+table.msgErr, table.msgWarn, table.msgInfo {
+	width: 100%;
+	border-style: solid;
+	border-width: 3px 0px 1px 0;
+	margin: 15px 0 15px 0;
+	padding: 0;	
+}
+
+table.msgInstr {
+	width: 100%;
+	border-style: solid;
+	border-width: 3px 0px 1px 0;
+	margin-top: 5px;
+	margin-bottom: 0px;		
+	padding: 0;	
+}
+
+.msgInstr2 {border-color: #CCCC99; background-color: #F5F6C7; color: #333; font: 75%/150% Verdana, sans-serif;}
+table.msgInstr2 {
+	width: 100%;
+	border-style: solid;
+	border-width: 3px 0px 1px 0;
+	margin: 0 0 4px 6px;		
+	padding: 0;	
+}
+
+td.msgErrTxt, td.msgWarnTxt, td.msgInfoTxt, td.msgInstr-txt {
+	color: #333;
+	padding: 8px 6px 3px 3px;
+	font-weight: bold;
+	background-position: center;
+}
+td.spacer {
+	width: 25px;
+	height: 15px;
+}
+td.msgErrImg, td.msgWarnImg, td.msgInfoImg, td.msgInstr-img {
+	width: 25px;
+	height: 15px;
+	background-position: 7px 9px;
+	background-repeat: no-repeat; 
+}
+
+td.msgErrImg {background-image: url(../images/error.gif)}
+td.msgWarnImg {background-image: url(../images/warning.gif)}
+td.msgInfoImg {background-image: url(../images/info.gif)}
+
+td.msgInstr-img {	background-image: url(../images/info.gif);}
+td.msgInstr-txt {	font-weight: normal;	}
+
+td.msgErrSubTxt, td.msgWarnSubTxt, td.msgInfoSubTxt {
+	font-weight: normal;
+	padding-bottom: 7px;	
+	padding-left: 3px;
+}
+
+*.msgReg {
+	font-family: Verdana, sans-serif;
+	font-weight: normal;
+	font-size: 80%;	
+}
+
+.cl {
+
+	font-family: Arial, MS Sans Serif; 	
+	font-size: 100%;	
+}
+
+a.cl-img {
+	padding-left: 20px;
+	background-image: url(../images/calendar.gif);
+	background-position: 3px 2px;
+	background-repeat: no-repeat;
+	background-color: #FFF;
+	height: 1%;
+}
+
+.cl-fmt {
+	padding-left: 3px;
+	font-family: Arial, MS Sans Serif; 	
+	font-size: 75%;
+	color: #000;
+	text-transform: lowercase;
+}
+
+.cl-err {   
+	font: 75%/150% Verdana, sans-serif;
+	background-color: #FDE366;
+	background-image: url(../images/error.gif); background-repeat: no-repeat; background-position: 5px 3px;	
+	border-top: #F4420C 1px solid;
+	border-bottom: #F4420C 1px solid;
+	color: #B3453B;	
+	font-weight: bold;	
+	text-indent: 30px;	
+	padding-top: 3px;
+	padding-bottom: 3px;
+}   
+
+
+div.tooltip {
+	position: absolute;
+	border: none;
+	visibility: hidden;
+	z-index: 100;
+	font:70%/130% Verdana,sans-serif;
+	width: 209px; 
+	display: block; 
+	font-weight: bold;
+	cursor: pointer;	
+}	
+
+div.tooltipHead {
+	color: #422F11;
+}
+
+div.tooltipBody {
+	padding: 3px 14px 3px 10px;
+	font-weight: normal;
+	color: #4c4c4c;
+}
+
+.tooltipHeadText {
+border-bottom: 1px solid red;
+padding-bottom: 2px;
+}
+
+.tooltipBodyText {
+
+}
+
+.navGuide {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; BORDER-BOTTOM: #996 1px solid; BACKGROUND-COLOR: #f7f7e8
+}
+.navGuide H3 {
+	PADDING-RIGHT: 7px; PADDING-LEFT: 5px; FONT-SIZE: 75%; PADDING-BOTTOM: 7px; MARGIN: 0px; COLOR: #996; PADDING-TOP: 7px
+}
+.guideHed {
+	PADDING-RIGHT: 7px; PADDING-LEFT: 5px; PADDING-BOTTOM: 7px; PADDING-TOP: 7px; BORDER-BOTTOM: #663 1px solid; BACKGROUND-COLOR: #e2dfbc
+}
+.guideHed H2 {
+	MARGIN: 0px; COLOR: #663
+}
+.navGuide DL.arrow {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 5px; FONT-SIZE: 75%; PADDING-BOTTOM: 0px; MARGIN: 0px 0px 1em 2px; LINE-HEIGHT: 150%; PADDING-TOP: 0px
+}
+.navGuide P {
+	PADDING-RIGHT: 7px; PADDING-LEFT: 5px; PADDING-BOTTOM: 7px; PADDING-TOP: 0px
+}
+.navGuide P {
+	COLOR: #4c4c4c
+}
+body.mainCalc {
+	margin: -1px 0 0 0;	
+	padding: 0;
+	border-collapse: collapse;		
+	width: 100%;
+}
+
+body.mainCalcPopup {
+   padding: 8;
+	border-collapse: collapse;		
+	width: 98%;
+}
+
+.calcMenu, .calcMenuSelected {
+   font-family:  Verdana, Arial, MS Sans Serif;
+   font-size: 11px;
+   color: #036;   
+   text-decoration: none;
+   margin: 0;
+   border: 0;
+   padding: 0;
+   border-collapse: collapse;      
+}
+
+table.calcMenu {
+	padding: 0;
+	border-collapse: collapse;
+	background-color: #E8ECED;   
+}
+
+td.calcMenu {
+	background-image: url(../images/bullet.gif); background-repeat: no-repeat; background-position: 5px 9px;  
+}
+
+td.calcMenu a {
+	display: block;
+	padding: 5px 13px 5px 19px;
+}
+
+td.calcMenuSelected {
+   background-color: #F7F9E0;  
+   padding: 5px 13px 5px 19px;   
+   background-image: url(../images/selbullet.gif); background-repeat: no-repeat; background-position: 5px 9px;     
+}
+
+a.calcMenu, a.calcMenuSelected { 
+   line-height: 150%;
+}
+
+td.calcMenu a:hover {
+   padding: 5px 13px 5px 19px;
+   text-decoration: none;
+   background-color: #FFF;   
+   background-image: url(../images/selbullet.gif); background-repeat: no-repeat; background-position: 5px 9px;     
+}
+
+a.calcmenuSelected  { 
+   background-color: #F7F9E0;   
+   color: #000;   
+}
+
+a.calcMenu:hover, a.calcMenuSelected:hover { 
+   text-decoration: none;
+} 
+
+ul {font:75%/150% Verdana,sans-serif; margin: 0 0 1em 15px; padding: 0; color: #333;}
+ol {font:75%/150% Verdana,sans-serif; margin: 0 0 1em 34px; padding: 0; color: #333;}
+li ul {font:100%/150% Verdana,sans-serif;} 
+li ol {font:100%/150% Verdana,sans-serif;}
+ul ul, ol ul {list-style-type: disc;}
+
+table.lNav {
+   width: 152px;
+   margin: 5px;
+   margin-top: -3px;
+   padding: 0;
+
+}
+
+.localNav ul {margin: 0; padding: 0; list-style-type: none;}   
+.localNav li.head {font-size: 110%; font-weight: bold; padding: 15px 0 5px 0; color: #333; border-left: none; border-right: none;}
+.localNav li.first {padding-top: 0;}
+.localNav li {font-size: 90%; font-weight: normal; border: solid 1px #CCC; border-top: none; padding: 0; margin: 0; }
+.localNav li a:link, .localNav li a:visited {display: block; text-decoration: none; color: #036; background-image: url(../images/bullet.gif); background-repeat: no-repeat; background-position: 5px 9px; background-color: #E8ECED; padding: 5px 3px 5px 19px; }
+.localNav li a:hover, localNav li a:visited:hover {background-color: #FFF; background-image: url(../images/selbullet.gif); text-decoration: none; color: #036;}
+.localNav li a.current, .localNav li a.current:hover, .localNav li a.current:visited, .localNav li a.current:visited:hover {background-image: url(../images/selbullet.gif); background-color: #F7F9E0; color: #000;}
+.localNav li a.sub, .localNav li a.sub:hover {background-image: url(../images/bullet.gif) !important;}
+.localNav li.subhead {font-size: 90%; font-weight: bold; color: #666; border-left: none; border-right: none; border-bottom: none; margin: 10px 0 0 5px;}
+.localNav li.subitem {font-weight: normal; border-bottom: solid 1px #EAEAEA; border-left: solid 1px #CCC; border-right: solid 1px #CCC;}
+.localNav li.last {border-bottom: solid 1px #CCC;}
+.localNav li.subitem a:link, .localNav li.subitem a:visited {background-color: #FFF; background-image: none; color: #3E6DA1;}
+.localNav li.subitem a:hover, .localNav li.subitem a:visited:hover {background-color: #FFF; color: #036; text-decoration: none; background-image: url(../images/selbullet.gif);}
+.localNav li.subitem a.current, .localNav li.subitem a.current:hover, .localNav li.subitem a.current:visited, .localNav li.subitem a.current:visited:hover {background-color: #FFF; background-image: url(../images/selbullet.gif); color: #000;}
+.localNav li.firstItem {border-top: solid 1px #CCC;} 
+div.longList {
+	position: absolute;
+	border: none;
+	z-index: 100;
+	background-color: white;
+}	
+
+select.longList {
+	font-family: Arial, MS Sans Serif;    
+	font-size: 12px; 
+	font-weight: normal;	
+	color: #454545;       	
+	background-color: #FFF;
+	padding-left: 2px;   
+	margin-left: 5px;
+}
+
+table.wizdual {
+	width: 99.7%;
+	background: #FFF;    		
+	margin: 0 6px 0 6px;
+	border-collapse: collapse;	
+	padding: 0;	
+	border: 1px solid #B6B6B6;
+}	
+
+.dual {
+	color: #022335; 
+	font-family: Arial, MS Sans Serif; 
+	font-weight: normal; 
+	background-color: #F0F0E6;	
+	padding: 0;
+	border: 0;	
+	margin: 0;
+	border-collapse: collapse;			
+}
+
+
+table.dual {
+	padding: 5 10 10 10;
+	margin: 0 6px 0 6px;		
+	vertical-align: top;	
+}
+
+td.dual {
+	padding-left: 5px;   
+	padding-bottom: 5px;   
+}
+
+table.dual-properties {
+	font-family: Arial, Verdana, sans-serif;
+	vertical-align: top;	
+	text-align: left;
+	margin: 0 0 0 8px;	
+	padding: 0;
+	border-collapse: collapse;		
+	border-left: 1px solid #B6B6B6;	
+	border-right: 1px solid #B6B6B6;	
+	border-bottom: 1px solid #B6B6B6;		
+}
+
+td.dual-properties {
+	padding: 10px;   
+	vertical-align: top;
+	background-color: #F0F0E6;
+}
+
+td.dual-properties-label {
+   width: 45%;	   
+   min-width: 153px;
+   color: #022335; 
+   font: 80% Arial, sans-serif; 
+   font-weight: normal; 
+   background-color: #E6EDF2; 
+   padding-top: 4px;  
+   padding-bottom: 4px;  
+   padding-right: 7px;
+   padding-left: 7px;  	
+   text-align: right;
+   border-bottom: 1px solid #CCC;
+   border-right: 1px solid #CCC;
+   border-left: 1px solid #CCC;      
+}
+
+.dual-properties-value {
+	font-family: Arial, MS Sans Serif;    
+	font-size: 12px; 
+	font-weight: normal;	
+	color: #454545;       	
+	padding-left: 2px;   
+	margin-left: 5px;
+	vertical-align: middle;	
+}
+
+td.dual-properties-head {
+	border: 1px solid #B6B6B6;	
+	border-top: 2px solid #B6B6B6;	
+	background-color: #C5D9ED;
+	vertical-align: top;   
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 80%;
+	font-weight: bold;
+	padding-left: 4px;
+	padding-top: 5px;
+	padding-bottom: 5px;		
+	color: #000;
+	margin: 0;	
+}
+
+td.dualHeadInstr {
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 80%;
+	font-weight: bold;
+	padding-left: 5px;
+	padding-top: 5px;
+	padding-bottom: 25px;		
+	color: #000;
+	margin: 0;	
+	width: 100%;		
+}
+
+td.dualLabel, td.dualValue {
+   color: #022335; 
+   font-family: Arial, MS Sans Serif; 
+   font-weight: normal; 
+   font-size: 80%;   
+   padding-bottom: 4px;  
+   padding-right: 5px;
+   text-align: right;    
+   vertical-align: top;   
+}
+
+td.dualValue {
+   text-align: left;    
+   font-weight: bold;    
+}
+
+table.dualFoot {
+	margin: 0 6 0 6px;
+	width: 100%;
+	background-color: #FFFFFF;
+	text-align: right;
+	padding-top: 10px;
+}
+
+
+
+span.optMarker {
+   padding-left: 3px;	
+   color: #000000; 
+   vertical-align: bottom;   
+}
+
+span.browserSummary {
+	top: 0;
+	left: 0;
+	background-image: url(../images/sigma.gif);
+	background-repeat: no-repeat;
+}
+
+td.browserSummary {
+	text-align: right;
+}
+
+td.tooltipBody {
+   text-align: right;    
+	font:70%/130% Verdana,sans-serif;
+	font-weight: normal;
+	color: #4c4c4c;
+}
+
+div.previewList {
+	position: absolute;
+   border: 2px solid #CCC;
+	visibility: hidden;
+	z-index: 80;
+	width: 259px; 
+	background-color: #FFFFFF;
+}
+
+a.wizLinkButton {
+	border: 0;
+	margin: 0;
+	font: normal 11px Verdana, sans-serif;
+	color: #000;
+	cursor: default;
+	padding-left: 9px;
+	padding-right: 9px;	
+	padding-bottom: 1px;
+	padding-top: 1px;
+	display:inline;
+	background-color: #C2D2EE;	
+	border-bottom-style: solid;
+	border-bottom-width: 2px;
+	border-bottom-color: #666666;	
+	border-right-style: solid;
+	border-right-width: 2px;
+	border-right-color: #666666;	
+}
+
+
+div.eventNN {
+	position: absolute;
+	top: 1px;
+	right: 3px;
+	width:  14px;
+	height: 13px;
+}
+
+div.eventOK {
+	position: absolute;
+	top: 1px;
+	right: 3px;
+	background: url(../images/succeeded.gif) no-repeat;
+	width:  14px;
+	height: 13px;
+}
+
+div.eventNO {
+	position: absolute;
+	top: 1px;
+	right: 3px;
+	background: url(../images/failed.gif) no-repeat;
+	width:  14px;
+	height: 13px;
+}
+
+div.eventRS {
+	position: absolute;
+	top: 1px;
+	right: 3px;
+	background: url(../images/restricted.gif) no-repeat;
+	width:  14px;
+	height: 13px;
+}
+
+div.eventPN {
+	position: absolute;
+	top: 1px;
+	right: 3px;
+	background: url(../images/pending.gif) no-repeat;
+	width:  14px;
+	height: 13px;
+}
+
+div.eventOD {
+	position: absolute;
+	top: 1px;
+	right: 3px;
+	background: url(../images/overdue.gif) no-repeat;
+	width:  14px;
+	height: 13px;
+}
+
+table.tabs {height: 22px; margin-left: 5px; padding: 0; border-collapse: collapse; border:0}
+tr.tabs {position: relative; margin: 0; padding: 0; font: normal 11px Arial, sans-serif; list-style-type: none; width: 775px;}
+tr.tabs td {display: block; float: left; margin: 0; padding: 0;}
+td.tabs {background-image:  url(../images/r_curve.gif); background-repeat: no-repeat; background-position: right top; background-color: #77725C; border-bottom: solid 1px #fff; width: 10%; }
+td.tabs a {font: normal 11px Arial, sans-serif; background-image:  url(../images/l_curve.gif); background-repeat: no-repeat; background-position: left top; color: #F4F1D9; width: 10%; }
+a.tabs {display: block; float: left; padding: 5px 10px 4px 10px; text-decoration: none; letter-spacing: 1px; white-space: nowrap; width: 10%; }/* Commented Backslash Hack hides rule from IE5-Mac \*/
+a.tabs a {float: none; padding: 5px 10px 4px 10px; } /* End IE5-Mac hack */
+a.tabs:hover { text-decoration: none; color: #FFF}
+a.tabs:visited { text-decoration: none; color: #FFF}
+
+tr.tabsSelected {position: relative; margin: 0; padding: 0; font: normal 11px Arial, sans-serif; list-style-type: none; width: 775px;}
+tr.tabsSelected td {display: block; float: left; margin: 0; padding: 0;}
+td.tabsSelected {color: #000; background-image:  url(../images/r_curve.gif); background-repeat: no-repeat; background-position: right top; background-color: #C5D9ED; border-bottom: solid 1px #C5D9ED; width: 10%; }
+td.tabsSelected a {color: #000; font: bold 11px Arial, sans-serif; background-image:  url(../images/l_curve.gif); background-repeat: no-repeat; background-position: left top; color: #FFF; width: 10%; }
+a.tabsSelected {color: #000; display: block; float: left; padding: 5px 10px 4px 10px; text-decoration: none; letter-spacing: 1px; white-space: nowrap; width: 10%; }/* Commented Backslash Hack hides rule from IE5-Mac \*/
+a.tabsSelected a {color: #000; float: none; padding: 5px 10px 4px 10px; } /* End IE5-Mac hack */
+a.tabsSelected:hover { text-decoration: none; color: #000}
+a.tabsSelected:visited { text-decoration: none; color: #000}
+table.tabsSelected {
+   width: 100%;	
+   height: 25px; 	
+   background-color: #C5D9ED;	
+}
