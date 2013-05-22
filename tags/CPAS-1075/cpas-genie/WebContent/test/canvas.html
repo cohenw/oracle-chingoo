@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas id="myCanvas" width="500" height="100" style="border:1px solid #c3c3c3;">
+Your browser does not support the HTML5 canvas tag.
+</canvas>
+
+<script>
+
+var c=document.getElementById("myCanvas");
+var ctx=c.getContext("2d");
+ctx.fillStyle="#0000FF";
+
+var arr = new Array();
+
+var idx_i = 0;
+var idx_j = 0;
+
+function test ()  {
+
+	ctx.fillStyle="#0000FF";
+	for (i=0; i<100;i++) {
+		var h = Math.floor((Math.random()*100)+1);
+		arr[i] = h;
+	}
+	
+	ctx.clearRect(0,0,500, 100);
+	for (i=0; i<100;i++) {
+		ctx.fillRect(5*i,100-arr[i],4,arr[i]);
+	}
+
+idx_i = 99;
+idx_j =-1;
+
+//idx_i = 0
+//idx_j = 0;
+
+//	setTimeout('NextMoveSelection()', 10);
+	setTimeout('NextMoveBubble()', 10);
+//	ctx.fillStyle="#FF0000";
+}
+
+function NextMoveSelection() {
+	idx_j++;
+	if (idx_j>=100) {
+		idx_i++;
+		idx_j = idx_i+1;
+	}
+
+	if (arr[idx_i] > arr[idx_j]) {
+		swap(idx_i, idx_j);
+	}
+
+	if (idx_i<99) 
+		setTimeout('NextMoveSelection()', 10);
+	else {
+		ctx.font="14px Arial";
+		ctx.fillText("Done!",10,20);
+	}	
+}
+
+function NextMoveBubble() {
+	idx_j++;
+	if (idx_j>=idx_i) {
+		idx_i--;
+		idx_j = 0;
+	}
+
+	if (arr[idx_j] > arr[idx_j+1]) {
+		swap(idx_j, idx_j+1);
+	}
+
+	if (idx_i>0) 
+		setTimeout('NextMoveBubble()', 10);
+	else {
+		ctx.font="14px Arial";
+		ctx.fillText("Done!",10,20);
+	}
+		
+}
+
+function swap(i, j) {
+	ctx.clearRect(5*i,0,4,100);
+	ctx.clearRect(5*j,0,4,100);
+	
+	var temp = arr[i];
+	arr[i] = arr[j];
+	arr[j] = temp;
+	
+	ctx.fillRect(5*i,100-arr[i],4,arr[i]);
+	ctx.fillRect(5*j,100-arr[j],4,arr[j]);
+}
+
+</script>
+
+<br/><br/>
+<a href="javascript:test()">test</a>
+
+</body>
+</html>
