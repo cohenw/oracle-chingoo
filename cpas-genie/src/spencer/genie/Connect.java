@@ -90,6 +90,7 @@ public class Connect implements HttpSessionBindingListener {
 	private HashMap<String, String> packageTables;
 	private HashMap<String, String> packageProcTables;
 	private HashMap<String,String> packageProc;
+	private HashMap<String, String> triggerTables;
 	
 	public QueryCache queryCache;
 	public ListCache listCache;
@@ -100,11 +101,13 @@ public class Connect implements HttpSessionBindingListener {
 	public ContentSearchView contentSearchView;
 	public ContentSearchTrigger contentSearchTrigger;
 	public PackageTableWorker packageTableWorker; 
+	public TriggerTableWorker triggerTableWorker; 
 	
 	private boolean workSheetTableCreated = false;
 	private boolean linkTableCreated = false;
 //	private boolean pkgTableCreated = false;
 	private boolean pkgProcCreated = false;
+	private boolean trgProcCreated = false;
 		
 	private String savedHistory = "";
 	private String email = "";
@@ -141,6 +144,8 @@ public class Connect implements HttpSessionBindingListener {
     	packageTables = new HashMap<String, String>();
     	packageProcTables = new HashMap<String, String>();
     	packageProc = new HashMap<String, String>();
+    	triggerTables = new HashMap<String, String>();
+
     	loginDate = new Date();
     	lastDate = new Date();
     	pwd = password;
@@ -199,6 +204,7 @@ public class Connect implements HttpSessionBindingListener {
             contentSearchView = ContentSearchView.getInstance();
             contentSearchTrigger = ContentSearchTrigger.getInstance();
             packageTableWorker = PackageTableWorker.getInstance();
+            triggerTableWorker = TriggerTableWorker.getInstance();
 
             loadData();
         }
@@ -346,6 +352,7 @@ public class Connect implements HttpSessionBindingListener {
     
     public void printQueryLog() {
     	HashMap<String, QueryLog> map = this.getQueryHistory();
+    	if (map ==null) return;
         List<QueryLog> logs = new ArrayList<QueryLog>(map.values());
 
         Collections.sort(logs, new Comparator<QueryLog>() {
@@ -442,6 +449,7 @@ System.out.println("filename=" + filename);
 		loadViewTables();
 		loadPackageTable();
 		loadPackageProc();
+		loadTriggerTable();
 		
         cu = new CpasUtil(this);
         this.isCpas = cu.isCpas;
@@ -653,6 +661,44 @@ System.out.println("filename=" + filename);
 
 	}
 	
+	public synchronized void loadTriggerTable() {
+		triggerTables.clear();
+		if (!this.isTVS("GENIE_TR_TABLE")) return;
+		
+		String sql = "SELECT TRIGGER_NAME, TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE FROM GENIE_TR_TABLE";
+		
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery(sql);	
+
+       		while (rs.next()) {
+       			String trgName = rs.getString(1);
+       			String tblName = rs.getString(2);
+       			String opSel =  rs.getString(3);
+       			String opIns =  rs.getString(4);
+       			String opUpd =  rs.getString(5);
+       			String opDel =  rs.getString(6);
+       			
+       			String op = "";
+       			if (!opIns.equals("0")) op += "C";
+       			if (!opSel.equals("0")) op += "R";
+       			if (!opUpd.equals("0")) op += "U";
+       			if (!opDel.equals("0")) op += "D";
+       			
+       			triggerTables.put(trgName+","+tblName, op);
+       		}
+       		rs.close();
+       		stmt.close();
+
+		} catch (SQLException e) {
+             System.err.println ("loadTriggerTable");
+             e.printStackTrace();
+             message = e.getMessage();
+ 		}
+
+		addMessage("Loaded triggerTables " + triggerTables.size());
+	}
+	
 	public synchronized void loadPackageProc() {
 		packageProc.clear();
 		
@@ -702,6 +748,14 @@ System.out.println("filename=" + filename);
 	public String getCRUD(String packageName, String procedureName, String tableName) {
 		String key = packageName+"."+procedureName + "," + tableName;
 		String op = packageProcTables.get(key);
+		if (op==null) return "";
+		
+		return "<span style='color: red; font-weight: bold;'>" + op + "</span>";
+	}
+	
+	public String getTriggerCRUD(String triggerName, String tableName) {
+		String key = triggerName + "," + tableName;
+		String op = triggerTables.get(key);
 		if (op==null) return "";
 		
 		return "<span style='color: red; font-weight: bold;'>" + op + "</span>";
@@ -1682,7 +1736,11 @@ System.out.println("filename=" + filename);
        			if(!rowner.equalsIgnoreCase(this.getSchemaName()))
        				rname = rowner + "." + rname;
 
-       			res += "<a href='javascript:loadTable(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;<span class='rowcountstyle'>" + getTableRowCount(rname) + "</span> " + this.getCRUD(name, rname) + "<br/>";
+       			String crud = this.getCRUD(name, rname);
+       			if (crud==null || crud.equals(""))
+       				crud = this.getTriggerCRUD(name, rname);
+       			
+       			res += "<a href='javascript:loadTable(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;<span class='rowcountstyle'>" + getTableRowCount(rname) + "</span> " + crud + "<br/>";
        		}
        		
        		rs.close();
@@ -2351,6 +2409,41 @@ System.out.println("filename=" + filename);
         this.tables.add("GENIE_PA_PROCEDURE");
 	}
 	
+	public void createTrg() throws SQLException {
+		if (this.isTVS("GENIE_TR")) return; 
+
+        conn.setReadOnly(false);
+        
+		String stmt1 = 
+				"CREATE TABLE GENIE_TR (	"+
+				"TRIGGER_NAME	VARCHAR2(30), " +
+				"CREATED DATE, " +
+				"PRIMARY KEY (TRIGGER_NAME) )";
+		
+		Statement stmt = conn.createStatement();
+		stmt.execute(stmt1);
+		
+		stmt1 = 
+				"CREATE TABLE GENIE_TR_TABLE (	"+
+				"TRIGGER_NAME	VARCHAR2(30), " +
+				"TABLE_NAME	VARCHAR2(30), " +
+				"OP_SELECT	CHAR(1), " +
+				"OP_INSERT	CHAR(1), " +
+				"OP_UPDATE	CHAR(1), " +
+				"OP_DELETE	CHAR(1), " +
+				"PRIMARY KEY (TRIGGER_NAME, TABLE_NAME) )";
+		
+		stmt.execute(stmt1);
+		stmt.execute("CREATE INDEX GENIE_TR_TABLE_IDX ON GENIE_TR_TABLE(TABLE_NAME)");
+
+		stmt.close();
+        conn.setReadOnly(true);
+        trgProcCreated = true;
+        
+        this.tables.add("GENIE_TR");
+        this.tables.add("GENIE_TR_TABLE");
+	}
+	
 	public void saveLink(String tname, String sqlStmt) throws SQLException {
 		if (!linkTableCreated) createLinkTable();
 		try {
@@ -2796,6 +2889,59 @@ System.out.println("filename=" + filename);
 	        	}
 	        }
 	        
+	        conn.setReadOnly(true);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void AddTriggerTable(String trgName, HashMap<String, String> hm) throws SQLException {
+		if (!trgProcCreated) createTrg();
+		try {
+	        conn.setReadOnly(false);
+
+	        Statement stmt = conn.createStatement();
+	        String sql = "DELETE FROM GENIE_TR_TABLE WHERE TRIGGER_NAME='" + trgName + "'";
+	        stmt.executeUpdate(sql);
+	        stmt.close();
+
+	        for (String key:hm.keySet()) {
+	        	String value=hm.get(key);
+
+	        	sql = "INSERT INTO GENIE_TR_TABLE(TRIGGER_NAME, TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE) VALUES (?,?,?,?,?,?)";
+	        	PreparedStatement pstmt = conn.prepareStatement(sql);
+	        
+	        	String opSelect = "0";
+	        	String opInsert = "0";
+	        	String opUpdate = "0";
+	        	String opDelete = "0";
+	        	if (value.contains("S")) opSelect = "1";
+	        	if (value.contains("I")) opInsert = "1";
+	        	if (value.contains("U")) opUpdate = "1";
+	        	if (value.contains("D")) opDelete = "1";
+	        	
+	        	pstmt.setString(1, trgName);
+	        	pstmt.setString(2, key);
+	        	pstmt.setString(3, opSelect);
+	        	pstmt.setString(4, opInsert);
+	        	pstmt.setString(5, opUpdate);
+	        	pstmt.setString(6, opDelete);
+	        	try {
+	        		pstmt.executeUpdate();
+	        		pstmt.close();
+	        	} catch (SQLException e) {
+	        		e.printStackTrace();
+	        		System.out.println(trgName + "," + key + "," + opSelect + opInsert + opUpdate + opDelete);
+	        		pstmt.close();
+	        	}
+	        }
+	        
+	        stmt = conn.createStatement();
+	        sql = "INSERT INTO GENIE_TR (TRIGGER_NAME, CREATED) VALUES ('" + trgName + "', SYSDATE)";
+	        stmt.executeUpdate(sql);
+	        stmt.close();
+
 	        conn.setReadOnly(true);
 
 		} catch (SQLException e) {

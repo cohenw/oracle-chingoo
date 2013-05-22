@@ -133,7 +133,7 @@ public String disp(Connect cn, String mainPkg, String name) {
 
 <html>
 <head>
-<title>Package Map</title>
+<title>Package Tree</title>
 
 <meta name="description"
 	content="Genie is an open-source, web based oracle database schema navigator." />
@@ -196,11 +196,32 @@ function hi_off(v) {
 </head>
 <body>
 
-<h2><%= gPkg + "." + cn.getProcedureLabel(gPkg, gPrc)  %>
+	<table width=100% border=0>
+		<td><h2 style="color: blue;"><img src="image/cpas.jpg"
+			title="Version <%=Util.getVersionDate()%>" /> Package Tree</h2></td>
+		<td></td>
+		<td>&nbsp;</td>
+
+		<td>
+<a href="index.jsp">Home</a> |
+<a href="query.jsp" target="_blank">Query</a>
+		</td>
+		<td><b><%=cn.getUrlString()%></b></td>
+
+<td align=right nowrap>
+<%--
+<b>Search</b> <input id="globalSearch" style="width: 200px;"/>
+<input type="button" value="Find" onClick="Javascript:processSearch($('#globalSearch').val())"/>
+ --%>
+ </td>
+
+ 	</table>
+
+<h3><%= gPkg + "." + cn.getProcedureLabel(gPkg, gPrc)  %>
 &nbsp;&nbsp;
 <a target=_blank href="src2.jsp?name=<%= gPkg %>#<%= gPrc.toLowerCase() %>">Source</a>
 <a target=_blank href="package-browser.jsp?name=<%= name %>">PackgeBrowser</a>
-</h2>
+</h3>
 
 <b><a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
 <div id="div-<%=id %>" style="display: none; margin-left: 20px; background-color: #eeeeee;">
@@ -229,15 +250,14 @@ for (int i=0;i<proc0.size();i++) {
 <td bgcolor="green"></td>
 <td valign=top><pre style="font-family: Consolas;">
 <%= new HyperSyntax4PB().getHyperSyntax(cn, text, "PROCEDURE", gPkg)%>
-</pre>
-</td>
+</pre></td>
 </table>
-
+<br/>
 <%		
 	}
 %>
 </div>
-<br/><br/>
+<br/>
 
 <h3>Table CRUD</h3>
 <div style="margin-left: 20px;">
@@ -296,7 +316,7 @@ for (int i=0;i<list0.size();i++) {
 <%  } 
 } 
 %>
-<%-- 	 <%= lvl %> <%= prev %> <%= next %><%= showPath(gPkg,  p.getPath()) %> <a href="package-map.jsp?name=<%=s%>"> <%= disp(gPkg, s) %></a><br/>
+<%-- 	 <%= lvl %> <%= prev %> <%= next %><%= showPath(gPkg,  p.getPath()) %> <a href="package-tree.jsp?name=<%=s%>"> <%= disp(gPkg, s) %></a><br/>
  --%>
  
 <% 
@@ -304,7 +324,7 @@ for (int i=0;i<list0.size();i++) {
 	divOpen++;
 %>
 <a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/minus.gif"></a>
-<a href="package-map.jsp?name=<%=s%>"> <%= disp(cn, gPkg, s) %></a>
+<a href="package-tree.jsp?name=<%=s%>"> <%= disp(cn, gPkg, s) %></a>
 <br/>
 <div id="div-<%=id%>" style='margin-left: 80px;'> 
 
@@ -372,7 +392,7 @@ while (true) {
 			if (s.startsWith("DEF.")) continue;
 			if (marked.contains(s)) continue;
 %>
-			 <%= showReversePath(cn, gPkg, path) %> <a href="package-map.jsp?name=<%=s%>"> <%= disp(cn, gPkg, s) %></a><br/>
+			 <%= showReversePath(cn, gPkg, path) %> <a href="package-tree.jsp?name=<%=s%>"> <%= disp(cn, gPkg, s) %></a><br/>
 <%
 			marked.add(s);
 
@@ -403,7 +423,7 @@ while (true) {
 
 </script>
 
-<form id="form-map" action="package-map.jsp" method="get">
+<form id="form-map" action="package-tree.jsp" method="get">
 <input id="name-map" name="name" type="hidden">
 </form>
 </body>

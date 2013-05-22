@@ -329,6 +329,9 @@ PEPP<br/>
 PMRS<br/>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS', 'pmrs_client')">pmrs_client@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS</a>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS', 'pmrs_client_53')">pmrs_client_53@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS', 'CLIENT_PMRS_DEV')">CLIENT_PMRS_DEV@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS</a>
+
+
 <br/>
 
 PPL<br/>

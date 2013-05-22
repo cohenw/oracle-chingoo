@@ -41,7 +41,7 @@ System.out.println("prc=" + prc);
 <h2><%= pkg %>.<%= cn.getProcedureLabel(pkg, prc) %>&nbsp;&nbsp;&nbsp;&nbsp;
 <a target=_blank href="src2.jsp?name=<%= pkg %>#<%= prc.toLowerCase() %>">Source</a>
 
-<a target=_blank href="package-map.jsp?name=<%= name %>">Tree</a>
+<a target=_blank href="package-tree.jsp?name=<%= name %>">Tree</a>
 </h2> 
 <br/>
 
@@ -103,7 +103,7 @@ for (int i=0;i<proc0.size();i++) {
 	String label = proc0.get(i)[3];
 	
 	q = "SELECT LINE, TEXT FROM USER_SOURCE WHERE TYPE='PACKAGE BODY' AND NAME = '" + pkg + "' AND LINE BETWEEN " + start + " AND " + end+ " ORDER BY LINE";
-	System.out.println(q);
+	//System.out.println(q);
 	List<String[]> src = cn.query(q, false);
 	String text = "";
 	for (int j=0;j<src.size();j++) text += src.get(j)[2];

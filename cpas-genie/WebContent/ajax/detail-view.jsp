@@ -137,7 +137,7 @@
 	} 
 %>
 
-		<a href="Javascript:loadPackage('<%= refTrg %>')"><%= refTrg %></a>&nbsp;&nbsp;<br/>		
+		<a href="Javascript:loadPackage('<%= refTrg %>')"><%= refTrg %></a>&nbsp;&nbsp;<%= cn.getTriggerCRUD(refTrg, view) %><br/>		
 <% }
 %>
 </td>

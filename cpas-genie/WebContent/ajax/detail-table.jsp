@@ -351,7 +351,7 @@ Please select a Table to see the detail.
 	} 
 %>
 
-		<a href="Javascript:loadPackage('<%= refTrg %>')"><%= refTrg %></a>&nbsp;&nbsp;<br/>		
+		<a href="Javascript:loadPackage('<%= refTrg %>')"><%= refTrg %></a>&nbsp;&nbsp;<%= cn.getTriggerCRUD(refTrg, table) %><br/>		
 <% }
 	for (; cols<=3; cols++) {
 %>
