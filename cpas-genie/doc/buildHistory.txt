@@ -267,6 +267,7 @@ Build CPAS1075
 
 Build CPAS1076
 	GENIE_PA for package / table relationship
+	GENIE_TR for trigger / table relationship
  	Package Analysis
  	Package Browser - Public / Private procedures
  	Syntax Highlight stays upon mouseout
