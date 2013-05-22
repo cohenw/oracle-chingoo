@@ -1,0 +1,381 @@
+/* Details of Calculation settings.*/
+/* Note: the file pdf.css is a concatenation of doc.css and newdoc.css. 
+	Any change made to doc.css or newdoc.css must be accompanied by a
+	similar change to pdf.css. */
+
+
+/* Details of Calculation Paragraph backgrounf*/
+
+/* Main screen */
+body.doc_para  {
+  /* background-image: url("compscreen.gif");
+   background-repeat: "no-repeat";
+   background-attachment: "fixed";*/
+	margin: 0;
+	border-collapse: collapse;
+	border: 0;
+	padding-top: 7px;
+	padding-left: 0px;
+	padding-right: 7px;
+}
+
+table.doc {
+	width: 100%;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+	margin-top: 10px;	
+}
+
+td.doc_spacer {
+ width: 0;
+ margin: 0;
+ border-collapse:collapse;
+ border: 0;
+ padding: 0;
+ display: none;
+}
+
+*.doc_data {
+ width: 100%;
+ border-collapse:collapse;
+ border: 0;
+ padding: 0; 
+ margin: 0;
+	empty-cells: hide;
+	border-collapse: collapse;	  
+}
+
+*.doc_array {
+	width: 100%;
+	padding: 0;
+	border-spacing: 0px;
+	empty-cells: hide;
+	border-collapse: collapse;	 
+	border: 1px solid #B6B6B6;	
+}
+
+*.doc_data_table {
+ width: 100%;
+ margin: 0;
+ border-collapse:collapse;
+ padding: 0; 
+	border-spacing: 0px;
+	empty-cells: hide; 
+} 
+
+*.doc_array_table {
+	width: 100%;
+	padding: 0;
+	border-spacing: 0px;
+	empty-cells: hide;
+	border-collapse: collapse;	 
+/*	border: 1px solid #B6B6B6;	*/
+}
+
+/* Details of Calculation Paragraph title and sub-title; VADIM-background*/
+td.doc_subParaDesc {
+	font-family: Arial, Verdana, MS Sans Serif; 
+	font-size: 75%;
+	font-weight: bold;
+	width: 100%;
+	border-collapse: collapse;	
+	margin: 0px;
+	border-left: 1px solid #B6B6B6;
+	border-right: 1px solid #B6B6B6;
+	border-top: 2px solid #B6B6B6;		
+	background-color: #C5D9ED; 
+	height: 28px;
+	text-align: left;
+	padding-left: 7px;	
+/*
+   width: 100%;
+	font-family: Arial, sans-serif;
+	font-weight: bold;
+	font-size: 12px;
+	padding-right: 5px;
+   border-top: #999 2px solid;
+   border-bottom: #999 1px solid;
+	padding-left: 7px;
+	background: #c5d9ed;
+	padding-bottom: 5px;
+	color: #000;
+	padding-top: 5px;
+*/	
+}
+
+/* Style for row below title row. Used for refresh button */
+td.doc_subParaDesc2 {
+   width: 100%;
+	font-family: Arial, sans-serif;
+	font-weight: bold;
+	font-size: 12px;
+	padding-right: 15px;
+   border-top: #999 2px solid;
+   border-bottom: #999 1px solid;
+	padding-left: 7px;
+	background: #ffffff;
+	padding-bottom: 5px;
+	color: #000;
+	padding-top: 5px;
+	text-align: right;
+}
+
+
+/* Data display - single data or desc - data display */
+
+
+/* Description cell */
+
+
+/* Details of Calculation Item description STRING*/
+td.doc_singleDataCellDesc {
+width: 20%;
+min-width: 153px;
+	margin: 0;
+	font: 75% Arial, sans-serif;
+color: #000;
+/*BORDER-RIGHT: #dcdcdc 1px solid;
+BORDER-BOTTOM: #dcdcdc 1px solid;*/
+	border: 1px solid #B6B6B6;	
+BACKGROUND: #e6edf2;
+TEXT-ALIGN: right;
+padding-right: 7px;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 7px;
+
+}
+/* Details of Calculation Item description STRING*/
+td.doc_singleDataCellDescS {
+width: 20%;
+min-width: 153px;
+	margin: 0;
+	font: 75% Arial, sans-serif;
+color: #000;
+/*BORDER-RIGHT: #dcdcdc 1px solid;
+BORDER-BOTTOM: #dcdcdc 1px solid;*/
+	border: 1px solid #B6B6B6;	
+BACKGROUND: #e6edf2;
+TEXT-ALIGN: right;
+padding-right: 7px;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 7px;
+}
+/* Details of Calculation Item description DATE*/
+td.doc_singleDataCellDescD {
+width: 20%;
+min-width: 153px;
+	margin: 0;
+	font: 75% Arial, sans-serif;
+color: #000;
+/*BORDER-RIGHT: #dcdcdc 1px solid;
+BORDER-BOTTOM: #dcdcdc 1px solid;*/
+	border: 1px solid #B6B6B6;	
+BACKGROUND: #e6edf2;
+TEXT-ALIGN: right;
+padding-right: 7px;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 7px;
+}
+/* Details of Calculation Item description NUMBER*/
+td.doc_singleDataCellDescN {
+width: 20%;
+min-width: 153px;
+	margin: 0;
+	font: 75% Arial, sans-serif;
+color: #000;
+/*BORDER-RIGHT: #dcdcdc 1px solid;
+BORDER-BOTTOM: #dcdcdc 1px solid;*/
+	border: 1px solid #B6B6B6;	
+BACKGROUND: #e6edf2;
+TEXT-ALIGN: right;
+padding-right: 7px;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 7px;
+}
+/* Details of Calculation Item description CURRENCY*/
+td.doc_singleDataCellDescR {
+width: 20%;
+min-width: 153px;
+	margin: 0;
+	font: 75% Arial, sans-serif;
+color: #000;
+/*BORDER-RIGHT: #dcdcdc 1px solid;
+BORDER-BOTTOM: #dcdcdc 1px solid;*/
+	border: 1px solid #B6B6B6;	
+BACKGROUND: #e6edf2;
+TEXT-ALIGN: right;
+padding-right: 7px;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 7px;
+}
+
+/* Data cell */
+
+/* Details of Calculation Item data STRING*/
+td.doc_singleDataCellData {
+	margin: 0;
+	font: 75% Arial, sans-serif;
+color: #333;
+BACKGROUND: #fff;
+TEXT-ALIGN: left;
+padding-right: 7px;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 7px;
+	border: 1px solid #B6B6B6;
+}
+
+/* Details of Calculation Item data STRING*/
+td.doc_singleDataCellDataS {
+	margin: 0;
+	font: 75% Arial, sans-serif;
+color: #333;
+BACKGROUND: #fff;
+TEXT-ALIGN: left;
+padding-right: 7px;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 7px;
+	border: 1px solid #B6B6B6;
+}
+
+/* Details of Calculation Item data DATE*/
+td.doc_singleDataCellDataD {
+	margin: 0;
+	font: 75% Arial, sans-serif;
+color: #333;
+BACKGROUND: #fff;
+TEXT-ALIGN: left;
+padding-right: 7px;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 7px;
+	border: 1px solid #B6B6B6;
+}
+
+/* Details of Calculation Item data NUMBER*/
+td.doc_singleDataCellDataN {
+	margin: 0;
+	font: 75% Arial, sans-serif;
+	color: #333;
+	BACKGROUND: #fff;
+	TEXT-ALIGN: left;
+	padding-right: 7px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 7px;
+	border: 1px solid #B6B6B6;
+}
+
+/* Details of Calculation Item data CURRENCY*/
+td.doc_singleDataCellDataR {
+	margin: 0;
+	font: 75% Arial, sans-serif;
+color: #333;
+BACKGROUND: #fff;
+TEXT-ALIGN: left;
+padding-right: 7px;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 7px;
+	border: 1px solid #B6B6B6;
+}
+
+/* Data display - arrays display */
+
+
+/* Description cell */
+
+/* Details of Calculation Item description STRING*/
+
+/* wms - same as ar_labels */
+td.doc_arrayDataCellDesc, td.doc_arrayDataCellDescS, td.doc_arrayDataCellDescN, td.doc_arrayDataCellDescD, td.doc_arrayDataCellDescR {
+   font-family: Arial, Verdana, MS Sans Serif; 
+	font-size: 75%;	
+   font-weight: normal; 
+   color: #000000;
+	margin: 0px;
+   background-color: #E6EDF2;    
+   text-align: center;   
+   height: 25px; 
+	padding: 0;
+   padding-bottom: 4px;  
+   vertical-align: bottom;
+	border: 1px solid #B6B6B6;
+}
+
+/* Data cell */
+
+/* Details of Calculation Item data STRING*/
+td.doc_arrayDataCellData, td.doc_arrayDataCellDataS, td.doc_arrayDataCellDataD, td.doc_arrayDataCellDataN, td.doc_arrayDataCellDataR {
+   font-family: Arial, MS Sans Serif; 
+   font-size: 75%; 
+   color: #333;
+   padding-bottom: 2px;
+   padding-top: 2px;
+   padding-left: 5px;
+   padding-right: 5px;
+   vertical-align: top;
+   text-align: left;   	
+	border-top: 1px solid #d7dfee;	
+	border-right: 1px solid #B6B6B6;
+	border-left: 1px solid #B6B6B6;	
+}
+
+
+/* Details of Calculation Item data DATE*/
+td.doc_arrayDataCellDataD {
+  	text-align: left;
+}
+
+/* Details of Calculation Item data NUMBER*/
+td.doc_arrayDataCellDataN {
+  	text-align: right;
+}
+
+.doc_caption, .doc_option_no, .doc_option_amount, .doc_option_text, .doc_option_no-span, .doc_option_amount-span, .doc_option_text-span {
+	margin: 0;
+	font-family: Arial, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif; 
+	font-size: 80%;
+	color: #333;	
+	padding-top: 4px;
+	padding-left: 4px;	
+	padding-right: 4px;		
+	border: 1px solid #d7dfee;
+	BACKGROUND: #fff;	
+}
+
+.doc_option_no-span, .doc_option_amount-span, .doc_option_text-span {
+	border-bottom: 1px solid #d7dfee;	
+}
+
+td.doc_caption {
+	background-color: #e6edf2;	
+}
+
+td.doc_option_no {
+	TEXT-ALIGN: left;
+}
+
+td.doc_option_amount, td.doc_option_amount-span {
+	TEXT-ALIGN: right;	
+}
+
+td.doc_option_text {
+	TEXT-ALIGN: left;
+}
+/* Added by vadim*/
+div.separator {
+	margin: 0;
+	padding: 0;
+/*	height: 1px;
+	line-height: 1px;
+	border-top: 1px dashed #ccc;
+*/	
+}

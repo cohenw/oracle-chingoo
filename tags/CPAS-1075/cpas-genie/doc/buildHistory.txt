@@ -1,0 +1,266 @@
+Build 1011
+	CpasUtil.planTable for SV_PLAN / PLAN
+
+Build 1012
+	Foreign key - delete rule
+	
+Build 1013
+	Add user-agent (browser) to email notification
+	Add user-agent, plan table to console log
+
+Build 1014
+	Role / Privileges show the differences
+
+Build 1015
+	Privilege (SECLABEL) search for Process/Event/TreeView
+	Added 250, 500 milliseconds on loadEvent, loadEventView respectively
+	
+Build 1016
+	Process/Event exclude SC_NEVER
+	Shoe CRUD in Process/Event
+	Indent Event name if pevent is not null
+
+Build 1017
+	CPAS Online view
+
+Build 1018
+	keyword = $.trim(keyword);  // IE does not support trim() method.
+	Hide Tabs with 'SC_NEVER'
+
+Build 1019
+	Set highlight on tab search (cpas online companion)
+	Show Process, Event detail in EventView pane
+
+Build 1020
+ 	Search View
+ 	Search Trigger
+ 	Rename search db content to search table
+ 
+Build 1021
+	Bug fix: table search (java script)
+	keyword = $.trim(keyword);  // IE does not support trim() method.
+	Enhance Search View/Trigger: added progress bar and status
+
+Build 1022
+	Slide show picture comes from outside (fall images)
+
+Build 1023
+	Show Treeview info inside CPAS online
+
+Build 1024
+	NAV Canada added to CPAS database list
+	download.jsp change NULL to ""
+	TASKCAT added to CPAS hint
+	
+Build 1025
+	Pop-up for Table, View and Package
+	Added search box on pop.jsp
+
+Build 1026
+	Bug fix - null pointer error in CpasUtil.java
+	Pop - style fix for autocomplete (define max height)
+	Added global search in Query and Datalink
+
+Build 1027
+	Title change on detail table/view/package
+	Load Event added indentation
+	Load Event hides with PEVENT IS NOT NULL
+
+Build 1028
+	Request.status, Request_task.status code/value
+	Latest Batches, Latest Requests
+	WIZARDCAT added	 
+	
+Build 1029
+	qry.jsp format do not use <pre> when starts with <
+
+Build 1030
+	Compile for JDK5
+
+Build 1031
+	CPAS Simulator use Code/Value for layout
+	CALC Detail page, Link to calc detail page 
+
+Build 1032
+	CALC Detail page support dynamic tabs
+	CALC HTML Detail page / applied SIGMA CSS
+
+Build 1033
+	Query support dynamic binding
+
+Build 1034
+	Data-Link by rowid
+
+Build 1035
+	CPAS Online - Slave event
+
+Build 1036
+	CPAS - Extract Member script
+	Schema Diff - use Tab UI
+	Schema Diff - logout for Schema 2
+	
+Build 1037
+	Auto complete - trim the keyword
+	SEARSDB added
+	Bug fix - Query with parameter(s) ex: COL=:MKEY)
+
+Build 1038
+	No datalink for group by query
+	No datalink if all PK columns are not selected
+
+Build 1039
+	Google Analytics include custom variable - BuildNo
+
+Build 1040
+	Query support Explain Plan
+
+Build 1041
+	No email for non-CPAS
+	Hide null-value parameter name in SecurityFilter
+	Remove link if the value is empty
+	Google Analytic issue for IE fixed
+
+Build 1042
+	Show sql statement in the query result (for screen copy)
+	
+Build 1043	
+	handle null value in qry.sql
+	fix download and query issue
+
+Build 1044
+	Schema Diff - trigger - ignore the 1st line
+
+Build 1045
+	Support queries that start with WITH
+	
+Build 1046
+	Support ajax page tracking
+	Bug Fix - queries that start with WITH
+
+Build 1047
+	Bug Fix - Table lookup in Query
+
+Build 1048
+	Support Transpose in Query page
+	
+Build 1050
+	Bug fix - cpas online slave event query
+
+Build 1051
+	Data Link support Transpose
+
+Build CPAS1052
+	CPAS Caption/Code also from ARRAY$TABLE
+
+Build CPAS1053
+	Filter2 for multiple filters 
+
+Build CPAS1054
+	UTF-8 issue
+ 
+Build CPAS1055
+	GA track custom variable5 - website url
+	Support JDK5
+
+Build CPAS1056
+	Fix CLOB/BLOB Download servlet when there is no PK
+
+Build CPAS1057
+	Simulator support Action Statement (ex: populate temp table)
+
+Build CPAS1058
+	Simulator support S:LANG (Language) parameter
+	Latest web wizards query
+	Logical link to %PERSONID columns
+	
+Build CPAS1059
+	new CPAS Simulator icon
+	LoadTVS in Connect
+	Query shows column list only for TVS
+
+Build CPAS1060
+	Bug fix for TVS (schema column list in query)
+	CPAS online support for PEPP
+
+Build CPAS1061
+	Bug fix for connection error due to TVS loading
+	removed loading TVS
+	Show CPAS catalog in homepage
+
+Build CPAS1062
+	CPAS Catalog pages show number of records for each table/synonym
+
+Build CPAS1063
+	CPAS Catalog pages link based on object's existance
+	CPAS Simulator bug fixed
+	Logical link for remarkid -> REMARK
+	Bug fix for static reference for CpasUtil.logicalLink2
+	CPAS Simulator support rows/page
+	Tooltip in Query shows column type and length
+
+Build CPAS1064
+	pop.jsp title shows object type
+
+Build CPAS1065
+	data-link shows fk lookup
+	bug fix - qry-simple-v.jsp for fk lookup when dialogUrl is empty
+	able to hide the history division
+	 
+Build CPAS1066
+	Open new page when new query is selected from data-link
+
+Build CPAS1067
+	Detect Temporary Table
+	use red star on mouse over
+	show/hide empty table option in svg ERD
+	data link url use new form
+	placeholder for input box
+	
+Build CPAS1068
+	CPAS logical link: REPORTCAT.FILEID -> SYSBINFILE, CPAS_WIZARD_PAGE_WEB.FORMNAME -> CPAS_JML
+	show connecting progress
+	show batch task on CPAS online event
+	Checkbox for hide empty tables
+
+Build CPAS1069
+	DataLink and PRK info for One table driven Views
+	For One table driven Views, show the table as Foreign key
+	Show detail link besize table/view name in Query
+	Remove duplication in data link (CPAS logical link)
+
+Build CPAS1070	
+	Fixed the tooltip for column description - lowsercase, no size for rowid type
+	Syntax Highlight for View / Trigger source
+
+Build CPAS1071
+	Load Public Synonym
+	Summary for query result (Count, Min, Max, Sum)
+	Dynamic Summary based on search / filter
+
+Build CPAS1072
+	Syntax mouse-over Highlight for variables, parameters and cursors
+	Bug fixed for one line comment at the end
+	Link to package header's cursor and type from package body
+	Column index for Table and View
+	CPAS_CODE shows values list		
+	Query does not hide edit box when the result set is not fully loaded
+	Logical child for ERRORCAT
+
+Build CPAS1073
+	Replaced JDBC driver - ojdbc5.jar
+	Fixed OpenQuery() issues for sql-query
+
+Build CPAS1074
+	source code line number for FireFox
+	search source code with '
+	TRANID added for CPAS code
+	PBR logical child tables
+	Login as CPAS_WEB and switch to target schema
+	Table detail for COMMON schema
+
+Build CPAS1075
+	GENIE_LINK table for custom data link
+	handle comments in query
+	code, code2 lookup for CPAS_CODE
+	Bug fix for source line number for IE and FF
+	Notice for IE (Genie works best with Chrome / FireFox)
