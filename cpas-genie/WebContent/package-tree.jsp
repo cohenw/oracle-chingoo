@@ -3,9 +3,9 @@
 	pageEncoding="utf-8"%>
 
 <%!
-public void DFS(Connect cn, String pkg, String prc, ArrayList<PTree> pt, HashSet<String> explored, ArrayList<String> path, int level) {
+public void DFS(Connect cn, int maxLevel, String pkg, String prc, ArrayList<PTree> pt, HashSet<String> explored, ArrayList<String> path, int level) {
 
-	if (level >=5) return;
+	if (level >=maxLevel) return;
 	
 	String q = "SELECT target_pkg_name, target_proc_name FROM GENIE_PA_DEPENDENCY WHERE PACKAGE_NAME='" + pkg + "' AND PROCEDURE_NAME='" + prc + "' ORDER BY DECODE(TARGET_PKG_NAME,'" + pkg + "','0',TARGET_PKG_NAME), 2";
 	List<String[]> proc1 = cn.query(q, false);
@@ -26,7 +26,7 @@ public void DFS(Connect cn, String pkg, String prc, ArrayList<PTree> pt, HashSet
 		newPath.add(target);		
 		if (!explored.contains(target)) {
 			explored.add(target);
-			DFS(cn, sPkg, sPrc, pt, explored, newPath, level +1);
+			DFS(cn, maxLevel, sPkg, sPrc, pt, explored, newPath, level +1);
 		}
 	}
 }
@@ -101,6 +101,10 @@ public String disp(Connect cn, String mainPkg, String name) {
 	Connect cn = (Connect) session.getAttribute("CN");
 
 	String name = request.getParameter("name");
+	String level = request.getParameter("level");
+	if (level==null || level.equals("")) level = "3";
+	int maxLevel = Integer.parseInt(level);
+	
 	if (name != null) name = name.toUpperCase();
 	String gPkg = "";
 	String gPrc = "";
@@ -191,10 +195,18 @@ function hi_on(v) {
 function hi_off(v) {
 	$("." + v).removeClass("highlight");
 }
+
+function changeLevel() {
+	$("#form_level").submit();
+}
 </script>
 
 </head>
 <body>
+
+<form name="form-map" id="form-map" action="package-tree.jsp" method="get">
+<input id="name-map" name="name" type="hidden">
+</form>
 
 	<table width=100% border=0>
 		<td><h2 style="color: blue;"><img src="image/cpas.jpg"
@@ -281,14 +293,26 @@ for (int i=0;i<list0.size();i++) {
 %>
 </div>
 
-<h3>Drill Down</h3>
+<form id="form_level" name="form_level" method="get" action="package-tree.jsp">
+<input name="name" type="hidden" value="<%=name%>">
+<h3>Drill Down - up to
+<input name="level" type="radio" value="1" onClick="javascript:changeLevel()" <%=(maxLevel==1)?"checked":"" %>>1
+<input name="level" type="radio" value="2" onClick="javascript:changeLevel()" <%=(maxLevel==2)?"checked":"" %>>2
+<input name="level" type="radio" value="3" onClick="javascript:changeLevel()" <%=maxLevel==3?"checked":"" %>>3
+<input name="level" type="radio" value="4" onClick="javascript:changeLevel()" <%=maxLevel==4?"checked":"" %>>4
+<input name="level" type="radio" value="5" onClick="javascript:changeLevel()" <%=maxLevel==5?"checked":"" %>>5
+<input name="level" type="radio" value="6" onClick="javascript:changeLevel()" <%=maxLevel==6?"checked":"" %>>6
+<input name="level" type="radio" value="7" onClick="javascript:changeLevel()" <%=maxLevel==7?"checked":"" %>>7
+level
+</h3>
+</form>
 <div id="drilldown" style="margin-left: 20px;">
 <%
 {
 	ArrayList<PTree> pt = new ArrayList<PTree>(); 
 	HashSet<String> explored = new HashSet<String>();
 	ArrayList<String> path = new ArrayList<String>(); 
-	DFS(cn, gPkg, gPrc, pt, explored, path, 0);
+	DFS(cn, maxLevel, gPkg, gPrc, pt, explored, path, 0);
 	int divOpen = 0;
 
 	int prev = 0;
@@ -396,7 +420,7 @@ while (true) {
 <%
 			marked.add(s);
 
-			if (path.size() >5) continue;
+			if ((path.size()+1) >=maxLevel) continue;
 			ArrayList<String> newpath = new ArrayList<String>();
 			newpath.addAll(path);
 			newpath.add(s);
@@ -423,8 +447,6 @@ while (true) {
 
 </script>
 
-<form id="form-map" action="package-tree.jsp" method="get">
-<input id="name-map" name="name" type="hidden">
-</form>
+
 </body>
 </html>

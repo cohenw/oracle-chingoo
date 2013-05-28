@@ -330,7 +330,8 @@ public class HyperSyntax4PB {
 					hyperlink = true;
 				
 				cntProc++;
-				this.procName = "P" + cntProc;
+				this.procName = "P1"; // + cntProc;
+//System.out.println("this.procName="+this.procName);
 				catchName = true;
 			} else if (syntax1.contains(tmp)) {
 				s.append( "<span class='syntax1'>" + token + "</span>" );
@@ -399,7 +400,7 @@ public class HyperSyntax4PB {
 		sb2.append( text.substring(start));
 		String s2 = sb2.toString();
 		
-		PlsqlAnalyzer pa = new PlsqlAnalyzer(s2);
+		PlsqlAnalyzer4PB pa = new PlsqlAnalyzer4PB(s2);
 		this.vars = pa.getVariables();
 //System.out.println("s2 vars=" + this.vars);
 		

@@ -271,4 +271,16 @@ Build CPAS1076
  	Package Analysis
  	Package Browser - Public / Private procedures
  	Syntax Highlight stays upon mouseout
+	Package Tree has level filter 1 to 7 (default 3)
+
+Build CPAS1077
+	Save query history object into file (Serialize) /home/cpas-genie
+	Timeago.js for query history page
+	Syntax highlight for cursor variables
+	PackageBrowser nested procedure highlight issue fixed
 	
+
+
+Known Issue
+	Source code - nested procedure highlight issue
+	Do not create GENIE_PA_PROCEDURE for nested procedure/function

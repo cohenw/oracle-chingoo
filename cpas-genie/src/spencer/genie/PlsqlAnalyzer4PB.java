@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
-public class PlsqlAnalyzer {
+public class PlsqlAnalyzer4PB {
 
 	private String delim = " \t(),;";
 	private String name;
@@ -22,7 +22,7 @@ public class PlsqlAnalyzer {
 	
 	public int prgIdx = 0;	// internal process index
 
-	public PlsqlAnalyzer(String str) {
+	public PlsqlAnalyzer4PB(String str) {
 		String[] lines = str.split("\r\n|\r|\n");
 		analyze(lines);
 	}
@@ -30,6 +30,11 @@ public class PlsqlAnalyzer {
 	private void analyze(String lines[]) {
 		// analyze the plsql source code
 		int ln = 0;
+		int nested = 0;
+		int prgIdxSaved = 0;
+		String paramsSaved = "";
+		String varsSaved = "";
+		
 		for (String s: lines) {
 			ln++;
 			
@@ -54,12 +59,38 @@ public class PlsqlAnalyzer {
 				String tokenUp = token.toUpperCase();
 				if (tokenUp.equals("PROCEDURE")) {
 					this.type = "PROCEDURE";
+					if (prgIdx > 0) {
+						nested++;
+						prgIdxSaved = prgIdx;
+						paramsSaved = params;
+						varsSaved = vars;
+						params = "";
+						vars="";
+					}
 					prgIdx = 1;
 				} else if (tokenUp.equals("FUNCTION")) {
 					this.type = "FUNCTION";
+					if (prgIdx > 0) {
+						nested++;
+						prgIdxSaved = prgIdx;
+						prgIdxSaved = prgIdx;
+						paramsSaved = params;
+						varsSaved = vars;
+						params = "";
+						vars="";
+					}
 					prgIdx = 1;
 				} else if (tokenUp.equals("TRIGGER")) {
 					this.type = "TRIGGER";
+					if (prgIdx > 0) {
+						nested++;
+						prgIdxSaved = prgIdx;
+						prgIdxSaved = prgIdx;
+						paramsSaved = params;
+						varsSaved = vars;
+						params = "";
+						vars="";
+					}
 					prgIdx = 1;
 					break;
 				} else if (prgIdx == 1) {
@@ -72,6 +103,7 @@ public class PlsqlAnalyzer {
 				} else if (prgIdx == 3) {
 					if (!token.equals(")")) {
 						this.params += token +" ";
+						//System.out.println("this.params=" + this.params);
 					} else {
 						prgIdx ++;
 					}
@@ -116,10 +148,21 @@ public class PlsqlAnalyzer {
 //							extractVariables(this.name.toUpperCase(), this.params, this.vars);
 							//System.out.println("vars=" + this.vars);
 							//System.out.println("params=" + this.params);
-							extractVariables("P" + cntProc, this.params, this.vars);
+							if (nested==0) cntProc = 1;
+							
+							extractVariables("P1" /*+ cntProc*/, this.params, this.vars);
 							prgIdx = 0;
 							this.params = "";
 							this.vars = "";
+							
+							if (nested>0) {
+								nested--;
+								prgIdx = prgIdxSaved;
+								params = paramsSaved;
+								vars = varsSaved;
+							} else {
+								prgIdx = 0;
+							}
 						}
 					}
 				}
@@ -134,6 +177,7 @@ public class PlsqlAnalyzer {
 	}
 
 	private void extractVariables(String procName, String params, String variables) {
+//System.out.println("procName, params, variable=[" + procName + "], [" + params + "], ["+ variables + "]");
 
 		// extract variable names - param, var, cursor
 		StringTokenizer st = new StringTokenizer(this.params, ",");

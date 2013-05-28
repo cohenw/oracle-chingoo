@@ -10,8 +10,18 @@ package spencer.genie;
  * 
  */
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -207,6 +217,8 @@ public class Connect implements HttpSessionBindingListener {
             triggerTableWorker = TriggerTableWorker.getInstance();
 
             loadData();
+            
+            loadHistoryFromFile();
         }
         catch (Exception e)
         {
@@ -365,13 +377,14 @@ public class Connect implements HttpSessionBindingListener {
     	String qryHist = "";
     	if (map == null /* || map.size()==0 */) return;
     	
-    	if (url.indexOf("8888")>0) return; // local test
+    	//if (url.indexOf("8888")>0) return; // local test
     	
     	Iterator iterator = logs.iterator();
     	int idx = 0;
     	while  (iterator.hasNext()) {
     		idx ++;
     		QueryLog ql = (QueryLog) iterator.next();
+    		if (ql.getTime().before(this.loginDate)) continue;
     		System.out.println(ql.getQueryString());
     		String cntLine = "   => " + ql.getCount() + " row";
     		if (ql.getCount() > 1) cntLine += "s";
@@ -382,6 +395,9 @@ public class Connect implements HttpSessionBindingListener {
     	
    		String who = this.getIPAddress() + " " + this.getEmail(); 
 		String title = "Genie - Query History ";
+		
+		saveHistoryToFile();
+		
 		if (!this.isCpas) return;
 		
    		if (this.email != null && email.length() > 2 && map.size() > 0 && isInCpasNetwork()) {
@@ -392,16 +408,16 @@ public class Connect implements HttpSessionBindingListener {
    		if (isInCpasNetwork())
    			Email.sendEmail("oracle.genie.email@gmail.com", title + this.urlString + " " + who, qryHist);
    		
-   		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
+   		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HHmm");
 //   		Date date = new Date();
    		String filename = dateFormat.format(this.getLoginDate());
    		
    		filename += ".log";
 //   		filename = filename.replaceAll(" ", "-");
-System.out.println("filename=" + filename);   		
+//System.out.println("filename=" + filename);   		
    		PrintWriter out = null; 
    		try {
-   			out = new PrintWriter(new FileWriter("/tmp/cpas-genie/" + filename));
+   			out = new PrintWriter(new FileWriter("/home/cpas-genie/" + filename));
    			out.print(this.getUrlString() + "\n");
    			out.print(qryHist);
    			out.flush();
@@ -410,6 +426,7 @@ System.out.println("filename=" + filename);
    			// TODO Auto-generated catch block
    			e.printStackTrace();
    		}
+   		
     }
     
 	public void valueBound(HttpSessionBindingEvent arg0) {
@@ -2901,9 +2918,14 @@ System.out.println("filename=" + filename);
 		try {
 	        conn.setReadOnly(false);
 
+
 	        Statement stmt = conn.createStatement();
 	        String sql = "DELETE FROM GENIE_TR_TABLE WHERE TRIGGER_NAME='" + trgName + "'";
 	        stmt.executeUpdate(sql);
+	        
+	        sql = "DELETE FROM GENIE_TR WHERE TRIGGER_NAME='" + trgName + "'";
+	        stmt.executeUpdate(sql);
+
 	        stmt.close();
 
 	        for (String key:hm.keySet()) {
@@ -3041,6 +3063,101 @@ System.out.println("filename=" + filename);
 			e.printStackTrace();
 		}
 	}
-	
+
+	private void saveHistoryToFile() {
+   		// Serialize
+   		try{
+   			//use buffering
+   			String serFilename = (this.getIPAddress() + "-" + this.urlString).toLowerCase();
+   			serFilename = serFilename.replaceAll("[^a-zA-Z0-9\\s]", "-") +  ".ser";
+   			OutputStream file = new FileOutputStream( "/home/cpas-genie/" + serFilename );
+   			OutputStream buffer = new BufferedOutputStream( file );
+   			ObjectOutput output = new ObjectOutputStream( buffer );
+   			try{
+   				output.writeObject(queryLog);
+   			}
+   			finally{
+   				output.close();
+   			}
+   			System.out.println("serialize " + serFilename + " " +queryLog.size());
+   	    }  
+   	    catch(IOException ex){
+   	    	ex.printStackTrace();
+   	    }
+   		// Serialize
+   		try{
+   			//use buffering
+   			String serFilename = (this.getIPAddress() + "-" + this.urlString).toLowerCase();
+   			serFilename = serFilename.replaceAll("[^a-zA-Z0-9\\s]", "-") +  ".ser2";
+   			OutputStream file = new FileOutputStream( "/home/cpas-genie/" + serFilename );
+   			OutputStream buffer = new BufferedOutputStream( file );
+   			ObjectOutput output = new ObjectOutputStream( buffer );
+   			try{
+   				output.writeObject(savedHistory);
+   			}
+   			finally{
+   				output.close();
+   			}
+   			System.out.println("serialize2 " + serFilename + " " + savedHistory.length());
+   	    }  
+   	    catch(IOException ex){
+   	    	ex.printStackTrace();
+   	    }
+		
+	}
+
+	private void loadHistoryFromFile() {
+		
+		try{
+   			//use buffering
+   			String serFilename = (this.getIPAddress() + "-" + this.urlString).toLowerCase();
+   			serFilename = serFilename.replaceAll("[^a-zA-Z0-9\\s]", "-") +  ".ser";
+	        InputStream file = new FileInputStream( "/home/cpas-genie/" + serFilename );
+	        InputStream buffer = new BufferedInputStream( file );
+	        ObjectInput input = new ObjectInputStream ( buffer );
+	        try{
+	        	//deserialize the Object
+	        	queryLog = (HashMap<String, QueryLog>)input.readObject();
+	        	System.out.println("deserialize " + serFilename + " " + queryLog.size());
+/*
+	          	for(String quark: recoveredQuarks){
+	            	System.out.println("Recovered Quark: " + quark);
+	          	}
+*/	        }
+	        finally{
+	        	input.close();
+	        }
+		} catch(ClassNotFoundException ex){
+	        ex.printStackTrace();
+	    } catch(IOException ex){
+	      	//ex.printStackTrace();
+	    }
+		
+		try{
+   			//use buffering
+   			String serFilename = (this.getIPAddress() + "-" + this.urlString).toLowerCase();
+   			serFilename = serFilename.replaceAll("[^a-zA-Z0-9\\s]", "-") +  ".ser2";
+	        InputStream file = new FileInputStream( "/home/cpas-genie/" + serFilename );
+	        InputStream buffer = new BufferedInputStream( file );
+	        ObjectInput input = new ObjectInputStream ( buffer );
+	        try{
+	        	//deserialize the Object
+	        	savedHistory = (String)input.readObject();
+	        	//System.out.println("deserialize " + serFilename + " " + queryLog.size());
+/*
+	          	for(String quark: recoveredQuarks){
+	            	System.out.println("Recovered Quark: " + quark);
+	          	}
+*/	        }
+	        finally{
+	        	input.close();
+	        }
+		} catch(ClassNotFoundException ex){
+	        ex.printStackTrace();
+	    } catch(IOException ex){
+	      	//ex.printStackTrace();
+	    }
+		
+	}
 }
 

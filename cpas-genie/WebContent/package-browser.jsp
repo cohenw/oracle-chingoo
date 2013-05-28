@@ -101,6 +101,7 @@ $(document).ready(function(){
 	});
 	
 	loadProc('<%=gPkg%>', '<%=gPrc%>');
+	showNavButton();
 })
 
 	function checkResize() {
@@ -142,11 +143,17 @@ function loadPackage(pName) {
 }
 
 function loadProc(pkgName, prcName) {
+	loadProc2(pkgName, prcName, 1);
+	stackFwd = [];
+}
+
+function loadProc2(pkgName, prcName, saveHistory) {
 	$("#inner-eventview").html('');
 
 	if (pkgName != gPackage) {
 		loadPackage(pkgName);
 	}
+//	console.log("saveHistory=" +saveHistory);
 	$.ajax({
 		url: "ajax-cpas/load-proc.jsp?key=" + pkgName + "." + prcName,
 		success: function(data){
@@ -157,7 +164,10 @@ function loadProc(pkgName, prcName) {
 			window.setTimeout(function() {
 				setYellow(gPackage, gProcedure);
 			}, 400);
-			saveForNavigation();
+			if (saveHistory=="1") {
+				stack.push(pkgName + "." + prcName);
+			}
+			showNavButton();
 		},
         error:function (jqXHR, textStatus, errorThrown){
             alert(jqXHR.status + " " + errorThrown);
@@ -347,6 +357,46 @@ function processSearch(keyword) {
 	});
 }
 
+function showNavButton() {
+	if (stack.length > 1 )
+		$("#imgBackward").show();
+	else
+		$("#imgBackward").hide();
+
+	if (stackFwd.length > 0 )
+		$("#imgForward").show();
+	else
+		$("#imgForward").hide();
+	
+	console.log(stack.length + "," + stackFwd.length);
+	console.log(stack);
+	console.log(stackFwd);
+}
+
+function goBack() {
+	if (stack.length>1) {
+		var data1 = stack.pop();
+		var data = stack.pop();
+		//alert(data);
+		var tmp = data.split(".");
+		loadProc2(tmp[0], tmp[1], 1);
+//		$("#inner-result1").html(data);
+//		stackFwd.push(current);
+		showNavButton();
+		stackFwd.push(data1);
+	}
+}
+
+function goFoward() {
+	if (stackFwd.length>0) {
+		var data = stackFwd.pop();
+		var tmp = data.split(".");
+		loadProc2(tmp[0], tmp[1], 1);
+		showNavButton();
+	}
+}
+
+
 </script>
 
 <style>
@@ -429,6 +479,11 @@ function hi_off(v) {
 		<td valign=top>
 		
 			<div id="outer-eventview" style="margin-top: 0px; margin-left: 0px;">
+	<div id="inner-nav">
+		<a href="Javascript:goBack()"><img id="imgBackward" src="image/blue_arrow_left.png" title="back" border="0" style="display:none;"></a>
+		&nbsp;&nbsp;
+		<a href="Javascript:goFoward()"><img id="imgForward" src="image/blue_arrow_right.png" title="forward" border="0" style="display:none;"></a>
+	</div>
 				<div id="inner-eventview"></div>
 			</div>
 		</td>

@@ -387,6 +387,7 @@ VANGUARD<br/>
 <div style="margin: 10px; padding:5px; width:450px; height:300px; overflow: scroll; border: 1px solid #666666;">
 <b>What's New.</b>
 <br/><br/>
+<li>Serialize query and object history
 <li>Package Analysis / Package Browser / Drill Down</li>
 <li>Custom Data Link</li>
 <li>PL/SQL Syntax highlight, hyper link</li>
