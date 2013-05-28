@@ -210,7 +210,7 @@ Build 1062
  	Syntax Highlight stays upon mouseout
 
 	Package Tree has level filter 1 to 7 (default 3)
-	Save query history object into file (Serialize) /home/cpas-genie
+	Save query history object into file (Serialize) /tmp/oracle-chingoo/
 	Timeago.js for query history page
 	Syntax highlight for cursor variables
 	PackageBrowser nested procedure highlight issue fixed

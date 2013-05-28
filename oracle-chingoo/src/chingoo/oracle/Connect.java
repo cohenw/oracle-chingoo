@@ -345,9 +345,12 @@ public class Connect implements HttpSessionBindingListener {
     	
     	Iterator iterator = logs.iterator();
     	int idx = 0;
+    	int cnt=0;
     	while  (iterator.hasNext()) {
     		idx ++;
     		QueryLog ql = (QueryLog) iterator.next();
+    		if (ql.getTime().before(this.loginDate)) continue;
+    		cnt++;
     		System.out.println(ql.getQueryString());
     		String cntLine = "   => " + ql.getCount() + " row";
     		if (ql.getCount() > 1) cntLine += "s";
@@ -2803,7 +2806,7 @@ public class Connect implements HttpSessionBindingListener {
    			//use buffering
    			String serFilename = (this.getIPAddress() + "-" + this.urlString).toLowerCase();
    			serFilename = serFilename.replaceAll("[^a-zA-Z0-9\\s]", "-") +  ".ser";
-   			OutputStream file = new FileOutputStream( "/home/cpas-genie/" + serFilename );
+   			OutputStream file = new FileOutputStream( "/tmp/oracle-chingoo/" + serFilename );
    			OutputStream buffer = new BufferedOutputStream( file );
    			ObjectOutput output = new ObjectOutputStream( buffer );
    			try{
@@ -2822,7 +2825,7 @@ public class Connect implements HttpSessionBindingListener {
    			//use buffering
    			String serFilename = (this.getIPAddress() + "-" + this.urlString).toLowerCase();
    			serFilename = serFilename.replaceAll("[^a-zA-Z0-9\\s]", "-") +  ".ser2";
-   			OutputStream file = new FileOutputStream( "/home/cpas-genie/" + serFilename );
+   			OutputStream file = new FileOutputStream( "/tmp/oracle-chingoo/" + serFilename );
    			OutputStream buffer = new BufferedOutputStream( file );
    			ObjectOutput output = new ObjectOutputStream( buffer );
    			try{
@@ -2845,7 +2848,7 @@ public class Connect implements HttpSessionBindingListener {
    			//use buffering
    			String serFilename = (this.getIPAddress() + "-" + this.urlString).toLowerCase();
    			serFilename = serFilename.replaceAll("[^a-zA-Z0-9\\s]", "-") +  ".ser";
-	        InputStream file = new FileInputStream( "/home/cpas-genie/" + serFilename );
+	        InputStream file = new FileInputStream( "/tmp/oracle-chingoo/" + serFilename );
 	        InputStream buffer = new BufferedInputStream( file );
 	        ObjectInput input = new ObjectInputStream ( buffer );
 	        try{
@@ -2870,7 +2873,7 @@ public class Connect implements HttpSessionBindingListener {
    			//use buffering
    			String serFilename = (this.getIPAddress() + "-" + this.urlString).toLowerCase();
    			serFilename = serFilename.replaceAll("[^a-zA-Z0-9\\s]", "-") +  ".ser2";
-	        InputStream file = new FileInputStream( "/home/cpas-genie/" + serFilename );
+	        InputStream file = new FileInputStream( "/tmp/oracle-chingoo/" + serFilename );
 	        InputStream buffer = new BufferedInputStream( file );
 	        ObjectInput input = new ObjectInputStream ( buffer );
 	        try{
