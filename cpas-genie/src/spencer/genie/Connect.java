@@ -381,10 +381,12 @@ public class Connect implements HttpSessionBindingListener {
     	
     	Iterator iterator = logs.iterator();
     	int idx = 0;
+    	int cnt=0;
     	while  (iterator.hasNext()) {
     		idx ++;
     		QueryLog ql = (QueryLog) iterator.next();
     		if (ql.getTime().before(this.loginDate)) continue;
+    		cnt++;
     		System.out.println(ql.getQueryString());
     		String cntLine = "   => " + ql.getCount() + " row";
     		if (ql.getCount() > 1) cntLine += "s";
@@ -400,7 +402,7 @@ public class Connect implements HttpSessionBindingListener {
 		
 		if (!this.isCpas) return;
 		
-   		if (this.email != null && email.length() > 2 && map.size() > 0 && isInCpasNetwork()) {
+   		if (this.email != null && email.length() > 2 && map.size() > 0 && isInCpasNetwork() && cnt > 0) {
     		Email.sendEmail(email, title + this.urlString, qryHist);
     	}
 
