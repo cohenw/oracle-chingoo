@@ -201,3 +201,17 @@ Build 1061
 	CHINGOO_LINK table for custom data link
 	handle comments in query
 	Bug fix for source line number for IE and FF
+
+Build 1062
+	CHINGOO_PA for package / table relationship
+	CHINGOO_TR for trigger / table relationship
+ 	Package Analysis
+ 	Package Browser - Public / Private procedures
+ 	Syntax Highlight stays upon mouseout
+
+	Package Tree has level filter 1 to 7 (default 3)
+	Save query history object into file (Serialize) /home/cpas-genie
+	Timeago.js for query history page
+	Syntax highlight for cursor variables
+	PackageBrowser nested procedure highlight issue fixed
+		

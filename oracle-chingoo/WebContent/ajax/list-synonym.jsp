@@ -28,7 +28,7 @@
 	String filter = request.getParameter("filter");
 
 	String qry = "SELECT SYNONYM_NAME, TABLE_OWNER, TABLE_NAME, (SELECT NUM_ROWS FROM ALL_TABLES WHERE OWNER=A.TABLE_OWNER AND TABLE_NAME =A.TABLE_NAME) NUM_ROWS FROM USER_SYNONYMS A ORDER BY 1"; 	
-	List<String[]> list = cn.query(qry);
+	List<String[]> list = cn.query(qry, false);
 
 	int totalCnt = list.size();
 	int selectedCnt = 0;

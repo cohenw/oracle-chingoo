@@ -5,9 +5,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class HyperSyntax {
+public class HyperSyntax4PB {
 
 	static String delim = " \r\n\t(),;%|=><*+-";
 	
@@ -55,7 +56,7 @@ public class HyperSyntax {
 
 	int cntProc = 0;
 	
-	public HyperSyntax() {
+	public HyperSyntax4PB() {
 	}
 
 	public static ArrayList<Range> extractComments(String text) {
@@ -71,8 +72,7 @@ public class HyperSyntax {
 			if (start < 0) break;
 			
 			int end = text.indexOf("*/", start+2);
-//			if (end < 0) break;
-			if (end < 0) end = text.length()-1;
+			if (end < 0) break;
 			
 			end +=2;
 			
@@ -89,7 +89,8 @@ public class HyperSyntax {
 			if (start < 0) break;
 			
 			int end = text.indexOf("\n", start+2);
-			if (end < 0) break;
+			//if (end < 0) break;
+			if (end < 0) end = text.length()-1;
 
 			// check if start is in between any of comment
 			boolean isComment = false;
@@ -293,7 +294,7 @@ public class HyperSyntax {
 	  }  
 	  return true;  
 	}
-
+	
 	private String hyperSyntax(Connect cn, String text, HashSet<String> procedures, HashSet<String> GV, String type, String pkgName) {
 		StringTokenizer st = new StringTokenizer(text, delim, true);
 		StringBuffer s = new StringBuffer();
@@ -329,7 +330,7 @@ public class HyperSyntax {
 					hyperlink = true;
 				
 				cntProc++;
-				this.procName = "P" + cntProc;
+				this.procName = "P1"; // + cntProc;
 				catchName = true;
 			} else if (syntax1.contains(tmp)) {
 				s.append( "<span class='syntax1'>" + token + "</span>" );
@@ -340,7 +341,7 @@ public class HyperSyntax {
 			else if (cn.isTVS(tmp)|| cn.isPublicSynonym(tmp)) {
 				s.append( "<a style='color: darkblue;' href='pop.jsp?key="+tmp+"' target='_blank'>" + token + "</a>" );
 			} else if (cn.isProcedure(tmp)) {
-				s.append( "<a style='color: darkblue;' target='_blank' href='src2.jsp?name=" + tmp + "'>" + token + "</a>" );
+				s.append( "<a style='color: darkblue;' target='_blank' href=\"Javascript:loadProc('" + pkgName + "','" + tmp + "');\">" + token + "</a>" );
 			} else if (hyperlink && !tmp.trim().equals("")) {
 				hyperlink = false;
 				s.append( "<a name='" + tmp.toLowerCase() + "'></a><a href='package-browser.jsp?name=" + pkgName + "." + token + "' target=_blank>"+ token + "</a>");
@@ -348,11 +349,11 @@ public class HyperSyntax {
 				if (type.equals("PACKAGE"))
 					s.append( "<a name='" + tmp.toLowerCase() + "'>" + token + "</a>" );
 				else {
-					s.append( "<a style='color: darkblue;' href='#" + tmp.toLowerCase() + "'>" + token + "</a>" );
+					s.append( "<a style='color: darkblue;' href=\"Javascript:loadProc('" + pkgName + "','" + tmp + "');\">" + token + "</a>" );
 //					System.out.println(pr + " proc1 " + tmp);			
 				}
 			} else if (procedures.contains(tmp)) {
-				s.append( "<a style='color: darkblue;' href='#" + tmp.toLowerCase() + "'>" + token + "</a>" );
+				s.append( "<a style='color: darkblue;' href=\"Javascript:loadProc('" + pkgName + "','" + tmp + "');\">" + token + "</a>" );
 //				System.out.println(pr + " proc2 " + tmp);
 				packageProc.add(pr + " "  + tmp);
 			} else if (vars.contains(procName+"-"+tmp))
@@ -363,7 +364,7 @@ public class HyperSyntax {
 				String prc = tmp.substring(idx+1);
 				
 				if (cn.isPackage(pkg)||(cn.isSynonym(pkg))) {
-					s.append( "<a style='color: darkblue;' target='_blank' href='src2.jsp?name=" + pkg + "#" + prc.toLowerCase() + "'>" + token + "</a>" );
+					s.append( "<a style='color: darkblue;' target='_blank' href=\"Javascript:loadProc('" + pkg + "','" + prc + "');\">" + token + "</a>" );
 					packageProc.add(pr + " "  + tmp);
 //					System.out.println(pr + " proc3 " + tmp);
 				} else if (vars.contains(procName+"-"+pkg)) { 
@@ -384,14 +385,8 @@ public class HyperSyntax {
 	}
 
 	public String getHyperSyntax(Connect cn, String text, String type, String pkgName) {
-		long before = System.currentTimeMillis();
-		
 		StringBuffer s = new StringBuffer();
-//		System.out.println("type=" + type + ", size=" + text.length());
-
 		ArrayList<Range> ranges = extractComments(text);
-		long after = System.currentTimeMillis();
-//		System.out.println("Elapsed Time for extractComment = " + (after - before));
 		
 		// build string that stripped out comment and string literals
 		StringBuffer sb2 = new StringBuffer();
@@ -404,30 +399,35 @@ public class HyperSyntax {
 		sb2.append( text.substring(start));
 		String s2 = sb2.toString();
 		
-		PlsqlAnalyzer pa = new PlsqlAnalyzer(s2);
+		PlsqlAnalyzer4PB pa = new PlsqlAnalyzer4PB(s2);
 		this.vars = pa.getVariables();
 //System.out.println("s2 vars=" + this.vars);
 		
 		//System.out.println("s2 size=" + s2.length());
 		// if (s2.length()<5000) System.out.println(s2);
 		
-		HashSet<String> set1 = getLinkables("PROCEDURE", s2);
-		HashSet<String> set2 = getLinkables("FUNCTION", s2);
+//		HashSet<String> set1 = getLinkables("PROCEDURE", s2);
+//		HashSet<String> set2 = getLinkables("FUNCTION", s2);
 		HashSet<String> GV = cn.tempSet; 
+/*
 		if (type.equals("PACKAGE")) {
 			GV = getLinkablesGV(s2);
 			cn.tempSet = GV;
 		}
-		
-//		System.out.println("GV = " +GV);
-		
-//		HashSet<String> procedures = getProcedures(text, ranges, type);
+*/		
 		HashSet<String> procedures = new HashSet<String>();
-		procedures.addAll(set1);
-		procedures.addAll(set2);
+
+		String q = "SELECT PROCEDURE_NAME FROM CHINGOO_PA_PROCEDURE WHERE PACKAGE_NAME='" + pkgName +"'";
+//		System.out.println(q);
+		List<String[]> prcs = cn.query(q, false);
 		
-		after = System.currentTimeMillis();
-//		System.out.println("Elapsed Time for getProcedures = " + (after - before));
+		for (int i=0;i<prcs.size();i++) {
+			String prc = prcs.get(i)[1];
+			procedures.add(prc);
+		}
+		
+//		procedures.addAll(set1);
+//		procedures.addAll(set2);
 		
 		this.procName = "";
 		this.cntProc=0;
@@ -447,11 +447,6 @@ public class HyperSyntax {
 		}
 		s.append( hyperSyntax(cn, text.substring(start), procedures, GV, type, pkgName) );
 		
-		after = System.currentTimeMillis();
-		if (type.equals("PACKAGE") || type.equals("PACKAGE BODY"))
-			System.out.println("Elapsed Time = " + (after - before));	
-		
-//		return slimIt(s.toString());
 		return s.toString();
 	}
 	

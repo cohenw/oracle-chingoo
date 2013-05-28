@@ -26,6 +26,7 @@
 	if (owner != null) 
 		qry = "SELECT TEXT FROM ALL_VIEWS WHERE OWNER='" + owner + "' AND VIEW_NAME='" + view +"'"; 
 	
+	List<String> refProc = cn.getReferencedProc(view);
 %>
 <div id="objectTitle" style="display:none">VIEW: <%= view %></div>
 <h2>VIEW: <%= view %> &nbsp;&nbsp;<a href="Javascript:runQuery('<%=catalog%>','<%=view%>')"><img border=0 src="image/icon_query.png" title="query"></a>
@@ -115,7 +116,7 @@
 	} 
 %>
 
-		<a href="Javascript:loadPackage('<%= refTrg %>')"><%= refTrg %></a>&nbsp;&nbsp;<br/>		
+		<a href="Javascript:loadPackage('<%= refTrg %>')"><%= refTrg %></a>&nbsp;&nbsp;<%= cn.getTriggerCRUD(refTrg, view) %><br/>				
 <% }
 %>
 </td>
@@ -144,4 +145,64 @@
 </tr>
 </table>
 <br/>
+
+<% 
+	if (refProc.size() > 0) { 
+%>
+<b>Referenced By</b>
+<a href="Javascript:toggleDiv('imgRef','divRef')"><img id="imgRef" border=0 src="image/minus.gif"></a>
+<div id="divRef">
+<table border=0 width=800>
+<td width=4%>&nbsp;</td>
+<td valign=top width=32%>
+<%
+	int listSize = (refProc.size() / 2) + 1;
+	int cnt = 0;
+	int cols = 1;
+	for (int i=0; i<refProc.size(); i++) {
+		String refPrc = refProc.get(i);
+		String temp[] = refPrc.split("\\.");
+		cnt++;
+%>
+
+<% if ((cnt-1)>=listSize) { %>
+		</td><td valign=top width=50%>
+<%
+		cnt = 1;
+		cols ++;
+	} 
+%>
+
+		<a target=_blank href="package-browser.jsp?name=<%= refPrc %>"><%= refPrc %></a>&nbsp;&nbsp;<%= cn.getCRUD(temp[0],temp[1].toUpperCase(), view) %><br/>		
+<% }
+	for (; cols<=2; cols++) {
+%>
+	</td><td valign=top width=50%>
+<% } %>
+
+</td>
+</table>
+</div>
+
+<%
+}
+%>
+
+<div style="display: none;">
+<form name="form0" id="form0" action="query.jsp" target="_blank">
+<input id="sql" name="sql" type="hidden" value=""/>
+<input id="dataLink" name="dataLink" type="hidden" value="1"/>
+<input id="id" name="id" type="hidden" value=""/>
+<input id="showFK" name="showFK" type="hidden" value="0"/>
+<input type="hidden" id="sortColumn" name="sortColumn" value="">
+<input type="hidden" id="sortDirection" name="sortDirection" value="0">
+<input type="hidden" id="hideColumn" name="hideColumn" value="">
+<input type="hidden" id="filterColumn" name="filterColumn" value="">
+<input type="hidden" id="filterValue" name="filterValue" value="">
+<input type="hidden" id="searchValue" name="searchValue" value="">
+<input type="hidden" id="pageNo" name="pageNo" value="1">
+<input type="hidden" id="rowsPerPage" name="rowsPerPage" value="20">
+</form>
+</div>
+
 
