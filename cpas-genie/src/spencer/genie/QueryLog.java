@@ -1,5 +1,6 @@
 package spencer.genie;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date;
  * @author spencer.hwang
  *
  */
-public class QueryLog {
+public class QueryLog implements Serializable {
 	Date qryTime = new Date();	
 	String qryString;
 	int count;

@@ -16,7 +16,7 @@
 		pkg = name.substring(0,idx).toUpperCase();
 		prc = name.substring(idx+1).toUpperCase();
 	}
-System.out.println("prc=" + prc);	
+//System.out.println("prc=" + prc);	
 	String q = "SELECT TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE FROM GENIE_PA_TABLE WHERE PACKAGE_NAME='" + pkg +"' AND PROCEDURE_NAME='" + prc + "' ORDER BY table_name";
 //	System.out.println(q);
 	List<String[]> list = cn.query(q, false);
@@ -45,7 +45,22 @@ System.out.println("prc=" + prc);
 </h2> 
 <br/>
 
-
+<%
+	if (pkg.startsWith("DATA$VALIDATION_")) {
+		String sql = "SELECT vkey, vname, descr, errorid FROM CPAS_VALIDATION WHERE packname='" +pkg + "' AND VNAME='" + cn.getProcedureLabel(pkg, prc) + "'";
+%>
+<b>CPAS Validation</b><br/>
+<div id="div-<%=id%>">
+<jsp:include page='../ajax/qry-simple.jsp'>
+	<jsp:param value="<%= sql %>" name="sql"/>
+	<jsp:param value="1" name="dataLink"/>
+	<jsp:param value="<%= id %>" name="id"/>
+</jsp:include>
+</div>
+<br/><br/>
+<%
+	}
+%>
 
 <b>Table CRUD</b><br/>
 <div style="margin-left: 20px;">
@@ -92,10 +107,10 @@ for (int i=0;i<list.size();i++) {
 %>
 </div>
 
-<br/><br/>
+<br/>
 <% id = Util.getId(); %>
 <b><a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
-<div id="div-<%=id %>" style="display: none; margin-left: 20px; background-color: #eeeeee;">
+<div id="div-<%=id %>" style="display: none; margin-left: 20px; background-color: #e0e0e0;">
 <%
 for (int i=0;i<proc0.size();i++) {
 	int start = Integer.parseInt(proc0.get(i)[1]);

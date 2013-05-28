@@ -1,6 +1,7 @@
 <%@ page language="java" 
 	import="java.util.*" 
 	import="java.sql.*" 
+	import="java.text.*" 
 	import="spencer.genie.*" 
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
@@ -31,6 +32,7 @@
 	<script src="script/main.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
     <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
     <script src="script/query-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
+	<script src="script/timeago.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
 
     <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'>
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
@@ -51,6 +53,9 @@
 		
 		
 	}	
+	$(document).ready(function() {
+		$("abbr.timeago").timeago();
+	});	
 </script>
 	
 </head>
@@ -65,15 +70,21 @@
 <tr class="rowHeader">
 <th>Run</th>
 <th>Query</th>
-<th>Time</th>
+<th>Time Ago</th>
 </tr>
 
 <%
-	Iterator iterator = logs.iterator();
 	int idx = 0;
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+	for (int i=logs.size()-1;i>=0;i--) {
+		QueryLog ql = logs.get(i);
+		idx ++;
+/*
+	Iterator iterator = logs.iterator();
 	while  (iterator.hasNext()) {
 		idx ++;
 		QueryLog ql = (QueryLog) iterator.next();
+*/
 		String divName ="QRY-" + idx;
 
 		String rowClass = "odd";
@@ -85,7 +96,9 @@
 			<div style="display: none;" id="<%= divName %>"><%= ql.getQueryString() %></div>
 			<div style="font-family: Consolas;"><%=new HyperSyntax().getHyperSyntax(cn, ql.getQueryString(), "SQL")%></div>
 		</td>
-		<td><%= ql.getTime() %></td>
+		<td nowrap><%-- <%= ql.getTime() %> --%>
+			<abbr class="timeago" title="<%= sdf.format(ql.getTime()) %>"><%= sdf.format(ql.getTime()) %></abbr>
+		</td>
 	</tr>
 <%
 	}

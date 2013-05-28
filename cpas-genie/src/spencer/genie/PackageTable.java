@@ -259,15 +259,19 @@ public class PackageTable {
 								Block block2 = blocks.pop();
 								if (block2.blockType.equals("PROC/FUNC")) {
 									ProcDetail item = new ProcDetail(block2.blockName, block2.startLine, block.endLine);
-									if (!pd.contains(item))
+									if (blocks.size()==0 && !pd.contains(item))
 										pd.add(item);
 
-									StringBuffer sb = new StringBuffer();
-									for (int i=block2.startLine; i<block.endLine;i++) {
-										sb.append(lines[i] + "\n");
+									if (blocks.size()==0) {
+										StringBuffer sb = new StringBuffer();
+										for (int i=block2.startLine; i<block.endLine;i++) {
+											sb.append(lines[i] + "\n");
+										}
+										//System.out.println("###1 " + block2.blockName + " " +block2.startLine + " - " + block.endLine + " :" +blocks.size());
+										extractTables2(block2.blockName, sb.toString());
 									}
-									extractTables2(sb.toString());
 								} else {
+									//System.out.println("###2 " + block2.blockName + " " + blocks.size());
 									blocks.push(block2);
 								}
 							}
@@ -288,7 +292,7 @@ public class PackageTable {
 		
 	}
 
-	
+/*	
 	private void analyze(String lines[]) {
 		// analyze the plsql source code
 		int ln = 0;
@@ -351,7 +355,7 @@ public class PackageTable {
 				} else if (prgIdx == 10) {
 					if (tokenUp.equals("BEGIN")) {
 						prgIdx = 11;
-						Block block = new Block(/*ln*/ prcStart, tokenUp);
+						Block block = new Block( prcStart, tokenUp);
 						blocks.push(block);	// begining of body
 					}
 					else {
@@ -374,7 +378,7 @@ public class PackageTable {
 
 						Block block = blocks.pop();
 						block.endLine = ln;
-						
+
 						bls.add(block);
 						if (block.blockType.equals("BEGIN") && blocks.size() ==0 ) {
 							//System.out.println("pop3 " + block + " " + blocks.size() + " "  + this.name);
@@ -387,6 +391,7 @@ public class PackageTable {
 								sb.append(lines[i] + "\n");
 //								System.out.println("  " + lines[i] +"\n");
 							}
+							System.out.println("### " + this.name + " " + blocks.size());
 							extractTables2(sb.toString());
 							//System.out.println("*** " + sb.toString());
 						}
@@ -404,6 +409,7 @@ public class PackageTable {
 		}
 		
 	}
+*/	
 /*
 	void extractTables(String text) {
 //		System.out.println(text);
@@ -487,7 +493,7 @@ public class PackageTable {
 
 	}
 */
-	void extractTables2(String text) {
+	void extractTables2(String procName, String text) {
 		//System.out.println("**** [[[[" +text +"]]]");
 		text = text.replaceAll("\n", " ");
 		text = text.replaceAll("\t", " ");
@@ -511,7 +517,7 @@ public class PackageTable {
 				String token = st.nextToken().toUpperCase();
 				if (cnt==2) {
 					//System.out.println(this.name + " INSERT *** " + token);
-					String key = this.name.toUpperCase()+","+token;
+					String key = procName.toUpperCase()+","+token;
 					String curr = hm.get(key);
 					if (curr ==null)
 						hm.put(key, "I");
@@ -543,7 +549,7 @@ public class PackageTable {
 				String token = st.nextToken().toUpperCase();
 				if (token.equals("FROM")) cnt--;
 				if (cnt==1) {
-					String key = this.name.toUpperCase()+","+token;
+					String key = procName.toUpperCase()+","+token;
 //System.out.println("key=" + key);
 					String curr = hm.get(key);
 //System.out.println("curr=" + key);
@@ -578,7 +584,7 @@ public class PackageTable {
 				String token = st.nextToken().toUpperCase();
 				if (token.equals("FROM")) cnt--;
 				if (cnt==1) {
-					String key = this.name.toUpperCase()+","+token;
+					String key = procName.toUpperCase()+","+token;
 					String curr = hm.get(key);
 					if (curr ==null)
 						hm.put(key, "U");
@@ -605,7 +611,7 @@ public class PackageTable {
 			List<String> tables = Util.getTables(tmp);
 			
 			for (String tbl:tables) {
-				String key = this.name.toUpperCase()+","+tbl.toUpperCase();
+				String key = procName.toUpperCase()+","+tbl.toUpperCase();
 				String curr = hm.get(key);
 				if (curr ==null)
 					hm.put(key, "S");

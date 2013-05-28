@@ -75,7 +75,7 @@ public class TriggerTableWorker {
 			
 			TriggerTable tt = new TriggerTable(currentTrg, text);
 			//System.out.println("text=[" + text + "]");
-			System.out.println("tt.getHM()="+ tt.getHM());
+			//System.out.println("tt.getHM()="+ tt.getHM());
 			cn.AddTriggerTable(currentTrg, tt.getHM());
 /*			
 			HyperSyntax hs = new HyperSyntax();
