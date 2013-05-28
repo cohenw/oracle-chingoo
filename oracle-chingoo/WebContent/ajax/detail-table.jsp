@@ -115,6 +115,8 @@ Please select a Table to see the detail.
 	List<String> refTrgs = cn.getReferencedTriggers(tname);
 	List<String[]> refIdx = cn.getIndexes(owner, tname);
 	List<String> refConst = cn.getConstraints(owner, tname);
+	
+	List<String> refProc = cn.getReferencedProc(tname);
 %>
 <hr>
 
@@ -327,8 +329,7 @@ Please select a Table to see the detail.
 		cols ++;
 	} 
 %>
-
-		<a href="Javascript:loadPackage('<%= refTrg %>')"><%= refTrg %></a>&nbsp;&nbsp;<br/>		
+		<a href="Javascript:loadPackage('<%= refTrg %>')"><%= refTrg %></a>&nbsp;&nbsp;<%= cn.getTriggerCRUD(refTrg, table) %><br/>		
 <% }
 	for (; cols<=3; cols++) {
 %>
@@ -368,8 +369,8 @@ Please select a Table to see the detail.
 		cols ++;
 	} 
 %>
-
-		<a href="Javascript:loadPackage('<%= refPkg %>')"><%= refPkg %></a>&nbsp;&nbsp;<br/>		
+		<a href="Javascript:loadPackage('<%= refPkg %>')"><%= refPkg %></a>&nbsp;&nbsp;<%= cn.getCRUD(refPkg, table) %><br/>		
+				
 <% }
 	for (; cols<=3; cols++) {
 %>
@@ -384,6 +385,47 @@ Please select a Table to see the detail.
 }
 %>
 
+<% 
+	if (refProc.size() > 0) { 
+%>
+<b>Referenced By</b>
+<a href="Javascript:toggleDiv('imgRef','divRef')"><img id="imgRef" border=0 src="image/minus.gif"></a>
+<div id="divRef">
+<table border=0 width=800>
+<td width=4%>&nbsp;</td>
+<td valign=top width=32%>
+<%
+	int listSize = (refProc.size() / 2) + 1;
+	int cnt = 0;
+	int cols = 1;
+	for (int i=0; i<refProc.size(); i++) {
+		String refPrc = refProc.get(i);
+		String temp[] = refPrc.split("\\.");
+		cnt++;
+%>
+
+<% if ((cnt-1)>=listSize) { %>
+		</td><td valign=top width=50%>
+<%
+		cnt = 1;
+		cols ++;
+	} 
+%>
+
+		<a target=_blank href="package-browser.jsp?name=<%= refPrc %>"><%= refPrc %></a>&nbsp;&nbsp;<%= cn.getCRUD(temp[0],temp[1].toUpperCase(), table) %><br/>		
+<% }
+	for (; cols<=2; cols++) {
+%>
+	</td><td valign=top width=50%>
+<% } %>
+
+</td>
+</table>
+</div>
+
+<%
+}
+%>
 
 </div>
 

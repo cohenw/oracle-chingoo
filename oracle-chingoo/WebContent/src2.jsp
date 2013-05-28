@@ -27,7 +27,7 @@
 	String q = "SELECT DISTINCT TYPE FROM USER_SOURCE WHERE NAME='" + name +"'  ORDER BY TYPE";
 	if (owner != null) q = "SELECT DISTINCT TYPE FROM ALL_SOURCE WHERE OWNER='" + owner + "' AND NAME='" + name +"' ORDER BY TYPE";
 
-	List<String[]> types = cn.query(q);
+	List<String[]> types = cn.query(q, false);
 	int lines_pkg = 0;
 	int lines_pkgbody = 0;
 	int lines_procedure = 0;
@@ -52,8 +52,11 @@
 </style>
 
 <script type="text/javascript">
+var hi_v = "";
 function hi_on(v) {
+	if (hi_v != "") hi_off(hi_v);
 	$("." + v).addClass("highlight");
+	hi_v = v;
 }
 function hi_off(v) {
 	$("." + v).removeClass("highlight");
@@ -99,6 +102,10 @@ for (int k=0;k<types.size();k++) {
 	else if (type.equals("FUNCTION"))
 		lines_function =  line;
 	
+	HyperSyntax hs = new HyperSyntax();
+	String syntax = hs.getHyperSyntax(cn, text, type, name);
+//	HashSet<String> packageProc = hs.getPackageProcedure();
+//	System.out.println(packageProc);
 %>
 <br/>
 <b><a href="javascript:tDiv('div-<%=k%>')"><%= type %></a></b><br/>
@@ -106,7 +113,7 @@ for (int k=0;k<types.size();k++) {
 <table>
 <td valign=top align=right><pre style="font-family: Consolas; color: gray;"><span id="colnum_<%=type.replace(" ","")%>" ></span></pre></td>
 <td bgcolor="green"></td>
-<td valign=top><pre style="font-family: Consolas;"><%= new HyperSyntax().getHyperSyntax(cn, text, type)%></pre></td>
+<td valign=top><pre style="font-family: Consolas;"><%=  syntax %></pre></td>
 </table>
 
 </div>
@@ -184,7 +191,6 @@ $(document).ready(function() {
 
 </script>
 
-
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -199,4 +205,6 @@ $(document).ready(function() {
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
+  
+//  alert(navigator.userAgent);
 </script>

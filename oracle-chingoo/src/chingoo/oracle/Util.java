@@ -117,7 +117,19 @@ public class Util {
 		List<String> tables = new ArrayList<String>();
 		Set<String> tbls = new HashSet<String>();
 
-		String temp=sql.replaceAll("[\n\r\t]", " ").toUpperCase();
+		// remove comments
+		ArrayList<Range> ranges = extractComments(sql);
+		// build string that stripped out comment and string literals
+		StringBuffer sb2 = new StringBuffer();
+		int start=0;
+		for (Range r:ranges) {
+			if (start > r.start) continue;
+			sb2.append(sql.substring(start, r.start));
+			start = r.end;
+		}
+		sb2.append( sql.substring(start));
+		String s2 = sb2.toString();		
+		String temp=s2.replaceAll("[\n\r\t]", " ").toUpperCase();
 
 		String froms[] = temp.split(" FROM ");
 		
@@ -331,11 +343,11 @@ public class Util {
 	}
 
 	public static String getBuildNo() {
-		return "1061";
+		return "1062";
 	}
 
 	public static String getVersionDate() {
-		return "May 6, 2013";
+		return "May 28, 2013";
 	}
 
 }
