@@ -684,4 +684,31 @@
     }
 
     
+    function createChingooTable() {
+		$.ajax({
+			type: 'POST',
+			url: "ajax/create-table.jsp",
+			success: function(data){
+				alert('Done');
+				loadTool("User Defined Page");
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});	
+    }
+    
+    function createChingooTable2() {
+		$.ajax({
+			type: 'POST',
+			url: "ajax/create-table2.jsp",
+			success: function(data){
+				alert('Done');
+				loadTool("Saved Query");
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+            	alert(jqXHR.status + " " + errorThrown);
+            }  
+		});	
+    }
     

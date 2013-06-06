@@ -378,6 +378,22 @@ function hi_on(v) {
 function hi_off(v) {
 	$("." + v).removeClass("highlight");
 }
+
+$(function() {
+	$( "#globalSearch" ).autocomplete({
+		source: "ajax/auto-complete2.jsp",
+		minLength: 2,
+		select: function( event, ui ) {
+			loadObject( ui.item ?
+				ui.item.value: "" );
+		}
+	}).data( "autocomplete" )._renderItem = function( ul, item ) {
+		return $( "<li></li>" )
+		.data( "item.autocomplete", item )
+		.append( "<a>" + item.label + " <span class='rowcountstyle'>" + item.desc + "</span></a>" )
+		.appendTo( ul );
+	};
+});	
 </script>
 
 </head>
@@ -385,8 +401,9 @@ function hi_off(v) {
 
 <body>
 	<table width=100% border=0>
-		<td><h2 style="color: blue;"><img src="image/cpas.jpg"
-			title="Version <%=Util.getVersionDate()%>" /> Package Browser</h2></td>
+		<td width=40><img src="image/package_ok.png"
+			title="Version <%=Util.getVersionDate()%>" /></td>
+		<td><h2 style="color: blue;">Package Browser</h2></td>
 		<td></td>
 		<td>&nbsp;</td>
 
@@ -397,12 +414,9 @@ function hi_off(v) {
 		<td><b><%=cn.getUrlString()%></b></td>
 
 <td align=right nowrap>
-<%--
-<b>Search</b> <input id="globalSearch" style="width: 200px;"/>
-<input type="button" value="Find" onClick="Javascript:processSearch($('#globalSearch').val())"/>
- --%>
- </td>
-
+<!-- <b>Global Search</b> <input id="globalSearch" style="width: 200px;" placeholder="table, view or package name"/>
+<input type="button" value="Find" onClick="Javascript:globalSearch($('#globalSearch').val())"/>
+ --></td>
  	</table>
 
 	<table border=0 cellspacing=0>

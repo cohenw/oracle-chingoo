@@ -377,7 +377,7 @@ Up to
 </form>
 
 <form name="form0" id="form0">
-<textarea style="display: none;" id="sql" name="sql" ><%= sql %></textarea>
+<textarea style="display: none;" id="sql" name="sql" ><%= sqlh %></textarea>
 <input type="hidden" id="sortColumn" name="sortColumn" value="">
 <input type="hidden" id="sortDirection" name="sortDirection" value="0">
 <input type="hidden" id="hideColumn" name="hideColumn" value="">
