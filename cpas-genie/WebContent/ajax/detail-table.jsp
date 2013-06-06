@@ -423,8 +423,10 @@ Please select a Table to see the detail.
 	int cols = 1;
 	for (int i=0; i<refProc.size(); i++) {
 		String refPrc = refProc.get(i);
+		//refPrc = cn.getProcedureLabel(refPrc);
 		String temp[] = refPrc.split("\\.");
 		cnt++;
+		refPrc = temp[0] + "." + cn.getProcedureLabel(refPrc.toUpperCase());
 %>
 
 <% if ((cnt-1)>=listSize) { %>
@@ -434,7 +436,6 @@ Please select a Table to see the detail.
 		cols ++;
 	} 
 %>
-
 		<a target=_blank href="package-browser.jsp?name=<%= refPrc %>"><%= refPrc %></a>&nbsp;&nbsp;<%= cn.getCRUD(temp[0],temp[1].toUpperCase(), table) %><br/>		
 <% }
 	for (; cols<=2; cols++) {

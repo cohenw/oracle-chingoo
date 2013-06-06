@@ -14,6 +14,7 @@ public String extractJS(String str) {
 	
 	String res = "";
 
+	int cnt=0;
 	while (true) {
 		start = str.indexOf("Javascript:", start);
 		if (start < 0 ) break;
@@ -24,6 +25,8 @@ public String extractJS(String str) {
 		res += tk + "<br/>\n";
 		//System.out.println("*** " + res);
 		start = end;
+		if (++cnt>=10) break;
+		
 	}
 
 	return res;
@@ -85,6 +88,7 @@ public String extractJS(String str) {
     		while  (iterator.hasNext()) {
     			idx ++;
     			QueryLog ql = (QueryLog) iterator.next();
+    			if (ql.getTime().before(cn.getLoginDate())) continue;
 //				qry += ql.getQueryString() + "; " + ql.getCount() + "<br/>";
 				qry += new HyperSyntax().getHyperSyntax(cn, ql.getQueryString(), "SQL") + "; " + ql.getCount() + "<br/>";
 				

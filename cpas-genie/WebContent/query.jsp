@@ -41,21 +41,21 @@
 	if (key != null && value != null && sql == null) {
 		value = value.trim();
 		if (key.equals("processid"))
-			sql = "SELECT * FROM BATCH WHERE processid='" + value + "'";
+			sql = "SELECT * FROM BATCH WHERE PROCESSID='" + value + "'";
 		else if (key.equals("mkey"))
-			sql = "SELECT * FROM MEMBER WHERE mkey='" + value + "'";
+			sql = "SELECT * FROM MEMBER WHERE MKEY='" + value + "'";
 		else if (key.equals("accountid"))
-			sql = "SELECT * FROM ACCOUNT WHERE accountid='" + value + "'";
+			sql = "SELECT * FROM ACCOUNT WHERE ACCOUNTID='" + value + "'";
 		else if (key.equals("penid"))
-			sql = "SELECT * FROM PENSIONER WHERE penid='" + value + "'";
+			sql = "SELECT * FROM PENSIONER WHERE PENDI='" + value + "'";
 		else if (key.equals("personid"))
-			sql = "SELECT * FROM PERSON WHERE personid='" + value + "'";
+			sql = "SELECT * FROM PERSON WHERE PERSONID='" + value + "'";
 		else if (key.equals("calcid"))
-			sql = "SELECT * FROM CALC WHERE calcid='" + value + "'";
+			sql = "SELECT * FROM CALC WHERE CALCID='" + value + "'";
 		else if (key.equals("errorid"))
-			sql = "SELECT * FROM ERRORCAT WHERE errorid='" + value + "'";
+			sql = "SELECT * FROM ERRORCAT WHERE ERRORID='" + value + "'";
 		else if (key.equals("requestid"))
-			sql = "SELECT * FROM REQUEST WHERE requestid='" + value + "'";
+			sql = "SELECT * FROM REQUEST WHERE REQUESTID='" + value + "'";
 	}
 	
 	int maxRow = Integer.parseInt(upto);
@@ -378,7 +378,7 @@ Up to
 </form>
 
 <form name="form0" id="form0">
-<textarea style="display: none;" id="sql" name="sql" ><%= sql %></textarea>
+<textarea style="display: none;" id="sql" name="sql" ><%= sqlh %></textarea>
 <input type="hidden" id="sortColumn" name="sortColumn" value="">
 <input type="hidden" id="sortDirection" name="sortDirection" value="0">
 <input type="hidden" id="hideColumn" name="hideColumn" value="">

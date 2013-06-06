@@ -764,4 +764,29 @@
 		$("#pageNo").val(1);
 		searchTableWork(id, '');
 	}
-    
+    function createGenieTable() {
+		$.ajax({
+			type: 'POST',
+			url: "ajax/create-table.jsp",
+			success: function(data){
+				alert('Done');
+				loadTool("User Defined Page");
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});	
+    }
+    function createGenieTable2() {
+		$.ajax({
+			type: 'POST',
+			url: "ajax/create-table2.jsp",
+			success: function(data){
+				alert('Done');
+				loadTool("Saved Query");
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+            	alert(jqXHR.status + " " + errorThrown);
+            }  
+		});	
+    }    

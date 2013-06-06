@@ -32,10 +32,10 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 
 		if (batchKey.equals("PBR")) {
 			list.add("BATCH_BUF$DATA$PBRHR$BUFF");
-			list.add("BATCH_BUF$DATA$PBRFR$BUFF");
-			list.add("BATCH_BUF$DATA$PBR$STATUS");
+			//list.add("BATCH_BUF$DATA$PBRFR$BUFF");
+			//list.add("BATCH_BUF$DATA$PBR$STATUS");
 			list.add("BATCH_BUF$DATA$PBR$ERR");
-			list.add("BATCH_BUF$DATA$PBR$ELOG");
+			//list.add("BATCH_BUF$DATA$PBR$ELOG");
 		}
 		
 		list.add("BATCH_ERROR");
@@ -405,7 +405,7 @@ if (cn.isViewTable(table)) {
 			if (label.equals(cn.getCpasUtil().logicalLink[j][0])) {
 				ft = cn.getCpasUtil().logicalLink[j][1];
 				fsql = cn.getPKLinkSql(ft, q.getValue(label));
-				System.out.println("*** " + fsql);
+				//System.out.println("*** " + fsql);
 				break;
 			}
 		}

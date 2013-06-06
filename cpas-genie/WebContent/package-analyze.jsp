@@ -9,11 +9,13 @@
 
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
+	String name = request.getParameter("name");
+
 	String q = "SELECT object_name FROM user_objects where object_type='PACKAGE BODY' ORDER BY 1";
 	if (cn.isTVS("GENIE_PA")) {
 		q = "SELECT object_name FROM user_objects A where object_type='PACKAGE BODY' AND NOT EXISTS (SELECT 1 FROM GENIE_PA WHERE PACKAGE_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
 	}
-	q = "SELECT object_name FROM user_objects where object_type='PACKAGE BODY' AND object_name IN ('DATA$PBR') ORDER BY 1";
+	q = "SELECT object_name FROM user_objects where object_type='PACKAGE BODY' AND object_name IN ('" + name + "') ORDER BY 1";
 
 	List<String[]> pkgs = cn.query(q, false);
 
@@ -47,7 +49,8 @@
 		String syntax = hs.getHyperSyntax(cn, text, "PACKAGE BODY", pkgName);
 		HashSet<String> packageProc = hs.getPackageProcedure();
 		System.out.println(packageProc);
-		cn.AddPackageProc(pkgName, packageProc);
+		cn.AddPackageProcDetail(pkgName, pt.getPD());
+		cn.AddPackageProc(pkgName, packageProc);		
 		hs = null;
 		list=null;
 	}
