@@ -402,6 +402,7 @@ Please select a Table to see the detail.
 		String refPrc = refProc.get(i);
 		String temp[] = refPrc.split("\\.");
 		cnt++;
+		refPrc = temp[0] + "." + cn.getProcedureLabel(refPrc.toUpperCase());
 %>
 
 <% if ((cnt-1)>=listSize) { %>
