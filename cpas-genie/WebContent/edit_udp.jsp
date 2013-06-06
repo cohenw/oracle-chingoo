@@ -287,7 +287,7 @@ User can define pages by combining multiple queries.
 <br/>
 
 Ex: param1=name, param2=city<br>
-SQL: SELECT * FROM EMPLOYEE WHERE FULLNAME LIKE '%[name]%' AND CITY ='[city]';
+SQL: SELECT * FROM EMPLOYEE WHERE FULLNAME LIKE '%:name%' AND CITY =':city';
 
 	<form method="post">
 		<% if (type.equals("newSql")) { %>

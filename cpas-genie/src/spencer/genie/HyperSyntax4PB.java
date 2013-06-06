@@ -328,6 +328,7 @@ public class HyperSyntax4PB {
 				s.append( "<span class='syntax1'>" + token + "</span>" );
 				if (!type.equals("PACKAGE"))
 					hyperlink = true;
+				hyperlink = false;
 				
 				cntProc++;
 				this.procName = "P1"; // + cntProc;

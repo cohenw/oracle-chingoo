@@ -278,7 +278,8 @@ Build CPAS1077
 	Timeago.js for query history page
 	Syntax highlight for cursor variables
 	PackageBrowser nested procedure highlight issue fixed
-	
+	Page navigation for Dynamic query (paramater query) bug fixed 
+	User defined page paramater uses :x instead of [x]	
 
 
 Known Issue

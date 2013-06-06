@@ -204,13 +204,10 @@ function changeLevel() {
 </head>
 <body>
 
-<form name="form-map" id="form-map" action="package-tree.jsp" method="get">
-<input id="name-map" name="name" type="hidden">
-</form>
-
 	<table width=100% border=0>
-		<td><h2 style="color: blue;"><img src="image/cpas.jpg"
-			title="Version <%=Util.getVersionDate()%>" /> Package Tree</h2></td>
+		<td width=40><img src="image/package_ok.png"
+			title="Version <%=Util.getVersionDate()%>" /></td>
+		<td><h2 style="color: blue;">Package Tree</h2></td>	
 		<td></td>
 		<td>&nbsp;</td>
 
@@ -233,7 +230,13 @@ function changeLevel() {
 &nbsp;&nbsp;
 <a target=_blank href="src2.jsp?name=<%= gPkg %>#<%= gPrc.toLowerCase() %>">Source</a>
 <a target=_blank href="package-browser.jsp?name=<%= name %>">PackgeBrowser</a>
+<a target=_blank href="package-analyze.jsp?name=<%= gPkg %>"><img src="image/check.gif" title="Analyze Packge"></a>
 </h3>
+
+<form name="form-map" id="form-map" action="package-tree.jsp" method="get">
+<input id="name-map" name="name" type="hidden">
+</form>
+
 
 <b><a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
 <div id="div-<%=id %>" style="display: none; margin-left: 20px; background-color: #eeeeee;">

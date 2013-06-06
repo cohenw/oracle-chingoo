@@ -401,6 +401,7 @@ public class Connect implements HttpSessionBindingListener {
 		saveHistoryToFile();
 		
 		if (!this.isCpas) return;
+		if (url.indexOf("8888")>0) return; // local test
 		
    		if (this.email != null && email.length() > 2 && map.size() > 0 && isInCpasNetwork() && cnt > 0) {
     		Email.sendEmail(email, title + this.urlString, qryHist);

@@ -42,6 +42,7 @@
 <a target=_blank href="src2.jsp?name=<%= pkg %>#<%= prc.toLowerCase() %>">Source</a>
 
 <a target=_blank href="package-tree.jsp?name=<%= name %>">Tree</a>
+<a target=_blank href="package-analyze.jsp?name=<%= pkg %>"><img src="image/check.gif" title="Analyze Packge"></a>
 </h2> 
 <br/>
 

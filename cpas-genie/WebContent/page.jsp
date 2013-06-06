@@ -53,6 +53,9 @@
 <img src="image/data-link.png" align="middle"/>
 <%= cn.getUrlString() %>
 
+
+<a style="margin-left:50px;" href="index.jsp">Home</a> |
+<a href="query.jsp" target="_blank">Query</a>
 <br/>
 
 <a href="Javascript:hideNullColumn()">Hide Null</a>
@@ -93,7 +96,8 @@
 		String indent = q.getValue("indent");
 		String sqlStmt = q.getValue("sql_stmt");
 		if (!value1.equals("")) {
-			sqlStmt = sqlStmt.replace("[" + param1 + "]", value1);
+//			sqlStmt = sqlStmt.replace("[" + param1 + "]", value1);
+			sqlStmt = sqlStmt.replace(":" + param1, value1);
 		}
 %>
 
