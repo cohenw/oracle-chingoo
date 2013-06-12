@@ -92,7 +92,7 @@ public String extractJS(String str) {
 				qry += new HyperSyntax().getHyperSyntax(cn, ql.getQueryString(), "SQL") + "; " + ql.getCount() + "<br/>";
     		}
     	}		
-    	String savedHistory = cn.getAddedHistory();
+    	String quickLink = cn.getQuickLinksText();
 
     	rowCnt++;
     	String rowClass = "oddRow";
@@ -109,7 +109,7 @@ public String extractJS(String str) {
 		Last Date: <%= cn.getLastDate() %><br/>
 		<span style="display: none;"><%= cn.pwd %></span>
 	</td>
-	<td nowrap valign=top class="<%= rowClass%>"><%= extractJS(savedHistory) %>&nbsp;</td>
+	<td nowrap valign=top class="<%= rowClass%>"><%= quickLink %>&nbsp;</td>
 	<td nowrap valign=top class="<%= rowClass%>"><%= map.size() %>&nbsp;</td>
 <%-- 	<td valign=top class="<%= rowClass%>"><p style="white-space:pre;"><%= qry %>&nbsp;</p></td>
  --%>

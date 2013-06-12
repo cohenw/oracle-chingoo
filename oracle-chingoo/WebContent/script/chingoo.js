@@ -82,7 +82,7 @@
 	        }  
 		});	
 		
-		addHistory("<a href='Javascript:loadObject(\""+oName+"\")'>" + oName + "</a>");
+		addQuickLink("object", oName);
 	}	
 
 	function setTitle() {
@@ -113,7 +113,7 @@
 	        }  
 		});	
 		
-		addHistory("<a href='Javascript:loadTable(\""+tName+"\")'>" + tName + "</a>");
+		addQuickLink("table", tName);
 	}	
 
 	
@@ -135,7 +135,7 @@
 	            alert(jqXHR.status + " " + errorThrown);
 	        }  
 		});	
-		addHistory("<a href='Javascript:loadView(\""+vName+"\")'>" + vName + "</a>");
+		addQuickLink("view", vName);
 	}
 
 	function loadPackage(pName) {
@@ -155,7 +155,7 @@
 	            alert(jqXHR.status + " " + errorThrown);
 	        }  
 		});	
-		addHistory("<a href='Javascript:loadPackage(\""+pName+"\")'>" + pName + "</a>");
+		addQuickLink("package", pName);
 	}
 
 	function loadSynonym(sName) {
@@ -175,7 +175,7 @@
 	            alert(jqXHR.status + " " + errorThrown);
 	        }  
 		});	
-		addHistory("<a href='Javascript:loadSynonym(\""+sName+"\")'>" + sName + "</a>");
+		addQuickLink("synonym", sName);
 	}
 
 	function loadTool(name) {
@@ -193,7 +193,7 @@
 	            alert(jqXHR.status + " " + errorThrown);
 	        }  
 		});	
-		addHistory("<a href='Javascript:loadTool(\""+name+"\")'>" + name + "</a>");
+		addQuickLink("tool", name);
 	}
 
 	function saveForNavigation() {
@@ -215,7 +215,7 @@
 		else
 			$("#imgForward").hide();
     }
-    
+/*
     function addHistory(value) {
     	var current = $("#inner-result2").html();
     	var newItem = "<li>" + value + "</li>";
@@ -225,6 +225,10 @@
     	}
     	
     	saveHistoryOnServer(value);
+    }
+*/  
+    function addQuickLink(type, name) {
+    	saveQuickLinkOnServer(type, name);
     }
     
     function setHighlight() {
@@ -243,6 +247,24 @@
     	});	
     }	
 
+    function saveQuickLinkOnServer(type, name) {
+    	$.ajax({
+    		url: "save-quicklink.jsp?type=" + type + "&name=" + name + "&t=" + (new Date().getTime()),
+    		success: function(data){
+    			$("#inner-result2").html(data);
+    		}  
+    	});	
+    }
+    
+    function remQuickLink(name) {
+    	$.ajax({
+    		url: "rem-quicklink.jsp?name=" + name + "&t=" + (new Date().getTime()),
+    		success: function(data){
+    			$("#inner-result2").html(data);
+    		}  
+    	});	
+    }
+    
     function runQuery(catalog,tab) {
     	var sList = "";
     	var form = "DIV_" + tab; 
@@ -660,7 +682,8 @@
 	        }  
 		});
 		
-		addHistory("<a href='Javascript:globalSearch(\""+keyword+"\")'>" + keyword + "</a>");
+		//addHistory("<a href='Javascript:globalSearch(\""+keyword+"\")'>" + keyword + "</a>");
+		addQuickLink("search", keyword);
 	}
 	
     function toolQuery() {

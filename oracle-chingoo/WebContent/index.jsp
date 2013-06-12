@@ -10,7 +10,7 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 
 	String title = "Chingoo " + cn.getUrlString();
-	String addedHistory = cn.getAddedHistory();
+	String quickLinks = cn.getQuickLinks();
 %>
 
 <html>
@@ -432,7 +432,7 @@ function hideHist() {
 <td valign=top>
 <div id="outer-result2">
 	<a href="Javascript:hideHist()" style="float:right;">hide</a>
-	<div id="inner-result2"><%= addedHistory %></div>
+	<div id="inner-result2"><%= quickLinks %></div>
 </div>
 </td>
 </table>

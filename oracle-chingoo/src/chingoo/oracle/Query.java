@@ -78,7 +78,8 @@ public class Query {
 			String q2 = qry;
 //			if (q2.toLowerCase().indexOf("limit ")<0) q2 += " LIMIT 200";
 			
-			String targetQry = processQuery(q2);
+			//String targetQry = processQuery(q2);
+			targetQry = q2;
 //			System.out.println("NEW QUERY: " + targetQry);	
 			rs = stmt.executeQuery(targetQry);
 			
@@ -111,6 +112,7 @@ public class Query {
 			message = e.getMessage();
 			isError = true;
 			System.out.println(e.toString());
+			System.out.println("targetQry="+targetQry);
 		}
 	}
 	
@@ -154,7 +156,7 @@ public class Query {
 			else newCols += ", " + token;
 		}
 
-		String newQry = "SELECT " + newCols + " " + theRest;
+		String newQry = "SELECT " + newCols + theRest;
 //		System.out.println("newQry=" + newQry);
 		return newQry;
 	}
