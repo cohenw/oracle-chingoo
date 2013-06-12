@@ -69,7 +69,7 @@ public class Connect implements HttpSessionBindingListener {
 	private HashSet<String> temp_tables = new HashSet<String>();
 	private HashSet<String> packages = new HashSet<String>();
 	private HashSet<String> procedureSet = new HashSet<String>();
-
+	
 	private Hashtable<String,String> comments;
 	private Hashtable<String,String> constraints;
 	private Hashtable<String,String> pkByTab;
@@ -86,6 +86,7 @@ public class Connect implements HttpSessionBindingListener {
 	private HashMap<String, QueryLog> queryLog;
 	private HashMap<String, ArrayList<String>> pkMap;
 //	private Stack<String> history;
+	private ArrayList<QuickLink> qlink;
 	
 	private HashMap<String, String> viewTables;
 	private HashMap<String, String> packageTables;
@@ -109,7 +110,6 @@ public class Connect implements HttpSessionBindingListener {
 	private boolean pkgProcCreated = false;
 	private boolean trgProcCreated = false;
 	
-	private String savedHistory = "";
 	private String email = "";
 	private String url = "";
 
@@ -170,7 +170,8 @@ public class Connect implements HttpSessionBindingListener {
             foreignKeys = new ArrayList<ForeignKey>();
             schemas = new Vector<String>();
             queryLog = new HashMap<String, QueryLog>();
-
+            qlink = new ArrayList<QuickLink>();
+            
 //       		this.schemaName = conn.getCatalog();
        		this.schemaName = userName;
 //       		System.out.println("this.schemaName=" + this.schemaName);
@@ -185,7 +186,7 @@ public class Connect implements HttpSessionBindingListener {
             contentSearchTrigger = ContentSearchTrigger.getInstance();
             packageTableWorker = PackageTableWorker.getInstance();
             triggerTableWorker = TriggerTableWorker.getInstance();
-
+            
             loadData();
             
             loadHistoryFromFile();
@@ -356,7 +357,6 @@ public class Connect implements HttpSessionBindingListener {
     		if (ql.getCount() > 1) cntLine += "s";
     		qryHist += ql.getQueryString() + ";\n"+ cntLine + "\n\n";
     	}
-    	System.out.println(extractJS(this.getAddedHistory()));
     	System.out.println("***] Query History from " + this.ipAddress);
     	
 		saveHistoryToFile();
@@ -2430,19 +2430,117 @@ public class Connect implements HttpSessionBindingListener {
 		return numRows;
 	}
 	
-	public String getAddedHistory() {
-		return savedHistory;
+	public String getQuickLinks() {
+		String res = "";
+		int cnt=0;
+		String lastType="";
+		for (QuickLink q:qlink) {
+			cnt++;
+			if (!q.getType().equals(lastType)) {
+					if (cnt > 1) res += "<br/>";
+					res += q.getType() + "<br/>";
+			}
+			if (q.getType().equals("table")) {
+				res += "<li><a href='Javascript:loadTable(\""+q.getName()+"\")'>" + q.getName() + "</a> <a href='Javascript:remQuickLink(\""+q.getName()+"\")'>x</a><br/>";
+			} else if (q.getType().equals("view")) {
+				res += "<li><a href='Javascript:loadView(\""+q.getName()+"\")'>" + q.getName() + "</a> <a href='Javascript:remQuickLink(\""+q.getName()+"\")'>x</a><br/>";
+			} else if (q.getType().equals("synonym")) {
+				res += "<li><a href='Javascript:loadSynonym(\""+q.getName()+"\")'>" + q.getName() + "</a> <a href='Javascript:remQuickLink(\""+q.getName()+"\")'>x</a><br/>";
+			} else if (q.getType().equals("object")) {
+				res += "<li><a href='Javascript:loadObject(\""+q.getName()+"\")'>" + q.getName() + "</a> <a href='Javascript:remQuickLink(\""+q.getName()+"\")'>x</a><br/>";
+			} else if (q.getType().equals("package")) {
+				res += "<li><a href='Javascript:loadPackage(\""+q.getName()+"\")'>" + q.getName() + "</a> <a href='Javascript:remQuickLink(\""+q.getName()+"\")'>x</a><br/>";
+			} else if (q.getType().equals("tool")) {
+				res += "<li><a href='Javascript:loadTool(\""+q.getName()+"\")'>" + q.getName() + "</a> <a href='Javascript:remQuickLink(\""+q.getName()+"\")'>x</a><br/>";
+			} else if (q.getType().equals("search")) {
+				res += "<li><a href='Javascript:globalSearch(\""+q.getName()+"\")'>" + q.getName() + "</a> <a href='Javascript:remQuickLink(\""+q.getName()+"\")'>x</a><br/>";
+			}
+			
+			lastType = q.getType();
+		}
+		return res;
 	}
 	
-	public void addHistory(String value) {
+	public String getQuickLinksText() {
+		String res = "";
+		int cnt=0;
+		String lastType="";
+		for (QuickLink q:qlink) {
+			cnt++;
+			if (!q.getType().equals(lastType)) {
+					if (cnt > 1) res += "<br/>";
+					res += q.getType() + "<br/>";
+			}
+			res += "<li>" + q.getName() + "<br/>";
+			lastType = q.getType();
+		}
+		return res;
+	}
+
+	private String getTypeStr(String type) {
+		if (type.equals("table")) return "1";
+		if (type.equals("view")) return "2";
+		if (type.equals("synonym")) return "3";
+		if (type.equals("package")) return "4";
+		if (type.equals("tool")) return "5";
+		if (type.equals("search")) return "6";
 		
-		String newItem = "<li>" + value + "</li>"; 
-		savedHistory = savedHistory.replace(newItem,"");
-		savedHistory = newItem + savedHistory;
+		return "9";
+	}
+	
+	public void addQuickLink(String type, String name) {
+		if (type.equals("table")||type.equals("view")||type.equals("synonym")||type.equals("object"))
+			name = name.toUpperCase();
 		
+		if (type.equals("object")) {
+			if (tables.contains(name)) 
+				type ="table";
+			else if (views.contains(name))
+				type = "view";
+			else if (synonyms.contains(name))
+				type = "synonym";
+			else if (packages.contains(name))
+				type = "package";
+		}
+		
+		boolean found = false;
+		for (QuickLink ql:qlink) {
+			if (ql.type.equals(type) && ql.name.equals(name)) {
+				ql.setTime();
+				found = true;
+				break;
+			}
+		}
+		
+		if (!found) {
+			QuickLink ql = new QuickLink(type, name);
+			qlink.add(ql);
+		}
+		
+		Collections.sort(qlink, new Comparator<QuickLink>(){
+			 
+            public int compare(QuickLink o1, QuickLink o2) {
+
+
+        		return (getTypeStr(o1.getType())+o1.getName()).compareTo(getTypeStr(o2.getType())+o2.getName());
+            }
+ 
+        });			
 		lastDate = new Date();
 	}
 
+	public void remQuickLink(String name) {
+		QuickLink q0 = null;
+		for (QuickLink q:qlink) {
+			if (q.getName().equals(name)) {
+				q0 = q;
+				break;
+			}
+		}
+		if (q0!= null) qlink.remove(q0);
+		
+	}
+	
 	public String getUrl() {
 		return url;
 	}
@@ -2824,17 +2922,17 @@ public class Connect implements HttpSessionBindingListener {
    		try{
    			//use buffering
    			String serFilename = (this.getIPAddress() + "-" + this.urlString).toLowerCase();
-   			serFilename = serFilename.replaceAll("[^a-zA-Z0-9\\s]", "-") +  ".ser2";
+   			serFilename = serFilename.replaceAll("[^a-zA-Z0-9\\s]", "-") +  ".qlink";
    			OutputStream file = new FileOutputStream( "/tmp/oracle-chingoo/" + serFilename );
    			OutputStream buffer = new BufferedOutputStream( file );
    			ObjectOutput output = new ObjectOutputStream( buffer );
    			try{
-   				output.writeObject(savedHistory);
+   				output.writeObject(qlink);
    			}
    			finally{
    				output.close();
    			}
-   			System.out.println("serialize2 " + serFilename + " " + savedHistory.length());
+   			System.out.println("serialize2 " + serFilename + " " + qlink.size());
    	    }  
    	    catch(IOException ex){
    	    	ex.printStackTrace();
@@ -2872,13 +2970,13 @@ public class Connect implements HttpSessionBindingListener {
 		try{
    			//use buffering
    			String serFilename = (this.getIPAddress() + "-" + this.urlString).toLowerCase();
-   			serFilename = serFilename.replaceAll("[^a-zA-Z0-9\\s]", "-") +  ".ser2";
+   			serFilename = serFilename.replaceAll("[^a-zA-Z0-9\\s]", "-") +  ".qlink";
 	        InputStream file = new FileInputStream( "/tmp/oracle-chingoo/" + serFilename );
 	        InputStream buffer = new BufferedInputStream( file );
 	        ObjectInput input = new ObjectInputStream ( buffer );
 	        try{
 	        	//deserialize the Object
-	        	savedHistory = (String)input.readObject();
+	        	qlink = (ArrayList<QuickLink>)input.readObject();
 	        	//System.out.println("deserialize " + serFilename + " " + queryLog.size());
 /*
 	          	for(String quark: recoveredQuarks){
