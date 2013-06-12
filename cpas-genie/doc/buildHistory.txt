@@ -279,9 +279,13 @@ Build CPAS1077
 	Syntax highlight for cursor variables
 	PackageBrowser nested procedure highlight issue fixed
 	Page navigation for Dynamic query (paramater query) bug fixed 
-	User defined page paramater uses :x instead of [x]	
+	User defined page paramater uses :x instead of [x]
+	Do not create GENIE_PA_PROCEDURE for nested procedure/function	
 
+Build CPAS1078
+	QuickLinks implemented (save/load)
 
 Known Issue
 	Source code - nested procedure highlight issue
-	Do not create GENIE_PA_PROCEDURE for nested procedure/function
+	FireFox - object history javascript issue
+

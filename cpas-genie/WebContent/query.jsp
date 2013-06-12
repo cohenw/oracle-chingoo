@@ -376,7 +376,6 @@ Up to
 <input type="button" value="Explain plan" onClick="Javascript:explainPlan()"/>
  -->
 </form>
-
 <form name="form0" id="form0">
 <textarea style="display: none;" id="sql" name="sql" ><%= sqlh %></textarea>
 <input type="hidden" id="sortColumn" name="sortColumn" value="">

@@ -183,6 +183,7 @@
 	for (int i=0; i<refProc.size(); i++) {
 		String refPrc = refProc.get(i);
 		String temp[] = refPrc.split("\\.");
+		refPrc = temp[0] + "." + cn.getProcedureLabel(refPrc.toUpperCase());
 		cnt++;
 %>
 
