@@ -18,8 +18,35 @@
 	q = "SELECT object_name FROM user_objects where object_type='PACKAGE BODY' AND object_name IN ('" + name + "') ORDER BY 1";
 
 	List<String[]> pkgs = cn.query(q, false);
+%>
 
-	out.println("Processing " + pkgs.size()+" packages.<br/>");
+<html>
+<head>
+	<title>Source for <%= name %></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+
+	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
+	<script src="script/main.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
+	<script type="text/javascript" src="script/shCore.js"></script>
+	<script type="text/javascript" src="script/shBrushSql.js"></script>
+    <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
+    <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.css?<%= Util.getScriptionVersion() %>" rel="stylesheet" type="text/css" />
+	<link rel="icon" type="image/png" href="image/Genie-icon.png">
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#wait").html("Done.");
+});
+</script>
+</head>
+<body>
+	Analyze Package: <b><%= name %></b><br/>
+	
+<div id="wait">
+<img src="image/waiting_big.gif">
+</div>
+<%
 	for (int k=0;k<pkgs.size();k++) {
 		String type = "PACKAGE BODY";
 		String pkgName = pkgs.get(k)[1]; 
@@ -42,18 +69,21 @@
 		}
 		PackageTable pt = new PackageTable(pkgName, text);
 		cn.AddPackageTable(pkgName, pt.getHM());
-		System.out.println(pt.getHM());
+//		System.out.println(pt.getHM());
 //		out.println(pt.getHM()+"<br/>");
 
 		HyperSyntax hs = new HyperSyntax();
 		String syntax = hs.getHyperSyntax(cn, text, "PACKAGE BODY", pkgName);
 		HashSet<String> packageProc = hs.getPackageProcedure();
-		System.out.println(packageProc);
+//		System.out.println(packageProc);
 		cn.AddPackageProcDetail(pkgName, pt.getPD());
 		cn.AddPackageProc(pkgName, packageProc);		
 		hs = null;
 		list=null;
 	}
 
-	out.println("Done.<br/>");
+//	out.println("Done.<br/>");
 %>
+
+</body>
+</html>

@@ -11,7 +11,7 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 
 	String title = "Genie " + cn.getUrlString();
-	String addedHistory = cn.getAddedHistory();
+	String quickLinks = cn.getQuickLinks();
 %>
 
 <html>
@@ -443,7 +443,7 @@ CPAS</a> |
 <td valign=top>
 <div id="outer-result2">
 	<a href="Javascript:hideHist()" style="float:right;">hide</a>
-	<div id="inner-result2"><%= addedHistory %></div>
+	<div id="inner-result2"><%= quickLinks %></div>
 </div>
 </td>
 </table>
