@@ -47,7 +47,7 @@
 		else if (key.equals("accountid"))
 			sql = "SELECT * FROM ACCOUNT WHERE ACCOUNTID='" + value + "'";
 		else if (key.equals("penid"))
-			sql = "SELECT * FROM PENSIONER WHERE PENDI='" + value + "'";
+			sql = "SELECT * FROM PENSIONER WHERE PENID='" + value + "'";
 		else if (key.equals("personid"))
 			sql = "SELECT * FROM PERSON WHERE PERSONID='" + value + "'";
 		else if (key.equals("calcid"))

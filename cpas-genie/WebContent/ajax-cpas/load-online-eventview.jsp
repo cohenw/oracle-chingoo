@@ -26,6 +26,9 @@
 %>
 
 <b>Process</b>
+ <a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry1%>"/></a>
+<div style="display: none;" id="sql-<%=id%>"><%= qry1%></div>
+
 <br/>
 <table id="dataTable" border=1 class="gridBody">
 <tr>
@@ -65,8 +68,12 @@
 
 <br/> 
 
-
+<%
+id = Util.getId();
+%>
 <b>Event</b>
+ <a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry0%>"/></a>
+<div style="display: none;" id="sql-<%=id%>"><%= qry0%></div>
 <table id="dataTable" border=1 class="gridBody">
 <tr>
 	<th class="headerRow">Event Name</th>
@@ -103,7 +110,7 @@
 		
 		String batchTask = "";
 		if (action==null) action="";
-		if (action != null && action.equals("BT") || action.equals("BW")) {
+		if (action != null && action.equals("BT") || action.equals("BW") || action.equals("IM")) {
 			String tmp[] = uparam.split(",");
 			if (tmp != null && tmp.length>1) {
 				String qry = "SELECT BATCHNAME || ' - ' || TASKNAME FROM BATCHCAT A, BATCHCAT_TASK B " +
@@ -134,6 +141,9 @@
 
 
 
+<%
+id = Util.getId();
+%>
 
 <%
 	String qry = "SELECT * FROM CPAS_PROCESS_EVENT_VIEW WHERE PROCESS = '" + process + 
@@ -294,6 +304,7 @@ if (qSlave.hasData()) {
 <table id="dataTable" border=1 class="gridBody">
 <tr>
 	<th class="headerRow">Event Name</th>
+	<th class="headerRow">Process</th>
 	<th class="headerRow">Event</th>
 	<th class="headerRow">PEvent</th>
 	<th class="headerRow">Position</th>
@@ -307,6 +318,7 @@ if (qSlave.hasData()) {
 qSlave.rewind(1000, 1);
 	while (qSlave.next() && rowCnt < 1000) {
 		String evnt = qSlave.getValue("event");
+		String pcss = qSlave.getValue("process");
 		String pevent = qSlave.getValue("pevent");
 		String name = qSlave.getValue("name");
 		String position = qSlave.getValue("position");
@@ -324,6 +336,7 @@ qSlave.rewind(1000, 1);
 %>
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><%= pevent==null?"":"&nbsp;&nbsp;&nbsp;&nbsp;" %><%= name %></td>
+	<td class="<%= rowClass%>" nowrap><%= pcss==null?"":pcss %></td>
 	<td class="<%= rowClass%>" nowrap><%= evnt==null?"":evnt %></td>
 	<td class="<%= rowClass%>" nowrap><%= pevent==null?"":pevent %></td>
 	<td class="<%= rowClass%>" nowrap><%= position==null?"":position %></td>

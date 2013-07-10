@@ -59,6 +59,7 @@ public class Connect implements HttpSessionBindingListener {
 
 //	public int QRY_ROWS = 1000;
 	
+	private HttpSession sn = null;
 	private Connection conn = null;
 	private String urlString = null;
 	private String message = "";
@@ -96,6 +97,7 @@ public class Connect implements HttpSessionBindingListener {
 	private HashMap<String, ArrayList<String>> pkMap;
 //	private Stack<String> history;
 	private ArrayList<QuickLink> qlink;
+	private ArrayList<String> jsplog;
 
 	private HashMap<String, String> viewTables;
 	private HashMap<String, String> packageTables;
@@ -125,7 +127,6 @@ public class Connect implements HttpSessionBindingListener {
 
 	private CpasUtil cu=null;
 	private Date loginDate; 
-	private Date lastDate;
 	private boolean isCpas = false;
 	public String pwd;
 	public String serverUrl;
@@ -157,7 +158,6 @@ public class Connect implements HttpSessionBindingListener {
     	triggerTables = new HashMap<String, String>();
 
     	loginDate = new Date();
-    	lastDate = new Date();
     	pwd = password;
     	
 //    	history = new Stack<String>();
@@ -165,6 +165,7 @@ public class Connect implements HttpSessionBindingListener {
     	this.ipAddress = ipAddress;
         try
         {
+        	sn = session;
             Class.forName ("oracle.jdbc.driver.OracleDriver").newInstance ();
             conn = DriverManager.getConnection (url, userName, password);
             conn.setReadOnly(true);
@@ -200,6 +201,7 @@ public class Connect implements HttpSessionBindingListener {
             schemas = new Vector<String>();
             queryLog = new HashMap<String, QueryLog>();
             qlink = new ArrayList<QuickLink>();
+            jsplog = new ArrayList<String>();
 
 //       		this.schemaName = conn.getCatalog();
        		this.schemaName = userName;
@@ -232,6 +234,10 @@ public class Connect implements HttpSessionBindingListener {
     public Connect(HttpSession session, String url, String userName, String password, String ipAddress) {
     	this(session, url, userName, password, ipAddress, true, null);
 	}    
+    
+    public HttpSession getSession() {
+    	return sn;
+    }
     
     /**
      * 
@@ -1238,7 +1244,6 @@ public class Connect implements HttpSessionBindingListener {
 	}
 */	
 	public void addQueryHistory(String qry, int cnt) {
-		lastDate = new Date();
 		if (cnt < 1) return;
 		QueryLog ql = new QueryLog(qry, cnt);
 		queryLog.put(qry, ql);
@@ -2643,6 +2648,14 @@ public class Connect implements HttpSessionBindingListener {
 		return numRows;
 	}
 	
+	public void addJspLog(String log) {
+		jsplog.add(log);
+	}
+	
+	public ArrayList<String> getJspLog() {
+		return jsplog;
+	}
+	
 	public String getQuickLinks() {
 		String res = "";
 		int cnt=0;
@@ -2739,7 +2752,6 @@ public class Connect implements HttpSessionBindingListener {
             }
  
         });			
-		lastDate = new Date();
 	}
 
 	public void remQuickLink(String name) {
@@ -2810,10 +2822,6 @@ public class Connect implements HttpSessionBindingListener {
 		return this.loginDate;
 	}
 
-	public Date getLastDate() {
-		return this.lastDate;
-	}
-	
 	public List<String[]> query(String qry) {
 		return query(qry, 5000, true);
 	}

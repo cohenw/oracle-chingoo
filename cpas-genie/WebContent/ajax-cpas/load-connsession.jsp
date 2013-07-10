@@ -15,6 +15,7 @@
 	q.rewind(1000, 1);
 %>
 {
+"<%="SESSIONID"%>":"<%=sid%>",
 <%
 	while (q.next()) {
 		String value = "";

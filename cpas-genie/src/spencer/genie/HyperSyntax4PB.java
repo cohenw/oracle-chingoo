@@ -359,7 +359,7 @@ public class HyperSyntax4PB {
 //				System.out.println(pr + " proc2 " + tmp);
 				packageProc.add(pr + " "  + tmp);
 			} else if (vars.contains(procName+"-"+tmp))
-				s.append( "<span class='"+procName+"-"+tmp+"' onmouseover='hi_on(\"" + procName+"-"+tmp + "\")' xonmouseout='hi_off(\"" + procName+"-"+tmp + "\")'>" + token + "</span>" );
+				s.append( "<span class='"+procName+"-"+tmp+"' onmouseover='hi_on(\"" + procName+"-"+tmp + "\")' onclick='hi_off(\"" + procName+"-"+tmp + "\")'>" + token + "</span>" );
 			else if (tmp.indexOf('.') > 0) {
 				int idx = tmp.indexOf('.');
 				String pkg = tmp.substring(0,idx);
@@ -370,7 +370,7 @@ public class HyperSyntax4PB {
 					packageProc.add(pr + " "  + tmp);
 //					System.out.println(pr + " proc3 " + tmp);
 				} else if (vars.contains(procName+"-"+pkg)) { 
-					s.append( "<span class='"+procName+"-"+pkg+"' onmouseover='hi_on(\"" + procName+"-"+pkg + "\")' xonmouseout='hi_off(\"" + procName+"-"+pkg + "\")'>" + token + "</span>" );
+					s.append( "<span class='"+procName+"-"+pkg+"' onmouseover='hi_on(\"" + procName+"-"+pkg + "\")' onclick='hi_off(\"" + procName+"-"+pkg + "\")'>" + token + "</span>" );
 				} else
 					s.append( token );
 			} else {
