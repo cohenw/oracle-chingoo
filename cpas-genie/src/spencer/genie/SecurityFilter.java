@@ -112,6 +112,8 @@ public class SecurityFilter implements Filter {
 		long after = System.currentTimeMillis();
 		
 		System.out.println(servletPath + " " + qry + " " + ip + " " + (after - before) + "ms"); // + " " + (new java.util.Date()));
+		if (!servletPath.endsWith("-progress.jsp")&&!servletPath.endsWith("-quicklink.jsp"))
+			cn.addJspLog(servletPath + " " + qry);
 	}
 
 	public void init(FilterConfig chain) throws ServletException {

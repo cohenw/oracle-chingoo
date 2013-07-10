@@ -284,8 +284,18 @@ Build CPAS1077
 
 Build CPAS1078
 	QuickLinks implemented (save/load)
+	JspLog added
+	Off highlight on click
 
+Build CPAS1079
+	TaskKey for Batch Task
+	sprocessid for Batch Queue
+	feed_processid for Batch
+	CPAS online new layout (Top-down)
+
+Build CPAS1080
+	CPAS online sitemap
+
+		
 Known Issue
-	Source code - nested procedure highlight issue
-	FireFox - object history javascript issue
-
+	

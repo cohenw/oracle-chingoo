@@ -30,7 +30,7 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 		List<String> lst = cn.queryMulti(qry);
 		list.addAll(lst);
 
-		if (batchKey.equals("PBR")) {
+		if (batchKey.equals("PBR")||batchKey.equals("PBRD2")) {
 			list.add("BATCH_BUF$DATA$PBRHR$BUFF");
 			//list.add("BATCH_BUF$DATA$PBRFR$BUFF");
 			//list.add("BATCH_BUF$DATA$PBR$STATUS");

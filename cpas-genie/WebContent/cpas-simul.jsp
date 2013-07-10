@@ -66,13 +66,14 @@
 	String personid = "";
 	String sessionid = "";
 	String processid = "";
+	String processkey = "";
 	String seclevel = "";
 	String memberid = "";
 	String taskid = "";
 	String userid = "";
 	String language = "";
 		
-	q = cn.query("SELECT tagname, tagcvalue, tagnvalue, tagdvalue, tagtype FROM CONNSESSION_DATA A WHERE SESSIONID=(SELECT  MAX(SESSIONID) FROM CONNSESSION)", false);
+	q = cn.query("SELECT tagname, tagcvalue, tagnvalue, tagdvalue, tagtype FROM CONNSESSION_DATA A WHERE SESSIONID=(SELECT  MAX(SESSIONID) FROM CONNSESSION) union all SELECT 'SESSIONID', null, MAX(SESSIONID), null, 'N' FROM CONNSESSION", false);
 	for (String[] row : q) {
 		String value = row[2];
 		if (row[5].equals("N")) value = row[3];
@@ -87,6 +88,7 @@
 		
 		if (row[1].equals("SESSIONID")) sessionid = value;
 		if (row[1].equals("PROCESSID")) processid = value;
+		if (row[1].equals("PROCESSKEY")) processkey = value;
 		if (row[1].equals("SECLEVEL")) seclevel = value;
 		if (row[1].equals("MEMBERID")) memberid = value;
 		if (row[1].equals("TASKID")) taskid = value;
@@ -103,6 +105,7 @@
 
 	if (sessionid==null) sessionid = "";
 	if (processid==null) processid = "";
+	if (processkey==null) processkey = "";
 	if (seclevel==null) seclevel = "";
 	if (memberid==null) memberid = "";
 	if (taskid==null) taskid = "";
@@ -153,6 +156,7 @@ function loadSessionValue(sid) {
 			$("#PERSONID").val(jo.PERSONID);
 			$("#SESSIONID").val(jo.SESSIONID);
 			$("#PROCESSID").val(jo.PROCESSID);
+			$("#PROCESSKEY").val(jo.PROCESSKEY);
 			$("#SECLEVEL").val(jo.SECLEVEL);
 			$("#MEMBERID").val(jo.MEMBERID);
 			$("#TASKID").val(jo.TASKID);
@@ -180,6 +184,7 @@ function runMain() {
 	var personid = $("#PERSONID").val();
 	var sessionid = $("#SESSIONID").val();
 	var processid = $("#PROCESSID").val();
+	var processkey = $("#PROCESSKEY").val();
 	var seclevel = $("#SECLEVEL").val();
 	var memberid = $("#MEMBERID").val();
 	var taskid = $("#TASKID").val();
@@ -194,6 +199,7 @@ function runMain() {
 	newQry=newQry.replace(new RegExp(":S.PERSONID", 'g'), "'" + personid + "'");
 	newQry=newQry.replace(new RegExp(":S.SESSIONID", 'g'), "'" + sessionid + "'");
 	newQry=newQry.replace(new RegExp(":S.PROCESSID", 'g'), "'" + processid + "'");
+	newQry=newQry.replace(new RegExp(":S.PROCESSKEY", 'g'), "'" + processkey + "'");
 	newQry=newQry.replace(new RegExp(":S.SECLEVEL", 'g'), "'" + seclevel + "'");
 	newQry=newQry.replace(new RegExp(":S.MEMBERID", 'g'), "'" + memberid + "'");
 	newQry=newQry.replace(new RegExp(":S.TASKID", 'g'), "'" + taskid + "'");
@@ -210,6 +216,7 @@ newAs=newAs.replace(new RegExp(":S.ACCOUNTID", 'g'), "'" + accountid + "'");
 newAs=newAs.replace(new RegExp(":S.PERSONID", 'g'), "'" + personid + "'");
 newAs=newAs.replace(new RegExp(":S.SESSIONID", 'g'), "'" + sessionid + "'");
 newAs=newAs.replace(new RegExp(":S.PROCESSID", 'g'), "'" + processid + "'");
+newAs=newAs.replace(new RegExp(":S.PROCESSKEY", 'g'), "'" + processkey + "'");
 newAs=newAs.replace(new RegExp(":S.SECLEVEL", 'g'), "'" + seclevel + "'");
 newAs=newAs.replace(new RegExp(":S.MEMBERID", 'g'), "'" + memberid + "'");
 newAs=newAs.replace(new RegExp(":S.TASKID", 'g'), "'" + taskid + "'");
@@ -279,6 +286,7 @@ function runSub(fields, values) {
 	var personid = $("#PERSONID").val();
 	var sessionid = $("#SESSIONID").val();
 	var processid = $("#PROCESSID").val();
+	var processkey = $("#PROCESSKEY").val();
 	var seclevel = $("#SECLEVEL").val();
 	var memberid = $("#MEMBERID").val();
 	var taskid = $("#TASKID").val();
@@ -293,6 +301,7 @@ function runSub(fields, values) {
 	newQry=newQry.replace(new RegExp(":S.PERSONID", 'g'), "'" + personid + "'");
 	newQry=newQry.replace(new RegExp(":S.SESSIONID", 'g'), "'" + sessionid + "'");
 	newQry=newQry.replace(new RegExp(":S.PROCESSID", 'g'), "'" + processid + "'");
+	newQry=newQry.replace(new RegExp(":S.PROCESSKEY", 'g'), "'" + processkey + "'");
 	newQry=newQry.replace(new RegExp(":S.SECLEVEL", 'g'), "'" + seclevel + "'");
 	newQry=newQry.replace(new RegExp(":S.MEMBERID", 'g'), "'" + memberid + "'");
 	newQry=newQry.replace(new RegExp(":S.TASKID", 'g'), "'" + taskid + "'");
@@ -457,6 +466,7 @@ function rowsPerPage(rows) {
 	<td>PERSONID</td>
 	<td>SESSIONID</td>
 	<td>PROCESSID</td>
+	<td>PROCESSKEY</td>
 	<td>SECLEVEL</td>
 	<td>MEMBERID</td>
 	<td>TASKID</td>
@@ -464,14 +474,15 @@ function rowsPerPage(rows) {
 	<td>LANGUAGE</td>
 </tr>
 <tr>
-	<td><input name="CLNT" id="CLNT" value="<%= clnt %>" size=7 maxlength=10></td>
-	<td><input name="MKEY" id="MKEY" value="<%= mkey %>" size=7 maxlength=10></td>
-	<td><input name="ERKEY" id="ERKEY" value="<%= erkey %>" size=7 maxlength=10></td>
-	<td><input name="PLAN" id="PLAN" value="<%= plan %>" size=7 maxlength=10></td>
+	<td><input name="CLNT" id="CLNT" value="<%= clnt %>" size=4 maxlength=10></td>
+	<td><input name="MKEY" id="MKEY" value="<%= mkey %>" size=8 maxlength=10></td>
+	<td><input name="ERKEY" id="ERKEY" value="<%= erkey %>" size=5 maxlength=10></td>
+	<td><input name="PLAN" id="PLAN" value="<%= plan %>" size=4 maxlength=10></td>
 	<td><input name="ACCOUNTID" id="ACCOUNTID" value="<%= accountid %>" size=7 maxlength=10></td>
 	<td><input name="PERSONID" id="PERSONID" value="<%= personid %>" size=7 maxlength=10></td>
 	<td><input name="SESSIONID" id="SESSIONID" value="<%= sessionid %>" size=7 maxlength=10></td>
 	<td><input name="PROCESSID" id="PROCESSID" value="<%= processid %>" size=7 maxlength=10></td>
+	<td><input name="PROCESSKEY" id="PROCESSKEY" value="<%= processkey %>" size=7 maxlength=10></td>
 	<td><input name="SECLEVEL" id="SECLEVEL" value="<%= seclevel %>" size=7 maxlength=10></td>
 	<td><input name="MEMBERID" id="MEMBERID" value="<%= memberid %>" size=7 maxlength=10></td>
 	<td><input name="TASKID" id="TASKID" value="<%= taskid %>" size=7 maxlength=10></td>

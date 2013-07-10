@@ -63,11 +63,14 @@ public class CpasUtil {
 			{"MKEY", "CLNT", "MEMBER"},
 			{"ERKEY", "CLNT", "EMPLOYER"},
 			{"PLAN", "CLNT", "SV_PLAN"},
-			{"PAYMENTID", "PENID", "PENSIONER_PAYMENT"}
+			{"PAYMENTID", "PENID", "PENSIONER_PAYMENT"},
+			{"SPROCESSID", "PROCESSID", "BATCH_QUEUE"},
+			{"TASKKEY", "BATCHKEY", "BATCHCAT_TASK"}
 	};
 			
 	public String logicalLink[][] = {
 			{"PROCESSID", "BATCH"},
+			{"FEED_PROCESSID", "BATCH"},
 			{"PENID", "PENSIONER"},
 			{"PERSONID", "PERSON"},
 			{"ACCOUNTID", "ACCOUNT"},
@@ -75,7 +78,8 @@ public class CpasUtil {
 			{"ERRORID", "ERRORCAT"},
 			{"REQUESTID", "REQUEST"},
 			{"BATCHKEY", "BATCHCAT"},
-			{"REPORTID", "REPORTCAT"},
+			{"REPORTID", "CPAS_REPORT"},
+			//{"REPORTID", "REPORTCAT"},
 			{"REQUESTKEY", "REQUESTCAT"},
 			{"FUND", "FUND"},
 			{"CTYPE", "CPAS_CALCTYPE"},
@@ -221,6 +225,9 @@ public class CpasUtil {
 		} else if (temp.equals("BATCH_QUEUE.TASKKEY") || temp.equals("REPORTHISTORY_TASK") || temp.equals("BATCHSCHEDULE_TASK")) {
 			String qry = "SELECT TASKNAME FROM BATCHCAT_TASK WHERE BATCHKEY='" + q.getValue("BATCHKEY") + "' AND TASKKEY = '" + value + "'";
 			return cn.queryOne(qry);
+		} else if (temp.endsWith(".TASKKEY")) {
+			String qry = "SELECT TASKNAME FROM BATCHCAT_TASK WHERE BATCHKEY='" + q.getValue("BATCHKEY") + "' AND TASKKEY = '" + value + "'";
+			return cn.queryOne(qry);
 		} else if (temp.equals("REQUEST_TASK.TASKKEY")) {
 			String qry = "SELECT TASKNAME FROM TASKCAT WHERE TASKKEY='" + value + "'";
 			return cn.queryOne(qry);
@@ -235,6 +242,12 @@ public class CpasUtil {
 			return cn.queryOne(qry);
 		} else if (temp.endsWith(".PLAN") && !tname.equals(planTable) && q.getValue("CLNT") !=null && !q.getValue("CLNT").equals("") && planTable.equals("SV_PLAN")) {
 			String qry = "SELECT SNAME FROM " + planTable +" WHERE CLNT='"+ q.getValue("CLNT") +"' AND PLAN='" + value + "'";
+			return cn.queryOne(qry);
+		} else if (temp.endsWith(".REPORTID") && !tname.equals("CPAS_REPORT")) {
+			String qry = "SELECT DESCRIPTION FROM CPAS_REPORT WHERE REPORTID='" + value + "'";
+			return cn.queryOne(qry);
+		} else if (temp.endsWith(".KITCODE") && !tname.equals("CPAS_KIT")) {
+			String qry = "SELECT KITNAME FROM CPAS_KIT WHERE KITCODE='" + value + "'";
 			return cn.queryOne(qry);
 		} else if (temp.endsWith(".VKEY") && !tname.equals("CPAS_VALIDATION")) {
 			String qry = "SELECT CAPTION FROM CPAS_VALIDATION WHERE VKEY='" + value + "'";
@@ -259,6 +272,8 @@ public class CpasUtil {
 			return cn.queryOne(qry);
 		} else if (temp.endsWith(".FUND") && !tname.equals("FUND")) {
 			String qry = "SELECT SNAME FROM FUND WHERE FUND='" + value + "'";
+			if (!cn.isTVS("FUND") && cn.isTVS("PLAN_FUND_NAME"))
+				qry = "SELECT NAME FROM PLAN_FUND_NAME WHERE FUND='" + value + "' AND ROWNUM=1";  // for APS
 			return cn.queryOne(qry);
 		} else if (temp.endsWith(".PERSONID") && !tname.equals("PERSON")) {
 			String qry = "SELECT UNAME FROM PERSON WHERE PERSONID='" + value + "'";

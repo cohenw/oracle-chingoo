@@ -1,5 +1,6 @@
 <%@ page language="java" 
 	import="java.util.*" 
+	import="java.text.*" 
 	import="java.util.Date" 
 	import="java.sql.*" 
 	import="spencer.genie.*" 
@@ -46,6 +47,7 @@ public String extractJS(String str) {
     <script src="script/genie.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
     <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
     <script src="script/worksheet-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
+	<script src="script/timeago.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
 
     <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'>
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
@@ -54,6 +56,12 @@ public String extractJS(String str) {
 	<script src="script/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
 
     <meta http-equiv="refresh" content="60;">
+<script language="Javascript">
+	
+	$(document).ready(function() {
+		$("abbr.timeago").timeago();
+	});	
+</script>    
 </head> 
 
 <body>
@@ -65,11 +73,13 @@ public String extractJS(String str) {
 <tr>
 	<th class="headerRow">Database / User</th>
 	<th class="headerRow">Hist</th>
-	<th class="headerRow">Count</th>
+	<th class="headerRow">JSP log</th>
+	<th class="headerRow">Q Count</th>
 	<th class="headerRow">Queries</th>
 </tr>
 <% 
 	int rowCnt = 0;
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 	for (Connect cn : ss) {
 		HashMap<String,QueryLog> map = cn.getQueryHistory();
 	    List<QueryLog> logs = new ArrayList<QueryLog>(map.values());
@@ -95,10 +105,18 @@ public String extractJS(String str) {
     		}
     	}		
     	String quickLink = cn.getQuickLinksText();
-
+    	String jsplogStr = "";
+    	ArrayList<String> al = cn.getJspLog();
+    	for (int i=0; i<al.size()&& i<20;i++) {
+    		jsplogStr += "<li>" + al.get(al.size()-i-1) +"<br/>";   		
+    	}
+    	
     	rowCnt++;
     	String rowClass = "oddRow";
     	if (rowCnt%2 == 0) rowClass = "evenRow";
+    	
+    	HttpSession sn = cn.getSession();
+    	Date lastAccessed = new Date(sn.getLastAccessedTime());
     	
 %>
 <tr class="simplehighlight">
@@ -107,11 +125,12 @@ public String extractJS(String str) {
 		IP: <%= cn.getIPAddress() %><br/>
 		Agent: <%= cn.getUserAgent() %><br/>
 		Email: <%= cn.getEmail() %><br/>
-		Login Date: <%= cn.getLoginDate() %><br/>
-		Last Date: <%= cn.getLastDate() %><br/>
+		Login Date: <abbr class="timeago" title="<%= sdf.format(cn.getLoginDate()) %>"><%= sdf.format(cn.getLoginDate()) %></abbr><br/>
+		Last Date: <abbr class="timeago" title="<%= sdf.format(lastAccessed) %>"><%= sdf.format(lastAccessed) %><br/>
 		<span style="display: none;"><%= cn.pwd %></span>
 	</td>
 	<td nowrap valign=top class="<%= rowClass%>"><%= quickLink %>&nbsp;</td>
+	<td valign=top class="<%= rowClass%>"><%= jsplogStr %>&nbsp;</td>
 	<td nowrap valign=top class="<%= rowClass%>"><%= map.size() %>&nbsp;</td>
 <!--	<td valign=top class="<%= rowClass%>"><p style="white-space:pre;"><%= qry %>&nbsp;</p></td>  -->
 	<td valign=top class="<%= rowClass%>"><div style="font-family: Consolas;"><%= qry %>&nbsp;</div></td>

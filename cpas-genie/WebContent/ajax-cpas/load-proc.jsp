@@ -44,7 +44,6 @@
 <a target=_blank href="package-tree.jsp?name=<%= name %>">Tree</a>
 <a target=_blank href="package-analyze.jsp?name=<%= pkg %>"><img src="image/check.gif" title="Analyze Packge"></a>
 </h2> 
-<br/>
 
 <%
 	if (pkg.startsWith("DATA$VALIDATION_")) {
@@ -62,6 +61,43 @@
 <%
 	}
 %>
+
+<% id = Util.getId(); %>
+<b><a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
+<div id="div-<%=id %>" style="display: none; margin-left: 20px; background-color: #e0e0e0;">
+<%
+for (int i=0;i<proc0.size();i++) {
+	int start = Integer.parseInt(proc0.get(i)[1]);
+	int end = Integer.parseInt(proc0.get(i)[2]);
+	String label = proc0.get(i)[3];
+	
+	q = "SELECT LINE, TEXT FROM USER_SOURCE WHERE TYPE='PACKAGE BODY' AND NAME = '" + pkg + "' AND LINE BETWEEN " + start + " AND " + end+ " ORDER BY LINE";
+	//System.out.println(q);
+	List<String[]> src = cn.query(q, false);
+	String text = "";
+	for (int j=0;j<src.size();j++) text += src.get(j)[2];
+%>
+
+
+<table>
+<td valign=top align=right><pre style="font-family: Consolas; color: gray;">
+<% 
+	for (int k= start;k<=end;k++) {
+		out.print(k+"\n");
+	}	
+%>
+</pre></td>
+<td bgcolor="green"></td>
+<td valign=top><pre style="font-family: Consolas;">
+<%= new HyperSyntax4PB().getHyperSyntax(cn, text, "PROCEDURE", pkg)%></pre>
+</td>
+</table>
+
+<%		
+	}
+%>
+</div>
+<br/><br/>
 
 <b>Table CRUD</b><br/>
 <div style="margin-left: 20px;">
@@ -109,42 +145,6 @@ for (int i=0;i<list.size();i++) {
 </div>
 
 <br/>
-<% id = Util.getId(); %>
-<b><a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
-<div id="div-<%=id %>" style="display: none; margin-left: 20px; background-color: #e0e0e0;">
-<%
-for (int i=0;i<proc0.size();i++) {
-	int start = Integer.parseInt(proc0.get(i)[1]);
-	int end = Integer.parseInt(proc0.get(i)[2]);
-	String label = proc0.get(i)[3];
-	
-	q = "SELECT LINE, TEXT FROM USER_SOURCE WHERE TYPE='PACKAGE BODY' AND NAME = '" + pkg + "' AND LINE BETWEEN " + start + " AND " + end+ " ORDER BY LINE";
-	//System.out.println(q);
-	List<String[]> src = cn.query(q, false);
-	String text = "";
-	for (int j=0;j<src.size();j++) text += src.get(j)[2];
-%>
-
-
-<table>
-<td valign=top align=right><pre style="font-family: Consolas; color: gray;">
-<% 
-	for (int k= start;k<=end;k++) {
-		out.print(k+"\n");
-	}	
-%>
-</pre></td>
-<td bgcolor="green"></td>
-<td valign=top><pre style="font-family: Consolas;">
-<%= new HyperSyntax4PB().getHyperSyntax(cn, text, "PROCEDURE", pkg)%></pre>
-</td>
-</table>
-
-<%		
-	}
-%>
-</div>
-<br/><br/>
 
 <b>Called By</b><br/>
 <div style="margin-left: 20px;">

@@ -8,7 +8,7 @@
 <%!
 	String tables1[] = {"MEMBER", "PERSON", "PENSIONER", "ACCOUNT", "CALC", "BATCH", "EMPLOYER", "FUND"};
 	String tables2[] = {"BATCHCAT", "BATCHCAT_TASK", "ERRORCAT", "REPORTCAT", "REQUESTCAT", "TASKCAT", "FWIZCAT", "WIZARDCAT"};
-	String tables3[] = {"CPAS_CODE", "CPAS_CALCTYPE", "CPAS_CATALOG", "CPAS_WIZARD", "CPAS_VALIDATION", "CPAS_ACTION", "CPAS_TABLE", "CPAS_LAYOUT"};
+	String tables3[] = {"CPAS_CODE", "CPAS_CALCTYPE", "CPAS_CATALOG", "CPAS_REPORT", "CPAS_WIZARD", "CPAS_VALIDATION", "CPAS_ACTION", "CPAS_TABLE", "CPAS_LAYOUT"};
 	String tables4[] = {"CPAS_DATE", "CPAS_JML", "CPAS_GROUP", "CPAS_SEARCHTYPE", "CPASFIND", "CPAS_DOC", /*"CPAS_FORM",*/ "CPAS_PARAMETER", "CPAS_AGE"};
 	String tables5[] = {"FORMULA", "RULE", "EXPOSE", "EXPOSE_RULE", "PLAN_RULEID", "", "CPAS_ROLE", "SECSWITCH"};
 %>
@@ -37,8 +37,8 @@
 <div>
 <h2><img src="image/cpas.jpg"> CPAS Catalog</h2>
 
-<% if (cn.isTVS("TREEVIEW")) { %>
-<a href="cpas-online.jsp" target="_blank">CPAS Online</a> 
+<% if (cn.isTVS("CPAS_SDI")) { %>
+<a href="cpas-on.jsp" target="_blank">CPAS Online</a> 
 <% } else { %>
 <span class="nullstyle">CPAS Online</span>
 <% } %>
