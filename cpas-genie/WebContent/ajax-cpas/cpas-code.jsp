@@ -24,8 +24,19 @@
 		sql = "SELECT VALU, NAME FROM CPAS_CODE_VALUE WHERE GRUP='" + key + "'";
 	else if (source.equals("S") || source.equals("3"))
 		sql = selectstmt;
+	else if (source.equals("P") && false) {
+		// to do for 'P' : procedure
+		String stmt = cn.queryOne("SELECT SELECTSTMT FROM CPAS_CODE WHERE GRUP = '" + key + "'");
+		System.out.println("stmt=" + stmt);
+		if (stmt.startsWith("BEGIN")) {
+			CallableStatement call = cn.getConnection().prepareCall(stmt);
+			call.execute();
+			call.close();
+		}
+		sql = "SELECT VALU, NAME FROM CT$CODE ORDER BY ORDERBY";
+	}
 	
-	// to do for 'P' : procedure
+	
 %>
 <b><%=caption %></b><br/>
 <div id="sql-<%=id%>" style="display: none;"><%= sql %></div>

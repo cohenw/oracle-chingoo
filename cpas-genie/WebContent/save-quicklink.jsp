@@ -13,6 +13,6 @@
 	String name = request.getParameter("name");
 
 	if (name != null) cn.addQuickLink(type, name);
-	System.out.println("type=" + type + " name=" + name);
+//	System.out.println("type=" + type + " name=" + name);
 	out.println(cn.getQuickLinks());
 %>

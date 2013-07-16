@@ -472,6 +472,11 @@ var qryPage = 'ajax/qry.jsp';
 		$("#"+divId).remove();
 	}	
 	
+	function toggleSort(divId) {
+		$("#"+divId+"-a").toggle();
+		$("#"+divId+"-b").toggle();
+	}	
+	
 $.fn.insertAtCaret = function (tagName) {
 	return this.each(function(){
 		if (document.selection) {
@@ -723,7 +728,7 @@ function showDialog(table, key) {
 		success: function(data){
 			temp = temp + data + "</div>";
 			$("BODY").append(temp);
-			$("#"+id).dialog({ width: 700, height: 180 });
+			$("#"+id).dialog({ width: 700, height: 300 });
 			setHighlight();
 		},
         error:function (jqXHR, textStatus, errorThrown){

@@ -2743,6 +2743,20 @@ public class Connect implements HttpSessionBindingListener {
 			qlink.add(ql);
 		}
 		
+		int sizeQuickLink = 40;
+		// keep the last 40 links only
+		if (qlink.size() > sizeQuickLink) {
+			Collections.sort(qlink, new Comparator<QuickLink>(){
+	            public int compare(QuickLink o1, QuickLink o2) {
+	        		return (o2.getTime().compareTo(o1.getTime()));
+	            }
+	        });			
+			
+			for (int i=qlink.size()-1; i >= sizeQuickLink;i--) {
+				qlink.remove(i);
+			}
+		}
+		
 		Collections.sort(qlink, new Comparator<QuickLink>(){
 			 
             public int compare(QuickLink o1, QuickLink o2) {

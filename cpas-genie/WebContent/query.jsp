@@ -291,6 +291,7 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 
 	<div>
 	<a href="Javascript:copyPaste('SELECT');">SELECT</a>&nbsp;
+	<a href="Javascript:copyPaste('DISTINCT');">DISTINCT</a>&nbsp;
 	<a href="Javascript:copyPaste('*');">*</a>&nbsp;
 	<a href="Javascript:copyPaste('FROM');">FROM</a>&nbsp;
 	<a href="Javascript:copyPaste('WHERE');">WHERE</a>&nbsp;
@@ -306,6 +307,7 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 	<a href="Javascript:copyPaste('( )');">( )</a>&nbsp;
 	<a href="Javascript:copyPaste('EXISTS');">EXISTS</a>&nbsp;
 	<a href="Javascript:copyPaste('ORDER BY');">ORDER-BY</a>&nbsp;
+	<a href="Javascript:copyPaste('ASC');">ASC</a>&nbsp;
 	<a href="Javascript:copyPaste('DESC');">DESC</a>&nbsp;
 <!-- 
 	<br/>

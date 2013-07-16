@@ -168,6 +168,14 @@ public class CpasUtil {
 			logicalLink2[2][2] = "PLAN";
 		}
 		
+		if (cn.isTVS("SV_MEMBER")) {
+			logicalLink2[0][2] = "SV_MEMBER";
+		}
+		
+		if (!cn.isTVS("CPAS_REPORT")) {
+			logicalLink[9][1] = "REPORTCAT"; 
+		}
+		
 		System.out.println("isCpas="+isCpas);
 		System.out.println("cpasType="+cpasType);
 		System.out.println("plan table=" + planTable);
@@ -245,9 +253,14 @@ public class CpasUtil {
 			return cn.queryOne(qry);
 		} else if (temp.endsWith(".REPORTID") && !tname.equals("CPAS_REPORT")) {
 			String qry = "SELECT DESCRIPTION FROM CPAS_REPORT WHERE REPORTID='" + value + "'";
+			if (!cn.isTVS("CPAS_REPORT"))
+				qry = "SELECT DESCRIPTION FROM REPORTCAT WHERE REPORTID='" + value + "'";
 			return cn.queryOne(qry);
 		} else if (temp.endsWith(".KITCODE") && !tname.equals("CPAS_KIT")) {
 			String qry = "SELECT KITNAME FROM CPAS_KIT WHERE KITCODE='" + value + "'";
+			return cn.queryOne(qry);
+		} else if (temp.endsWith(".CLNT") && !tname.equals("CLIENT")) {
+			String qry = "SELECT SNAME FROM CLIENT WHERE CLNT='" + value + "'";
 			return cn.queryOne(qry);
 		} else if (temp.endsWith(".VKEY") && !tname.equals("CPAS_VALIDATION")) {
 			String qry = "SELECT CAPTION FROM CPAS_VALIDATION WHERE VKEY='" + value + "'";
