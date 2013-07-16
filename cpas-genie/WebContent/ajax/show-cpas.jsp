@@ -9,13 +9,14 @@
 	String tables1[] = {"MEMBER", "PERSON", "PENSIONER", "ACCOUNT", "CALC", "BATCH", "EMPLOYER", "FUND"};
 	String tables2[] = {"BATCHCAT", "BATCHCAT_TASK", "ERRORCAT", "REPORTCAT", "REQUESTCAT", "TASKCAT", "FWIZCAT", "WIZARDCAT"};
 	String tables3[] = {"CPAS_CODE", "CPAS_CALCTYPE", "CPAS_CATALOG", "CPAS_REPORT", "CPAS_WIZARD", "CPAS_VALIDATION", "CPAS_ACTION", "CPAS_TABLE", "CPAS_LAYOUT"};
-	String tables4[] = {"CPAS_DATE", "CPAS_JML", "CPAS_GROUP", "CPAS_SEARCHTYPE", "CPASFIND", "CPAS_DOC", /*"CPAS_FORM",*/ "CPAS_PARAMETER", "CPAS_AGE"};
+	String tables4[] = {"CPAS_DATE", "CPAS_JML", "CPAS_GROUP", "CPAS_SEARCHTYPE", "CPASFIND", "CPAS_DOC", /*"CPAS_FORM",*/ "CPAS_PARAMETER", "CPAS_AGE", "CPAS_KIT"};
 	String tables5[] = {"FORMULA", "RULE", "EXPOSE", "EXPOSE_RULE", "PLAN_RULEID", "", "CPAS_ROLE", "SECSWITCH"};
 %>
 
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
-	
+
+	if (cn.isTVS("SV_MEMBER")) tables1[0] = "SV_MEMBER";
 	String cntCustom = cn.queryOne("SELECT count(*) FROM USER_OBJECTS WHERE OBJECT_NAME='CUSTOMTREEVIEW'");
 	boolean hasCustomTV = cntCustom.equals("1");
 %>
@@ -39,6 +40,7 @@
 
 <% if (cn.isTVS("CPAS_SDI")) { %>
 <a href="cpas-on.jsp" target="_blank">CPAS Online</a> 
+<a href="cpas-on-custom.jsp" target="_blank">Custom</a>
 <% } else { %>
 <span class="nullstyle">CPAS Online</span>
 <% } %>

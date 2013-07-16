@@ -46,9 +46,11 @@ Please select a Table to see the detail.
 
 <div id="<%= divId %>">
 <a href="Javascript:copyPaste('<%=table %>');"><b><%= table %></b></a> <span class="rowcountstyle"><%= cn.getTableRowCount(table) %></span> <a href="Javascript:removeDiv('<%= divId %>')">x</a> 
+<a href="Javascript:toggleSort('<%= divId %>')"><img src="image/a.gif"></a>
 &nbsp;&nbsp;&nbsp;<a href="pop.jsp?key=<%= table %>" target="_blank" title="view detail"><img src="image/sql.png"></a>
 <br/>
 
+<div id="<%= divId %>-a">
 <table border=0 width=780>
 <tr>
 	<td width=20%></td>
@@ -78,5 +80,48 @@ Please select a Table to see the detail.
 %>
 
 </tr></table>
+</div>
+<%
+	List<TableCol> cols2 = new ArrayList<TableCol>();
+	cols2.addAll(cols);
+
+	Collections.sort(cols2, new Comparator<TableCol>() {
+	    public int compare(TableCol col1, TableCol col2) {
+	        return col1.getName().compareTo(col2.getName());
+	    }
+	});
+%>
+<div id="<%= divId %>-b" style="display:none;">
+<table border=0 width=780>
+<tr>
+	<td width=20%></td>
+	<td width=20%></td>
+	<td width=20%></td>
+	<td width=20%></td>
+	<td width=20%></td>
+</tr>
+<tr>
+<%	
+
+	for (int i=0; i<cols2.size();i++) {
+		TableCol col = cols2.get(i);
+		String colName = col.getName();
+		String colDisp = col.getName().toLowerCase();
+		if (pk.contains(colName)) colDisp = "<span class='pk'>" + colDisp + "</span>";
+
+		String tooltip = col.getTypeName();
+		String comment = cn.getComment(tname, colName);
+		if (comment != null && comment.length() > 0) tooltip += " " + comment;
+%>
+<td>&nbsp;<a href="Javascript:copyPaste('<%=colName%>');" title="<%= tooltip %>"><%= colDisp%></a></td>
+<%
+		if ((i+1)%5==0) out.println("</tr><tr>");
+	}
+	
+%>
+
+</tr></table>
+</div>
+
 <br/>
 </div>

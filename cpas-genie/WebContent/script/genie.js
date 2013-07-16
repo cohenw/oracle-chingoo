@@ -531,7 +531,7 @@
 			success: function(data){
 				temp = temp + data + "</div>";
 				$("BODY").append(temp);
-				$("#"+id).dialog({ width: 700, height: 180 });
+				$("#"+id).dialog({ width: 700, height: 300 });
 				setHighlight();
 			},
             error:function (jqXHR, textStatus, errorThrown){

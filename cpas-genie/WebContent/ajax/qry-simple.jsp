@@ -227,11 +227,19 @@ Found: <%= filteredCount %>
 				if (capt != null) 
 					cpasDisp += "<br/> &gt;  <span class='cpas'>" + capt + "</span>";
 			}			
+
+			String grup = cn.getCpasCodeGrup(tname, colName);
+			if (grup == null || grup.equals("_")) grup = "";
 			
+			if (grup != null && !grup.equals("")) {
+				String codeTable = cn.getCpasUtil().getCpasCodeTable();
+//				grup = " -&gt; <a href=\"javascript:showDialog('" + codeTable + "','"+grup+"')\">" + grup + "</a>";
+				grup = " <a href=\"javascript:showCpasCode('"+grup+"')\">" + grup + "</a>";
+			}			
 %>
 <th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
 	href="Javascript:setColumn(<%= id %>, '<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colDisp%></a>
-	<%= extraImage %><%= cpasDisp %>
+	<%= extraImage %><%= cpasDisp %> <%= grup %>
 </th>
 <%
 	} 

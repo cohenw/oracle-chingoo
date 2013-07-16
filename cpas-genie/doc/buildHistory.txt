@@ -295,7 +295,16 @@ Build CPAS1079
 
 Build CPAS1080
 	CPAS online sitemap
+	Dialog popup shows CPAS hint/value
+	Dialog popup links to Data link
+	MEMBER vs SV_MEMBER	
+	Column name sort by Alpha
+	Datalink shows link to codegroup values
 
-		
+Build CPAS1081
+	Keep the last 40 quick links
+	CPAS online - custom version
+	CPAS_REPORT / REPORTCAT
+			
 Known Issue
 	

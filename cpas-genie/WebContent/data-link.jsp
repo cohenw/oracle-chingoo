@@ -160,6 +160,7 @@ public String getQryStmt(String sql, Query q) {
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
 
     <script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="script/genie.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
     <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
 
     <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'>
