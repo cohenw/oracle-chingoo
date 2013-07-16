@@ -93,8 +93,8 @@
 You can have multiple SQL statements.<br/>
 EX:<br/>
 <div style="margin-left: 20px;">
-SELECT * FROM TABLE1 WHERE COL1='[MKEY]';<br/>
-SELECT * FROM TABLE2 WHERE COL1='[CLNT]' AND COL2='[CALCID]';<br/>
+SELECT * FROM TABLE1 WHERE COL1=:MKEY;<br/>
+SELECT * FROM TABLE2 WHERE COL1=:CLNT AND COL2=:CALCID;<br/>
 </div>
 
 <form method="post">

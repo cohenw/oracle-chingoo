@@ -15,6 +15,7 @@
 	
 	List<String[]> res = cn.query(sql, false);
 
+	if (res.size() == 0) return;
 	String id = Util.getId();
 	String source = res.get(0)[1];
 	String caption = res.get(0)[2];

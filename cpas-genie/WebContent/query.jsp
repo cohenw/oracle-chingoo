@@ -119,9 +119,10 @@
 
     <script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
 
+    <script src="script/genie.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
     <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
-    <script src="script/query-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
-
+<%--     <script src="script/query-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
+ --%>
     <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'>
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
 
@@ -172,6 +173,433 @@
 	}	
 	</style>
 	<script>
+	var doMode = 'copy';
+	var qryPage = 'ajax/qry.jsp';
+	
+	function rowsPerPage(rows) {
+		$("#rowsPerPage").val(rows);
+		$("#pageNo").val(1);
+		$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		
+		reloadData0();
+	}
+
+	function showTable(tbl) {
+		if (tbl == "") return;
+		
+		$("#table-detail").append("<div id='wait'><img src='image/loading.gif'/></div>");
+		$("#table-detail").hide();
+		$.ajax({
+//			url: "ajax/table_col.jsp?table=" + tbl + "&t=" + (new Date().getTime()),
+			url: "ajax/table_col.jsp?table=" + tbl,
+			success: function(data){
+				$("#wait").remove();
+				$("#table-detail").append(data);
+				$("#table-detail").slideDown();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+            	alert(jqXHR.status + " " + errorThrown);
+            }  
+		});	
+	}
+	
+	function setDoMode(mode) {
+		var select = "";
+
+		doMode = mode;
+
+		$("#modeCopy").css("font-weight", "");
+		$("#modeHide").css("font-weight", "");
+		$("#modeSort").css("font-weight", "");
+		$("#modeFilter").css("font-weight", "");
+		$("#modeFilter2").css("font-weight", "");
+
+		$("#modeCopy").css("background-color", "");
+		$("#modeHide").css("background-color", "");
+		$("#modeSort").css("background-color", "");
+		$("#modeFilter").css("background-color", "");
+		$("#modeFilter2").css("background-color", "");
+
+		if (mode == "copy") {
+			select = "modeCopy";
+		} else if (mode == "hide") {
+			select = "modeHide";
+			hideNullColumnTableMaster();
+		} else if (mode == "sort") {
+			select = "modeSort";
+		} else if (mode == "filter") {
+			select = "modeFilter";
+			filter('0');
+		} else if (mode == "filter2") {
+			select = "modeFilter2";
+			filter2();
+		}
+		
+		$("#" + select).css("font-weight", "bold");
+		$("#" + select).css("background-color", "yellow");
+	}
+
+	function submitQuery() {
+		$("#form1").attr("action", "query.jsp");
+		$("#form1").submit();
+	}
+	
+	function toggleSort(divId) {
+		$("#"+divId+"-a").toggle();
+		$("#"+divId+"-b").toggle();
+	}	
+
+	function removeDiv(divId) {
+		$("#"+divId).remove();
+	}	
+	
+	function copyPaste(val) {
+//		$("#sql1").insertAtCaret(" " + val);
+		$("#sql1").insertAtCaret2(val);
+	}
+
+	function doAction(val, idx) {
+		if (doMode=='copy') {
+			copyPaste(val);
+		} else if (doMode=='hide') {
+   	 		hideX(idx);
+		} else if (doMode=='sort' || doMode=='filter2') {
+			sort(val);
+		} else if (doMode=='filter') {
+			filter(val);
+		} else {
+			alert("mode=" + doMode);
+		}
+	}
+
+    function hideX(idx) {
+		var cols = $("#hideColumn").val();
+		if (cols == "") cols = idx;
+		else cols += "," + idx;
+		
+		$("#hideColumn").val(cols);
+		hide(idx);
+		$("#showAllCol").show();    	
+    }
+
+	function sort(col) {
+		$("#pageNo").val(1);
+		$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		var prevSortColumn = $("#sortColumn").val();
+		var prevSortDirection = $("#sortDirection").val();
+		var newSortDirection = "0";
+		
+		if (prevSortColumn==col && prevSortDirection=="0") { 
+			newSortDirection = "1";  
+		}
+		$("#sortColumn").val(col);
+		$("#sortDirection").val(newSortDirection);
+		
+		reloadData0();
+	}
+
+	function filter(col) {
+		$("#filter-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		$("#filterColumn").val(col);
+		$("#filterValue").val('');
+		
+		$.ajax({
+			type: 'POST',
+			url: "ajax/filter.jsp",
+			data: $("#form0").serialize(),
+			success: function(data){
+				$("#filter-div").append(data);
+				$("#wait").remove();
+				reloadData0();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+            	alert(jqXHR.status + " " + errorThrown);
+            }  
+		});	
+	}	
+
+	function gotoPage0(pageNo) {
+		$("#pageNo").val(pageNo);
+		$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+
+		reloadData0();
+	}
+	
+	function reloadData0() {
+		$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		
+		//$('body').css('cursor', 'wait'); 
+		$.ajax({
+			type: 'POST',
+			url: qryPage,
+			data: $("#form0").serialize(),
+			success: function(data){
+				$("#data-div").append(data);
+				$("#wait").remove();
+				hideIfAny();
+				
+				setHighlight();
+				//$('body').css('cursor', 'default'); 
+				refreshSummary();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+            	alert(jqXHR.status + " " + errorThrown);
+            }  
+		});	
+		
+	}
+	
+	function reloadSummary() {
+		$("#summary-div").hide();
+		$("#summary-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		
+		//$('body').css('cursor', 'wait'); 
+		$.ajax({
+			type: 'POST',
+			url: 'qry-summary.jsp',
+			data: $("#form0").serialize(),
+			success: function(data){
+				$("#summary-div").append(data);
+				$("#wait").remove();
+				$("#summary-div").slideDown();
+				setHighlight();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+            	alert(jqXHR.status + " " + errorThrown);
+            }  
+		});	
+	}
+
+	function refreshSummary() {
+		var v = $("#summary").val();
+		if (v==0) return;
+
+		$.ajax({
+			type: 'POST',
+			url: 'qry-summary.jsp',
+			data: $("#form0").serialize(),
+			success: function(data){
+				$("#summary-div").html(data);
+				setHighlight();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+            	alert(jqXHR.status + " " + errorThrown);
+            }  
+		});	
+	}
+	
+    function hideNullColumnTableMaster() {
+    	var divName = "dataTable";
+    	var rowCount = $('#' + divName + ' tr').length;
+    	
+    	//if (rowCount > 2) return;
+    	
+   	    //var row = 1;
+   	 	var hideCol = []; 
+   	 	var colCnt = numCol(divName);
+   	 	//alert(rowCount + "," +colCnt);
+    	for (var col = 0; col < colCnt; col++) {
+   	 		var nullValue = true;
+       	 	for (var row=1; row<rowCount;row++) {
+	    		var value = $("#" + divName).children().children()[row].children[col].innerHTML;
+    			if (value.indexOf(">null<")<=0) {
+   				nullValue = false;
+	    		}
+   	    	}
+   	    	if (nullValue) hideCol.push(col+1);
+   	    }
+   	    
+   	 	for (var i = 0, l = hideCol.length; i < l; ++i) {
+   	 		//alert('hide ' + hideCol[i] );
+   	 		hideX(hideCol[i]);
+   	    }
+   	    
+    }
+
+    function hideX(idx) {
+		var cols = $("#hideColumn").val();
+		if (cols == "") cols = idx;
+		else cols += "," + idx;
+		
+		$("#hideColumn").val(cols);
+		hide(idx);
+		$("#showAllCol").show();    	
+    }
+
+	function hide(col) {
+		$('table#dataTable').hideCol(col);
+	}
+	
+	function show(col) {
+		$('table#dataTable').showCol(col);
+	}
+	
+	function hideInspectComment() {
+		$('table#inspectTable').hideCol(3);
+	}	
+
+	function showAllColumn() {
+		var hiddenCols = $("#hideColumn").val();
+		if (hiddenCols != '') {
+			var cols = hiddenCols.split(",");
+			for(var i = 0;i<cols.length;i++){
+				show(cols[i]);
+			}
+		}
+
+		$("#showAllCol").hide();
+		$("#hideColumn").val('');
+	}
+
+	function toggleSummary() {
+		var v = $("#summary").val();
+		v = (v=="1"?"0":"1");
+		$("#summary").val(v);
+		//alert(v);
+		if (v=='1') {
+			reloadSummary();
+		} else
+			$("#summary-div").slideUp();
+	}
+	
+    $.fn.insertAtCaret2 = function (tagName) {
+		return this.each(function(){
+			if (document.selection) {
+				//IE support
+				this.focus();
+				sel = document.selection.createRange();
+				sel.text = tagName;
+				this.focus();
+			}else if (this.selectionStart || this.selectionStart == '0') {
+				//MOZILLA/NETSCAPE support
+				startPos = this.selectionStart;
+				endPos = this.selectionEnd;
+				scrollTop = this.scrollTop;
+				var x = this.value.substring(startPos-1, startPos);
+				//alert("[" + x + "]");
+				if (x != ' ') tagName = ' ' + tagName; 
+				this.value = this.value.substring(0, startPos) + tagName + this.value.substring(endPos,this.value.length);
+				this.focus();
+				this.selectionStart = startPos + tagName.length;
+				this.selectionEnd = startPos + tagName.length;
+				this.scrollTop = scrollTop;
+			} else {
+				this.value += tagName;
+				this.focus();
+			}
+		});
+	};	
+
+	function filter2() {
+		if ($("#filter2-div").is(':visible')) {
+			$("#filter2-div").slideUp();
+			resetFilter();
+			return;
+		}
+		
+		$("#filter2-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		$("#filterColumn").val('');
+		$("#filterValue").val('');
+		
+		$.ajax({
+			type: 'POST',
+			url: "ajax/filter2.jsp",
+			data: $("#form0").serialize(),
+			success: function(data){
+				$("#filter2-div").append(data);
+				$("#wait").remove();
+				$("#filter2-div").slideDown();
+				reloadData0();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+            	alert(jqXHR.status + " " + errorThrown);
+            }  
+		});	
+	}	
+	
+	function applyFilter(value) {
+		$("#pageNo").val(1);
+		$("#filterValue").val(value);
+		$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		
+		reloadData0();
+	}
+
+	function setFilter() {
+		$("#pageNo").val(1);
+		var valList = "";
+		$("select.filterCol").each(function() {
+			var val = $(this).val();
+			if (val==null) val = "";
+			valList += val + "^";
+		});		
+		$("#filter2").val(valList);
+		//alert(valList);
+		reloadData0();
+	}
+
+	function resetFilter() {
+		$('select[name=options]').val( '' );
+		$("select.filterCol").val(''); 
+		//reloadData();
+		setFilter();
+	}
+
+	function download() {
+		$("#form1").attr("action", "download.jsp");
+		$("#form1").submit();
+		$("#form1").attr("action", "query.jsp");
+	}
+
+	function searchRecords0(filter) {
+		
+		$("#search").attr("onchange" , "");
+		
+		$("#pageNo").val(1);
+		$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
+		$("#searchValue").val(filter);
+		
+		reloadData0();
+	}
+
+	function clearSearch0() {
+		$("#search").val("");
+		searchRecords0('');
+	}
+
+	function toggleDataLink() {
+		var v = $("#dataLink").val();
+		v = (v=="1"?"0":"1");
+		$("#dataLink").val(v);
+//		alert(v);
+		reloadData0();
+	}
+
+	function togglePreFormat() {
+		var v = $("#preFormat").val();
+		v = (v=="1"?"0":"1");
+		$("#preFormat").val(v);
+//		alert(v);
+		reloadData0();
+	}
+
+	function setTranspose() {
+		if (qryPage == "ajax/qry.jsp") {
+			qryPage = "ajax/qry-v.jsp";
+		} else {
+			qryPage = "ajax/qry.jsp";
+		}
+		reloadData0();
+	}
+
+	function toggleCpas() {
+		var v = $("#cpas").val();
+		v = (v=="1"?"0":"1");
+		$("#cpas").val(v);
+//		alert(v);
+		reloadData0();
+	}
+
 	$(function() {
 		function addTable( tname ) {
 			if (tname == "") return;
@@ -393,7 +821,10 @@ Up to
 <input type="hidden" id="preFormat" name="preFormat" value="0">
 <input type="hidden" id="summary" name="summary" value="0">
 <input type="hidden" id="cpas" name="cpas" value="0">
+<input id="id" name="id" type="hidden" value=""/>
+<input id="showFK" name="showFK" type="hidden" value="0"/>
 </form>
+
 
 <form id="FormPop" name="FormPop" target="_blank" method="post" action="pop.jsp">
 <input id="popType" name="type" type="hidden" value="OBJECT">

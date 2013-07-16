@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 public class HyperSyntax {
@@ -459,27 +461,13 @@ public class HyperSyntax {
 		return this.packageProc;
 	}
 	
-	public ArrayList<String> getTables(Connect cn, String sql) {
-		ArrayList<String> tables = new ArrayList<String>();
-		
-		StringTokenizer st = new StringTokenizer(sql, delim, true);
-		while (st.hasMoreTokens()) {
-			String token = st.nextToken();
-			
-			if (token.length()==1 && token.indexOf(delim)>=0 ) {
-				continue;
-			} 
-			
-			String tmp = token.toUpperCase();
-			//System.out.println("[" + tmp + "]");
-			if (syntax1.contains(tmp) || syntax2.contains(tmp)) {
-				continue;
-			} else if (cn.isTVS(tmp) || cn.isPublicSynonym(tmp)) {
-				if (!tables.contains(tmp))
-					tables.add(tmp);
-			}
+	public List<String> getTables(Connect cn, String sql) {
+		List<String> tables = new ArrayList<String>();
+		List<String> tables1 = Util.getTables(sql);
+		for (String tmp:tables1) {
+			if (cn.isTVS(tmp) || cn.isPublicSynonym(tmp))
+				tables.add(tmp);
 		}
-
 		return tables; 
 	}
 	
