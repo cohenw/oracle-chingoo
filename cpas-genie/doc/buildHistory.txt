@@ -305,6 +305,9 @@ Build CPAS1081
 	Keep the last 40 quick links
 	CPAS online - custom version
 	CPAS_REPORT / REPORTCAT
+	Fixed Query page, dialog search/navigation issue
+	Custom link support :variable name, date type
+	Fixed getTabls() to get table names from FROM clause
 			
 Known Issue
 	

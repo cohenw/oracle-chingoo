@@ -2372,7 +2372,7 @@ public class Connect implements HttpSessionBindingListener {
         conn.setReadOnly(true);
         linkTableCreated = true;
         
-        this.tables.add("GENIE_LINK");
+        addToTableList("GENIE_LINK");
 	}
 
 	public void createPkg() throws SQLException {
@@ -2428,10 +2428,15 @@ public class Connect implements HttpSessionBindingListener {
         conn.setReadOnly(true);
         pkgProcCreated = true;
         
-        this.tables.add("GENIE_PA");
-        this.tables.add("GENIE_PA_TABLE");
-        this.tables.add("GENIE_PA_DEPENDENCY");
-        this.tables.add("GENIE_PA_PROCEDURE");
+        addToTableList("GENIE_PA");
+        addToTableList("GENIE_PA_TABLE");
+        addToTableList("GENIE_PA_DEPENDENCY");
+        addToTableList("GENIE_PA_PROCEDURE");
+	}
+	
+	private void addToTableList(String tname) {
+		this.tables.add(tname);
+		this.tableSet.add(tname);
 	}
 	
 	public void createTrg() throws SQLException {
@@ -2465,8 +2470,8 @@ public class Connect implements HttpSessionBindingListener {
         conn.setReadOnly(true);
         trgProcCreated = true;
         
-        this.tables.add("GENIE_TR");
-        this.tables.add("GENIE_TR_TABLE");
+        addToTableList("GENIE_TR");
+        addToTableList("GENIE_TR_TABLE");
 	}
 	
 	public void saveLink(String tname, String sqlStmt) throws SQLException {
