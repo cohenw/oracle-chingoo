@@ -34,7 +34,7 @@
 </head>
 
 <div>
-<h2><img src="image/cpas.jpg"> CPAS Catalog</h2>
+<h3><img src="image/cpas.jpg"> CPAS Catalog</h3>
 
 <% if (cn.isTVS("CPAS_SDI")) { %>
 <a href="cpas-on.jsp" target="_blank">CPAS Online</a> 
@@ -50,9 +50,8 @@
 <span class="nullstyle">CPAS Tree View</span>
 <% } %>
 
-|
 <% if (hasCustomTV && cn.isTVS("CPAS_SDI")) { %> 
-<a href="cpas-customtreeview.jsp" target="_blank">CPAS Custom Tree View</a> |
+<a href="cpas-customtreeview.jsp" target="_blank">Custom</a> |
 <% } %> 
 
 <% if (cn.isTVS("CPAS_SDI")) { %>

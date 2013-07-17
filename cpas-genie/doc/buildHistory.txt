@@ -308,6 +308,9 @@ Build CPAS1081
 	Fixed Query page, dialog search/navigation issue
 	Custom link support :variable name, date type
 	Fixed getTabls() to get table names from FROM clause
+
+Build CAPS1082
+	CPAS Code popup support dynamic parameters
 			
 Known Issue
 	
