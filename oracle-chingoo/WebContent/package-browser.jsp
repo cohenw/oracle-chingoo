@@ -155,7 +155,7 @@ function loadProc2(pkgName, prcName, saveHistory) {
 	}
 //	console.log("saveHistory=" +saveHistory);
 	$.ajax({
-		url: "ajax-cpas/load-proc.jsp?key=" + pkgName + "." + prcName,
+		url: "ajax/load-proc.jsp?key=" + pkgName + "." + prcName,
 		success: function(data){
 			$("#inner-eventview").html(data);
 			setHighlight();

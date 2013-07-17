@@ -75,11 +75,14 @@
     </script>
   </head>
   
-  <body>
-    <h2>Welcome to Oracle Chingoo.</h2>
+<body>
+    <h1>Oracle Chingoo - Build <%= Util.getBuildNo() %></h1>
 
-   <img src="image/chingoo.png" title="<%= Util.getVersionDate() + " Build" + Util.getBuildNo() %>" width=128 height=128/>
-   
+<table>
+<td>
+<img src="image/chingoo.png" title="<%= Util.getVersionDate() + " Build" + Util.getBuildNo() %>"/>
+</td>
+<td>
 <form action="connect_new.jsp" method="POST">
 
 
@@ -99,6 +102,10 @@
     </table>
     <input type="submit" value="Connect"/>
 	</form>
+</td>
+</table>
+   
+   
 
 <br/>
 

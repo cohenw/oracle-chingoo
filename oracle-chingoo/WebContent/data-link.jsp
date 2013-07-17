@@ -15,15 +15,15 @@ public String getQryStmt(String sql, Query q) {
 	List<String> params = new ArrayList<String>();
 	
 	String tmp ="";
-	if (sql.contains("[") && sql.contains("]")) {
+	if (sql.contains(":")) {
 		needInput = true;
 
 		int prev = 0;
 		while (true) {
-			int start = sql.indexOf("[", prev);
+			int start = sql.indexOf(":", prev);
 			if (start <0) break;
-			int end = sql.indexOf("]", start);
-			if (end <0) break;
+			int end = sql.indexOf(" ", start);
+			if (end <0) end = sql.length();
 			tmp = sql.substring(start+1, end);
 		
 			params.add(tmp);
@@ -33,13 +33,19 @@ public String getQryStmt(String sql, Query q) {
 	
 	System.out.println("params=" + params);
 	for (String param: params) {
-		sql = sql.replaceAll("\\[" + param + "\\]" , q.getValue(param));
+		String value = q.getValue(param);
+		if (value.matches("\\d{4}-\\d{2}-\\d{2}")) {
+			value = "to_date('" + value + "','yyyy-mm-dd')";
+		} else {
+			value = "'" + value + "'";
+		}
+		
+		sql = sql.replaceAll(":" + param + "" , value);
 	}
 	
 	
 	return sql;
 }
-
 %>
 <%
 	int counter = 0;
@@ -113,6 +119,7 @@ public String getQryStmt(String sql, Query q) {
 <head> 
 	<title><%= title %></title>
     <script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="script/chingoo.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
     <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
 
     <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'>
