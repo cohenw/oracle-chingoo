@@ -52,6 +52,29 @@
 	int totalCount = q.getRecordCount();
 	int filteredCount = q.getFilteredCount();
 	int totalPage = q.getTotalPage(linesPerPage);
+	
+	// Primary Key for PK Link
+	String pkName = cn.getPrimaryKeyName(tname);
+	int pkColIndex = -1;	boolean hasPK = false;
+	List<String> pkColList = null;
+	if (pkName != null) {
+		pkColList = cn.getConstraintColList(pkName);
+		
+		// check if PK columns are in the result set
+		int matchCount = 0;
+		for (int j=0;j<pkColList.size();j++) {
+			String colName = pkColList.get(j);
+			for  (int i = 0; i<= q.getColumnCount()-1; i++){
+				String col = q.getColumnLabel(i);
+				if (col.equalsIgnoreCase(colName)) {
+					matchCount++;
+					continue;
+				}
+			}
+		}
+
+		hasPK = pkColList.size() > 0 && (pkColList.size() == matchCount);
+	}
 %>
 
 <% if (q.getRecordCount() > 0) { %>
@@ -95,6 +118,13 @@ Found: <%= filteredCount %>
 <table id="table-<%= id %>" border=1 class="gridBody">
 <tr>
 <%
+int offset = 0;
+if (hasPK) {
+	offset ++;
+%>
+<th class="headerRow">Link</th>
+<%
+}
 	boolean numberCol[] = new boolean[500];
 	int colIdx = 0;
 	for  (int i = 0; i<= q.getColumnCount()-1; i++){
@@ -130,6 +160,7 @@ Found: <%= filteredCount %>
 <%
 	int rowCnt = 0;
 	q.rewind(linesPerPage, pgNo);
+	String pkValues = ""; 
 	
 	while (q.next()) {
 		rowCnt++;
@@ -137,8 +168,26 @@ Found: <%= filteredCount %>
 		if (rowCnt%2 == 0) rowClass = "evenRow";
 %>
 <tr class="simplehighlight">
-
 <%
+	if (hasPK && q.hasData()) {
+		String keyValue = null;
+	
+		for (int i=0;q.hasData() && i<pkColList.size(); i++) {
+			String v = q.getValue(pkColList.get(i));
+			if (i==0) keyValue = v;
+			else keyValue = keyValue + "^" + v; 
+		}
+		pkValues = keyValue;
+		
+		String linkUrlTree = "data-link.jsp?table=" + tname + "&key=" + Util.encodeUrl(keyValue);
+		linkUrlTree = "data-link.jsp?qry=" + tname + "|" + keyValue;
+%>
+	<td class="<%= rowClass%>">
+		<a target="_blank" href='<%= linkUrlTree %>'><img src="image/chingoo-icon.png" width=16 height=16 border=0 title="Data link"></a>
+	</td>
+<%
+	}
+
 	colIdx=0;
 	for  (int i = 0; q.hasData() && i < q.getColumnCount(); i++){
 		colIdx++;

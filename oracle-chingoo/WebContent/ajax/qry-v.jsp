@@ -200,7 +200,7 @@ if (!hasPK && q.hasColumn("ROWID")) hasRowid = true;
  <pre style="font-family: Consolas; font-size: 16px;"><b id="qqq"><%=new HyperSyntax().getHyperSyntax(cn, sql, "SQL")%></b><a title="Edit Query" style="margin-left: 10px;" href="Javascript:editQuery()"><img border=0 src="image/sql.png"></a></pre>
 
 <% if (pgNo>1) { %>
-<a href="Javascript:gotoPage(<%= pgNo - 1%>)"><img border=0 src="image/btn-prev.png" align="top"></a>
+<a href="Javascript:gotoPage0(<%= pgNo - 1%>)"><img border=0 src="image/btn-prev.png" align="top"></a>
 <% } %>
 
 <% if (totalPage > 1) { %>
@@ -208,7 +208,7 @@ Page: <b><%= pgNo %></b> of <%= totalPage %>
 <% } %>
 
 <% if (q.getTotalPage(linesPerPage) > pgNo) { %>
-<a href="Javascript:gotoPage(<%= pgNo + 1%>)"><img border=0 src="image/btn-next.png" align="top"></a>
+<a href="Javascript:gotoPage0(<%= pgNo + 1%>)"><img border=0 src="image/btn-next.png" align="top"></a>
 <% } %>
 
 

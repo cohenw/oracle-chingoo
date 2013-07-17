@@ -355,6 +355,9 @@ function hideHist() {
 <td width="44">
 <img align=top src="image/chingoo-small.gif" title="Oracle Chingoo - Build <%= Util.getBuildNo() %>"/>
 </td>
+<td>
+<span style="font-face: Arial; font-size:24px; color: #0000FF;">Oracle Chingoo</span>
+</td>
 
 <td><b><%= cn.getUrlString() %></b></td>
 <td nowrap>

@@ -470,6 +470,11 @@ var qryPage = 'ajax/qry.jsp';
 		$("#"+divId).remove();
 	}	
 	
+	function toggleSort(divId) {
+		$("#"+divId+"-a").toggle();
+		$("#"+divId+"-b").toggle();
+	}	
+	
 $.fn.insertAtCaret = function (tagName) {
 	return this.each(function(){
 		if (document.selection) {

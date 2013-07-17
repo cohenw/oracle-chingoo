@@ -343,11 +343,11 @@ public class Util {
 	}
 
 	public static String getBuildNo() {
-		return "1062";
+		return "1063";
 	}
 
 	public static String getVersionDate() {
-		return "Jun 12, 2013";
+		return "Jul 17, 2013";
 	}
 
 }

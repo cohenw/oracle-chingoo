@@ -52,6 +52,7 @@ public class Connect implements HttpSessionBindingListener {
 
 //	public int QRY_ROWS = 1000;
 	
+	private HttpSession sn = null;
 	private Connection conn = null;
 	private String urlString = null;
 	private String message = "";
@@ -87,6 +88,7 @@ public class Connect implements HttpSessionBindingListener {
 	private HashMap<String, ArrayList<String>> pkMap;
 //	private Stack<String> history;
 	private ArrayList<QuickLink> qlink;
+	private ArrayList<String> jsplog;
 	
 	private HashMap<String, String> viewTables;
 	private HashMap<String, String> packageTables;
@@ -149,6 +151,7 @@ public class Connect implements HttpSessionBindingListener {
     	this.ipAddress = ipAddress;
         try
         {
+        	sn = session;
             Class.forName ("oracle.jdbc.driver.OracleDriver").newInstance ();
             conn = DriverManager.getConnection (url, userName, password);
             conn.setReadOnly(true);
@@ -171,6 +174,7 @@ public class Connect implements HttpSessionBindingListener {
             schemas = new Vector<String>();
             queryLog = new HashMap<String, QueryLog>();
             qlink = new ArrayList<QuickLink>();
+            jsplog = new ArrayList<String>();
             
 //       		this.schemaName = conn.getCatalog();
        		this.schemaName = userName;
@@ -202,6 +206,10 @@ public class Connect implements HttpSessionBindingListener {
     public Connect(HttpSession session, String url, String userName, String password, String ipAddress) {
     	this(session, url, userName, password, ipAddress, true);
 	}    
+    
+    public HttpSession getSession() {
+    	return sn;
+    }
     
     /**
      * 
@@ -2163,7 +2171,7 @@ public class Connect implements HttpSessionBindingListener {
         conn.setReadOnly(true);
         linkTableCreated = true;
         
-        this.tables.add("CHINGOO_LINK");
+        addToTableList("CHINGOO_LINK");
 	}
 
 	public void createPkg() throws SQLException {
@@ -2218,11 +2226,16 @@ public class Connect implements HttpSessionBindingListener {
 		stmt.close();
         conn.setReadOnly(true);
         pkgProcCreated = true;
-        
-        this.tables.add("CHINGOO_PA");
-        this.tables.add("CHINGOO_PA_TABLE");
-        this.tables.add("CHINGOO_PA_DEPENDENCY");
-        this.tables.add("CHINGOO_PA_PROCEDURE");
+
+        addToTableList("CHINGOO_PA");
+        addToTableList("CHINGOO_PA_TABLE");
+        addToTableList("CHINGOO_PA_DEPENDENCY");
+        addToTableList("CHINGOO_PA_PROCEDURE");
+	}
+	
+	private void addToTableList(String tname) {
+		this.tables.add(tname);
+		this.tableSet.add(tname);
 	}
 	
 	public void createTrg() throws SQLException {
@@ -2256,8 +2269,8 @@ public class Connect implements HttpSessionBindingListener {
         conn.setReadOnly(true);
         trgProcCreated = true;
         
-        this.tables.add("CHINGOO_TR");
-        this.tables.add("CHINGOO_TR_TABLE");
+        addToTableList("CHINGOO_TR");
+        addToTableList("CHINGOO_TR_TABLE");
 	}
 	
 	public void saveLink(String tname, String sqlStmt) throws SQLException {
@@ -2430,6 +2443,14 @@ public class Connect implements HttpSessionBindingListener {
 		return numRows;
 	}
 	
+	public void addJspLog(String log) {
+		jsplog.add(log);
+	}
+	
+	public ArrayList<String> getJspLog() {
+		return jsplog;
+	}
+	
 	public String getQuickLinks() {
 		String res = "";
 		int cnt=0;
@@ -2515,6 +2536,20 @@ public class Connect implements HttpSessionBindingListener {
 		if (!found) {
 			QuickLink ql = new QuickLink(type, name);
 			qlink.add(ql);
+		}
+		
+		int sizeQuickLink = 40;
+		// keep the last 40 links only
+		if (qlink.size() > sizeQuickLink) {
+			Collections.sort(qlink, new Comparator<QuickLink>(){
+	            public int compare(QuickLink o1, QuickLink o2) {
+	        		return (o2.getTime().compareTo(o1.getTime()));
+	            }
+	        });			
+			
+			for (int i=qlink.size()-1; i >= sizeQuickLink;i--) {
+				qlink.remove(i);
+			}
 		}
 		
 		Collections.sort(qlink, new Comparator<QuickLink>(){

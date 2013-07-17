@@ -217,4 +217,14 @@ Build 1062
 	Page navigation for Dynamic query (paramater query) bug fixed 
 	User defined page paramater uses :x instead of [x]	
 	QuickLinks implemented (save/load)
-		
+	Off highlight on click
+	
+Build 1063
+	Dialog popup links to Data link
+	Column name sort by Alpha
+	Keep the last 40 quick links
+	Fixed Query page, dialog search/navigation issue
+	Custom link support :variable name, date type
+	Fixed getTabls() to get table names from FROM clause
+	
+	
