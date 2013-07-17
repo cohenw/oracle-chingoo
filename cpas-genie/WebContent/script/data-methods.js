@@ -341,6 +341,30 @@
 		}
 	}	
 	
+	function applyParameter(id) {
+		$("#pageNo").val(1);
+		var dynvar = $("#dyn"+ id + "-vars").val();
+		
+		var sql = $("#sqlorig-"+ id).html();
+//		alert("#sql-"+ id);
+//		alert(sql);
+		
+		var cols = dynvar.split(" ");
+		for(var i = 0;i<cols.length;i++){
+			var param = $("#dyn" + id + "-" + cols[i]).val();
+//			alert("#dyn"+id + "-" +cols[i]);
+//			alert(param);
+			sql = replaceAll(sql, ":" + cols[i], "'" + param + "'", 1);
+		}		
+/*		
+		sql = replaceAll(sql, ":CLNT", "'0832'", 1);
+		sql = replaceAll(sql, ":PLAN", "'5'", 1);
+*/
+//		alert(sql);
+		$("#sql-"+ id).html(sql);
+		reloadData(id);
+	}
+	
 	function searchTable(id, key) {
 		$("#pageNo").val(1);
 		$("#searchValue").val(key);

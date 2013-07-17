@@ -6,14 +6,12 @@
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
-
 <%
 	boolean cpas = true;
 	int counter = 0;
 	String sql = request.getParameter("sql");
 	String id = request.getParameter("id");
-	
-	
+
 	String dataLink = request.getParameter("dataLink");
 	boolean dLink = (dataLink != null && dataLink.equals("1"));
 	//dLink = true;
@@ -36,15 +34,12 @@
 
 	String searchValue = request.getParameter("searchValue");
 	if (searchValue==null) searchValue = "";
-	
+
 	Connect cn = (Connect) session.getAttribute("CN");
-/* DOT NOT use cache
-	Query q = QueryCache.getInstance().getQueryObject(sql);
-	if (q==null) {
-		q = new Query(cn, sql);
-		QueryCache.getInstance().addQuery(sql, q);
-	}
-*/
+
+%>
+
+<%
 	Query q = new Query(cn, sql, false);
 
 	if (q.isError()) {
@@ -126,7 +121,6 @@
 	int totalPage = q.getTotalPage(linesPerPage);
 	
 %>
-
 <%-- <b><%= tname %></b> --%> 
 <%--<%= cn.getComment(tname) --%>
 

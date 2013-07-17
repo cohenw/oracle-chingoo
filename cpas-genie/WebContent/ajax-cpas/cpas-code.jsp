@@ -6,6 +6,23 @@
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
+<%!
+	ArrayList<String> getBindVariableList(String qry) {
+		ArrayList<String> al = new ArrayList<String>();
+		if (qry==null) return al;
+		StringTokenizer st = new StringTokenizer(qry, " =)\n");
+
+		while (st.hasMoreTokens()) {
+			String token = st.nextToken().trim();
+			if (token.startsWith(":") && !token.startsWith(":=") && token.length()>1) {
+				System.out.println("token=" + token);
+				al.add(token);
+			}
+		}
+		return al;
+	}
+%>
+
 <%
 	int counter = 0;
 	Connect cn = (Connect) session.getAttribute("CN");
@@ -36,12 +53,29 @@
 		}
 		sql = "SELECT VALU, NAME FROM CT$CODE ORDER BY ORDERBY";
 	}
-	
+
+	boolean isDynamic = false;
+
+	ArrayList<String> varAl = getBindVariableList(sql);
+	if (varAl.size() >0 ) isDynamic = true;
+System.out.println("isDynamic=" + isDynamic);
+
+	String sqlh = sql;
+	String dynamicVars = request.getParameter("dynamicVars");
+	//System.out.println("*** dynamicVars=" + dynamicVars);
+	if (dynamicVars!=null && dynamicVars.length() > 0) {
+		isDynamic = true;
+		String[] vars = dynamicVars.split(" ");
+		for (String var : vars) {
+			System.out.println("* " + var + ": " + request.getParameter(var));
+			sqlh = sqlh.replaceAll(var, "'" + request.getParameter(var) + "'");
+		}
+	}		
 	
 %>
 <b><%=caption %></b><br/>
 <div id="sql-<%=id%>" style="display: none;"><%= sql %></div>
-<%= sql %>
+<span id="sqlorig-<%=id%>"><%= sql %></span>
 &nbsp;
 <a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border="0"></a>
 &nbsp;
@@ -51,6 +85,28 @@
 <div style="display: none;" id="hide-<%=id%>"></div>
 <div style="display: none;" id="sort-<%=id%>"></div>
 <div style="display: none;" id="sortdir-<%=id%>">0</div>
+
+<br/>
+<%
+	if (isDynamic) {
+		String varlist = "";
+		int i=0;
+		for (String var:varAl) {
+			varlist += var.substring(1) + " ";
+			i++;
+%>
+	<%= var %> <input id="dyn<%=id%>-<%= var.substring(1) %>" length=30>
+<%
+		}
+%>
+		<input id="dyn<%=id%>-vars" value="<%= varlist.trim() %>" type="hidden"/>
+		<input type="button" value="submit" onClick="applyParameter(<%=id%>)">
+<%		
+		//return;
+	}
+%>
+
+
 <div id="div-<%=id%>">
 <jsp:include page='../ajax/qry-simple.jsp'>
 	<jsp:param value="<%= sql %>" name="sql"/>
