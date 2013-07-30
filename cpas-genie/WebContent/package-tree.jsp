@@ -259,6 +259,25 @@ function changeLevel() {
 <input id="name-map" name="name" type="hidden">
 </form>
 
+<%
+	if (gPkg.startsWith("DATA$VALIDATION_")) {
+		String sql = "SELECT vkey, descr, errorid FROM CPAS_VALIDATION WHERE packname='" +gPkg + "' AND VNAME='" + cn.getProcedureLabel(gPkg, gPrc) + "'";
+%>
+<br/>
+<b>CPAS Validation</b><br/>
+<div id="div-<%=id%>">
+<jsp:include page='ajax/qry-simple.jsp'>
+	<jsp:param value="<%= sql %>" name="sql"/>
+	<jsp:param value="1" name="dataLink"/>
+	<jsp:param value="<%= id %>" name="id"/>
+</jsp:include>
+</div>
+<br/>
+<%
+	}
+%>
+
+
 <h3>Table CRUD</h3>
 <table border=1 class="gridBody" style="margin-left: 20px;">
 <tr>
@@ -297,7 +316,9 @@ for (int i=0;i<list0.size();i++) {
 </div>
  -->
 <br/>
-
+<%
+	id = Util.getId();
+%>
 <b><a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
 <div id="div-<%=id %>" style="display: none; margin-left: 20px; background-color: #eeeeee;">
 <%
@@ -333,6 +354,7 @@ for (int i=0;i<proc0.size();i++) {
 %>
 </div>
 <br/>
+
 
 <form id="form_level" name="form_level" method="get" action="package-tree.jsp">
 <input name="name" type="hidden" value="<%=name%>">

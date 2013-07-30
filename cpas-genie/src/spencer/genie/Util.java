@@ -500,7 +500,7 @@ public static void main(String args[]) {
 	}
 
 	public static String getVersionDate() {
-		return "Jul 29, 2013";
+		return "Jul 30, 2013";
 	}
 
 }

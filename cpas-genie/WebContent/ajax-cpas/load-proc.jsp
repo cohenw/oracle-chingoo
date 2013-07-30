@@ -68,7 +68,7 @@ public String getTables(List<String[]> list0, String type) {
 
 <%
 	if (pkg.startsWith("DATA$VALIDATION_")) {
-		String sql = "SELECT vkey, vname, descr, errorid FROM CPAS_VALIDATION WHERE packname='" +pkg + "' AND VNAME='" + cn.getProcedureLabel(pkg, prc) + "'";
+		String sql = "SELECT vkey, descr, errorid FROM CPAS_VALIDATION WHERE packname='" +pkg + "' AND VNAME='" + cn.getProcedureLabel(pkg, prc) + "'";
 %>
 <b>CPAS Validation</b><br/>
 <div id="div-<%=id%>">

@@ -411,11 +411,6 @@ VANGUARD<br/>
 <li>SIGMA, CAAT, PSAC and VANGUARD added to database list</li>
 <li>Search for TreeView and Process</li>
 <li>Link between Treeview and Process</li>
-<li>
-CPAS Genie User's manual.
-<a href="http://vs-web-peba:8080/docs/CPAS-Genie-Manual.docx"><img src='https://dcb.nci.nih.gov/SiteCollectionImages/icon_word.gif'>Download</a>
-</li>
-
 
 </div>
 </td>

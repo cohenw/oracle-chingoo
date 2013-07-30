@@ -399,6 +399,13 @@ if (cpas) {
  --%>
 <%= (val!=null && isLinked && linkImage.startsWith("image/view")? "<a href='Javascript:showDialog(" + dialogUrl + ")'><img border=0 src='" + linkImage + "'></a>":"")%>
 <%= (val!=null && isLinked && linkImage.equals("image/download.gif")? "<a href='" + linkUrl + "' target=_blank><img border=0 src='" + linkImage + "'></a>":"")%>
+<%
+	if (tname.equals("CPAS_VALIDATION") && colName.equals("VNAME")) {
+		String pkg = q.getValue("PACKNAME") + "." + q.getValue("VNAME");
+		out.println(" <a target=_blank href='package-tree.jsp?name=" + pkg + "'>Detail</a>");
+	}
+
+%>
 </td>
 <%
 		}
