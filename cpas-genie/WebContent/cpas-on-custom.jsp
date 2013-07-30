@@ -165,7 +165,7 @@ function loadEvent(process) {
 
 function loadEventView(process, event) {
 	$.ajax({
-		url: "ajax-cpas/load-online-eventview.jsp?process=" + process + "&event="+event +"&t=" + (new Date().getTime()),
+		url: "ajax-cpas/load-online-eventview-custom.jsp?process=" + process + "&event="+event +"&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-eventview").html(data);
 			setHighlight();
@@ -345,7 +345,7 @@ function setEvent(sdi, process, event) {
 
 function loadSTMT(sdi, actionid, treekey) {
 	$.ajax({
-		url: "ajax-cpas/load-online-STMT.jsp?sdi=" + sdi + "&actionid=" + actionid + "&t=" + (new Date().getTime()),
+		url: "ajax-cpas/load-online-STMT-custom.jsp?sdi=" + sdi + "&actionid=" + actionid + "&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-tvstmt").html(data);
 			var id = treekey.replace(/_/g,"-");
@@ -367,7 +367,7 @@ function loadSTMT(sdi, actionid, treekey) {
 	<table width=100% border=0>
 		<td><img src="image/cpas.jpg"
 			title="Version <%=Util.getVersionDate()%>" /></td>
-		<td><h2 style="color: blue;">Genie for CPAS Online</h2></td>
+		<td><h2 style="color: blue;">Genie for CPAS Online - CUSTOM</h2></td>
 		<td>&nbsp;</td>
 
 		<td>
@@ -467,7 +467,7 @@ if (cn.getUrlString().contains("PEPP")) {
 <input id="sql-query" name="sql" type="hidden"/>
 </form>
 
-<form id="formSimul" target="_blank" action="cpas-simul.jsp">
+<form id="formSimul" target="_blank" action="cpas-simul-custom.jsp">
 <input id="formSimulSdi" name="sdi" type="hidden"/>
 <input id="formSimulTkey" name="treekey" type="hidden"/>
 </form>

@@ -96,7 +96,8 @@
 <% } else {%>	
     <h2>Welcome to Oracle Genie.</h2>
 <% } %>	
-
+    <a href="login.jsp">CPAS Login (Dev Environments)</a>
+    
 	<form action="connect_new.jsp" method="POST">
     <table border=0 style="margin-left: 20px;">
     <tr>
