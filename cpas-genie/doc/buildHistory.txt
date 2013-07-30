@@ -309,8 +309,18 @@ Build CPAS1081
 	Custom link support :variable name, date type
 	Fixed getTabls() to get table names from FROM clause
 
-Build CAPS1082
+Build CPAS1082
 	CPAS Code popup support dynamic parameters
+	CPAS Code popup for type 5 (APS)
+	Tools - Recently modified objects
+	Tools - User Sessions
+	Extract tables names form JOIN clause
+
+Build CPAS1083
+	Package/Trigger Analyze support Column for Insert/Update	
+	Package Tree over Package Browser
 			
 Known Issue
-	
+
+New Feature to implement
+		

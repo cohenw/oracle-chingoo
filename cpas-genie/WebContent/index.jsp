@@ -453,7 +453,7 @@ CPAS</a> |
 </form>
 
 <div id="dialog-modal" title="About Genie" style="display:none; background: #ffffff;">
-<img src="image/genie2.jpg" align="center" />
+<img src="image/genie-lamp.jpg" align="center" />
 <br/>
 
 <% if (isCPAS) { %>

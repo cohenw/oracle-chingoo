@@ -3,6 +3,28 @@
 	pageEncoding="utf-8"%>
 
 <%!
+
+public String getTables(List<String[]> list0, String type) {
+	String res ="";
+	
+	for (int i=0;i<list0.size();i++) {
+		String tname = list0.get(i)[1];
+		String op = "";
+		String opS = list0.get(i)[2];
+		String opI = list0.get(i)[3];
+		String opU = list0.get(i)[4];
+		String opD = list0.get(i)[5];
+		
+		if (opI.equals("1") && type.equals("INSERT")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
+		if (opS.equals("1") && type.equals("SELECT")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
+		if (opU.equals("1") && type.equals("UPDATE")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
+		if (opD.equals("1") && type.equals("DELETE")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
+	}
+	
+	return res;
+}
+
+
 public void DFS(Connect cn, int maxLevel, String pkg, String prc, ArrayList<PTree> pt, HashSet<String> explored, ArrayList<String> path, int level) {
 
 	if (level >=maxLevel) return;
@@ -205,7 +227,7 @@ function changeLevel() {
 <body>
 
 	<table width=100% border=0>
-		<td width=40><img src="image/package_ok.png"
+		<td width=40><img src="image/tree.png"
 			title="Version <%=Util.getVersionDate()%>" /></td>
 		<td><h2 style="color: blue;">Package Tree</h2></td>	
 		<td></td>
@@ -226,17 +248,55 @@ function changeLevel() {
 
  	</table>
 
-<h3><%= gPkg + "." + cn.getProcedureLabel(gPkg, gPrc)  %>
+<h2><%= gPkg + "." + cn.getProcedureLabel(gPkg, gPrc)  %></h2>
 &nbsp;&nbsp;
-<a target=_blank href="src2.jsp?name=<%= gPkg %>#<%= gPrc.toLowerCase() %>">Source</a>
+<a target=_blank href="src2.jsp?name=<%= gPkg %>#<%= gPrc.toLowerCase() %>">PackageSource</a>
 <a target=_blank href="package-browser.jsp?name=<%= name %>">PackgeBrowser</a>
-<a target=_blank href="package-analyze.jsp?name=<%= gPkg %>"><img src="image/check.gif" title="Analyze Packge"></a>
-</h3>
+<a target=_blank href="analyze-package.jsp?name=<%= gPkg %>">Analyze</a>
+
 
 <form name="form-map" id="form-map" action="package-tree.jsp" method="get">
 <input id="name-map" name="name" type="hidden">
 </form>
 
+<h3>Table CRUD</h3>
+<table border=1 class="gridBody" style="margin-left: 20px;">
+<tr>
+	<th class="headerRow">SELECT</th>
+	<th class="headerRow">INSERT</th>
+	<th class="headerRow">UPDATE</th>
+	<th class="headerRow">DELETE</th>
+</tr>
+<tr>
+<td valign=top><%= getTables(list0, "SELECT") %></td>
+<td valign=top><%= getTables(list0, "INSERT") %></td>
+<td valign=top><%= getTables(list0, "UPDATE") %></td>
+<td valign=top><%= getTables(list0, "DELETE") %></td>
+</tr>
+</table>
+<!-- 
+<div style="margin-left: 20px;">
+<%
+for (int i=0;i<list0.size();i++) {
+		String tname = list0.get(i)[1];
+		String op = "";
+		String opS = list0.get(i)[2];
+		String opI = list0.get(i)[3];
+		String opU = list0.get(i)[4];
+		String opD = list0.get(i)[5];
+		
+		if (opI.equals("1")) op += "C";
+		if (opS.equals("1")) op += "R";
+		if (opU.equals("1")) op += "U";
+		if (opD.equals("1")) op += "D";
+%>
+	<a target=_blank href="pop.jsp?key=<%= tname %>"><b><%= tname %></b></a> <span style='color: red; font-weight: bold;'><%= op %></span></br/>
+<%		
+	}
+%>
+</div>
+ -->
+<br/>
 
 <b><a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
 <div id="div-<%=id %>" style="display: none; margin-left: 20px; background-color: #eeeeee;">
@@ -274,28 +334,6 @@ for (int i=0;i<proc0.size();i++) {
 </div>
 <br/>
 
-<h3>Table CRUD</h3>
-<div style="margin-left: 20px;">
-<%
-for (int i=0;i<list0.size();i++) {
-		String tname = list0.get(i)[1];
-		String op = "";
-		String opS = list0.get(i)[2];
-		String opI = list0.get(i)[3];
-		String opU = list0.get(i)[4];
-		String opD = list0.get(i)[5];
-		
-		if (opI.equals("1")) op += "C";
-		if (opS.equals("1")) op += "R";
-		if (opU.equals("1")) op += "U";
-		if (opD.equals("1")) op += "D";
-%>
-	<a target=_blank href="pop.jsp?key=<%= tname %>"><b><%= tname %></b></a> <span style='color: red; font-weight: bold;'><%= op %></span></br/>
-<%		
-	}
-%>
-</div>
-
 <form id="form_level" name="form_level" method="get" action="package-tree.jsp">
 <input name="name" type="hidden" value="<%=name%>">
 <h3>Drill Down - up to
@@ -309,7 +347,11 @@ for (int i=0;i<list0.size();i++) {
 level
 </h3>
 </form>
-<div id="drilldown" style="margin-left: 20px;">
+<%
+	id = Util.getId();
+%>
+<a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/minus.gif"></a>
+<div id="div-<%=id %>" style="margin-left: 20px;">
 <%
 {
 	ArrayList<PTree> pt = new ArrayList<PTree>(); 
@@ -432,6 +474,7 @@ while (true) {
 		
 	}
 %>
+
 </div>
 <br/><br/><br/><br/><br/>
 

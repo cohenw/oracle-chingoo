@@ -5,6 +5,27 @@
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
+<%!
+public String getTables(List<String[]> list0, String type) {
+	String res ="";
+	
+	for (int i=0;i<list0.size();i++) {
+		String tname = list0.get(i)[1];
+		String op = "";
+		String opS = list0.get(i)[2];
+		String opI = list0.get(i)[3];
+		String opU = list0.get(i)[4];
+		String opD = list0.get(i)[5];
+		
+		if (opI.equals("1") && type.equals("INSERT")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
+		if (opS.equals("1") && type.equals("SELECT")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
+		if (opU.equals("1") && type.equals("UPDATE")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
+		if (opD.equals("1") && type.equals("DELETE")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
+	}
+	
+	return res;
+}
+%>
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
 	String key = request.getParameter("key");
@@ -42,7 +63,7 @@
 <a target=_blank href="src2.jsp?name=<%= pkg %>#<%= prc.toLowerCase() %>">Source</a>
 
 <a target=_blank href="package-tree.jsp?name=<%= name %>">Tree</a>
-<a target=_blank href="package-analyze.jsp?name=<%= pkg %>"><img src="image/check.gif" title="Analyze Packge"></a>
+<a target=_blank href="analyze-package.jsp?name=<%= pkg %>">Analyze</a>
 </h2> 
 
 <%
@@ -61,6 +82,45 @@
 <%
 	}
 %>
+
+<b>Table CRUD</b><br/>
+<table border=1 class="gridBody" style="margin-left: 20px;">
+<tr>
+	<th class="headerRow">SELECT</th>
+	<th class="headerRow">INSERT</th>
+	<th class="headerRow">UPDATE</th>
+	<th class="headerRow">DELETE</th>
+</tr>
+<tr>
+<td valign=top><%= getTables(list, "SELECT") %></td>
+<td valign=top><%= getTables(list, "INSERT") %></td>
+<td valign=top><%= getTables(list, "UPDATE") %></td>
+<td valign=top><%= getTables(list, "DELETE") %></td>
+</tr>
+</table>
+<!-- 
+<div style="margin-left: 20px;">
+<%
+for (int i=0;i<list.size();i++) {
+		String tname = list.get(i)[1];
+		String op = "";
+		String opS = list.get(i)[2];
+		String opI = list.get(i)[3];
+		String opU = list.get(i)[4];
+		String opD = list.get(i)[5];
+		
+		if (opI.equals("1")) op += "C";
+		if (opS.equals("1")) op += "R";
+		if (opU.equals("1")) op += "U";
+		if (opD.equals("1")) op += "D";
+%>
+	<a target=_blank href="pop.jsp?key=<%= tname %>"><b><%= tname %></b></a> <span style='color: red; font-weight: bold;'><%= op %></span></br/>
+<%		
+	}
+%>
+</div>
+ -->
+<br/>
 
 <% id = Util.getId(); %>
 <b><a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
@@ -99,28 +159,6 @@ for (int i=0;i<proc0.size();i++) {
 </div>
 <br/><br/>
 
-<b>Table CRUD</b><br/>
-<div style="margin-left: 20px;">
-<%
-for (int i=0;i<list.size();i++) {
-		String tname = list.get(i)[1];
-		String op = "";
-		String opS = list.get(i)[2];
-		String opI = list.get(i)[3];
-		String opU = list.get(i)[4];
-		String opD = list.get(i)[5];
-		
-		if (opI.equals("1")) op += "C";
-		if (opS.equals("1")) op += "R";
-		if (opU.equals("1")) op += "U";
-		if (opD.equals("1")) op += "D";
-%>
-	<a target=_blank href="pop.jsp?key=<%= tname %>"><b><%= tname %></b></a> <span style='color: red; font-weight: bold;'><%= op %></span></br/>
-<%		
-	}
-%>
-</div>
-<br/>
 
 <b>Calls</b><br/>
 <div style="margin-left: 20px;">

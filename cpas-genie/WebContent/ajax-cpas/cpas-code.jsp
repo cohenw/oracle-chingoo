@@ -29,6 +29,10 @@
 
 	String key = request.getParameter("key");
 	String sql = "SELECT SOURCE, CAPTION, SELECTSTMT FROM CPAS_CODE WHERE GRUP = '" + key + "'";
+	int cpasType = cn.getCpasType();
+	if (cpasType ==5) {
+		sql = "SELECT TYPE, (SELECT capt from CODE_CAPTION WHERE GRUP='"	+ key + "' AND LANG='E'), (SELECT STMTCODE FROM CODE_SELECT WHERE GRUP=A.GRUP) STMT FROM CODE A WHERE GRUP='"	+ key + "'";
+	}
 	
 	List<String[]> res = cn.query(sql, false);
 
@@ -54,6 +58,15 @@
 		sql = "SELECT VALU, NAME FROM CT$CODE ORDER BY ORDERBY";
 	}
 
+	if (cpasType == 5) {
+		if (source.equals("G")) {
+			sql = "SELECT VALU, NAME FROM CODE_VALUE_NAME WHERE GRUP='" + key + "'";
+		} if (source.equals("C")||source.equals("P")) {
+			sql = selectstmt;
+		}
+	}
+	
+	
 	boolean isDynamic = false;
 
 	ArrayList<String> varAl = getBindVariableList(sql);

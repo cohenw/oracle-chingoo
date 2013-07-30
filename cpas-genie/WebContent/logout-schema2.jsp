@@ -21,7 +21,7 @@
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
   </head>
 
- <img src="image/genie2.jpg"/>
+ <img src="image/genie-lamp.jpg"/>
 
 <h2>Disconnected from Schema2. Good Bye!</h2>
 

@@ -76,7 +76,7 @@ public class TriggerTableWorker {
 			TriggerTable tt = new TriggerTable(currentTrg, text);
 			//System.out.println("text=[" + text + "]");
 			//System.out.println("tt.getHM()="+ tt.getHM());
-			cn.AddTriggerTable(currentTrg, tt.getHM());
+			cn.AddTriggerTable(currentTrg, tt.getHM(), tt.getHMIns(), tt.getHMUpd(), tt.getHMDel());
 /*			
 			HyperSyntax hs = new HyperSyntax();
 			String syntax = hs.getHyperSyntax(cn, text, "PACKAGE BODY", currentPkg);

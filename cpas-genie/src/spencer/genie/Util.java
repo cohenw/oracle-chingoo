@@ -146,6 +146,31 @@ public class Util {
 			String a[] = str.split(",");
 			for (int j=0; j<a.length; j++) {
 				String tname = a[j].trim();
+				String ttt = tname;
+				while (true) {
+					int x = ttt.indexOf(" JOIN ");
+					if (x > 0) {
+						int y = ttt.indexOf(" ON ", x);
+						if (y > 0) {
+							String tmp = ttt.substring(x+6, y);
+							//System.out.println("tmp=[" + tmp + "]");
+
+							x = tmp.indexOf(" ");
+							if (x > 0) tmp = tmp.substring(0, x).trim();
+							//System.out.println(j + "=" +tname);
+							
+							if (tmp.endsWith(")")) tmp = tmp.substring(0, tmp.length()-1);
+							if (tmp.startsWith("'")) continue;
+
+							tbls.add(tmp);
+							
+							
+							ttt = ttt.substring(y + 4);
+						}
+					} else
+						break;
+				}
+				
 				int x = tname.indexOf(" ");
 				if (x > 0) tname = tname.substring(0, x).trim();
 				//System.out.println(j + "=" +tname);
@@ -161,7 +186,18 @@ public class Util {
 		
 		return tables;
 	}
+/*
+public static void main(String args[]) {
+	String sql = "SELECT A.CLIENT_CODE, A.FUND_CODE, A.EDATE, A.NET_PERFORMANCE, \n" +
+"B.GROSS_PERFORMANCE, B.NET_PERFORMANCE\n" +
+"FROM CQ68418_NET A \n" +
+"left join FUND_PERF_MTH_NET B on CLNT='0'||A.Client_code AND FUND=A.FUND_CODE AND B.edate=A.edate\n" +
+"left join FUND_PERF_MTH_NET2 C on CLNT='0'||A.Client_code AND FUND=A.FUND_CODE AND B.edate=A.edate\n" +
+"WHERE a.edate=to_date('20130531','yyyymmdd') ORDER BY CLIENT_CODE";
 	
+	System.out.println(getTables(sql));
+}
+*/	
 	public static ArrayList<Range> extractComments(String text) {
 
 		ArrayList<Range> list = new ArrayList<Range>();
@@ -372,6 +408,87 @@ public class Util {
 
 	}
 
+	public static ArrayList<String> getInsertColumn(String sql) {
+		ArrayList<String> res = new ArrayList<String>();
+
+		int start = sql.indexOf("(");
+		int end  = sql.indexOf(")");
+		
+		if (start < 0 || end < 0) return res;
+		
+		String ext = sql.substring(start +1, end);
+		//System.out.println("[" + ext + "]");
+		
+		String[] arr = ext.split(",");
+		
+		for (String col:arr)
+			res.add(col.toUpperCase().trim());
+		return res;
+	}
+	
+	public static ArrayList<String> getUpdateColumn(String sql) {
+		ArrayList<String> res = new ArrayList<String>();
+
+		sql = sql.toUpperCase();
+		int start = sql.indexOf(" SET ");
+		int end  = sql.indexOf(" WHERE ");
+		
+		if (start < 0) return res;
+		if (end <0) end = sql.length();
+		
+		String ext = sql.substring(start +5, end);
+		//System.out.println("[" + ext + "]");
+		
+		String[] arr = ext.split("=");
+		
+		int i = 0;
+		for (String tmp:arr) {
+			int s = tmp.lastIndexOf(",");
+			if (s > 0) tmp = tmp.substring(s+1);
+			tmp = tmp.trim();
+			if (tmp.contains(".")) tmp = tmp.substring(tmp.lastIndexOf(".")+1);
+			res.add(tmp);
+			i++;
+		}
+		if (res.size()>0) res.remove(res.size()-1);
+		return res;
+	}
+
+	public static ArrayList<String> getDeleteColumn(String sql) {
+		ArrayList<String> res = new ArrayList<String>();
+
+		sql = sql.toUpperCase();
+		int start = sql.indexOf(" WHERE ");
+		if (start <0) return res;
+		String ext = sql.substring(start +7);
+//System.out.println("[" + ext + "]");
+		
+		String[] arr = ext.split("AND");
+		
+		int i = 0;
+		for (String tmp:arr) {
+			//System.out.println("<" + tmp + ">");
+			int s1 = tmp.indexOf(" ");
+			int s2 = tmp.indexOf("=");
+			int s3 = tmp.indexOf("<");
+			int s4 = tmp.indexOf(">");
+			int s=1000;
+			if (s1 >0 && s1 < s) s = s1;
+			if (s2 >0 && s2 < s) s = s2;
+			if (s3 >0 && s3 < s) s = s3;
+			if (s4 >0 && s4 < s) s = s4;
+			
+			if (s > 0 && s!= 1000) tmp = tmp.substring(0,s);
+			tmp = tmp.trim();
+			if (tmp.contains(".")) tmp = tmp.substring(tmp.lastIndexOf(".")+1);
+			//System.out.println("$" + tmp + "$");
+			res.add(tmp);
+			i++;
+		}
+		//if (res.size()>0) res.remove(res.size()-1);
+		return res;
+	}
+
 	public static boolean isInCpasNetwork(HttpServletRequest req) {
 		String url = getURL(req);
 		return true;
@@ -379,11 +496,11 @@ public class Util {
 	}
 
 	public static String getBuildNo() {
-		return "CPAS-1082";
+		return "CPAS-1083";
 	}
 
 	public static String getVersionDate() {
-		return "Jul 17, 2013";
+		return "Jul 29, 2013";
 	}
 
 }
