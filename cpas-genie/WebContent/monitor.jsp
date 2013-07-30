@@ -82,8 +82,8 @@ public String extractJS(String str) {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 	for (Connect cn : ss) {
 		HashMap<String,QueryLog> map = cn.getQueryHistory();
+	    if (map==null) continue;
 	    List<QueryLog> logs = new ArrayList<QueryLog>(map.values());
-
 	    Collections.sort(logs, new Comparator<QueryLog>() {
 
 	        public int compare(QueryLog o1, QueryLog o2) {

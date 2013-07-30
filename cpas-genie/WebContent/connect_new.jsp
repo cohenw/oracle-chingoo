@@ -124,7 +124,7 @@ function stopShow() {
   	<input name="targetSchema" type="hidden" value="<%= targetSchema %>">
   </form>
   
-  <img src="image/genie2.jpg"/>
+  <img src="image/genie-lamp.jpg"/>
     <h2>Connecting &amp; Loading Database Objects...</h2>
 
 	<div id="loadingDiv" style="font-size:18px;"></div>

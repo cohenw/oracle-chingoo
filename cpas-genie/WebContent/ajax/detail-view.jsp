@@ -33,6 +33,7 @@
 %>
 <div id="objectTitle" style="display:none">VIEW: <%= view %></div>
 <h2>VIEW: <%= view %> &nbsp;&nbsp;<a href="Javascript:runQuery('<%=catalog%>','<%=view%>')"><img border=0 src="image/icon_query.png" title="query"></a>
+<a href="crud-matrix.jsp?table=<%=view%>" target="_blank"><img title="CRUD Matrix" src="image/matrix.gif"></a>
 <a href="pop.jsp?type=VIEW&key=<%=view%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
 </h2>
 
@@ -195,7 +196,7 @@
 	} 
 %>
 
-		<a target=_blank href="package-browser.jsp?name=<%= refPrc %>"><%= refPrc %></a>&nbsp;&nbsp;<%= cn.getCRUD(temp[0],temp[1].toUpperCase(), view) %><br/>		
+		<a target=_blank href="package-tree.jsp?name=<%= refPrc %>"><%= refPrc %></a>&nbsp;&nbsp;<%= cn.getCRUD(temp[0],temp[1].toUpperCase(), view) %><br/>		
 <% }
 	for (; cols<=2; cols++) {
 %>

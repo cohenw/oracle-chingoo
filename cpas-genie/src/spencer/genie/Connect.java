@@ -758,7 +758,10 @@ public class Connect implements HttpSessionBindingListener {
 	
 	public String getProcedureLabel(String key) {
 		String value = packageProc.get(key);
-		if(value==null) value = key;
+		if(value==null) {
+			String temp[] = key.split("\\.");
+			value = temp[1];
+		}
 		
 		return value;
 	}
@@ -2398,6 +2401,9 @@ public class Connect implements HttpSessionBindingListener {
 				"OP_INSERT	CHAR(1), " +
 				"OP_UPDATE	CHAR(1), " +
 				"OP_DELETE	CHAR(1), " +
+				"COLS_INSERT VARCHAR2(1000), " +
+				"COLS_UPDATE VARCHAR2(1000), " +
+				"COLS_DELETE VARCHAR2(1000), " +
 				"PRIMARY KEY (PACKAGE_NAME, PROCEDURE_NAME, TABLE_NAME) )";
 		
 		stmt.execute(stmt1);
@@ -2461,6 +2467,9 @@ public class Connect implements HttpSessionBindingListener {
 				"OP_INSERT	CHAR(1), " +
 				"OP_UPDATE	CHAR(1), " +
 				"OP_DELETE	CHAR(1), " +
+				"COLS_INSERT VARCHAR2(1000), " +
+				"COLS_UPDATE VARCHAR2(1000), " +
+				"COLS_DELETE VARCHAR2(1000), " +
 				"PRIMARY KEY (TRIGGER_NAME, TABLE_NAME) )";
 		
 		stmt.execute(stmt1);
@@ -2984,7 +2993,7 @@ public class Connect implements HttpSessionBindingListener {
 		return this.targetSchema;
 	}
 	
-	public void AddPackageTable(String pkgName, HashMap<String, String> hm) throws SQLException {
+	public void AddPackageTable(String pkgName, HashMap<String, String> hm, HashMap<String, HashSet<String>> hmIns, HashMap<String, HashSet<String>> hmUpd, HashMap<String, HashSet<String>> hmDel) throws SQLException {
 		if (!pkgProcCreated) createPkg();
 		try {
 	        conn.setReadOnly(false);
@@ -2998,7 +3007,7 @@ public class Connect implements HttpSessionBindingListener {
 	        	String value=hm.get(key);
 				String[] temp = key.split("\\,");
 				if(temp.length < 2) continue;
-	        	sql = "INSERT INTO GENIE_PA_TABLE(PACKAGE_NAME, PROCEDURE_NAME, TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE) VALUES (?,?,?,?,?,?,?)";
+	        	sql = "INSERT INTO GENIE_PA_TABLE(PACKAGE_NAME, PROCEDURE_NAME, TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE, COLS_INSERT, COLS_UPDATE, COLS_DELETE) VALUES (?,?,?,?,?,?,?,?,?,?)";
 	        	PreparedStatement pstmt = conn.prepareStatement(sql);
 	        
 	        	String opSelect = "0";
@@ -3017,6 +3026,41 @@ public class Connect implements HttpSessionBindingListener {
 	        		System.out.println("Table name too long: [" + temp[1] + "]");
 	        		continue;
 	        	}
+//	        	System.out.println("hmIns="+hmIns.get(key));	        	
+//	        	System.out.println("hmUpd="+hmUpd.get(key));	        	
+
+	        	String colsInsert = null;
+	        	HashSet<String> hs = hmIns.get(key);
+	        	if (hs != null) {
+	        		for (String col: hs) {
+	        			if (colsInsert==null)
+	        				colsInsert = "|" + col + "|";
+	        			else
+	        				colsInsert += col + "|";
+	        		}
+	        	}
+	        	
+	        	String colsUpdate = null;
+	        	hs = hmUpd.get(key);
+	        	if (hs != null) {
+	        		for (String col: hs) {
+	        			if (colsUpdate==null)
+	        				colsUpdate = "|" + col + "|";
+	        			else
+	        				colsUpdate += col + "|";
+	        		}
+	        	}
+	        	
+	        	String colsDelete = null;
+	        	hs = hmDel.get(key);
+	        	if (hs != null) {
+	        		for (String col: hs) {
+	        			if (colsDelete==null)
+	        				colsDelete = "|" + col + "|";
+	        			else
+	        				colsDelete += col + "|";
+	        		}
+	        	}
 	        	pstmt.setString(1, pkgName);
 	        	pstmt.setString(2, temp[0]);
 	        	pstmt.setString(3, temp[1]);
@@ -3024,6 +3068,9 @@ public class Connect implements HttpSessionBindingListener {
 	        	pstmt.setString(5, opInsert);
 	        	pstmt.setString(6, opUpdate);
 	        	pstmt.setString(7, opDelete);
+	        	pstmt.setString(8, colsInsert);
+	        	pstmt.setString(9, colsUpdate);
+	        	pstmt.setString(10,  colsDelete);
 	        	try {
 	        		pstmt.executeUpdate();
 	        		pstmt.close();
@@ -3041,7 +3088,7 @@ public class Connect implements HttpSessionBindingListener {
 		}
 	}
 	
-	public void AddTriggerTable(String trgName, HashMap<String, String> hm) throws SQLException {
+	public void AddTriggerTable(String trgName, HashMap<String, String> hm, HashMap<String, HashSet<String>> hmIns, HashMap<String, HashSet<String>> hmUpd, HashMap<String, HashSet<String>> hmDel) throws SQLException {
 		if (!trgProcCreated) createTrg();
 		try {
 	        conn.setReadOnly(false);
@@ -3059,7 +3106,7 @@ public class Connect implements HttpSessionBindingListener {
 	        for (String key:hm.keySet()) {
 	        	String value=hm.get(key);
 
-	        	sql = "INSERT INTO GENIE_TR_TABLE(TRIGGER_NAME, TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE) VALUES (?,?,?,?,?,?)";
+	        	sql = "INSERT INTO GENIE_TR_TABLE(TRIGGER_NAME, TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE, COLS_INSERT, COLS_UPDATE, COLS_DELETE) VALUES (?,?,?,?,?,?,?,?,?)";
 	        	PreparedStatement pstmt = conn.prepareStatement(sql);
 	        
 	        	String opSelect = "0";
@@ -3070,13 +3117,50 @@ public class Connect implements HttpSessionBindingListener {
 	        	if (value.contains("I")) opInsert = "1";
 	        	if (value.contains("U")) opUpdate = "1";
 	        	if (value.contains("D")) opDelete = "1";
+//	        	System.out.println("hmIns="+hmIns.get(key));	        	
+//	        	System.out.println("hmUpd="+hmUpd.get(key));	        	
+
+	        	String colsInsert = null;
+	        	HashSet<String> hs = hmIns.get(key);
+	        	if (hs != null) {
+	        		for (String col: hs) {
+	        			if (colsInsert==null)
+	        				colsInsert = "|" + col + "|";
+	        			else
+	        				colsInsert += col + "|";
+	        		}
+	        	}
 	        	
+	        	String colsUpdate = null;
+	        	hs = hmUpd.get(key);
+	        	if (hs != null) {
+	        		for (String col: hs) {
+	        			if (colsUpdate==null)
+	        				colsUpdate = "|" + col + "|";
+	        			else
+	        				colsUpdate += col + "|";
+	        		}
+	        	}
+	        	
+	        	String colsDelete = null;
+	        	hs = hmDel.get(key);
+	        	if (hs != null) {
+	        		for (String col: hs) {
+	        			if (colsDelete==null)
+	        				colsDelete = "|" + col + "|";
+	        			else
+	        				colsDelete += col + "|";
+	        		}
+	        	}	        	
 	        	pstmt.setString(1, trgName);
 	        	pstmt.setString(2, key);
 	        	pstmt.setString(3, opSelect);
 	        	pstmt.setString(4, opInsert);
 	        	pstmt.setString(5, opUpdate);
 	        	pstmt.setString(6, opDelete);
+	        	pstmt.setString(7, colsInsert);
+	        	pstmt.setString(8, colsUpdate);
+	        	pstmt.setString(9, colsDelete);
 	        	try {
 	        		pstmt.executeUpdate();
 	        		pstmt.close();
@@ -3143,8 +3227,10 @@ public class Connect implements HttpSessionBindingListener {
 	        		pstmt.executeUpdate();
 	        		pstmt.close();
 	        	} catch (SQLException e) {
-	        		e.printStackTrace();
-	        		System.out.println(pkgName + "," + temp[0] +"," + targetPkg + "," + targetPrc);
+	        		if (e.getErrorCode()!=1) {
+	        			e.printStackTrace();
+	        			System.out.println(e.getErrorCode() + "," +pkgName + "," + temp[0] +"," + targetPkg + "," + targetPrc);
+	        		}
 	        		pstmt.close();
 	        	}
 	        }

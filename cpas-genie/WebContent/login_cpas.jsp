@@ -77,6 +77,12 @@
     		$("#url").val(n[1]);
     	}
     	
+    	function setLoginCPAS(jdbcUrl, target, userId) {
+    		$("#url").val(jdbcUrl);
+    		$("#targetSchema").val(target);
+    		$("#username").val(userId);
+    	}
+    	
     </script>
   </head>
   
@@ -84,7 +90,7 @@
 <% if (isCPAS) { %>
 	<img src="http://www.cpas.com/images/layout_01.jpg">
 <% } %>	
-  <img src="image/genie2.jpg" title="<%= Util.getVersionDate() + " Build " + Util.getBuildNo() %>"/>
+  <img src="image/genie-lamp.jpg" title="<%= Util.getVersionDate() + " Build " + Util.getBuildNo() %>"/>
 <% if (isCPAS) { %>
     <h2>Welcome to CPAS Genie.</h2>
 <% } else {%>	
@@ -221,186 +227,18 @@
 <table>
 <td>
 <div style="margin: 10px; padding:5px; width:500px; height:300px; overflow: scroll; border: 1px solid #666666;">
-
-ACTRA<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.CPAS.COM:1521/ACTRA', 'cpasdba')">cpasdba@jdbc:oracle:thin:@s-ora-004.CPAS.COM:1521/ACTRA</a>
-<br/>
-
-AFM (MPF)<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.cpas.com:1521/AFM', 'CPDBSMALL')">CPDBSMALL@jdbc:oracle:thin:@s-ora-006.cpas.com:1521/AFM</a>
-<br/>
-
-AIARC<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1521/AIARC', 'aiarc')">aiarc@jdbc:oracle:thin:@s-ora-002.cpas.com:1521/AIARC</a>
-<br/>
-
-APA<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.CPAS.COM:1526/APA', 'apa_client')">apa_client@jdbc:oracle:thin:@s-ora-006.CPAS.COM:1526/APA</a>
-<br/>
-
-BALTIMOR<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR', 'client_55bld')">client_55bld@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR', 'client_55blt')">client_55blt@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR', 'client_55blm')">client_55blm@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR', 'client_55BLC4')">client_55BLC4@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/BALTIMOR</a>
-<br/>
-
-BMO<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/BMO', 'client_54')">client_54@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/BMO</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/BMO', 'client_54_qa')">client_54_qa@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/BMO</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1521/SSGQA', 'client_54')">client_54@jdbc:oracle:thin:@s-ora-002.cpas.com:1521/SSGQA</a>
-<br/>
-
 CAAT<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAAT', 'client_caat_dev')">client_caat_dev@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAAT</a>
+<a style="margin-left: 60px;" href="javascript:setLoginCPAS('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAAT', 'client_caat_dc', '')">client_caat_dc@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAAT</a>
 <br/>
-
-CAPITAL<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAPITAL', 'test_capital')">test_capital@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAPITAL</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAPITAL', 'prd_capital')">prd_capital@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAPITAL</a>
-<br/>
-
-CCCERA<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/CCCERA', 'client_54_dev')">client_54_dev@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/CCCERA</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/CCCERA', 'client_54_prd')">client_54_prd@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/CCCERA</a>
-<br/>
-
-CIBC<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1521/IMPTEST', 'cpasdba')">cpasdba@jdbc:oracle:thin:@S-ORA-003.cpas.com:1521/IMPTEST</a>
-<br/>
-
-COR<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.CPAS.COM:1526/COR', 'cor_client_577')">cor_client_577@jdbc:oracle:thin:@s-ora-006.CPAS.COM:1526/COR</a>
-<br/>
-
-DALLAS<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/DALLAS', 'client_55dl')">client_55dl@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/DALLAS</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/DALLAS', 'client_55d')">client_55d@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/DALLAS</a>
-<br/>
-
-GOODYEAR<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/GOODYEAR', 'gy_client')">gy_client@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/GOODYEAR</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.cpas.com:1526/GOODYEAR', 'gy_client')">gy_client@jdbc:oracle:thin:@s-ora-006.cpas.com:1526/GOODYEAR</a>
-<br/>
-
-KCERA<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/KCERA', 'client_55kcd')">client_55kcd@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/KCERA</a>
-<br/>
-
-MCERA<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA', 'client_55mc')">client_55mc@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA', 'client_55mct')">client_55mct@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA', 'client_55mcc')">client_55mcc@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA</a>
-<br/>
-
-MERCED<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED', 'CLIENT_55MD')">CLIENT_55MD@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED', 'CLIENT_55MDT')">CLIENT_55MDT@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED', 'CLIENT_55MDM')">CLIENT_55MDM@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED', 'CLIENT_55MDC')">CLIENT_55MDC@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/MERCED</a>
-<br/>
-
-NAV Canada <br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.cpas.com:1521/NAV', 'nav_client_cpas')">nav_client_cpas@jdbc:oracle:thin:@s-ora-006.cpas.com:1521/NAV</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.cpas.com:1521/NAV', 'nav_client')">nav_client@jdbc:oracle:thin:@s-ora-006.cpas.com:1521/NAV</a>
-<br/>
-
-NDRIO <br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/NDRIO', 'NDRIO_CPAS_CLIENT')">NDRIO_CPAS_CLIENT@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/NDRIO</a>
-<br/>
-
-NTCA<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/NTCA', 'NTCA_DATA')">NTCA_DATA@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/NTCA</a>
-<br/>
-
-PEPP<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP', 'test_pepp')">test_pepp@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP', 'prd_pepp')">prd_pepp@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PEPP</a>
-<br/>
-
-PMRS<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS', 'pmrs_client')">pmrs_client@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS', 'pmrs_client_53')">pmrs_client_53@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/PMRS</a>
-<br/>
-
-PPL<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/PPL', 'client_54_ppl_dev')">client_54_ppl_dev@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/PPL</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/PPL', 'client_54_ppl_prod')">client_54_ppl_prod@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/PPL</a>
-<br/>
-
-PSAC<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/PSAC', 'client_55')">client_55@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/PSAC</a>
-<br/>
-
-RKLARGUS<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/RKLARGUS', 'client_55')">client_55@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/RKLARGUS</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/RKLARGUS', 'client_55_sit')">client_55_sit@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/RKLARGUS</a>
-<br/>
-
-SAXON<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SAXON55', 'client_55')">client_55@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SAXON55</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SAXON55', 'client_55_qa')">client_55_qa@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SAXON55</a>
-<br/>
-
-SEARSDB<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.cpas.com:1521/SEARSDB', 'CPDBDBA')">CPDBDBA@jdbc:oracle:thin:@s-ora-006.cpas.com:1521/SEARSDB</a>
-<br/>
-
-
-SIGMA<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/SIGMA', 'client_55sg')">client_55sg@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/SIGMA</a>
-<br/>
-
-SVB Aruba<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SVB', 'SVB_CLIENT_TEST')">SVB_CLIENT_TEST@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/SVB</a>
-<br/>
-
-TCERA<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/TCERADEV', 'client_55tc')">client_55tc@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/TCERADEV</a>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-005.cpas.com:1521/TCERADEV', 'client_55tcm')">client_55tcm@jdbc:oracle:thin:@s-ora-005.cpas.com:1521/TCERADEV</a>
-<br/>
-
-TTC<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.cpas.com:1526/TTC', 'TTC_CLIENT_DEV')">TTC_CLIENT_DEV@jdbc:oracle:thin:@s-ora-006.cpas.com:1526/TTC</a>
-<br/>
-
-VANGUARD<br/>
-<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1521/VANGUARD', 'client_54')">client_54@jdbc:oracle:thin:@s-ora-003.cpas.com:1521/VANGUARD</a>
+<a style="margin-left: 60px;" href="javascript:setLoginCPAS('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAAT', 'client_caat_test', '')">client_caat_test@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAAT</a>
 <br/>
 
 </div>
 
-</td>
-<td>
-
-<div style="margin: 10px; padding:5px; width:450px; height:300px; overflow: scroll; border: 1px solid #666666;">
-<b>What's New.</b>
-<br/><br/>
-<li>PL/SQL Syntax highlight, hyper link</li>
-<li>Multiple Filter enabled</li>
-<li>CPAS online slave event query added</li>
-<li>Support Transpose in Query page.</li>
-<li>Support queries start with WITH.</li>
-<li>Query support Explain Plan</li>
-<li>Calc Detail/Calc Html Detail added.</li>
-<li>Search view, trigger added.</li>
-<li>CPAS Online added.</li>
-<li>CPAS Role Privileges added.</li>
-<li>Logical Child for BATCH - Parameters &amp; Buffer tables.</li>
-<li>Datalink now supports CPAS Logical Link for well-known column names like processid, mkey, calcid, etc.</li>
-<li>SIGMA, CAAT, PSAC and VANGUARD added to database list</li>
-<li>Search for TreeView and Process</li>
-<li>Link between Treeview and Process</li>
-<li>
-CPAS Genie User's manual.
-<a href="http://vs-web-peba:8080/docs/CPAS-Genie-Manual.docx"><img src='https://dcb.nci.nih.gov/SiteCollectionImages/icon_word.gif'>Download</a>
-</li>
-
-
-</div>
 </td>
 
 </table>
+
 
 <br/>
 Please contact Spencer Hwang(<a href="mailto:spencerh@cpas.com">spencerh@cpas.com</a>) to add more database locations.

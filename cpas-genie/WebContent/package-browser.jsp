@@ -437,7 +437,7 @@ $(function() {
 
 <body>
 	<table width=100% border=0>
-		<td width=40><img src="image/package_ok.png"
+		<td width=40><img src="image/tree.png"
 			title="Version <%=Util.getVersionDate()%>" /></td>
 		<td><h2 style="color: blue;">Package Browser</h2></td>
 		<td></td>

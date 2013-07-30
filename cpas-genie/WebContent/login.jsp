@@ -92,13 +92,13 @@ or
 <% if (isCPAS) { %>
 	<img src="http://www.cpas.com/images/layout_01.jpg">
 <% } %>	
-  <img src="image/genie2.jpg" title="<%= Util.getVersionDate() + " Build " + Util.getBuildNo() %>"/>
+  <img src="image/genie-lamp.jpg" title="<%= Util.getVersionDate() + " Build " + Util.getBuildNo() %>"/>
 <% if (isCPAS) { %>
     <h2>Welcome to CPAS Genie.<br/> 
     Are you new to Genie? Please watch the tutorial videos. \\picard\training\CPAS Genie
     
     </h2>
-    <a href="login_cpas.jsp">CPAS login</a>
+    <a href="login_cpas.jsp">CPAS login (Test Environments)</a>
 <% } else {%>	
     <h2>Welcome to Oracle Genie.</h2>
 <% } %>	
@@ -295,6 +295,10 @@ KCERA<br/>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/KCERA', 'client_55kcd')">client_55kcd@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/KCERA</a>
 <br/>
 
+Lutheran Church<br/>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.cpas.com:1526/LUTHERAN', 'lcc_dev')">lcc_dev@jdbc:oracle:thin:@s-ora-006.cpas.com:1526/LUTHERAN</a>
+<br/>
+
 MCERA<br/>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA', 'client_55mc')">client_55mc@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA</a>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA', 'client_55mct')">client_55mct@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/MCERA</a>
@@ -387,6 +391,8 @@ VANGUARD<br/>
 <div style="margin: 10px; padding:5px; width:450px; height:300px; overflow: scroll; border: 1px solid #666666;">
 <b>What's New.</b>
 <br/><br/>
+<li>CRUD Matrix
+<li>CPAS online - custom version
 <li>Serialize query and object history
 <li>Package Analysis / Package Browser / Drill Down</li>
 <li>Custom Data Link</li>
