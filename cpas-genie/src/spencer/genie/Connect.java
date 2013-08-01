@@ -1546,7 +1546,7 @@ public class Connect implements HttpSessionBindingListener {
 
 		if (!this.isTVS("GENIE_PA_TABLE")) return list;
 		
-		String sql = "SELECT PACKAGE_NAME, PROCEDURE_NAME FROM GENIE_PA_TABLE WHERE TABLE_NAME='" + tname + "' ORDER BY 1";
+		String sql = "SELECT PACKAGE_NAME, PROCEDURE_NAME FROM GENIE_PA_TABLE WHERE TABLE_NAME='" + tname + "' ORDER BY 1,2";
 		if (this.targetSchema != null)
 			return list;
 		try {

@@ -15,7 +15,7 @@
 	if (cn.isTVS("GENIE_PA")) {
 		q = "SELECT object_name FROM user_objects A where object_type='PACKAGE BODY' AND NOT EXISTS (SELECT 1 FROM GENIE_PA WHERE PACKAGE_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
 	}
-	q = "SELECT object_name FROM user_objects where object_type='PACKAGE BODY' AND object_name IN ('" + name + "') ORDER BY 1";
+	q = "SELECT object_name FROM user_objects where object_type IN ('PACKAGE BODY','TYPE BODY') AND object_name IN ('" + name + "') ORDER BY 1";
 
 	List<String[]> pkgs = cn.query(q, false);
 %>
@@ -48,13 +48,12 @@ $(document).ready(function() {
 </div>
 <%
 	for (int k=0;k<pkgs.size();k++) {
-		String type = "PACKAGE BODY";
 		String pkgName = pkgs.get(k)[1]; 
 		System.out.println(pkgName);
 		out.println((k+1) + " " + pkgName+"<br/>");
 		out.flush();
 		
-		String qry = "SELECT TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME='" + pkgName +"' AND TYPE = '" + type + "' ORDER BY TYPE, LINE";
+		String qry = "SELECT TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME='" + pkgName +"' AND TYPE IN ('PACKAGE BODY','TYPE BODY') ORDER BY TYPE, LINE";
 		List<String[]> list = cn.query(qry, 20000, false);
 		
 		String text = "";

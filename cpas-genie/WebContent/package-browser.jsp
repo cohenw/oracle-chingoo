@@ -4,7 +4,7 @@
 
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
-	String qry = "SELECT object_name FROM user_objects where object_type in ('PACKAGE BODY') order by 1";	
+	String qry = "SELECT object_name FROM user_objects where object_type IN ('PACKAGE BODY','TYPE BODY') order by 1";	
 
 	Query q = new Query(cn, qry, false);
 	String name = request.getParameter("name");

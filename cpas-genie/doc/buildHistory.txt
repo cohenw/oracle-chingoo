@@ -319,6 +319,7 @@ Build CPAS1082
 Build CPAS1083
 	Package/Trigger Analyze support Column for Insert/Update	
 	Package Tree over Package Browser
+	PA includes Types
 			
 Known Issue
 
