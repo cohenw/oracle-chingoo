@@ -450,7 +450,7 @@ public class HyperSyntax {
 		s.append( hyperSyntax(cn, text.substring(start), procedures, GV, type, pkgName) );
 		
 		after = System.currentTimeMillis();
-		if (type.equals("PACKAGE") || type.equals("PACKAGE BODY"))
+		if (type.equals("PACKAGE") || type.equals("PACKAGE BODY") || type.equals("TYPE BODY"))
 			System.out.println("Elapsed Time = " + (after - before));	
 		
 //		return slimIt(s.toString());

@@ -97,7 +97,7 @@
 	String table = request.getParameter("table");
 	String owner = request.getParameter("owner");
 
-	String q1 = "SELECT object_name FROM user_objects A where object_type='PACKAGE BODY' AND object_name IN (SELECT NAME FROM USER_DEPENDENCIES WHERE REFERENCED_NAME='" + table + "' AND TYPE in ('PACKAGE BODY')) AND NOT EXISTS (SELECT 1 FROM GENIE_PA WHERE PACKAGE_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
+	String q1 = "SELECT object_name FROM user_objects A where object_type IN ('PACKAGE BODY','TYPE BODY') AND object_name IN (SELECT NAME FROM USER_DEPENDENCIES WHERE REFERENCED_NAME='" + table + "' AND TYPE IN ('PACKAGE BODY','TYPE BODY')) AND NOT EXISTS (SELECT 1 FROM GENIE_PA WHERE PACKAGE_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
 
 	List<String[]> pkgs = cn.query(q1, false);
 

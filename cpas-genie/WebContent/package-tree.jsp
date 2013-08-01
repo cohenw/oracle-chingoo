@@ -327,7 +327,7 @@ for (int i=0;i<proc0.size();i++) {
 	int end = Integer.parseInt(proc0.get(i)[2]);
 	String label = proc0.get(i)[3];
 	
-	q = "SELECT LINE, TEXT FROM USER_SOURCE WHERE TYPE='PACKAGE BODY' AND NAME = '" + gPkg + "' AND LINE BETWEEN " + start + " AND " + end+ " ORDER BY LINE";
+	q = "SELECT LINE, TEXT FROM USER_SOURCE WHERE TYPE IN ('PACKAGE BODY','TYPE BODY') AND NAME = '" + gPkg + "' AND LINE BETWEEN " + start + " AND " + end+ " ORDER BY LINE";
 	//System.out.println(q);
 	List<String[]> src = cn.query(q, false);
 	String text = "";
