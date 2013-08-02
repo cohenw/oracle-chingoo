@@ -30,7 +30,7 @@
 		response.sendRedirect("detail-view.jsp?view=" + object);
 	} else if (oType.equals("SYNONYM")) {
 		response.sendRedirect("detail-synonym.jsp?name=" + object);
-	} else if (oType.equals("PACKAGE")||oType.equals("PROCEDURE")||oType.equals("FUNCTION")) {
+	} else if (oType.equals("PACKAGE")||oType.equals("PROCEDURE")||oType.equals("FUNCTION")||oType.equals("TYPE")) {
 		response.sendRedirect("detail-package.jsp?name=" + object);
 	} else {
 		System.out.println("Unknown object: " + object + " " + oType);

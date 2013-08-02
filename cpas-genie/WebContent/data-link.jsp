@@ -369,7 +369,7 @@ if (cn.isViewTable(table)) {
 <% if (cntFK == 1) {%>
 	<b><a style="margin-left: 150px;" href="Javascript:toggleFK()">Foreign Key <img id="img-fk" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-fk" style="margin-top:10px;">
-		<img style="margin-left: 170px;" src="image/arrow_down.jpg"><br/>
+		<img style="margin-left: 170px;" src="image/arrow_down.png"><br/>
 <% } %>
 
 <div id="div-fkk-<%=id%>"  style="margin-left: 170px;">
@@ -445,7 +445,7 @@ if (cn.isViewTable(table)) {
 <% if (cntLFK == 1) {%>
 	<b><a style="margin-left: 150px;" href="Javascript:toggleLFK()">CPAS Logical Link <img id="img-lfk" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-lfk" style="margin-top:10px;">
-		<img style="margin-left: 170px;" src="image/arrow_down.jpg"><br/>
+		<img style="margin-left: 170px;" src="image/arrow_down.png"><br/>
 <% } %>
 
 
@@ -504,7 +504,7 @@ if (cn.isViewTable(table)) {
 <% if (cntRef == 1) {%>
 	<b><a style="margin-left: 20px;" href="Javascript:toggleChild()">Child Table <img id="img-child" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-child">
-	<img style="margin-left: 40px;" src="image/arrow_up.jpg"><br/>
+	<img style="margin-left: 40px;" src="image/arrow_up.png"><br/>
 <% } %>
 
 <div id="div-child-<%=id%>">
@@ -579,7 +579,7 @@ if (cn.isViewTable(table)) {
 <% if (lc == 1) {%>
 	<b><a style="margin-left: 20px;" href="Javascript:toggleLChild()">CPAS Logical Child Table <img id="img-lchild" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-lchild">
-	<img style="margin-left: 40px;" src="image/arrow_up.jpg"><br/>
+	<img style="margin-left: 40px;" src="image/arrow_up.png"><br/>
 <% } %>
 
 <div id="div-lchild-<%=id%>">

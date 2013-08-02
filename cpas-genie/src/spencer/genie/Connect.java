@@ -1045,9 +1045,9 @@ public class Connect implements HttpSessionBindingListener {
 		procedureSet.clear();
 		
 		Statement stmt = conn.createStatement();
-		String qry = "SELECT object_name, object_type FROM user_objects WHERE object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE', 'PROCEDURE','FUNCTION')";
+		String qry = "SELECT object_name, object_type FROM user_objects WHERE object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE', 'PROCEDURE','FUNCTION','TYPE')";
 		if (this.targetSchema != null)
-			qry = "SELECT object_name, object_type FROM all_objects WHERE owner='" +this.targetSchema + "' AND object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE', 'PROCEDURE','FUNCTION')";
+			qry = "SELECT object_name, object_type FROM all_objects WHERE owner='" +this.targetSchema + "' AND object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE', 'PROCEDURE','FUNCTION','TYPE')";
 		ResultSet rs = stmt.executeQuery(qry);
 		while (rs.next()){
 			String name = rs.getString(1);
@@ -1056,7 +1056,7 @@ public class Connect implements HttpSessionBindingListener {
 			if (type.equals("TABLE")) tables.add(name);
 			else if (type.equals("VIEW")) views.add(name);
 			else if (type.equals("SYNONYM")) synonyms.add(name);
-			else if (type.equals("PACKAGE")) packages.add(name);
+			else if (type.equals("PACKAGE")||type.equals("TYPE")) packages.add(name);
 			else if (type.equals("PROCEDURE")||type.equals("FUNCTION")) procedureSet.add(name);
 		}
 		

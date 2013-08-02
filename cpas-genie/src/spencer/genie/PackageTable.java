@@ -183,13 +183,20 @@ public class PackageTable {
 		int prcStart=0;
 		for (String s: lines) {
 			ln++;
-			
+/*			
+			if (s.startsWith("MEMBER ")) {
+				System.out.println("s="+s);
+				s = s.substring(7);
+				System.out.println("s="+s);
+			}
+*/
 			StringTokenizer st = new StringTokenizer(s, delim, true);
 			int tokenSeq =0;
 			while (st.hasMoreTokens()) {
 				String token = st.nextToken();
 				if (token.equals(" ") || token.equals("\t")) continue;	// ignore white space
 				
+//				if (tokenSeq==0 && token.equalsIgnoreCase("MEMBER")) continue; // for EP_CALC
 				tokenSeq++;
 				//System.out.println(tokenSeq + " " + token);
 				
@@ -296,213 +303,12 @@ public class PackageTable {
 		
 	}
 
-/*	
-	private void analyze(String lines[]) {
-		// analyze the plsql source code
-		int ln = 0;
-		int prcStart=0;
-		for (String s: lines) {
-			ln++;
-			
-			if (type != null && type.equals("TRIGGER") && prgIdx==1) {
-				if (s.trim().toUpperCase().equals("BEGIN") || s.trim().toUpperCase().equals("DECLARE")) {
-					prgIdx = 10;
-					name ="TRIGGER";
-				} else
-					continue;
-			}
-			
-			//System.out.println(ln + " " + s);
-			StringTokenizer st = new StringTokenizer(s, delim, true);
-			int tokenSeq =0;
-			while (st.hasMoreTokens()) {
-				String token = st.nextToken();
-				if (token.equals(" ") || token.equals("\t")) continue;	// ignore white space
-				
-				tokenSeq++;
-				//System.out.println(tokenSeq + " " + token);
-				
-				String tokenUp = token.toUpperCase();
-				if (tokenUp.equals("PROCEDURE")) {
-					this.type = "PROCEDURE";
-					prgIdx = 1;
-					prcStart = ln;
-				} else if (tokenUp.equals("FUNCTION")) {
-					this.type = "FUNCTION";
-					prgIdx = 1;
-					prcStart = ln;
-				} else if (tokenUp.equals("TRIGGER")) {
-					this.type = "TRIGGER";
-					prgIdx = 1;
-					prcStart = ln;
-					break;
-				} else if (prgIdx == 1) {
-					this.name = token;
-					cntProc++;
-					prgIdx = 2;
-					//System.out.println("name=" + this.name);
-				} else if (prgIdx == 2 && token.equals("(")) {
-					prgIdx = 3;
-				} else if (prgIdx == 3) {
-					if (!token.equals(")")) {
-						this.params += token +" ";
-					} else {
-						prgIdx ++;
-					}
-				} else if (prgIdx <=4 && tokenUp.equals("RETURN")) {
-					prgIdx = 5;
-				} else if (prgIdx == 5 && !(tokenUp.equals("AS") || tokenUp.equals("IS"))) {
-					returnType = token;
-					prgIdx = 6;
-				} else if (prgIdx <= 6 && (tokenUp.equals("AS") || tokenUp.equals("IS"))) {
-					prgIdx = 10;
-				} else if (prgIdx == 10) {
-					if (tokenUp.equals("BEGIN")) {
-						prgIdx = 11;
-						Block block = new Block( prcStart, tokenUp);
-						blocks.push(block);	// begining of body
-					}
-					else {
-						vars += token + " ";
-					}
-				} else if (prgIdx > 10) {
-					
-					if (tokenUp.equals("DECLARE") && vars.equals("")) {
-						prgIdx = 10;
-					}
-					
-					if (tokenSeq==1 && (tokenUp.equals("BEGIN")||tokenUp.equals("IF")||tokenUp.equals("FOR")||tokenUp.equals("LOOP")
-							||tokenUp.equals("CASE")||tokenUp.equals("WHILE")  )) {
-						Block block = new Block(ln, tokenUp);
-						blocks.push(block);	// begining of body
-					}
-
-					if (tokenUp.equals("END")) {
-						if (blocks.empty()) continue;
-
-						Block block = blocks.pop();
-						block.endLine = ln;
-
-						bls.add(block);
-						if (block.blockType.equals("BEGIN") && blocks.size() ==0 ) {
-							//System.out.println("pop3 " + block + " " + blocks.size() + " "  + this.name);
-							ProcDetail item = new ProcDetail(this.name, block.startLine, block.endLine);
-							if (!pd.contains(item))
-								pd.add(item);
-							
-							StringBuffer sb = new StringBuffer();
-							for (int i=block.startLine; i<block.endLine;i++) {
-								sb.append(lines[i] + "\n");
-//								System.out.println("  " + lines[i] +"\n");
-							}
-							System.out.println("### " + this.name + " " + blocks.size());
-							extractTables2(sb.toString());
-							//System.out.println("*** " + sb.toString());
-						}
-						
-						if (blocks.size()==0 && this.name != null) {
-							//System.out.println("params=" + params);
-//							extractVariables(this.name.toUpperCase(), this.params, this.vars);
-							prgIdx = 0;
-							this.params = "";
-							this.vars = "";
-						}
-					}
-				}
-			}
-		}
-		
-	}
-*/	
-/*
-	void extractTables(String text) {
-//		System.out.println(text);
-		
-		StringTokenizer st = new StringTokenizer(text, ";");
-		while (st.hasMoreTokens()) {
-			String token =st.nextToken();
-
-			StringTokenizer st2 = new StringTokenizer(token, " \t\n,()");
-			
-			String skipUntil = null;
-			
-			while (st2.hasMoreTokens()) {
-				String name = st2.nextToken();
-				//System.out.println(" * " + name);
-				
-				if (skipUntil != null && !name.equals(skipUntil)) { 
-					continue;
-				} else if (skipUntil != null && name.equals(skipUntil))  {
-					skipUntil = null;
-					continue;
-				}
-				
-				if (name.equals("IF")) {
-					skipUntil = "THEN";
-					continue;
-				} else if (name.equals("DECLARE")) {
-					skipUntil = "BEGIN";
-					continue;
-				} else if (name.equals("FOR")) {
-					skipUntil = "LOOP";
-					continue;
-				} else if (name.equals("FORALL")) {
-					skipUntil = "EXCEPTIONS";
-					continue;
-				} else if (name.equals("ELSE") || name.equals("BEGIN")) {
-					if (st2.hasMoreTokens()) 
-						name = st2.nextToken();
-				}
-				
-				if (name.equals("INSERT")) {
-					name = st2.nextToken();
-					name = st2.nextToken();
-					//System.out.println("   " + this.name + " ****** INSERT " + name);
-					String key = this.name+","+name;
-					String curr = hm.get(key);
-					if (curr ==null)
-						hm.put(key, "I");
-					else if (!key.contains("I")) {
-						hm.put(key, curr+"I");
-					}
-				}
-				if (name.equals("UPDATE")) {
-					name = st2.nextToken();
-					//System.out.println("   " + this.name + " ****** UPDATE " + name);
-					String key = this.name+","+name;
-					String curr = hm.get(key);
-					if (curr ==null)
-						hm.put(key, "U");
-					else if (!key.contains("U")) {
-						hm.put(key, curr+"U");
-					}
-				}
-				if (name.equals("DELETE")) {
-					name = st2.nextToken();
-					if (name.equals("FROM"))
-						name = st2.nextToken();
-					//System.out.println("   " + this.name + " ****** DELETE " + name);
-					String key = this.name+","+name;
-					String curr = hm.get(key);
-					if (curr ==null)
-						hm.put(key, "D");
-					else  if (!key.contains("D")) {
-						hm.put(key, curr+"D");
-					}
-				}
-
-				break;
-			}
-		}
-
-	}
-*/
 	
 	void extractTables2(String procName, String text) {
 		//System.out.println("**** [[[[" +text +"]]]");
 		text = text.replaceAll("\n", " ");
 		text = text.replaceAll("\t", " ");
-		//System.out.println("[[[[" +text +"]]]");
+		//System.out.println(procName + "[[[[" +text +"]]]");
 		
 		// search for INSERT
 		int start =0;
