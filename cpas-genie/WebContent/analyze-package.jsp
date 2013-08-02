@@ -10,7 +10,8 @@
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
 	String name = request.getParameter("name");
-
+	String callback = request.getParameter("callback");
+	
 	String q = "SELECT object_name FROM user_objects where object_type='PACKAGE BODY' ORDER BY 1";
 	if (cn.isTVS("GENIE_PA")) {
 		q = "SELECT object_name FROM user_objects A where object_type='PACKAGE BODY' AND NOT EXISTS (SELECT 1 FROM GENIE_PA WHERE PACKAGE_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
@@ -88,5 +89,9 @@ $(document).ready(function() {
 //	out.println("Done.<br/>");
 %>
 
+<br/><br/>
+<% if (callback != null) { %>
+<h2><a href="<%= callback %>">Go</a></h2>
+<% } %>
 </body>
 </html>

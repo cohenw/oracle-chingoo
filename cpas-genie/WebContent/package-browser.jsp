@@ -20,6 +20,17 @@
 			gPrc = name.substring(idx+1);
 		}
 	}
+	
+	cn.createPkg();
+	cn.createTrg();
+	
+	String q1 = "SELECT 1 FROM GENIE_PA A, USER_OBJECTS B WHERE PACKAGE_NAME='" + gPkg.toUpperCase()+ "' AND A.PACKAGE_NAME=B.OBJECT_NAME AND B.OBJECT_TYPE IN ('PACKAGE BODY','TYPE BODY') AND	A.CREATED >= B.LAST_DDL_TIME";
+	List<String[]> pkgs = cn.query(q1, false);
+	if (pkgs.size() == 0) {
+		response.sendRedirect("analyze-package.jsp?name="+gPkg+"&callback=" +  Util.escapeHtml("package-browser.jsp?name=" + name));
+		return;
+	}
+	
 %>
 
 <html>

@@ -139,6 +139,17 @@ public String disp(Connect cn, String mainPkg, String name) {
 			gPrc = name.substring(idx+1);
 		}
 	}
+	cn.createPkg();
+	cn.createTrg();
+	
+	String q1 = "SELECT 1 FROM GENIE_PA A, USER_OBJECTS B WHERE PACKAGE_NAME='" + gPkg.toUpperCase()+ "' AND A.PACKAGE_NAME=B.OBJECT_NAME AND B.OBJECT_TYPE IN ('PACKAGE BODY','TYPE BODY') AND	A.CREATED >= B.LAST_DDL_TIME";
+	List<String[]> pkgs = cn.query(q1, false);
+//	System.out.println(q1);
+//	System.out.println(pkgs.size());
+	if (pkgs.size() == 0) {
+		response.sendRedirect("analyze-package.jsp?name="+gPkg+"&callback=" +  Util.escapeHtml("package-tree.jsp?name=" + name));
+		return;
+	}
 	
 	String q = "SELECT TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE FROM GENIE_PA_TABLE WHERE PACKAGE_NAME='" + gPkg +"' AND PROCEDURE_NAME='" + gPrc + "' ORDER BY table_name";
 //	System.out.println(q);
@@ -421,7 +432,7 @@ level
 
 <%
 	
-	String q1 = "SELECT TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE FROM GENIE_PA_TABLE WHERE PACKAGE_NAME='" + pkg +"' AND PROCEDURE_NAME='" + prc + "' ORDER BY table_name";
+	q1 = "SELECT TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE FROM GENIE_PA_TABLE WHERE PACKAGE_NAME='" + pkg +"' AND PROCEDURE_NAME='" + prc + "' ORDER BY table_name";
 //	System.out.println(q);
 List<String[]> list = cn.query(q1, false);
 
