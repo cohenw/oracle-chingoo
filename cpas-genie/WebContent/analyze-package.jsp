@@ -22,7 +22,7 @@
 
 <html>
 <head>
-	<title>Source for <%= name %></title>
+	<title>Analyzing <%= name %></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
 
 	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -67,7 +67,11 @@ $(document).ready(function() {
 			
 		}
 		PackageTable pt = new PackageTable(pkgName, text);
-		cn.AddPackageTable(pkgName, pt.getHM(), pt.getHMIns(), pt.getHMUpd(), pt.getHMDel());
+/* 		System.out.println("pt.getHM()=[" + pt.getHM() + "]");
+		System.out.println("pt.getHMIns()=[" + pt.getHMIns() + "]");
+		System.out.println("pt.getHMUpd()=[" + pt.getHMUpd() + "]");
+		System.out.println("pt.getHMDel()=[" + pt.getHMDel() + "]");
+ */		cn.AddPackageTable(pkgName, pt.getHM(), pt.getHMIns(), pt.getHMUpd(), pt.getHMDel());
 //		System.out.println(pt.getHM());
 //		out.println(pt.getHM()+"<br/>");
 

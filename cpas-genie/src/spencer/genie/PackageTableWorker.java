@@ -65,7 +65,11 @@ public class PackageTableWorker {
 			}
 			PackageTable pt = new PackageTable(currentPkg, text);
 			//System.out.println("text=[" + text + "]");
-			cn.AddPackageTable(currentPkg, pt.getHM(), pt.getHMIns(), pt.getHMUpd(), pt.getHMDel());
+/*			System.out.println("pt.getHM()=[" + pt.getHM() + "]");
+			System.out.println("pt.getHMIns()=[" + pt.getHMIns() + "]");
+			System.out.println("pt.getHMUpd()=[" + pt.getHMUpd() + "]");
+			System.out.println("pt.getHMDel()=[" + pt.getHMDel() + "]");
+*/			cn.AddPackageTable(currentPkg, pt.getHM(), pt.getHMIns(), pt.getHMUpd(), pt.getHMDel());
 			
 			HyperSyntax hs = new HyperSyntax();
 			String syntax = hs.getHyperSyntax(cn, text, "PACKAGE BODY", currentPkg);

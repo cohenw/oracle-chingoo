@@ -37,7 +37,41 @@ String imgList[] = {
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
     
     <script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
-    
+<style>
+#slideshow {
+    position:relative;
+    height:350px;
+}
+
+#slideshow IMG {
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:8;
+}
+
+#slideshow IMG.active {
+    z-index:10;
+}
+
+#slideshow IMG.last-active {
+    z-index:9;
+}
+
+.waitontop {
+    position:absolute;
+    top:435;
+    left:300;
+    z-index:11;
+}
+
+#waitimg {
+	position:relative;
+	top: -220;
+	left: 100;
+    z-index:11;
+}
+</style>
 <script type="text/javascript">
 var to2;
 
@@ -124,8 +158,8 @@ function stopShow() {
   	<input name="targetSchema" type="hidden" value="<%= targetSchema %>">
   </form>
   
-  <img src="image/genie-lamp.jpg"/>
-    <h2>Connecting &amp; Loading Database Objects...</h2>
+<!--   <img src="image/genie-lamp.jpg"/>
+ -->    <h2>Connecting &amp; Loading Database Objects...</h2>
 
 	<div id="loadingDiv" style="font-size:18px;"></div>
 
@@ -134,24 +168,16 @@ function stopShow() {
 	- Tables, Comments, Constraints, Primary &amp; Foreign keys.
 
 <div id="connectProgress"></div>
-	
+
 <div id="slideshow">
 
-	<img src="image/nature1.jpg" alt="" class="active" />
-    <img src="image/nature2.jpg" alt=""/>
-    <img src="image/nature3.jpg" alt=""/>
-    <img src="image/nature4.jpg" alt=""/>
-    <img src="image/nature5.jpg" alt=""/>
-
- <%-- 
-    <img src="<%= imgList[0] %>" alt="" class="active" />
-    <img src="<%= imgList[1] %>" />
-    <img src="<%= imgList[2] %>" />
-    <img src="<%= imgList[3] %>" />
-    <img src="<%= imgList[4] %>" />
- --%>
+	<img src="image/img1.jpg" alt="" class="active" />
+    <img src="image/img2.jpg" alt=""/>
+    <img src="image/img3.jpg" alt=""/>
+    <img src="image/img4.jpg" alt=""/>
+    <img src="image/img5.jpg" alt=""/>
  </div>
-
+	
 <%--
 <img id="waiting" src="image/waiting_big.gif" class="waitontop">  
 --%>
