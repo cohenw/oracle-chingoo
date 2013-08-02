@@ -227,4 +227,12 @@ Build 1063
 	Custom link support :variable name, date type
 	Fixed getTabls() to get table names from FROM clause
 	
+Build 1064
+	Tools - Recently modified objects
+	Tools - User Sessions
+	Extract tables names form JOIN clause
+	Package/Trigger Analyze support Column for Insert/Update	
+	Package Tree over Package Browser
+	PA includes Types
+	Automatic detection for Package change
 	

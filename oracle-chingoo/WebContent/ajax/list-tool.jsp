@@ -33,6 +33,9 @@
 	list.add("Oracle Version");
 	list.add("");
 
+	list.add("Recently modified objects");
+	list.add("User Sessions");
+	
 	list.add("Schema Size");
 	list.add("Large Tables");
 

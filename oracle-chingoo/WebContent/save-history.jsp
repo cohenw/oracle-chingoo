@@ -19,6 +19,6 @@
 		cn.ping();
 	}
 	
-	if (value != null) cn.addHistory(value);
+//	if (value != null) cn.addHistory(value);
 //	System.out.println("ping " + connected + " " + (new Date()));
 %>
