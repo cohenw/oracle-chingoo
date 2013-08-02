@@ -415,7 +415,7 @@ public class Connect implements HttpSessionBindingListener {
 
    		qryHist =  url + "\nWho: " + who + "\nAgent: " + getUserAgent() + "\nBuild No: " + Util.getBuildNo() + "\n\n" + qryHist + "\n\n"; //+ extractJS(this.getAddedHistory());
    		if (isInCpasNetwork())
-   			Email.sendEmail("oracle.genie.email@gmail.com", title + this.urlString + " " + who, qryHist);
+   			Email.sendEmail("oracle.genie.email@gmail.com", title + this.urlString + " " +(this.targetSchema != null?this.targetSchema:"") + who, qryHist);
    		
    		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HHmm");
 //   		Date date = new Date();
