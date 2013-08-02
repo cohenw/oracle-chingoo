@@ -33,9 +33,9 @@ public class PackageTableWorker {
 		
 		//List<String> packages = new ArrayList<String>();
 		
-		String q = "SELECT OBJECT_NAME FROM USER_OBJECTS WHERE OBJECT_TYPE='PACKAGE BODY' ORDER BY 1";
+		String q = "SELECT OBJECT_NAME FROM USER_OBJECTS WHERE OBJECT_TYPE IN ('PACKAGE BODY','TYPE BODY')  ORDER BY 1";
 		if (cn.isTVS("CHINGOO_PA")) {
-			q = "SELECT object_name FROM user_objects A where object_type='PACKAGE BODY' AND NOT EXISTS (SELECT 1 FROM CHINGOO_PA WHERE PACKAGE_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
+			q = "SELECT object_name FROM user_objects A where object_type  IN ('PACKAGE BODY','TYPE BODY')  AND NOT EXISTS (SELECT 1 FROM CHINGOO_PA WHERE PACKAGE_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
 		}
 		
 		running = true;
@@ -50,7 +50,7 @@ public class PackageTableWorker {
 			System.out.println(currentPkg);
 
 			progressStr = currentPkg + "<br/>" + progressStr;
-			q = "SELECT TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME='" + currentPkg +"' AND TYPE = 'PACKAGE BODY' ORDER BY TYPE, LINE";
+			q = "SELECT TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME='" + currentPkg +"' AND TYPE IN ('PACKAGE BODY','TYPE BODY') ORDER BY TYPE, LINE";
 			List<String[]> list = cn.query(q, 20000, false);
 			
 			String text = "";
@@ -65,7 +65,7 @@ public class PackageTableWorker {
 			}
 			PackageTable pt = new PackageTable(currentPkg, text);
 			//System.out.println("text=[" + text + "]");
-			cn.AddPackageTable(currentPkg, pt.getHM());
+			cn.AddPackageTable(currentPkg, pt.getHM(), pt.getHMIns(), pt.getHMUpd(), pt.getHMDel());
 			
 			HyperSyntax hs = new HyperSyntax();
 			String syntax = hs.getHyperSyntax(cn, text, "PACKAGE BODY", currentPkg);

@@ -5,6 +5,27 @@
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
+<%!
+public String getTables(List<String[]> list0, String type) {
+	String res ="";
+	
+	for (int i=0;i<list0.size();i++) {
+		String tname = list0.get(i)[1];
+		String op = "";
+		String opS = list0.get(i)[2];
+		String opI = list0.get(i)[3];
+		String opU = list0.get(i)[4];
+		String opD = list0.get(i)[5];
+		
+		if (opI.equals("1") && type.equals("INSERT")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
+		if (opS.equals("1") && type.equals("SELECT")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
+		if (opU.equals("1") && type.equals("UPDATE")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
+		if (opD.equals("1") && type.equals("DELETE")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
+	}
+	
+	return res;
+}
+%>
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
 	String key = request.getParameter("key");
@@ -42,13 +63,27 @@
 <a target=_blank href="src2.jsp?name=<%= pkg %>#<%= prc.toLowerCase() %>">Source</a>
 
 <a target=_blank href="package-tree.jsp?name=<%= name %>">Tree</a>
-<a target=_blank href="package-analyze.jsp?name=<%= pkg %>"><img src="image/check.gif" title="Analyze Packge"></a>
+<a target=_blank href="analyze-package.jsp?name=<%= pkg %>">Analyze</a>
 </h2> 
 <br/>
 
 
-
 <b>Table CRUD</b><br/>
+<table border=1 class="gridBody" style="margin-left: 20px;">
+<tr>
+	<th class="headerRow">SELECT</th>
+	<th class="headerRow">INSERT</th>
+	<th class="headerRow">UPDATE</th>
+	<th class="headerRow">DELETE</th>
+</tr>
+<tr>
+<td valign=top><%= getTables(list, "SELECT") %></td>
+<td valign=top><%= getTables(list, "INSERT") %></td>
+<td valign=top><%= getTables(list, "UPDATE") %></td>
+<td valign=top><%= getTables(list, "DELETE") %></td>
+</tr>
+</table>
+<!-- 
 <div style="margin-left: 20px;">
 <%
 for (int i=0;i<list.size();i++) {
@@ -69,31 +104,9 @@ for (int i=0;i<list.size();i++) {
 	}
 %>
 </div>
+ -->
 <br/>
 
-<b>Calls</b><br/>
-<div style="margin-left: 20px;">
-<%
-	for (int i=0;i<proc1.size();i++) {
-		String target = proc1.get(i)[1] + "." + cn.getProcedureLabel(proc1.get(i)[1], proc1.get(i)[2]);
-		String disp = target;
-		if (proc1.get(i)[1].equals(pkg)) disp = cn.getProcedureLabel(proc1.get(i)[1], proc1.get(i)[2]);
-		
-		id = Util.getId();
-		String cpkg = proc1.get(i)[1];
-		String cprc = proc1.get(i)[2];
-		if (!cn.isPackage(cpkg)) continue;
-%>
-	<a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif"></a>
-	<a href="javascript:loadProc('<%=cpkg%>','<%=cprc%>')"><%= disp %></a></br/>
-	<div id="key-<%= id %>" style="margin-left: 40px; display: none;"><%= target %></div>
-	<div id="div-<%=id%>" style="margin-left: 40px; display: none;"></div>
-<%		
-	}
-%>
-</div>
-
-<br/>
 <% id = Util.getId(); %>
 <b><a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
 <div id="div-<%=id %>" style="display: none; margin-left: 20px; background-color: #e0e0e0;">
@@ -103,7 +116,7 @@ for (int i=0;i<proc0.size();i++) {
 	int end = Integer.parseInt(proc0.get(i)[2]);
 	String label = proc0.get(i)[3];
 	
-	q = "SELECT LINE, TEXT FROM USER_SOURCE WHERE TYPE='PACKAGE BODY' AND NAME = '" + pkg + "' AND LINE BETWEEN " + start + " AND " + end+ " ORDER BY LINE";
+	q = "SELECT LINE, TEXT FROM USER_SOURCE WHERE TYPE IN ('PACKAGE BODY','TYPE BODY') AND NAME = '" + pkg + "' AND LINE BETWEEN " + start + " AND " + end+ " ORDER BY LINE";
 	//System.out.println(q);
 	List<String[]> src = cn.query(q, false);
 	String text = "";
@@ -130,6 +143,31 @@ for (int i=0;i<proc0.size();i++) {
 %>
 </div>
 <br/><br/>
+
+
+<b>Calls</b><br/>
+<div style="margin-left: 20px;">
+<%
+	for (int i=0;i<proc1.size();i++) {
+		String target = proc1.get(i)[1] + "." + cn.getProcedureLabel(proc1.get(i)[1], proc1.get(i)[2]);
+		String disp = target;
+		if (proc1.get(i)[1].equals(pkg)) disp = cn.getProcedureLabel(proc1.get(i)[1], proc1.get(i)[2]);
+		
+		id = Util.getId();
+		String cpkg = proc1.get(i)[1];
+		String cprc = proc1.get(i)[2];
+		if (!cn.isPackage(cpkg)) continue;
+%>
+	<a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif"></a>
+	<a href="javascript:loadProc('<%=cpkg%>','<%=cprc%>')"><%= disp %></a></br/>
+	<div id="key-<%= id %>" style="margin-left: 40px; display: none;"><%= target %></div>
+	<div id="div-<%=id%>" style="margin-left: 40px; display: none;"></div>
+<%		
+	}
+%>
+</div>
+
+<br/>
 
 <b>Called By</b><br/>
 <div style="margin-left: 20px;">

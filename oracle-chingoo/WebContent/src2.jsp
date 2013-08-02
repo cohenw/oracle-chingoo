@@ -93,9 +93,9 @@ for (int k=0;k<types.size();k++) {
 		
 	}
 
-	if (type.equals("PACKAGE"))
+	if (type.equals("PACKAGE")||type.equals("TYPE"))
 		lines_pkg = line;
-	else if (type.equals("PACKAGE BODY"))
+	else if (type.equals("PACKAGE BODY")||type.equals("TYPE BODY"))
 		lines_pkgbody =  line;
 	else if (type.equals("PROCEDURE"))
 		lines_procedure = line;
@@ -111,7 +111,7 @@ for (int k=0;k<types.size();k++) {
 <b><a href="javascript:tDiv('div-<%=k%>')"><%= type %></a></b><br/>
 <div id="div-<%=k%>" style="display: block;">
 <table>
-<td valign=top align=right><pre style="font-family: Consolas; color: gray;"><span id="colnum_<%=type.replace(" ","")%>" ></span></pre></td>
+<td valign=top align=right><pre style="font-family: Consolas; color: gray;"><span id="column_<%=type.replace(" ","")%>" ></span></pre></td>
 <td bgcolor="green"></td>
 <td valign=top><pre style="font-family: Consolas;"><%=  syntax %></pre></td>
 </table>
@@ -138,22 +138,32 @@ for (int k=0;k<types.size();k++) {
 	  lines="";
 	  for (var i=1;i <= <%=lines_pkg%>;i++)
 		  lines += i + "\n";
-	  $("#colnum_PACKAGE").html('<pre>' + lines + '</pre>');
+	  $("#column_PACKAGE").html('<pre>' + lines + '</pre>');
 	  
 	  lines="";
 	  for (var i=1;i <= <%=lines_pkgbody%>;i++)
 		  lines += i + "\n";
-	  $("#colnum_PACKAGEBODY").html('<pre>' + lines + '</pre>');
+	  $("#column_PACKAGEBODY").html('<pre>' + lines + '</pre>');
+
+	  lines="";
+	  for (var i=1;i <= <%=lines_pkg%>;i++)
+		  lines += i + "\n";
+	  $("#column_TYPE").html('<pre>' + lines + '</pre>');
+	  
+	  lines="";
+	  for (var i=1;i <= <%=lines_pkgbody%>;i++)
+		  lines += i + "\n";
+	  $("#column_TYPE").html('<pre>' + lines + '</pre>');
 
 	  lines="";
 	  for (var i=1;i <= <%=lines_procedure%>;i++)
 		  lines += i + "\n";
-	  $("#colnum_PROCEDURE").html('<pre>' + lines + '</pre>');
+	  $("#column_PROCEDURE").html('<pre>' + lines + '</pre>');
 
 	  lines="";
 	  for (var i=1;i <= <%=lines_function%>;i++)
 		  lines += i + "\n";
-	  $("#colnum_FUNCTION").html('<pre>' + lines + '</pre>');
+	  $("#column_FUNCTION").html('<pre>' + lines + '</pre>');
   }
   
 $(document).ready(function() {
@@ -171,22 +181,32 @@ $(document).ready(function() {
   lines="";
   for (var i=1;i <= <%=lines_pkg%>;i++)
 	  lines += i + "\n";
-  $("#colnum_PACKAGE").html('   ' + lines);
+  $("#column_PACKAGE").html('   ' + lines);
   
   lines="";
   for (var i=1;i <= <%=lines_pkgbody%>;i++)
 	  lines += i + "\n";
-  $("#colnum_PACKAGEBODY").html('   ' + lines);
+  $("#column_PACKAGEBODY").html('   ' + lines);
+
+  lines="";
+  for (var i=1;i <= <%=lines_pkg%>;i++)
+	  lines += i + "\n";
+  $("#column_TYPE").html('   ' + lines);
+  
+  lines="";
+  for (var i=1;i <= <%=lines_pkgbody%>;i++)
+	  lines += i + "\n";
+  $("#column_TYPEBODY").html('   ' + lines);
 
   lines="";
   for (var i=1;i <= <%=lines_procedure%>;i++)
 	  lines += i + "\n";
-  $("#colnum_PROCEDURE").html('   ' + lines);
+  $("#column_PROCEDURE").html('   ' + lines);
 
   lines="";
   for (var i=1;i <= <%=lines_function%>;i++)
 	  lines += i + "\n";
-  $("#colnum_FUNCTION").html('   ' + lines);
+  $("#column_FUNCTION").html('   ' + lines);
 });
 
 </script>

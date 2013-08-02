@@ -51,6 +51,10 @@
 				 " AND   s.segment_type = 'LOBINDEX' ) where bytes > [Size in MB (ex: 10)] * 1000000 order by 2 desc";
 	else if (tool.equalsIgnoreCase("users"))
 		qry = "SELECT * FROM ALL_USERS";
+	else if (tool.equalsIgnoreCase("Recently modified objects"))
+		qry = "SELECT * FROM USER_OBJECTS ORDER BY TIMESTAMP DESC";
+	else if (tool.equalsIgnoreCase("User Sessions"))
+		qry = "SELECT * FROM V$SESSION";
 
 %>
 <h2><%= tool %> &nbsp;&nbsp;</h2>

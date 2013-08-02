@@ -300,7 +300,7 @@ if (cn.isViewTable(table)) {
 <% if (cntFK == 1) {%>
 	<b><a style="margin-left: 50px;" href="Javascript:toggleFK()">Foreign Key <img id="img-fk" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-fk" style="margin-top:10px;">
-		<img style="margin-left: 70px;" src="image/arrow_down.jpg"><br/>
+		<img style="margin-left: 70px;" src="image/arrow_down.png"><br/>
 <% } %>
 
 <div id="div-fkk-<%=id%>"  style="margin-left: 70px;">
@@ -399,7 +399,7 @@ if (cn.isViewTable(table)) {
 <% if (cntRef == 1) {%>
 	<b><a style="margin-left: 20px;" href="Javascript:toggleChild()">Child Table <img id="img-child" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-child">
-	<img style="margin-left: 40px;" src="image/arrow_up.jpg"><br/>
+	<img style="margin-left: 40px;" src="image/arrow_up.png"><br/>
 <% } %>
 
 <div id="div-child-<%=id%>">

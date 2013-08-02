@@ -17,6 +17,10 @@ public class TriggerTable {
 	private String type;
 	private String returnType;
 	private HashMap<String, String> hm = new HashMap<String, String>();
+	private HashMap<String, HashSet<String>> hmIns = new HashMap<String, HashSet<String>>();  // table columns for Insert
+	private HashMap<String, HashSet<String>> hmUpd = new HashMap<String, HashSet<String>>();  // table columns for Update
+	private HashMap<String, HashSet<String>> hmDel = new HashMap<String, HashSet<String>>();  // table columns for Delete
+
 	static int cntProc = 0;
 	
 	private ArrayList<ProcDetail> pd = new ArrayList<ProcDetail>(); 
@@ -503,6 +507,7 @@ public class TriggerTable {
 			if (end <0) break;
 
 			String tmp = text.substring(start + 8, end);
+			ArrayList<String> cols = Util.getInsertColumn(tmp);
 			//System.out.println("[" + tmp + "]");
 			
 			StringTokenizer st = new StringTokenizer(tmp, " (");
@@ -521,6 +526,16 @@ public class TriggerTable {
 						hm.put(key, curr+"I");
 //System.out.println("key0=" + curr);
 					}
+					
+					HashSet<String> hs = hmIns.get(key);
+					if (hs == null) {
+						hs = new HashSet<String> ();
+						hmIns.put(key, hs);
+					}
+					for (String col:cols) {
+						hs.add(col);
+					}
+					
 				}
 			}
 			
@@ -537,6 +552,7 @@ public class TriggerTable {
 
 			String tmp = text.substring(start + 8, end);
 //System.out.println("tmp="+tmp);			
+			ArrayList<String> cols = Util.getDeleteColumn(tmp);
 			StringTokenizer st = new StringTokenizer(tmp, " (");
 			int cnt=0;
 			while (st.hasMoreTokens()) {
@@ -556,6 +572,14 @@ public class TriggerTable {
 						hm.put(key, curr+"D");
 //System.out.println("key1=" + curr);
 					}
+					HashSet<String> hs = hmDel.get(key);
+					if (hs == null) {
+						hs = new HashSet<String> ();
+						hmDel.put(key, hs);
+					}
+					for (String col:cols) {
+						hs.add(col);
+					}
 				}
 			}
 			
@@ -571,6 +595,7 @@ public class TriggerTable {
 			if (end <0) break;
 
 			String tmp = text.substring(start + 8, end);
+			ArrayList<String> cols = Util.getUpdateColumn(tmp);
 			
 			StringTokenizer st = new StringTokenizer(tmp, " (");
 			int cnt=0;
@@ -586,6 +611,15 @@ public class TriggerTable {
 					else if (!curr.contains("U")) {
 						hm.remove(key);
 						hm.put(key, curr+"U");
+					}
+
+					HashSet<String> hs = hmUpd.get(key);
+					if (hs == null) {
+						hs = new HashSet<String> ();
+						hmUpd.put(key, hs);
+					}
+					for (String col:cols) {
+						hs.add(col);
 					}
 				}
 			}
@@ -630,6 +664,18 @@ public class TriggerTable {
 	
 	public HashMap<String, String> getHM() {
 		return this.hm;
+	}
+	
+	public HashMap<String, HashSet<String>> getHMIns() {
+		return this.hmIns;
+	}
+	
+	public HashMap<String, HashSet<String>> getHMUpd() {
+		return this.hmUpd;
+	}
+	
+	public HashMap<String, HashSet<String>> getHMDel() {
+		return this.hmDel;
 	}
 	
 	public ArrayList<ProcDetail> getPD() {

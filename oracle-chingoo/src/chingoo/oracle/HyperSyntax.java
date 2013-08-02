@@ -27,7 +27,7 @@ public class HyperSyntax {
 		"DROP", "GRANT", "HAVING", "IDENTIFIED", "INCREMENT", "INDEX", "VIEW", "INTERSECT",
 		"LEVEL", "LIKE", "LOCK", "LONG", "CLOB", "BLOB", "MINUS", "ONLINE", "OFFLINE", "OPTION", "PRIOR",
 		"PUBLIC", "ROWID", "ROWNUM", "ROWS", "SESSION", "SET", "SMALLINT", "START", "SYNONYM", "UNIQUE",
-		"VALIDATE"
+		"VALIDATE", "LEFT", "JOIN", "RIGHT"
 		};
 
 	static String syntaxString2[] = { "SUBSTR", "TRUNC", "TO_CHAR", "TO_DATE", "ROUND", "COUNT", "AVG", "NVL",
@@ -345,7 +345,7 @@ public class HyperSyntax {
 				s.append( "<a style='color: darkblue;' target='_blank' href='src2.jsp?name=" + tmp + "'>" + token + "</a>" );
 			} else if (hyperlink && !tmp.trim().equals("")) {
 				hyperlink = false;
-				s.append( "<a name='" + tmp.toLowerCase() + "'></a><a href='package-browser.jsp?name=" + pkgName + "." + token + "' target=_blank>"+ token + "</a>");
+				s.append( "<a name='" + tmp.toLowerCase() + "'></a><a href='package-tree.jsp?name=" + pkgName + "." + token + "' target=_blank>"+ token + "</a>");
 			} else if (GV !=null && GV.contains(tmp)) {
 				if (type.equals("PACKAGE"))
 					s.append( "<a name='" + tmp.toLowerCase() + "'>" + token + "</a>" );
@@ -450,7 +450,7 @@ public class HyperSyntax {
 		s.append( hyperSyntax(cn, text.substring(start), procedures, GV, type, pkgName) );
 		
 		after = System.currentTimeMillis();
-		if (type.equals("PACKAGE") || type.equals("PACKAGE BODY"))
+		if (type.equals("PACKAGE") || type.equals("PACKAGE BODY") || type.equals("TYPE BODY"))
 			System.out.println("Elapsed Time = " + (after - before));	
 		
 //		return slimIt(s.toString());

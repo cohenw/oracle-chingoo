@@ -33,7 +33,8 @@
 <div id="objectTitle" style="display:none"><%= typeName %>: <%= name %></div>
 <h2><%= typeName %>: <%= name %> &nbsp;&nbsp;<a href="<%=sourceUrl%>" target="_blank"><img border=0 src="image/icon_query.png" title="Source code"></a>
 <a href="pop.jsp?type=PACKAGE&key=<%=name%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
-<% if (hasChingooTable && typeName.equals("PACKAGE")) { %>
+<% if (hasChingooTable && (typeName.equals("PACKAGE")||typeName.equals("TYPE"))) { %>
+<a target="_blank" href="analyze-package.jsp?name=<%= name %>">Analyze</a>
 <a target=_blank href="package-browser.jsp?name=<%= name %>">Package Browser</a>
 <% } %>
 </h2>
@@ -104,7 +105,7 @@ for (int k=0;k<types.size();k++) {
 	<a target="_blank" href="<%= sourceUrl%>#<%= list.get(i).toLowerCase() %>"><%= list.get(i).toLowerCase() %></a>
 	&nbsp;
 <% if (hasChingooTable) { %>	
- 	<a target="_blank" href="package-browser.jsp?name=<%= name + "." + list.get(i) %>"><img src="image/link.gif"></a>
+ 	<a target="_blank" href="package-tree.jsp?name=<%= name + "." + list.get(i) %>"><img src="image/link.gif"></a>
 
 <% } %> 	<br/>		
 <% }

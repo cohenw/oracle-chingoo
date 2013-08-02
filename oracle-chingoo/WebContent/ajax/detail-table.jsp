@@ -50,6 +50,7 @@ Please select a Table to see the detail.
 <a href="Javascript:runQuery('','<%=tname%>')"><img border=0 src="image/icon_query.png" title="query"></a>
 <a href="erd.jsp?tname=<%=tname%>" target="_blank"><img title="ERD" border=0 src="image/erd.gif"></a>
 <a href="erd_svg.jsp?tname=<%=tname%>" target="_blank"><img title="Simple ERD" border=0 src="image/simple-erd.png"></a>
+<a href="crud-matrix.jsp?table=<%=tname%>" target="_blank"><img title="CRUD Matrix" src="image/matrix.gif"></a>
 <a href="pop.jsp?type=TABLE&key=<%=tname%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
 </h2>
 
@@ -413,7 +414,7 @@ Please select a Table to see the detail.
 	} 
 %>
 
-		<a target=_blank href="package-browser.jsp?name=<%= refPrc %>"><%= refPrc %></a>&nbsp;&nbsp;<%= cn.getCRUD(temp[0],temp[1].toUpperCase(), table) %><br/>		
+		<a target=_blank href="package-tree.jsp?name=<%= refPrc %>"><%= refPrc %></a>&nbsp;&nbsp;<%= cn.getCRUD(temp[0],temp[1].toUpperCase(), table) %><br/>		
 <% }
 	for (; cols<=2; cols++) {
 %>

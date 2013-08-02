@@ -345,7 +345,7 @@ public class HyperSyntax4PB {
 				s.append( "<a style='color: darkblue;' target='_blank' href=\"Javascript:loadProc('" + pkgName + "','" + tmp + "');\">" + token + "</a>" );
 			} else if (hyperlink && !tmp.trim().equals("")) {
 				hyperlink = false;
-				s.append( "<a name='" + tmp.toLowerCase() + "'></a><a href='package-browser.jsp?name=" + pkgName + "." + token + "' target=_blank>"+ token + "</a>");
+				s.append( "<a name='" + tmp.toLowerCase() + "'></a><a href='package-tree.jsp?name=" + pkgName + "." + token + "' target=_blank>"+ token + "</a>");
 			} else if (GV !=null && GV.contains(tmp)) {
 				if (type.equals("PACKAGE"))
 					s.append( "<a name='" + tmp.toLowerCase() + "'>" + token + "</a>" );
