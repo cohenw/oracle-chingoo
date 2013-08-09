@@ -1662,7 +1662,10 @@ public class Connect implements HttpSessionBindingListener {
        			String qry = "SELECT TABLE_OWNER, TABLE_NAME FROM USER_SYNONYMS WHERE SYNONYM_NAME='" + rname + "'"; 	
        			List<String[]> list = query(qry);
        			
-       			res += "<a href='javascript:loadSynonym(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;<span class='rowcountstyle'>" + getTableRowCount(list.get(0)[1], list.get(0)[2]) + "</span><br/>";
+       			String crud = this.getCRUD(name, rname);
+       			
+       			if (list.size() > 0)
+       			res += "<a href='javascript:loadSynonym(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;<span class='rowcountstyle'>" + getTableRowCount(list.get(0)[1], list.get(0)[2]) + "</span> " + crud + "<br/>";
        		}
        		
        		rs.close();

@@ -60,7 +60,7 @@ Please select a Table to see the detail.
 <form id="<%= formName %>">
 <input name="table" type="hidden" value="<%= table %>"/>
 <input name="query" type="hidden" value=""/>
-<table id="dataTable" border=1 class="gridBody" style="margin-left: 10px;">
+<table id="dataTable" border=1 class="gridBody" style="margin-left: 10px;" width="800">
 <tr>
 	<th class="headerRow">Idx</th>
 	<th class="headerRow">Column Name</th>

@@ -495,6 +495,9 @@ while (true) {
 
 </div>
 <br/><br/><br/><br/><br/>
+<form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
+<input id="sql-query" name="sql" type="hidden"/>
+</form>
 
 <script type="text/javascript">
 

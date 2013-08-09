@@ -235,4 +235,7 @@ Build 1064
 	Package Tree over Package Browser
 	PA includes Types
 	Automatic detection for Package change
+	CRUD information for Synonym
+	Bugfix: Blob download in data-link page
+	Bugfix: PA ignores forward declarations
 	
