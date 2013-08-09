@@ -214,6 +214,10 @@ public class PackageTable {
 					Block block = new Block(prcStart, "PROC/FUNC", token);
 					blocks.push(block);	// begining of body
 					//System.out.println("name=" + this.name);
+				} else if (prgIdx >= 2 && prgIdx < 10 && token.equals(";") && blocks.size()>0) {   // ignore forward declation
+					prgIdx = 0;
+					Util.p("forward declation " + this.name);
+					blocks.pop();
 				} else if (prgIdx == 2 && token.equals("(")) {
 					prgIdx = 3;
 				} else if (prgIdx == 3) {

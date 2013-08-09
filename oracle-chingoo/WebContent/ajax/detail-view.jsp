@@ -36,7 +36,7 @@
 
 <%= owner==null?cn.getComment(view):cn.getSynTableComment(owner, view) %><br/>
 
-<table id="dataTable" border=1 class="gridBody" style="margin-left: 10px;">
+<table id="dataTable" border=1 class="gridBody" style="margin-left: 10px;" width="800">
 <tr>
 	<th class="headerRow">Idx</th>
 	<th class="headerRow">Column Name</th>
