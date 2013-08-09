@@ -1837,9 +1837,11 @@ public class Connect implements HttpSessionBindingListener {
        			if (this.targetSchema != null)
        				qry = "SELECT TABLE_OWNER, TABLE_NAME FROM ALL_SYNONYMS WHERE OWNER='" + this.targetSchema + "' AND SYNONYM_NAME='" + rname + "'";
        			List<String[]> list = query(qry);
+
+       			String crud = this.getCRUD(name, rname);
        			
        			if (list.size() > 0)
-       			res += "<a href='javascript:loadSynonym(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;<span class='rowcountstyle'>" + getTableRowCount(list.get(0)[1], list.get(0)[2]) + "</span><br/>";
+       			res += "<a href='javascript:loadSynonym(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;<span class='rowcountstyle'>" + getTableRowCount(list.get(0)[1], list.get(0)[2]) + "</span> " + crud + "<br/>";
        		}
        		
        		rs.close();
@@ -1874,10 +1876,10 @@ public class Connect implements HttpSessionBindingListener {
        		if (useCache) stringCache.add(qry, res);
     		
 		} catch (SQLException e) {
-            System.err.println ("queryOne - " + qry);
+            //System.err.println ("queryOne - " + qry);
             System.out.println ("queryOne - " + qry);
-             e.printStackTrace();
-             message = e.getMessage();
+            e.printStackTrace();
+            message = e.getMessage();
  		}
 		return res;
 	}

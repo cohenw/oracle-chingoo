@@ -86,10 +86,41 @@ $(document).ready(function(){
 	checkResize();
 	loadSdi();
 	<% if (sdi != null ) {%>
-	loadTV('<%=sdi%>');
-	loadSTMT('<%=sdi%>',<%=actionId%>,'<%=treekey%>');
+	
+	window.setTimeout(function() {
+		loadTV('<%=sdi%>');
+	}, 200);
+	
+	window.setTimeout(function() {
+		loadSTMT('<%=sdi%>',<%=actionId%>,'<%=treekey%>');
+		setYellow('<%=sdi%>', '<%=treekey%>');
+	}, 400);
+	
 <% } %>	
 })
+
+function replaceall(str,replace,with_this)
+{
+    var str_hasil ="";
+    var temp;
+
+    for(var i=0;i<str.length;i++) // not need to be equal. it causes the last change: undefined..
+    {
+        if (str[i] == replace)
+        {
+            temp = with_this;
+        }
+        else
+        {
+                temp = str[i];
+        }
+
+        str_hasil += temp;
+    }
+
+    return str_hasil;
+}
+
 
 	function checkResize() {
 		var w = $(window).width();
@@ -256,8 +287,48 @@ function closeAll() {
 	
 }
 
+function tvSearch(keyword) {
+	//keyword = keyword.trim();
+	keyword = $.trim(keyword);
+	$("#inner-tvstmt").html("<img src='image/loading.gif'/>");
+
+	$.ajax({
+		url: "ajax-cpas/tv-search-custom.jsp?keyword=" + keyword + "&t=" + (new Date().getTime()),
+		success: function(data){
+			$("#inner-tvstmt").html(data);
+		},
+        error:function (jqXHR, textStatus, errorThrown){
+            alert(jqXHR.status + " " + errorThrown);
+        }  
+	});
+}
+
 function openSimulator() {
 	$("#formSimul").submit();
+}
+
+function setYellow(sdi, treekey) {
+	$('#inner-sdi a.selected').removeClass('selected');
+	$('#inner-tv a.selected').removeClass('selected');
+	var sdiId = "sdi-" + replaceall(sdi, "_", "-");
+	var tkId = replaceall(treekey, "_", "-");
+	//console.log(pkgId);
+	$('#' + sdiId ).addClass('selected');
+	$('#' + tkId ).addClass('selected');
+
+	if ($('#' + sdiId).length) {
+		var newTop = $('#' + sdiId ).position().top - $('#inner-sdi').position().top;
+		$('#outer-sdi').animate({scrollTop: newTop}, 500);
+	}
+//alert(tkId);
+	if ($('#' + tkId).length) {
+		var newTop = $('#' + tkId ).position().top - $('#inner-tv').position().top;
+		//alert(newTop);
+		$('#outer-tv').animate({scrollTop: newTop }, 500);
+		//alert('xxx');
+	}
+	
+	//alert('aaa');
 }
 
 </script>
@@ -278,6 +349,11 @@ function openSimulator() {
 <a href="cpas-process.jsp" target="_blank">CPAS Process</a> 
 		</td>
 		<td align=right><h3><%=cn.getUrlString()%></h3></td>
+		<td align=right nowrap>
+<b>TreeView Search</b> <input id="globalSearch" style="width: 200px;" onChange="tvSearch($('#globalSearch').val())"/>
+<!-- <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
+ -->
+<input type="button" value="Find" onClick="Javascript:tvSearch($('#globalSearch').val())"/>
 	</table>
 
 	<table border=0 cellspacing=0>

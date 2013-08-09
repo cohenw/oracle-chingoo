@@ -363,7 +363,7 @@ function hideHist() {
 <% } %>
 </td>
 <td>
-<span style="color: blue; font-family: Arial; font-size:18px; font-weight:bold;">CPAS Genie</span>
+<span style="font-family: Arial; font-size:18px;"><span style="background-color:black; color: white;">C</span><span style="background-color:#FF9900; color: white;">PAS</span> <span style="color: blue; font-family: Arial; font-size:18px; font-weight:bold;">Genie</span></span>
 </td>
 <!-- <td nowrap><h2 style="color: blue;">Genie</h2></td> -->
 <td><b><%= cn.getUrlString() %></b></td>

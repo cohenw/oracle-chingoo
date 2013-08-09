@@ -10,9 +10,9 @@
 	String keyword = request.getParameter("keyword");
 	String key = keyword.toUpperCase().trim();
 
-	String qry = "SELECT * FROM TREEVIEW WHERE UPPER(CAPTION) LIKE '%" + key + "%' OR TREEKEY='" + key + "' " +
+	String qry = "SELECT * FROM CUSTOMTREEVIEW WHERE UPPER(CAPTION) LIKE '%" + key + "%' OR TREEKEY='" + key + "' " +
 				"UNION " +
-				"SELECT * FROM TREEVIEW WHERE (SDI, SCHEMA, ACTIONID) IN (SELECT SDI, SCHEMA, ACTIONID FROM TREEACTION_STMT WHERE actiontype IN ('MS','DS') AND upper(actionstmt) like '%" + key + "%') " +
+				"SELECT * FROM CUSTOMTREEVIEW WHERE (SDI, SCHEMA, ACTIONID) IN (SELECT SDI, SCHEMA, ACTIONID FROM CUSTOMTREEACTION_STMT WHERE actiontype IN ('MS','DS') AND upper(actionstmt) like '%" + key + "%') " +
 				"ORDER BY 1, 2"; 
 	Query q = new Query(cn, qry, false);
 	
@@ -46,7 +46,7 @@
 %>
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><%= sdi %></a><br/><span class='cpas'><%= sdiName %></span></td>
-	<td class="<%= rowClass%>" nowrap><a href="cpas-treeview.jsp?sdi=<%=sdi%>&treekey=<%=treekey%>"><%= caption %></a></td>
+	<td class="<%= rowClass%>" nowrap><a href="cpas-customtreeview.jsp?sdi=<%=sdi%>&treekey=<%=treekey%>"><%= caption %></a></td>
 	<td class="<%= rowClass%>" nowrap><%= treekey %></td>
 </tr>
 <%

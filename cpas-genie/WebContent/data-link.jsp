@@ -6,7 +6,6 @@
 	contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"
 %>
-
 <%!
 public synchronized List<String> getLogicalChildTables(Connect cn, String tname, Query q) {
 //System.out.println("tname="+tname);	
@@ -29,15 +28,38 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 		//System.out.println("qry="+qry);	
 		List<String> lst = cn.queryMulti(qry);
 		list.addAll(lst);
-
+/*
 		if (batchKey.equals("PBR")||batchKey.equals("PBRD2")) {
 			list.add("BATCH_BUF$DATA$PBRHR$BUFF");
-			//list.add("BATCH_BUF$DATA$PBRFR$BUFF");
+			list.add("BATCH_BUF$DATA$PBRFR$BUFF");
 			//list.add("BATCH_BUF$DATA$PBR$STATUS");
 			list.add("BATCH_BUF$DATA$PBR$ERR");
 			//list.add("BATCH_BUF$DATA$PBR$ELOG");
 		}
-		
+*/		
+		// for BATCH get the package name
+		// and get the table names from genie CRUD info
+		// if the table has processid/processkey and not part of list, add to the list
+		qry = "SELECT DISTINCT METHODNAME FROM BATCHCAT_TASK WHERE BATCHKEY='" + batchKey + "' AND METHODNAME != 'IMPBATCH'";
+		lst = cn.queryMulti(qry);
+		if (cn.isTVS("GENIE_PA_TABLE")) {
+		 for (String pkg:lst) {
+			//Util.p(pkg);
+			String q2 = "select * from (SELECT distinct table_name " +
+					"FROM GENIE_PA_TABLE A WHERE PACKAGE_NAME='" + pkg.toUpperCase() + "' and (op_insert='1' or op_update='1')) A " +
+					"where exists (select 1 from USER_TAB_COLUMNS where table_name=A.table_name and column_name in ('PROCESSID', 'PROCESSKEY')) " +
+					"order by 1";
+			//Util.p(q2);
+			List<String> l2 = cn.queryMulti(q2);
+			for (String tbl:l2) {
+				if (!list.contains(tbl)) {
+					//Util.p(tbl);
+					list.add(tbl);
+				}
+			}
+		 }
+		}
+
 		list.add("BATCH_ERROR");
 		list.add("CALC_ERROR");
 

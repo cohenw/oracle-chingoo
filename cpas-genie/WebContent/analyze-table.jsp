@@ -45,7 +45,7 @@ $(document).ready(function() {
 </head>
 <body>
 <h2>
-	Analyzing Packages for Table : <b><%= name %></b><br/>
+	Analyzing Packages for Table : <b><%= name %></b><br/></h2>
 	
 <div id="wait">
 <img src="image/waiting_big.gif">

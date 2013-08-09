@@ -95,10 +95,33 @@ $(document).ready(function(){
 <% if (treekey != null ) {%>
 	window.setTimeout(function() {
 		loadSTMT('<%=sdi%>',<%=actionId%>,'<%=treekey%>');
+		setYellow('<%=sdi%>', '<%=treekey%>');
 	}, 500);
 <% } %>
 
 })
+
+function replaceall(str,replace,with_this)
+{
+    var str_hasil ="";
+    var temp;
+
+    for(var i=0;i<str.length;i++) // not need to be equal. it causes the last change: undefined..
+    {
+        if (str[i] == replace)
+        {
+            temp = with_this;
+        }
+        else
+        {
+                temp = str[i];
+        }
+
+        str_hasil += temp;
+    }
+
+    return str_hasil;
+}
 
 	function checkResize() {
 		var w = $(window).width();
@@ -284,6 +307,31 @@ function tvSearch(keyword) {
         }  
 	});
 }
+
+function setYellow(sdi, treekey) {
+	$('#inner-sdi a.selected').removeClass('selected');
+	$('#inner-tv a.selected').removeClass('selected');
+	var sdiId = "sdi-" + replaceall(sdi, "_", "-");
+	var tkId = replaceall(treekey, "_", "-");
+	//console.log(pkgId);
+	$('#' + sdiId ).addClass('selected');
+	$('#' + tkId ).addClass('selected');
+
+	if ($('#' + sdiId).length) {
+		var newTop = $('#' + sdiId ).position().top - $('#inner-sdi').position().top;
+		$('#outer-sdi').animate({scrollTop: newTop}, 500);
+	}
+//alert(tkId);
+	if ($('#' + tkId).length) {
+		var newTop = $('#' + tkId ).position().top - $('#inner-tv').position().top;
+		//alert(newTop);
+		$('#outer-tv').animate({scrollTop: newTop }, 500);
+		//alert('xxx');
+	}
+	
+	//alert('aaa');
+}
+
 
 </script>
 

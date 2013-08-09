@@ -169,8 +169,8 @@ public class PackageTable {
 		sb2.append( text.substring(start));
 		String s2 = sb2.toString();
 		
-		//System.out.println("------------------------------------");
-		//System.out.println(s2);
+//		System.out.println("------------------------------------");
+//		System.out.println(s2);
 
 		String[] lines = s2.split("\r\n|\r|\n");
 		this.analyze_new(lines);
@@ -198,7 +198,7 @@ public class PackageTable {
 				
 //				if (tokenSeq==0 && token.equalsIgnoreCase("MEMBER")) continue; // for EP_CALC
 				tokenSeq++;
-				//System.out.println(tokenSeq + " " + token);
+//				System.out.println(tokenSeq + " " + token);
 				
 				String tokenUp = token.toUpperCase();
 				if (tokenUp.equals("PROCEDURE")) {
@@ -221,6 +221,22 @@ public class PackageTable {
 					Block block = new Block(prcStart, "PROC/FUNC", token);
 					blocks.push(block);	// begining of body
 					//System.out.println("name=" + this.name);
+/*
+					if (s.trim().endsWith(";")) {
+						// ignore forward declation
+						prgIdx = 0;
+						blocks.pop();
+					}
+*/
+/*
+				} else if (prgIdx == 2 && token.equals(";")) {  // ignore forward declation
+					prgIdx = 0;
+					blocks.pop();
+*/					
+				} else if (prgIdx >= 2 && prgIdx < 10 && token.equals(";") && blocks.size()>0) {   // ignore forward declation
+					prgIdx = 0;
+					Util.p("forward declation " + this.name);
+					blocks.pop();
 				} else if (prgIdx == 2 && token.equals("(")) {
 					prgIdx = 3;
 				} else if (prgIdx == 3) {

@@ -333,12 +333,24 @@ qSlave.rewind(1000, 1);
 		if (rowCnt%2 == 0) rowClass = "evenRow";		
 		String actionName = cn.queryOne("SELECT NAME FROM CPAS_ACTION WHERE ACTION ='" + action + "'");
 		String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + seclabel + "'");
+		
+		String treeviewUrl = null;
+		String treeviewCaption = null;
+		if (evnt != null) {
+			String q2 = "SELECT SDI, TREEKEY, CAPTION FROM CPAS_PROCESS_EVENT_VIEW WHERE PROCESS = '" + pcss + "' AND EVENT = '" + evnt + "'";
+			List<String[]> r = cn.query(q2);
+			if (r.size() > 0) {
+				treeviewUrl = "cpas-treeview.jsp?sdi=" + r.get(0)[1] + "&treekey=" + r.get(0)[2];
+				treeviewCaption = r.get(0)[3];
+			}
+		}
+		
 %>
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><%= pevent==null?"":"&nbsp;&nbsp;&nbsp;&nbsp;" %><%= name %></td>
 	<td class="<%= rowClass%>" nowrap><%= pcss==null?"":pcss %></td>
 	<td class="<%= rowClass%>" nowrap><%= evnt==null?"":evnt %></td>
-	<td class="<%= rowClass%>" nowrap><%= pevent==null?"":pevent %></td>
+	<td class="<%= rowClass%>" nowrap><%= pevent==null?"":pevent %><%= evnt==null?"":" <a target=_blank href='" + treeviewUrl +"'>" + treeviewCaption + " treeview</a>" %></td>
 	<td class="<%= rowClass%>" nowrap><%= position==null?"":position %></td>
 	<td class="<%= rowClass%>" nowrap><%= action==null?"":action + " <span class='cpas'>" + actionName + "</span>"%></td>
 	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel + " <span class='cpas'>" + secName + "</span>"%></td>

@@ -98,12 +98,17 @@
 		rowCnt ++;
 		String rowClass = "oddRow";
 		if (rowCnt%2 == 0) rowClass = "evenRow";
+		
+		String lbl = label[i][0];
 %>
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><%= label[i][1] %></td>
 	<td class="<%= rowClass%>" nowrap><%= label[i][0] %></td>
-	<td class="<%= rowClass%>"><PRE style='font-family: Consolas;'><%= values[i] %>	</PRE>
-<% if ((label[i][0].equals("MT") || label[i][0].equals("DT")) && !values[i].equals("")) {
+	<td class="<%= rowClass%>">
+<%= (label[i][0].equals("MS") || label[i][0].equals("DS")) ? "<span style='font-family: Consolas;'>" + new HyperSyntax().getHyperSyntax(cn, values[i], "SQL") : values[i] %>
+<%= (label[i][0].equals("MS") || label[i][0].equals("DS")) ? "</span>":"" %>
+
+<% if ((label[i][0].equals("MT") || label[i][0].equals("DT")) && !values[i].equals("") && values[i].length() < 30) {
 	id = Util.getId();
 	qry = "SELECT * FROM CPAS_LAYOUT WHERE TNAME = '" + values[i] + "'";
 %>
@@ -115,6 +120,14 @@
 %>
 	<a href="cpas-process.jsp?id=<%= values[i]%>" target="_blank">open process</a>
 <% } %>
+
+<% if (lbl.equals("AW") || lbl.equals("MN") || lbl.equals("ME") || lbl.equals("MR")
+		|| lbl.equals("DN") || lbl.equals("DE") || lbl.equals("DR")) { 
+	String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + values[i] + "'");
+%>
+	<span class='cpas'> <%= secName %></span>
+<% } %>
+
 	</td>
 </tr>
 

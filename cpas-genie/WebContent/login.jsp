@@ -94,7 +94,7 @@ or
 <% } %>	
   <img src="image/genie-lamp.jpg" title="<%= Util.getVersionDate() + " Build " + Util.getBuildNo() %>"/>
 <% if (isCPAS) { %>
-    <h2>Welcome to CPAS Genie.<br/> 
+    <h2>Welcome to <span style="background-color:black; color: white;">C</span><span style="background-color:#FF9900; color: white;">PAS</span> Genie.<br/> 
     Are you new to Genie? Please watch the tutorial videos. \\picard\training\CPAS Genie
     
     </h2>
