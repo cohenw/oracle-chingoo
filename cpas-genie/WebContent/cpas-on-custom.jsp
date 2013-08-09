@@ -304,7 +304,7 @@ function processSearch(keyword) {
 	$("#inner-eventview").html('');
 
 	$.ajax({
-		url: "ajax-cpas/online-process-search.jsp?keyword=" + keyword + "&t=" + (new Date().getTime()),
+		url: "ajax-cpas/online-process-search-custom.jsp?keyword=" + keyword + "&t=" + (new Date().getTime()),
 		success: function(data){
 			$("#inner-eventview").html(data);
 		},
@@ -373,7 +373,8 @@ function loadSTMT(sdi, actionid, treekey) {
 		<td>
 <a href="index.jsp">Home</a> |
 <a href="query.jsp" target="_blank">Query</a> |
-<a href="cpas-process.jsp" target="_blank">CPAS Process</a> 
+<a href="cpas-process.jsp" target="_blank">CPAS Process</a> |
+<a href="cpas-customtreeview.jsp" target="_blank">Treeview</a>  
 		</td>
 		<td><h3><%=cn.getUrlString()%></h3></td>
 

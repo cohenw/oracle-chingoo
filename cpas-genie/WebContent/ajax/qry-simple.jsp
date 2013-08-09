@@ -305,8 +305,8 @@ Found: <%= filteredCount %>
 					isLinked = true;
 					String tpkName = cn.getPrimaryKeyName(tbl);
 					String tpkCol = cn.getConstraintCols(tpkName);
-					//String tpkValue = q.getValue(tpkCol);
-					String tpkValue = pkValues;
+					String tpkValue = q.getValue(tpkCol);
+					//String tpkValue = pkValues;
 					
 //					linkUrl ="ajax/blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
 					String fname = q.getValue("filename");
@@ -402,7 +402,7 @@ if (cpas) {
 <%
 	if (tname.equals("CPAS_VALIDATION") && colName.equals("VNAME")) {
 		String pkg = q.getValue("PACKNAME") + "." + q.getValue("VNAME");
-		out.println(" <a target=_blank href='package-tree.jsp?name=" + pkg + "'>Detail</a>");
+		out.println(" <a target=_blank href='package-tree.jsp?name=" + pkg + "'>Source</a>");
 	}
 
 %>

@@ -83,7 +83,7 @@ for (int i=0; i<list2.size();i++) {
 	String treeKey = list2.get(i)[6];
 
 %>
-<span style="margin-left:<%=(level-2)* 20%>px;"></span><a href="javascript:loadSTMT('<%= sdi %>', <%=actionId%>, '<%= treeKey %>');"><%= Util.escapeHtml(caption) %></a> <!-- <span class="nullstyle"><%= treeKey %></span> -->
+<span style="margin-left:<%=(level-2)* 20%>px;"></span><a id="<%= treeKey.replaceAll("_", "-") %>" href="javascript:loadSTMT('<%= sdi %>', <%=actionId%>, '<%= treeKey %>');"><%= Util.escapeHtml(caption) %></a> <!-- <span class="nullstyle"><%= treeKey %></span> -->
 <br/>
 <% 
 	}

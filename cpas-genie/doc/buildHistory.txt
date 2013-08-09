@@ -321,8 +321,21 @@ Build CPAS1083
 	Package Tree over Package Browser
 	PA includes Types
 	Automatic detection for Package change
+
+Build CPAS1084
+	CPAS Online link to Treeview (Custom)
+	TreeView search enhanced for Table/View name in MS/DS
+	TreeView load automatically scroll to selected item
+	TreeView MS/DS syntax highlight
+	CPAS online search TV Key, Table/View name
+	implement online-process-search-custom.jsp for Custom Online search
+	CRUD information for Synonym
+	Data-Link for BATCH include logical tables based on PA/CRUD
+	Bugfix: Blob download in data-link page
+	Bugfix: PA ignores forward declarations
 			
 Known Issue
+	PA does not include Stored procedures and functions
 
 New Feature to implement
-		
+				
