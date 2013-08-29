@@ -25,8 +25,10 @@
 	String id = Util.getId();
 %>
 
+<div style="display: none;">
+
 <b>Process</b>
- <a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry1%>"/></a>
+ <a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry1%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry1%></div>
 
 <br/>
@@ -67,12 +69,13 @@
 </table>
 
 <br/> 
+</div>
 
 <%
 id = Util.getId();
 %>
 <b>Event</b>
- <a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry0%>"/></a>
+ <a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry0%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry0%></div>
 <table id="dataTable" border=1 class="gridBody">
 <tr>
@@ -109,14 +112,26 @@ id = Util.getId();
 		String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + seclabel + "'");
 		
 		String batchTask = "";
+		String dataLink = "";
 		if (action==null) action="";
 		if (action != null && action.equals("BT") || action.equals("BW") || action.equals("IM")) {
 			String tmp[] = uparam.split(",");
 			if (tmp != null && tmp.length>1) {
 				String qry = "SELECT BATCHNAME || ' - ' || TASKNAME FROM BATCHCAT A, BATCHCAT_TASK B " +
 				"WHERE A.batchkey=B.batchkey AND A.batchkey = '" + tmp[0] + "'  AND B.taskkey='" + tmp[1] + "'";
-			
+
 				batchTask = cn.queryOne(qry);
+				if (tmp.length==1)
+					dataLink = "<a target=_blank href='data-link.jsp?qry=BATCHCAT|" + tmp[0] + "'>DataLink</a>";
+				else {
+					dataLink = "<a target=_blank href='data-link.jsp?qry=BATCHCAT|" + tmp[0] + "'>Batch</a> <a target=_blank href='data-link.jsp?qry=BATCHCAT_TASK|" + tmp[0] + "^" + tmp[1] + "'>Task</a>";
+				}
+			} else if (tmp != null && tmp.length ==1) {
+				String qry = "SELECT BATCHNAME FROM BATCHCAT A " +
+				"WHERE A.batchkey = '" + tmp[0] + "'";
+
+				batchTask = cn.queryOne(qry);
+				dataLink = "<a target=_blank href='data-link.jsp?qry=BATCHCAT|" + tmp[0] + "'>DataLink</a>";
 			}
 		}
 		
@@ -126,9 +141,15 @@ id = Util.getId();
 	<td class="<%= rowClass%>" nowrap><%= event==null?"":event %></td>
 	<td class="<%= rowClass%>" nowrap><%= pevent==null?"":pevent %></td>
 	<td class="<%= rowClass%>" nowrap><%= position==null?"":position %></td>
-	<td class="<%= rowClass%>" nowrap><%= action==null?"":action + " <span class='cpas'>" + actionName + "</span>"%></td>
+	<td class="<%= rowClass%>" nowrap><%= action==null?"":action + " <span class='cpas'>" + actionName + "</span>"%>
+		<% id = Util.getId();
+			qry0 = "SELECT * FROM CPAS_ACTION WHERE ACTION='" + action + "'";
+		%>
+		<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry0%>"/></a>
+		<div style="display: none;" id="sql-<%=id%>"><%= qry0 %></div>
+	</td>
 	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel + " <span class='cpas'>" + secName + "</span>"%></td>
-	<td class="<%= rowClass%>" nowrap><%= uparam==null?"":uparam %> <span class='cpas'><%= batchTask %></span></td>
+	<td class="<%= rowClass%>" nowrap><%= uparam==null?"":uparam %> <span class='cpas'><%= batchTask %></span> <%= dataLink %></td>
 <%--
  	<td class="<%= rowClass%>" nowrap><%= log==null?"":log %></td>
 	<td class="<%= rowClass%>" nowrap><%= rkey==null?"":rkey %></td>
@@ -147,7 +168,7 @@ id = Util.getId();
 
 <%
 	String qry = "SELECT * FROM CPAS_PROCESS_EVENT_VIEW WHERE PROCESS = '" + process + 
-			"' AND EVENT='" + event + "' AND SECLABEL != 'SC_NEVER' ORDER BY POSITION"; 	
+			"' AND EVENT='" + event + "' AND UPPER(SECLABEL) != 'SC_NEVER' /*AND POSITION=0*/ ORDER BY POSITION"; 	
 	Query q = new Query(cn, qry, false);
 
 	String ename = cn.queryOne("SELECT NAME FROM CPAS_PROCESS_EVENT WHERE PROCESS='" + process+"' AND EVENT='" + event + "'");
@@ -157,12 +178,13 @@ id = Util.getId();
 <br/>
 
 <b>Event View</b> - <%= ename %> [<%= process %>,<%= event %>]
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 <br/>
 
 <table id="dataTable" border=1 class="gridBody">
 <tr>
+	<th class="headerRow">Type</th>
 	<th class="headerRow">Description</th>
 	<th class="headerRow">Position</th>
 	<th class="headerRow">SDI,Treeview Key</th>
@@ -211,6 +233,7 @@ id = Util.getId();
 		}
 %>
 <tr class="simplehighlight">
+	<td class="<%= rowClass%>" nowrap><%= position.equals("0")?"Main":"Quick Link" %></td>
 	<td class="<%= rowClass%>" nowrap>
 	<% if (actionId==null) { %>
 		<%= descr==null?"":descr %>
@@ -258,7 +281,7 @@ if (tv!=null && sdi!=null && actionId != null) {
 	lupd = lupd==null?"":lupd;
 	ldel = ldel==null?"":ldel;
 %>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
 <%-- 
 <br/>
 <a href="javascript:openSimul('<%=sdi%>','<%=tv%>')">Simulator</a>
@@ -298,7 +321,7 @@ if (qSlave.hasData()) {
 %>
 
 <b>Slave Event</b>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qrySlave%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qrySlave%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qrySlave%></div>
 <br/>
 

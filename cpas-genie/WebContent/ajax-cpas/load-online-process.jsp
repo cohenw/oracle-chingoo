@@ -9,7 +9,7 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String ptype = request.getParameter("ptype");
 	
-	String qry = "SELECT * FROM CPAS_PROCESS WHERE TYPE = '" + ptype + "' AND SECLABEL != 'SC_NEVER' ORDER BY POSITION";
+	String qry = "SELECT * FROM CPAS_PROCESS WHERE TYPE = '" + ptype + "' AND UPPER(SECLABEL) != 'SC_NEVER' ORDER BY POSITION";
 	Query q = new Query(cn, qry, false);
 	
 	String qry2 = "SELECT NAME FROM CPAS_TAB WHERE TAB='" + ptype+"'";
@@ -30,7 +30,7 @@
 <b>Process</b>
 <%--  - <%= pname %> [<%= ptype %>]
  --%>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 <br/>
 <%

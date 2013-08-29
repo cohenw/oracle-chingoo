@@ -330,12 +330,30 @@ Build CPAS1084
 	CPAS online search TV Key, Table/View name
 	implement online-process-search-custom.jsp for Custom Online search
 	CRUD information for Synonym
-	Data-Link for BATCH include logical tables based on PA/CRUD
 	Bugfix: Blob download in data-link page
 	Bugfix: PA ignores forward declarations
+
+Build CPAS1085
+	Data-Link for BATCH include logical tables based on PA/CRUD (using DFS)
+	PA/TA for Target Schema
+	Bugfix: Data-link logical child cache issue
+	CPAS online - hides quick links from event view list	
+	CPAS online - batch links to data-link
+ 	PA ignores WHILE, LOOP
+ 	FORMULA / PLAN_CALCTYPE_REPFIELD
+ 	Dblink Member to Account
+ 	Fix for Util.getTables table order
+ 	Dblink CALC logical childs
+ 	Dblink to Views
+ 	Duplicated dynamic parameter - fixed 
+ 	FKEY link to Formula
 			
 Known Issue
 	PA does not include Stored procedures and functions
 
+
 New Feature to implement
-				
+
+Known Bug
+	dynamic parameter ex :A.COL1 appears multiple times
+	After Package Analyze, need to reload procedure/crud info into cache

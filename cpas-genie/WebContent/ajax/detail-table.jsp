@@ -170,7 +170,7 @@ Please select a Table to see the detail.
 			tabLink = false;
 			tabLink = true;
 		}
-		if (!rec.rOwner.equalsIgnoreCase(cn.getSchemaName())) rTable = rec.rOwner + "." + rTable;
+		if (!(rec.rOwner.equalsIgnoreCase(cn.getSchemaName()) || rec.rOwner.equalsIgnoreCase(cn.getTargetSchema()))) rTable = rec.rOwner + "." + rTable;
 %>
 &nbsp;&nbsp;&nbsp;&nbsp;<%= rec.constraintName %>
 	(<%= cn.getConstraintCols(rec.owner, rec.constraintName).toLowerCase() %>)

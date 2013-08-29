@@ -228,25 +228,30 @@ function processSearch(keyword) {
 
 <body>
 
-	<table width=100% border=0>
-		<td><img src="image/cpas.jpg"
-			title="Version <%=Util.getVersionDate()%>" /></td>
-		<td><h2 style="color: blue;">CPAS Process</h2></td>
-		<td>&nbsp;</td>
+<div id="topline" style="background-color: #EEEEEE; padding: 0px; border:1px solid #888888; border-radius:10px;">
+<table width=100% border=0 cellpadding=0 cellspacing=0>
+<td width="44">
+<img align=top src="image/lamp.png" alt="Ver. <%= Util.getVersionDate() %>" title="<%= Util.getBuildNo() %>"/>
+</td>
+<td>
+<span style="font-family: Arial; font-size:18px;"><span style="background-color:black; color: white;">C</span><span style="background-color:#FF9900; color: white;">PAS</span> <span style="color: blue; font-family: Arial; font-size:18px; font-weight:bold;">Process</span></span>
+</td>
+<!-- <td nowrap><h2 style="color: blue;">Genie</h2></td> -->
+<td><b><%= cn.getUrlString() %></b></td>
+<td nowrap>
 
-		<td>
-		<a href="index.jsp">Home</a> |
+<a href="index.jsp">Home</a> |
 <a href="query.jsp" target="_blank">Query</a> |
 <a href="cpas-treeview.jsp" target="_blank">CPAS TreeView</a> 
-		</td>
-		<td align=left><h3><%=cn.getUrlString()%></h3></td>
-		<td align=right nowrap>
+
+</td>
+<td align=right nowrap>
 <b>Process Search</b> <input id="globalSearch" style="width: 200px;" onChange="processSearch($('#globalSearch').val())"/>
-<!-- <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
- -->
 <input type="button" value="Find" onClick="Javascript:processSearch($('#globalSearch').val())"/>
 </td>
-	</table>
+</table>
+</div>
+<div style="height: 4px;"></div>
 
 	<table border=0 cellspacing=0>
 		<tr>

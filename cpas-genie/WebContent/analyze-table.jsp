@@ -15,11 +15,15 @@
 	cn.createTrg();
 	
 	String q = "SELECT object_name FROM user_objects where object_type='PACKAGE BODY' ORDER BY 1";
+
 	if (cn.isTVS("GENIE_PA")) {
 		q = "SELECT object_name FROM user_objects A where object_type='PACKAGE BODY' AND NOT EXISTS (SELECT 1 FROM GENIE_PA WHERE PACKAGE_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
 	}
 	q = "SELECT object_name FROM user_objects A where object_type IN ('PACKAGE BODY','TYPE BODY') AND object_name IN (SELECT NAME FROM USER_DEPENDENCIES WHERE REFERENCED_NAME='" + name + "' AND TYPE IN ('PACKAGE BODY','TYPE BODY')) AND NOT EXISTS (SELECT 1 FROM GENIE_PA WHERE PACKAGE_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
-
+	if (cn.getTargetSchema() != null) {
+		q = "SELECT object_name FROM ALL_OBJECTS A WHERE OWNER='" + cn.getTargetSchema() + "' AND object_type IN ('PACKAGE BODY','TYPE BODY') AND object_name IN (SELECT NAME FROM ALL_DEPENDENCIES WHERE OWNER='" + cn.getTargetSchema() + "' AND REFERENCED_NAME='" + name + "' AND TYPE IN ('PACKAGE BODY','TYPE BODY')) AND NOT EXISTS (SELECT 1 FROM GENIE_PA WHERE PACKAGE_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
+		//q = "SELECT object_name FROM user_objects A where object_type IN ('PACKAGE BODY','TYPE BODY') AND object_name IN (SELECT NAME FROM USER_DEPENDENCIES WHERE REFERENCED_NAME='" + name + "' AND TYPE IN ('PACKAGE BODY','TYPE BODY')) AND NOT EXISTS (SELECT 1 FROM GENIE_PA WHERE PACKAGE_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
+	}
 	List<String[]> pkgs = cn.query(q, false);
 %>
 
@@ -30,10 +34,6 @@
 
 	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
 	<script src="script/main.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
-	<script type="text/javascript" src="script/shCore.js"></script>
-	<script type="text/javascript" src="script/shBrushSql.js"></script>
-    <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
-    <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
     <link href="css/style.css?<%= Util.getScriptionVersion() %>" rel="stylesheet" type="text/css" />
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
 
@@ -58,6 +58,10 @@ $(document).ready(function() {
 		out.flush();
 		
 		String qry = "SELECT TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME='" + pkgName +"' AND TYPE IN ('PACKAGE BODY','TYPE BODY') ORDER BY TYPE, LINE";
+		if (cn.getTargetSchema() != null) {
+			qry = "SELECT TYPE, LINE, TEXT FROM ALL_SOURCE WHERE OWNER='" + cn.getTargetSchema() + "' AND NAME='" + pkgName +"' AND TYPE IN ('PACKAGE BODY','TYPE BODY') ORDER BY TYPE, LINE";
+		}
+
 		List<String[]> list = cn.query(qry, 20000, false);
 		
 		String text = "";
@@ -92,7 +96,9 @@ $(document).ready(function() {
 
 <%
 	q = "SELECT object_name FROM user_objects A where object_type='TRIGGER' AND object_name IN (SELECT NAME FROM USER_DEPENDENCIES WHERE REFERENCED_NAME='" + name + "' AND TYPE in ('TRIGGER')) AND NOT EXISTS (SELECT 1 FROM GENIE_TR WHERE TRIGGER_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
-
+	if (cn.getTargetSchema() != null) {
+		q = "SELECT object_name FROM user_objects A where OWNER='" + cn.getTargetSchema() + "' AND object_type='TRIGGER' AND object_name IN (SELECT NAME FROM ALL_DEPENDENCIES WHERE OWNER='" + cn.getTargetSchema() + "' AND REFERENCED_NAME='" + name + "' AND TYPE in ('TRIGGER')) AND NOT EXISTS (SELECT 1 FROM GENIE_TR WHERE TRIGGER_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
+	}
 	List<String[]> trgs = cn.query(q, false);
 %>
 
@@ -109,6 +115,9 @@ $(document).ready(function() {
 		out.flush();
 		
 		String qry = "SELECT TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME='" + trgName +"' AND TYPE = '" + type + "' ORDER BY TYPE, LINE";
+		if (cn.getTargetSchema() != null) {
+			qry = "SELECT TYPE, LINE, TEXT FROM ALL_SOURCE WHERE OWNER='" + cn.getTargetSchema() + "' AND NAME='" + trgName +"' AND TYPE = '" + type + "' ORDER BY TYPE, LINE";
+		}
 		List<String[]> list = cn.query(qry, 20000, false);
 		
 		String text = "";

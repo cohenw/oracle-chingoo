@@ -7,16 +7,47 @@
 	pageEncoding="utf-8"
 %>
 <%!
+public void DFS(Connect cn, int maxLevel, String pkg, String prc, ArrayList<PTree> pt, HashSet<String> explored, ArrayList<String> path, int level) {
+
+	if (level >=maxLevel) return;
+	
+	String q = "SELECT target_pkg_name, target_proc_name FROM GENIE_PA_DEPENDENCY WHERE PACKAGE_NAME='" + pkg + "' AND PROCEDURE_NAME='" + prc + "' ORDER BY DECODE(TARGET_PKG_NAME,'" + pkg + "','0',TARGET_PKG_NAME), 2";
+	List<String[]> proc1 = cn.query(q, false);
+	
+	ArrayList<String> res = new ArrayList<String>(); 
+	for (int i=0;i<proc1.size();i++) {
+		String sPkg = proc1.get(i)[1];
+		String sPrc = proc1.get(i)[2];
+		String target = sPkg + "." + sPrc;
+		if (target.startsWith("DEF.")) continue;
+	//if (explored.contains(target)) continue;
+
+		
+		pt.add(new PTree(target, path));
+
+		ArrayList<String> newPath = new ArrayList<String>();
+		newPath.addAll(path);
+		newPath.add(target);		
+		if (!explored.contains(target)) {
+			explored.add(target);
+			DFS(cn, maxLevel, sPkg, sPrc, pt, explored, newPath, level +1);
+		}
+	}
+}
+
 public synchronized List<String> getLogicalChildTables(Connect cn, String tname, Query q) {
 //System.out.println("tname="+tname);	
 	List<String> list = new ArrayList<String>();
 
 	if ( tname.equals("BATCH") ) {
+		// 1 Param table
 		String paramTable = cn.queryOne("SELECT PARAMTABLE FROM BATCHCAT WHERE BATCHKEY='" +q.getValue("BATCHKEY") +"'");
 		//System.out.println("paramTable=" + paramTable);
 		if (paramTable != null && !paramTable.equals("")) {
 			list.add(paramTable);
 		}
+
+		// 2 Buffer tables
 		String batchKey = q.getValue("BATCHKEY");
 		String qry = "SELECT BUFFERTABLE FROM BATCHCAT_BUFFER WHERE BATCHKEY='" + batchKey + "' " +
 			"AND EXISTS (SELECT 1 FROM USER_OBJECTS WHERE OBJECT_NAME=BUFFERTABLE)";
@@ -24,19 +55,60 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 			qry = "SELECT BUFFERTABLE FROM BATCHCAT_BUFFER WHERE BATCHKEY='" + batchKey + "' " +
 					"AND EXISTS (SELECT 1 FROM ALL_OBJECTS WHERE OWNER = '" + cn.getTargetSchema() + "' AND OBJECT_NAME=BUFFERTABLE)";
 		}
-		
 		//System.out.println("qry="+qry);	
 		List<String> lst = cn.queryMulti(qry);
 		list.addAll(lst);
-/*
-		if (batchKey.equals("PBR")||batchKey.equals("PBRD2")) {
-			list.add("BATCH_BUF$DATA$PBRHR$BUFF");
-			list.add("BATCH_BUF$DATA$PBRFR$BUFF");
-			//list.add("BATCH_BUF$DATA$PBR$STATUS");
-			list.add("BATCH_BUF$DATA$PBR$ERR");
-			//list.add("BATCH_BUF$DATA$PBR$ELOG");
-		}
-*/		
+
+		// 3 Tables from CRUD info	
+		qry = "SELECT DISTINCT METHODNAME FROM BATCHCAT_TASK WHERE BATCHKEY='" + batchKey + "' AND METHODNAME != 'IMPBATCH'";
+		lst = cn.queryMulti(qry);
+		if (cn.isTVS("GENIE_PA_TABLE")) {
+			 for (String pkg:lst) {
+				ArrayList<PTree> pt = new ArrayList<PTree>(); 
+				HashSet<String> explored = new HashSet<String>();
+				ArrayList<String> path = new ArrayList<String>(); 
+				DFS(cn, 5, pkg, "PERFORM", pt, explored, path, 0);
+
+				HashSet<String> pkgs = new HashSet<String>();
+				for (int i=0; i< pt.size(); i++) {
+					PTree p = pt.get(i);
+					if (!pkgs.contains(p.getPackage())) {
+						pkgs.add(p.getPackage());
+						//Util.p(p.getPackage());
+					}
+				}
+				
+				for (String pkgName: pkgs) {
+
+					String q2 = "SELECT distinct table_name " +
+							"FROM GENIE_PA_TABLE A WHERE PACKAGE_NAME='" + pkgName + "' AND " +
+									" (op_insert='1' OR " +
+	                    			"  (cols_update like '%|PROCESSIDY|%' OR cols_update like '%|PROCESSKEY|%')) AND " +
+									" exists (select 1 from user_tab_columns where table_name=A.table_name and column_name in ('PROCESSKEY','PROCESSID'))";
+					if (cn.getTargetSchema() != null) {
+						q2 = "SELECT distinct table_name " +
+								"FROM GENIE_PA_TABLE A WHERE PACKAGE_NAME='" + pkgName + "' AND " +
+										" (op_insert='1' OR " +
+		                    			"  (cols_update like '%|PROCESSIDY|%' OR cols_update like '%|PROCESSKEY|%')) AND " +
+										" exists (select 1 from all_tab_columns where owner='" + cn.getTargetSchema() + "' and table_name=A.table_name and column_name in ('PROCESSKEY','PROCESSID'))";					}
+					
+					//Util.p(q2);
+					List<String> l2 = cn.queryMulti(q2);
+					for (String tbl:l2) {
+						if (!list.contains(tbl)) {
+							//Util.p(" *** " + tbl);
+							list.add(tbl);
+						}
+					}
+				}
+			 }
+		} 
+
+		// 3 Sort by table name
+		Collections.sort(list);
+		
+/*		
+		// 3 Tables from CRUD info		
 		// for BATCH get the package name
 		// and get the table names from genie CRUD info
 		// if the table has processid/processkey and not part of list, add to the list
@@ -59,21 +131,39 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 			}
 		 }
 		}
-
-		list.add("BATCH_ERROR");
-		list.add("CALC_ERROR");
+*/
+		if (!list.contains("BATCH_ERROR"))
+			list.add("BATCH_ERROR");
+		if (!list.contains("CALC_ERROR"))
+			list.add("CALC_ERROR");
+		
 
 	} else if ( tname.equals("ERRORCAT") ) {
 		if (cn.isTVS("CPAS_VALIDATION")) list.add("CPAS_VALIDATION");
 		if (cn.isTVS("BATCHCAT_PREVALSET")) list.add("BATCHCAT_PREVALSET");
+	} else if (tname.equals("FORMULA")) {
+		list.add("PLAN_CALCTYPE_REPFIELD");
+		list.add("MEMBER_PLAN_OVERRIDE");
+//		Util.p("*** " + list);
+	} else if (tname.equals("MEMBER")||tname.equals("SV_MEMBER")) {
+		list.add("MEMBER_PLAN_ACCOUNT");
+		list.add("ACCOUNT");
+	} else if (tname.equals("CALC")) {
+		String qry = "SELECT TABLE_NAME FROM USER_TABLES A WHERE TABLE_NAME LIKE 'CALC_%' AND EXISTS (SELECT 1 FROM USER_TAB_COLS WHERE TABLE_NAME=A.TABLE_NAME AND COLUMN_NAME = 'CALCID') ORDER BY 1";
+		List<String> l2 = cn.queryMulti(qry);
+		for (String tbl:l2) {
+			//Util.p(" *** " + tbl);
+			if (!list.contains(tbl)) {
+				//Util.p(" *** " + tbl);
+				list.add(tbl);
+			}
+		}
 	}
 
 	return list;
 }
 
 public String getQryStmt(String sql, Query q) {
-//	System.out.println("tname="+tname);
-	
 	// replace [colname] to 'XXX' where XXX is the value of colname
 	boolean needInput = false;
 	List<String> params = new ArrayList<String>();
@@ -90,12 +180,14 @@ public String getQryStmt(String sql, Query q) {
 			if (end <0) end = sql.length();
 			tmp = sql.substring(start+1, end);
 		
+			if (tmp.endsWith(")")||tmp.endsWith(",")) tmp = tmp.substring(0, tmp.length()-1);
 			params.add(tmp);
 			prev = end+1;
 		}
 	}
 	
-	System.out.println("params=" + params);
+	//System.out.println("params=" + params);
+	
 	for (String param: params) {
 		String value = q.getValue(param);
 		if (value.matches("\\d{4}-\\d{2}-\\d{2}")) {
@@ -103,10 +195,9 @@ public String getQryStmt(String sql, Query q) {
 		} else {
 			value = "'" + value + "'";
 		}
-		
-		sql = sql.replaceAll(":" + param + "" , value);
+		sql = sql.replaceAll(":" + param, value);
 	}
-	
+
 	
 	return sql;
 }
@@ -248,12 +339,12 @@ public String getQryStmt(String sql, Query q) {
 	String id = Util.getId();
 %>
 
-<div style="background-color: #ffffff;">
-<img src="image/star-big.png" align="middle"/>
-
- <b>DATA LINK</b>
+<div style="background-color: #E6F8E0; padding: 6px; border:1px solid #CCCCCC; border-radius:10px;">
+<img src="image/star-big.png" width=20 height=20 align="top"/>
+<span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Data Link</span>
+ 
 &nbsp;&nbsp;
-<%= cn.getUrlString() %>
+<b><%= cn.getUrlString() %></b>
 
 &nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -266,10 +357,12 @@ public String getQryStmt(String sql, Query q) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <!-- <a href="Javascript:openWorksheet()">Open Work Sheet</a>
  -->
+<span style="float:right;">
 Search <input id="globalSearch" style="width: 200px;" placeholder="table or view name"/>
+</span>
 </div>
 
-<br/><br/>
+<br/>
 
 <div id="tableList1" style="display: hidden; margin-left: 20px;">
 </div>
@@ -281,7 +374,8 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 %>
 
 <b><%= table %></b> (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(table) %>)
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 title="<%=sql%>"/></a>
+&nbsp;&nbsp<a href="pop.jsp?key=<%= table %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
+ <a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 title="<%=sql%>"/></a>
 <span class="cpas"><%= cn.getCpasComment(table) %></span>
 <%-- <%= sql %> --%>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
@@ -398,7 +492,9 @@ if (cn.isViewTable(table)) {
 <a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(ft) %>)
 <span class="cpas"><%= cn.getCpasComment(ft) %></span>
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=fsql%>"/></a>
+&nbsp;&nbsp;
+<a href="pop.jsp?key=<%= ft %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=fsql%>"/></a>
 (<%= table %>.<%= fc.toLowerCase() %>)
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
@@ -465,7 +561,7 @@ if (cn.isViewTable(table)) {
 
 %>
 <% if (cntLFK == 1) {%>
-	<b><a style="margin-left: 150px;" href="Javascript:toggleLFK()">CPAS Logical Link <img id="img-lfk" border=0 src="image/minus.gif"></a></b><br/>
+	<b><a style="margin-left: 150px;" href="Javascript:toggleLFK()">CPAS Logical Foreign Key <img id="img-lfk" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-lfk" style="margin-top:10px;">
 		<img style="margin-left: 170px;" src="image/arrow_down.png"><br/>
 <% } %>
@@ -475,7 +571,9 @@ if (cn.isViewTable(table)) {
 > <a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(ft) %>)
 <span class="cpas"><%= cn.getCpasComment(ft) %></span>
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=fsql%>"/></a>
+&nbsp;&nbsp;
+<a href="pop.jsp?key=<%= ft %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=fsql%>"/></a>
 (<%= table %>.<%= fc.toLowerCase() %>)
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
@@ -513,10 +611,14 @@ if (cn.isViewTable(table)) {
 		String refTab = refTabs.get(i);
 //System.out.println("refTab="+refTab);		
 		String fkColName = cn.getRefConstraintCols(table, refTab);
-//System.out.println("fkColName="+fkColName);		
-		int recCount = cn.getPKLinkCount(refTab, fkColName , key);
+//System.out.println("fkColName="+fkColName);
+
+		int recCount = 0;
+		String refsql = "";
+		recCount = cn.getPKLinkCount(refTab, fkColName , key);
+		refsql = cn.getRelatedLinkSql(refTab, fkColName, key);
+		
 		if (recCount==0) continue;
-		String refsql = cn.getRelatedLinkSql(refTab, fkColName, key);
 
 		id = Util.getId();
 		autoLoadChild.add(id);
@@ -533,7 +635,9 @@ if (cn.isViewTable(table)) {
 <a style="margin-left: 40px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= recCount %></span> / <%= cn.getTableRowCount(refTab) %>)
 <span class="cpas"><%= cn.getCpasComment(refTab) %></span>
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle border=0 title="<%=refsql%>"/></a>
+&nbsp;&nbsp;
+<a href="pop.jsp?key=<%= refTab %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" align=middle border=0 title="<%=refsql%>"/></a>
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-child-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 
 <% if (refTab.equals("CALC_DETAIL")) { %>
@@ -563,29 +667,51 @@ if (cn.isViewTable(table)) {
 	int lc = 0;
 	for (int i=0; i<lcTabs.size(); i++) {
 		String refTab = lcTabs.get(i);
-		String fkColName = "PROCESSID";
+		String fkColName = "";
 		
-		String qr = "SELECT COLUMN_NAME from user_tab_columns where table_name='" + refTab + "' " + 
-				"and COLUMN_NAME in ('PROCESSID', 'PROCESSKEY')";
-		if (cn.getTargetSchema() != null) {
-			qr = "SELECT COLUMN_NAME from all_tab_columns where owner='" + cn.getTargetSchema() + "' and table_name='" + refTab + "' " + 
+		if (table.equals("BATCH")) {
+		
+			String qr = "SELECT COLUMN_NAME from user_tab_columns where table_name='" + refTab + "' " + 
 					"and COLUMN_NAME in ('PROCESSID', 'PROCESSKEY')";
-		}
+			if (cn.getTargetSchema() != null) {
+				qr = "SELECT COLUMN_NAME from all_tab_columns where owner='" + cn.getTargetSchema() + "' and table_name='" + refTab + "' " + 
+						"and COLUMN_NAME in ('PROCESSID', 'PROCESSKEY')";
+			}
 		
-		fkColName = cn.queryOne(qr);
-		if (fkColName== null) fkColName = "PROCESSID";
-		
-		if (table.equals("REPORTCAT")) {
+			fkColName = cn.queryOne(qr);
+			if (fkColName== null) fkColName = "PROCESSID";
+			
+		} else if (table.equals("CALC")) {
+			fkColName = "CALCID";
+			key = q.getValue("CALCID");
+		} else if (table.equals("REPORTCAT")) {
 			fkColName = "FILEID";
 			key = q.getValue("FILEID");
 		} else if (refTab.equals("CPAS_VALIDATION") || refTab.equals("BATCHCAT_PREVALSET")) {
 			fkColName = "ERRORID";
 			key = q.getValue("ERRORID");
+		} else if (refTab.equals("PLAN_CALCTYPE_REPFIELD")||refTab.equals("MEMBER_PLAN_OVERRIDE")) {
+			fkColName = "FKEY";
+			key = q.getValue("FKEY");
 		} 
-			
-		int recCount = cn.getPKLinkCount(refTab, fkColName , key);
+
+		//Util.p(table+" - "+refTab);				
+		int recCount = 0;
+		String refsql = "";
+		if ((table.equals("MEMBER")||table.equals("SV_MEMBER")) && refTab.equals("ACCOUNT")) {
+			refsql = "SELECT * FROM ACCOUNT WHERE ACCOUNTID IN (SELECT ACCOUNTID FROM MEMBER_PLAN_ACCOUNT WHERE CLNT='"+q.getValue("CLNT")+"' AND MKEY='"+q.getValue("MKEY")+"')";
+			String tmp = refsql.replace("SELECT * ", "SELECT COUNT(*) ");
+			recCount = cn.getQryCount(tmp);
+		} else if ((table.equals("MEMBER")||table.equals("SV_MEMBER")) && refTab.equals("MEMBER_PLAN_ACCOUNT")) {
+			refsql = "SELECT * FROM MEMBER_PLAN_ACCOUNT WHERE ACCOUNTID IN (SELECT ACCOUNTID FROM MEMBER_PLAN_ACCOUNT WHERE CLNT='"+q.getValue("CLNT")+"' AND MKEY='"+q.getValue("MKEY")+"')";
+			String tmp = refsql.replace("SELECT * ", "SELECT COUNT(*) ");
+			recCount = cn.getQryCount(tmp);
+		} else {
+			recCount = cn.getPKLinkCount(refTab, fkColName , key);
+			refsql = cn.getRelatedLinkSql(refTab, fkColName, key);
+		}
+		
 		if (recCount==0) continue;
-		String refsql = cn.getRelatedLinkSql(refTab, fkColName, key);
 
 		if (refTab.equals("CALC_ERROR")) {
 			refsql = "SELECT * FROM CALC_ERROR WHERE CALCID IN (SELECT CALCID FROM CALC WHERE PROCESSID='"+key+"')";
@@ -599,6 +725,7 @@ if (cn.isViewTable(table)) {
 		//cntRef++;
 %>
 <% if (lc == 1) {%>
+<br/>
 	<b><a style="margin-left: 20px;" href="Javascript:toggleLChild()">CPAS Logical Child Table <img id="img-lchild" border=0 src="image/minus.gif"></a></b><br/>
 <div id="div-lchild">
 	<img style="margin-left: 40px;" src="image/arrow_up.png"><br/>
@@ -608,7 +735,9 @@ if (cn.isViewTable(table)) {
 <a style="margin-left: 40px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= recCount %></span> / <%= cn.getTableRowCount(refTab) %>)
 <span class="cpas"><%= cn.getCpasComment(refTab) %></span>
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle border=0 title="<%=refsql%>"/></a>
+&nbsp;&nbsp;
+<a href="pop.jsp?key=<%= refTab %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" align=middle border=0 title="<%=refsql%>"/></a>
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-child-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>
 <div style="display: none;" id="hide-<%=id%>"></div>
@@ -616,7 +745,7 @@ if (cn.isViewTable(table)) {
 <div style="display: none;" id="sortdir-<%=id%>">0</div>
 <div style="display: none;" id="mode-<%=id%>">sort</div>
 <div style="display: none;" id="ori-<%=id%>">H</div>
-<div id="div-<%=id%>" style="margin-left: 70px; display: none;"></div>
+<div id="div-<%=id%>" style="margin-left: 40px; display: none;"></div>
 <br/>
 </div>
 <%	
@@ -646,7 +775,9 @@ if (cn.isViewTable(table)) {
 <div id="div-custom-<%=id%>">
 <a style="margin-left: 40px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle border=0 title="<%=refsql%>"/></a>
+&nbsp;&nbsp;
+<a href="pop.jsp?key=<%= refTab %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" align=middle border=0 title="<%=refsql%>"/></a>
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-child-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>
 <div style="display: none;" id="hide-<%=id%>"></div>
@@ -660,6 +791,64 @@ if (cn.isViewTable(table)) {
 <% 	} %>
 </div>
 <%} %>
+
+
+<%
+List<String> refViews = cn.getReferencedViews(table);
+
+int cnt=0;
+if (refViews.size()>0) {
+%>
+
+<br/>
+<b><a style="margin-left: 20px;" href="Javascript:toggleView()">View <img id="img-view" border=0 src="image/plus.gif"></a></b><br/>
+<div id="div-view" style="display:none; margin-left: 40px;">
+
+<%
+	String condition = Util.buildCondition(pkCols,  key);
+	String[] pks = pkCols.split("\\,");
+//	for (String pk: pks)
+		//Util.p("pks="+pk);
+	for (int i=0; i<refViews.size(); i++) {
+	
+		String refView = refViews.get(i);
+
+		List<TableCol> cols = cn.getTableDetail(null, refView);
+		//Util.p(refView + " size=" + cols.size());
+		//Util.p(" " + cols);
+		boolean isOK = false;
+		for (String c: pks) { // for every PK columns
+			c = c.trim();
+			isOK = false;
+			//Util.p("c=" + c);
+			for (TableCol co: cols) { // make sure the PK column is in the view
+				//Util.p("*=" + co.getName());
+				if ( co.getName().equals(c)) {
+					isOK = true;
+					//Util.p("found=" + co.getName());
+					break;
+				}
+			}
+			if (!isOK) break;
+		}
+		if (!isOK) {
+			//Util.p("no found - " + refView);
+			continue;
+		}
+		//Util.p(cols.toString());
+
+		cnt++;
+//		String refsql = cn.getRelatedLinkSql(refView, fkColName, key);
+
+		String refsql = "SELECT * FROM " + refView + " WHERE " + condition;
+		id = Util.getId();
+%>	
+	<div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>
+	<a href="Javascript:openQuery('<%= id %>')"><%= refView %></a>&nbsp;&nbsp;<br/>		
+<% } }%>
+</div>
+
+
 
 <br/><br/>
 <a href="Javascript:window.close()">Close</a>

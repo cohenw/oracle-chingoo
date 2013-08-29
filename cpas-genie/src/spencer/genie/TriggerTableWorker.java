@@ -34,8 +34,14 @@ public class TriggerTableWorker {
 		//List<String> packages = new ArrayList<String>();
 		
 		String q = "SELECT OBJECT_NAME FROM USER_OBJECTS WHERE OBJECT_TYPE='TRIGGER' ORDER BY 1";
+		if (cn.getTargetSchema() != null) {
+			q = "SELECT OBJECT_NAME FROM ALL_OBJECTS WHERE OWNER='" + cn.getTargetSchema() + "' AND OBJECT_TYPE='TRIGGER' ORDER BY 1";
+		}
 		if (cn.isTVS("GENIE_TR")) {
 			q = "SELECT object_name FROM user_objects A where object_type='TRIGGER' AND NOT EXISTS (SELECT 1 FROM GENIE_TR WHERE TRIGGER_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
+			if (cn.getTargetSchema() != null) {
+				q = "SELECT object_name FROM all_objects A where OWNER='" + cn.getTargetSchema() + "' AND object_type='TRIGGER' AND NOT EXISTS (SELECT 1 FROM GENIE_TR WHERE TRIGGER_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
+			}			
 		}
 		
 		running = true;
@@ -51,6 +57,11 @@ public class TriggerTableWorker {
 
 			progressStr = currentTrg + "<br/>" + progressStr;
 			q = "SELECT TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME='" + currentTrg +"' AND TYPE = 'TRIGGER' ORDER BY TYPE, LINE";
+			if (cn.getTargetSchema() != null) {
+				q = "SELECT TYPE, LINE, TEXT FROM ALL_SOURCE WHERE OWNER='" + cn.getTargetSchema() + "' AND NAME='" + currentTrg +"' AND TYPE = 'TRIGGER' ORDER BY TYPE, LINE";
+			}
+
+			
 			List<String[]> list = cn.query(q, 20000, false);
 			
 			String text = "";

@@ -37,8 +37,10 @@
 <h3><img src="image/cpas.jpg"> CPAS Catalog</h3>
 
 <% if (cn.isTVS("CPAS_SDI")) { %>
-<a href="cpas-on.jsp" target="_blank">CPAS Online</a> 
-<a href="cpas-on-custom.jsp" target="_blank">Custom</a>
+<a href="cpas-on.jsp" target="_blank">CPAS Online</a>
+	<% if (hasCustomTV) { %>
+		<a href="cpas-on-custom.jsp" target="_blank">Custom</a>
+	<% } %>
 <% } else { %>
 <span class="nullstyle">CPAS Online</span>
 <% } %>
@@ -46,14 +48,14 @@
 |
 <% if (cn.isTVS("CPAS_SDI")) { %>
 <a href="cpas-treeview.jsp" target="_blank">CPAS Tree View</a>
+	<% if (hasCustomTV) { %> 
+		<a href="cpas-customtreeview.jsp" target="_blank">Custom</a>
+	<% } %> 
 <% } else { %>
 <span class="nullstyle">CPAS Tree View</span>
 <% } %>
 
-<% if (hasCustomTV && cn.isTVS("CPAS_SDI")) { %> 
-<a href="cpas-customtreeview.jsp" target="_blank">Custom</a> |
-<% } %> 
-
+|
 <% if (cn.isTVS("CPAS_SDI")) { %>
 <a href="cpas-process.jsp" target="_blank">CPAS Process</a>
 <% } else { %>

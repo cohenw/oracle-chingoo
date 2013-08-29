@@ -155,7 +155,7 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 %>
 
 <h2><%= name %>
-<a target=_blank href="src2.jsp?name=<%= pkg %>#<%= prc.toLowerCase() %>"><img border="0" src="image/icon_query.png" title="Source code"></a>
+<a target=_blank href="src2.jsp?name=<%= pkg %>#<%= prc.toLowerCase() %>"><img border="0" src="image/sourcecode.gif" title="Source code"></a>
 </h2> 
 <br/>
 

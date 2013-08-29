@@ -61,12 +61,22 @@
 </head>
 <body>
 
-<table>
-<td><br><img src="image/small-genie.gif"/></td>
-<td><%= cn.getUrlString() %> Database: <%= cn.getSchemaName() %></td>
-</table>
+<div style="background-color: #E6F8E0; padding: 6px; border:1px solid #CCCCCC; border-radius:10px;">
+<img src="image/icon_query.png" width=20 height=20 align="top"/>
+<span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Query History</span>
+&nbsp;&nbsp;&nbsp;
+<b><%= cn.getUrlString() %></b>
+&nbsp;&nbsp;&nbsp;
+<a href="index.jsp" target="_blank">Home</a> |
+<a href="query.jsp" target="_blank">Query</a>
+<!-- <span style="float:right;">
+Search <input id="globalSearch" style="width: 200px;" placeholder="table or view name"/>
+</span>
+ -->
+</div>
+<div style="height: 4px;"></div>
 
-<table id="dataTable" class="gridBody" border=1 width=800>
+<table id="dataTable" class="gridBody" border=1 width=1000>
 <tr class="rowHeader">
 <th>Run</th>
 <th>Query</th>

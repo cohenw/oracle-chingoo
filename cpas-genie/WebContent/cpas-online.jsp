@@ -5,7 +5,7 @@
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
 	String qry = "SELECT LEVEL, ITEMID, CAPTION, SWITCH, ACTIONID, TREEKEY, UDATA /*, TRANSLATE, RATIO */ FROM TREEVIEW A START WITH ITEMID = 0 AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' CONNECT BY PARENTID = PRIOR ITEMID AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' " +
-		" AND EXISTS (SELECT 1 FROM TREEACTION_STMT WHERE SDI=A.SDI AND ACTIONID=A.ACTIONID AND ACTIONTYPE='AW' AND ACTIONSTMT!='SC_NEVER') " +
+		" AND EXISTS (SELECT 1 FROM TREEACTION_STMT WHERE SDI=A.SDI AND ACTIONID=A.ACTIONID AND ACTIONTYPE='AW' AND UPPER(ACTIONSTMT) !='SC_NEVER') " +
 		" ORDER BY SORTORDER";	
 
 	Query q = new Query(cn, qry, false);
@@ -371,7 +371,7 @@ function loadSTMT(sdi, actionid, treekey) {
 	String id = Util.getId();
 %>
 <b>CPAS Online Tab</b>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 <br/>
 			

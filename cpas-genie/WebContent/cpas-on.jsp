@@ -5,7 +5,7 @@
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
 	String qry = "SELECT LEVEL, ITEMID, CAPTION, SWITCH, ACTIONID, TREEKEY, UDATA /*, TRANSLATE, RATIO */ FROM TREEVIEW A START WITH ITEMID = 0 AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' CONNECT BY PARENTID = PRIOR ITEMID AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' " +
-		" AND EXISTS (SELECT 1 FROM TREEACTION_STMT WHERE SDI=A.SDI AND ACTIONID=A.ACTIONID AND ACTIONTYPE='AW' AND ACTIONSTMT!='SC_NEVER') " +
+		" AND EXISTS (SELECT 1 FROM TREEACTION_STMT WHERE SDI=A.SDI AND ACTIONID=A.ACTIONID AND ACTIONTYPE='AW' AND UPPER(ACTIONSTMT) !='SC_NEVER') " +
 		" ORDER BY SORTORDER";	
 
 	Query q = new Query(cn, qry, false);
@@ -364,26 +364,34 @@ function loadSTMT(sdi, actionid, treekey) {
 
 
 <body>
-	<table width=100% border=0>
-		<td><img src="image/cpas.jpg"
-			title="Version <%=Util.getVersionDate()%>" /></td>
-		<td><h2 style="color: blue;">Genie for CPAS Online</h2></td>
-		<td>&nbsp;</td>
 
-		<td>
+
+<div id="topline" style="background-color: #EEEEEE; padding: 0px; border:1px solid #888888; border-radius:10px;">
+<table width=100% border=0 cellpadding=0 cellspacing=0>
+<td width="44">
+<img align=top src="image/lamp.png" alt="Ver. <%= Util.getVersionDate() %>" title="<%= Util.getBuildNo() %>"/>
+</td>
+<td>
+<span style="font-family: Arial; font-size:18px;"><span style="background-color:black; color: white;">C</span><span style="background-color:#FF9900; color: white;">PAS</span> <span style="color: blue; font-family: Arial; font-size:18px; font-weight:bold;">Online</span></span>
+</td>
+<!-- <td nowrap><h2 style="color: blue;">Genie</h2></td> -->
+<td><b><%= cn.getUrlString() %></b></td>
+<td nowrap>
+
 <a href="index.jsp">Home</a> |
 <a href="query.jsp" target="_blank">Query</a> |
 <a href="cpas-process.jsp" target="_blank">CPAS Process</a> |
 <a href="cpas-treeview.jsp" target="_blank">Treeview</a> 
-		</td>
-		<td><h3><%=cn.getUrlString()%></h3></td>
 
+</td>
 <td align=right nowrap>
 <b>Search</b> <input id="globalSearch" style="width: 200px;"/>
 <input type="button" value="Find" onClick="Javascript:processSearch($('#globalSearch').val())"/>
 </td>
+</table>
+</div>
+<div style="height: 4px;"></div>
 
- 	</table>
 
 			<div id="outer-tab">
 				<div id="inner-tab">
@@ -391,7 +399,7 @@ function loadSTMT(sdi, actionid, treekey) {
 	String id = Util.getId();
 %>
 <b>CPAS Online Tab</b>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 			
 <table border=0>

@@ -32,7 +32,7 @@
 	String typeName = cn.getObjectType(owner, name);
 %>
 <div id="objectTitle" style="display:none"><%= typeName %>: <%= name %></div>
-<h2><%= typeName %>: <%= name %> &nbsp;&nbsp;<a href="<%=sourceUrl%>" target="_blank"><img border=0 src="image/icon_query.png" title="Source code"></a>
+<h2><%= typeName %>: <%= name %> &nbsp;&nbsp;<a href="<%=sourceUrl%>" target="_blank"><img border=0 src="image/sourcecode.gif" title="Source code"></a>
 <a href="pop.jsp?type=PACKAGE&key=<%=name%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
 <% if (hasGenieTable && (typeName.equals("PACKAGE")||typeName.equals("TYPE"))) { %>
 <a target=_blank href="package-browser.jsp?name=<%= name %>">Package Browser</a>
@@ -51,6 +51,9 @@
 <% 
 	if (typeName.equals("TRIGGER")) {
 		String q = "SELECT DISTINCT TYPE FROM USER_SOURCE WHERE NAME='" + name +"' ORDER BY TYPE";
+		if (cn.getTargetSchema() != null) {
+			q = "SELECT DISTINCT TYPE FROM ALL_SOURCE WHERE OWNER='" + cn.getTargetSchema() + "' AND NAME='" + name +"' ORDER BY TYPE";
+		}
 		if (owner != null) q = "SELECT DISTINCT TYPE FROM ALL_SOURCE WHERE OWNER='" + owner + "' AND NAME='" + name +"' ORDER BY TYPE";
 
 		List<String[]> types = cn.query(q, false);
@@ -60,6 +63,9 @@ for (int k=0;k<types.size();k++) {
 	String type = types.get(k)[1];
 
 	String qry2 = "SELECT TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME='" + name +"' AND TYPE = '" + type + "' ORDER BY TYPE, LINE";
+	if (cn.getTargetSchema() != null) {
+		qry2 = "SELECT TYPE, LINE, TEXT FROM ALL_SOURCE WHERE OWNER='" + cn.getTargetSchema() + "' AND NAME='" + name +"' AND TYPE = '" + type + "' ORDER BY TYPE, LINE";
+	}
 	if (owner != null) qry2 = "SELECT TYPE, LINE, TEXT FROM ALL_SOURCE WHERE OWNER='" + owner + "' AND NAME='" + name +"' AND TYPE = '" + type + "' ORDER BY TYPE, LINE";
 
 	List<String[]> list2 = cn.query(qry2, false);

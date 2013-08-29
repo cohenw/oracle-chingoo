@@ -1731,7 +1731,7 @@ public class Connect implements HttpSessionBindingListener {
        			String rname = rs.getString("REFERENCED_NAME");
        			String rtype = rs.getString("REFERENCED_TYPE");
        			
-       			if(!rowner.equalsIgnoreCase(this.getSchemaName()))
+       			if(!( rowner.equalsIgnoreCase(this.getSchemaName()) || rowner.equalsIgnoreCase(this.getTargetSchema())))
        				rname = rowner + "." + rname;
        			res += "<a href='javascript:loadPackage(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;<br/>";
        		}
@@ -1761,7 +1761,7 @@ public class Connect implements HttpSessionBindingListener {
        			String rname = rs.getString("REFERENCED_NAME");
        			String rtype = rs.getString("REFERENCED_TYPE");
        			
-       			if(!rowner.equalsIgnoreCase(this.getSchemaName()))
+       			if(!(rowner.equalsIgnoreCase(this.getSchemaName()) || rowner.equalsIgnoreCase(this.getTargetSchema())))
        				rname = rowner + "." + rname;
 
        			String crud = this.getCRUD(name, rname);
@@ -1797,7 +1797,7 @@ public class Connect implements HttpSessionBindingListener {
        			String rname = rs.getString("REFERENCED_NAME");
        			String rtype = rs.getString("REFERENCED_TYPE");
        			
-       			if(!rowner.equalsIgnoreCase(this.getSchemaName()))
+       			if(!(rowner.equalsIgnoreCase(this.getSchemaName()) || rowner.equalsIgnoreCase(this.getTargetSchema())))
        				rname = rowner + "." + rname;
 
        			res += "<a href='javascript:loadView(\""+ rname + "\")'>" + rname + "</a>&nbsp;&nbsp;" + this.getCRUD(name, rname) + "<br/>";
@@ -1830,7 +1830,7 @@ public class Connect implements HttpSessionBindingListener {
        			String rname = rs.getString("REFERENCED_NAME");
        			String rtype = rs.getString("REFERENCED_TYPE");
        			
-       			if(!rowner.equalsIgnoreCase(this.getSchemaName()))
+       			if(!(rowner.equalsIgnoreCase(this.getSchemaName()) || rowner.equalsIgnoreCase(this.getTargetSchema())))
        				rname = rowner + "." + rname;
 
        			String qry = "SELECT TABLE_OWNER, TABLE_NAME FROM USER_SYNONYMS WHERE SYNONYM_NAME='" + rname + "'";
@@ -1960,7 +1960,7 @@ public class Connect implements HttpSessionBindingListener {
 			qry = "SELECT COUNT(*) FROM " + tname + " WHERE CALCID IN (SELECT CALCID FROM CALC WHERE PROCESSID='" + keys + "')";
 		}
 		
-		String res = this.queryOne(qry);
+		String res = this.queryOne(qry, false);
 		if (res==null || res.equals("")) return 0;
 		cnt = Integer.parseInt(res);
 		

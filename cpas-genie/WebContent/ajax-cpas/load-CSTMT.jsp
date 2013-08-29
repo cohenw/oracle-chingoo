@@ -69,7 +69,7 @@
 	String sql = "SELECT * FROM CUSTOMTREEACTION_STMT WHERE SDI = '" + sdi + "' AND ACTIONID=" + actionid + ""; 	
 %>
 <b><%= tv.get(0)[1] %></b> <%= tv.get(0)[2] %>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=sql%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=sql%>"/></a>
 <a href="javascript:openSimulator()">Simulator <img border=0 src="image/Media-play-2-icon.png"></a>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
 
@@ -112,7 +112,7 @@
 	id = Util.getId();
 	qry = "SELECT * FROM CPAS_LAYOUT WHERE TNAME = '" + values[i] + "'";
 %>
-	<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
+	<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
 	<div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 <% } %>
 

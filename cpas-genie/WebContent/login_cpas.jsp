@@ -80,7 +80,7 @@
     	function setLoginCPAS(jdbcUrl, target, userId) {
     		$("#url").val(jdbcUrl);
     		$("#targetSchema").val(target);
-    		$("#username").val(userId);
+    		//$("#username").val(userId);
     	}
     	
     </script>
@@ -233,6 +233,11 @@ CAAT<br/>
 <br/>
 <a style="margin-left: 60px;" href="javascript:setLoginCPAS('jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAAT', 'client_caat_test', '')">client_caat_test@jdbc:oracle:thin:@s-ora-003.cpas.com:1526/CAAT</a>
 <br/>
+<br/>
+KCERA<br/>
+<a style="margin-left: 60px;" href="javascript:setLoginCPAS('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/KCERA', 'client_55kcm', '')">client_55kcm@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/KCERA</a>
+<br/>
+
 
 </div>
 

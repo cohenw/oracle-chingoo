@@ -154,7 +154,7 @@ String id2 = Util.getId();
 sortColumn, sortDirection = <%=sortColumn +"," + sortDirection %> Layout=<%= layout %><br/>
  --%>
 <%= sql %>
-<a href="javascript:openQuery('<%=id2%>')"><img src="image/sql.png" border=0 align=middle  title="<%=sql%>"/></a>
+<a href="javascript:openQuery('<%=id2%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=sql%>"/></a>
 <a href="javascript:toggleLayout('<%=id%>')">Layout</a>
 <div style="display: none;" id="sql-<%=id2%>"><%= sql%></div>
 

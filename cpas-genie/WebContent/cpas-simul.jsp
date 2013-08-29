@@ -33,7 +33,7 @@
 
 	List<String[]> q = cn.query("SELECT caption, treekey FROM TREEVIEW WHERE SDI='"+sdi+"' and actionid="+actionid, false);
 	
-	if (actionid==null || actionid.equals("")) {
+	if ((actionid==null || actionid.equals("")) && cn.isTVS("CUSTOMTREEVIEW")) {
 		if (actionid==null && tv != null) {
 			actionid = cn.queryOne("SELECT actionid FROM CUSTOMTREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv + "'");
 		}
@@ -514,7 +514,7 @@ function rowsPerPage(rows) {
 	String qry = "SELECT * FROM CPAS_LAYOUT WHERE TNAME='" + mainLayout + "'";
 %>
 <b>Master</b> [<%= mainLayout %>]
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 
 <div style="padding: 4px;">
@@ -539,7 +539,7 @@ if (subQry != null && !subQry.equals("")) {
 %>
 
 <b>Detail</b> [<%= subLayout %>]
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 
 <div style="padding: 4px;">
