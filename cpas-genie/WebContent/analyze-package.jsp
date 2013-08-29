@@ -17,7 +17,11 @@
 		q = "SELECT object_name FROM user_objects A where object_type='PACKAGE BODY' AND NOT EXISTS (SELECT 1 FROM GENIE_PA WHERE PACKAGE_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
 	}
 	q = "SELECT object_name FROM user_objects where object_type IN ('PACKAGE BODY','TYPE BODY') AND object_name IN ('" + name + "') ORDER BY 1";
-
+	if (cn.getTargetSchema() != null) {
+		q = "SELECT object_name FROM all_objects where owner='" + cn.getTargetSchema() + "' and object_type IN ('PACKAGE BODY','TYPE BODY') AND object_name IN ('" + name + "') ORDER BY 1";
+	}
+	
+	Util.p(q);
 	List<String[]> pkgs = cn.query(q, false);
 %>
 
@@ -28,10 +32,6 @@
 
 	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
 	<script src="script/main.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
-	<script type="text/javascript" src="script/shCore.js"></script>
-	<script type="text/javascript" src="script/shBrushSql.js"></script>
-    <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
-    <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
     <link href="css/style.css?<%= Util.getScriptionVersion() %>" rel="stylesheet" type="text/css" />
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
 
@@ -55,6 +55,9 @@ $(document).ready(function() {
 		out.flush();
 		
 		String qry = "SELECT TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME='" + pkgName +"' AND TYPE IN ('PACKAGE BODY','TYPE BODY') ORDER BY TYPE, LINE";
+		if (cn.getTargetSchema() != null) {
+			qry = "SELECT TYPE, LINE, TEXT FROM ALL_SOURCE WHERE OWNER='" + cn.getTargetSchema() + "' AND NAME='" + pkgName +"' AND TYPE IN ('PACKAGE BODY','TYPE BODY') ORDER BY TYPE, LINE";
+		}
 		List<String[]> list = cn.query(qry, 20000, false);
 		
 		String text = "";
@@ -82,8 +85,8 @@ $(document).ready(function() {
 		String syntax = hs.getHyperSyntax(cn, text, "PACKAGE BODY", pkgName);
 		HashSet<String> packageProc = hs.getPackageProcedure();
 //		System.out.println(packageProc);
- 		System.out.println("pt.getPD()=[" + pt.getPD() + "]");
-//		cn.AddPackageProcDetail(pkgName, pt.getPD());
+//		System.out.println("pt.getPD()=[" + pt.getPD() + "]");
+		cn.AddPackageProcDetail(pkgName, pt.getPD());
 		cn.AddPackageProc(pkgName, packageProc);		
 		hs = null;
 		list=null;

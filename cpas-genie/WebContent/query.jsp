@@ -16,7 +16,7 @@
 			String token = st.nextToken().trim();
 			if (token.startsWith(":") && !token.startsWith(":=") && token.length()>1) {
 				System.out.println("token=" + token);
-				al.add(token);
+				if (!al.contains(token)) al.add(token);
 			}
 		}
 		return al;
@@ -681,35 +681,50 @@
 	function reloadQuery() {
 		$("#form1").submit();		
 	}
-	
+
+	function toggleHelp() {
+		var src = $("#helpDivImage").attr('src');
+		if (src.indexOf("minus")>0) {
+			$("#div-help").slideUp();
+			$("#helpDivImage").attr('src','image/plus.gif');
+		} else {
+			$("#div-help").slideDown();
+			$("#helpDivImage").attr('src','image/minus.gif');
+		}
+	}
 	</script>    
 </head> 
 
 <body>
 
-<div style="background-color: #ffffff;">
-<img src="image/icon_query.png" align="middle"/> <b>QUERY</b>
-<%= cn.getUrlString() %>
+<div style="background-color: #E6F8E0; padding: 6px; border:1px solid #CCCCCC; border-radius:10px;">
+<img src="image/icon_query.png" width=20 height=20 align="top"/>
+<span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Query</span>
 &nbsp;&nbsp;&nbsp;
+<b><%= cn.getUrlString() %></b>
+&nbsp;&nbsp;&nbsp;
+<a href="index.jsp" target="_blank">Home</a> |
 <a href="query.jsp" target="_blank">Query</a> |
+<a target=_blank href="history.jsp">History</a>
 <!-- <a href="q.jsp" target="_blank">Q</a> |
- -->
+
 <a href="erd_svg.jsp?tname=<%= tbl %>" target="_blank">ERD</a> |
 <a href="worksheet.jsp" target="_blank">Work Sheet</a>
-&nbsp;&nbsp;&nbsp;
+ -->&nbsp;&nbsp;&nbsp;
+<span style="float:right;">
 Search <input id="globalSearch" style="width: 200px;" placeholder="table or view name"/>
+</span>
 </div>
-
+<div style="height: 4px;"></div>
 <div id="queryMain">
 
 <a href="Javascript:toggleHelp()"><img  style="float: left" id="helpDivImage" border="0" src="image/minus.gif"></a>
-<div id="div-help" style="float: left">
-	<a id="showERD" href="Javascript:showERD('<%=tbl%>')">Show ERD</a>
-	<div id="tableList1" style="margin-left: 5px;">
-<%-- 	<a href="Javascript:showRelatedTables('<%=tbl%>')">Show Related Tables</a>
- --%>
- 	</div>
 
+<div id="div-help" style="float: left;">
+<%-- 	<a id="showERD" href="Javascript:showERD('<%=tbl%>')">Show ERD</a>
+	<div id="tableList1" style="margin-left: 5px;">
+ 	</div>
+ --%>
 <div class="ui-widget">
 	<label for="tablesearch">Table/View: </label>
 	<input id="tablesearch" style="width: 200px;"/>

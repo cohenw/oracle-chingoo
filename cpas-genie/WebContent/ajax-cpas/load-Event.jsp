@@ -9,7 +9,7 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String process = request.getParameter("process");
 
-	String qry = "SELECT * FROM CPAS_PROCESS_EVENT WHERE PROCESS = '" + process + "' AND SECLABEL != 'SC_NEVER' AND PEVENT IS NULL ORDER BY POSITION"; 
+	String qry = "SELECT * FROM CPAS_PROCESS_EVENT WHERE PROCESS = '" + process + "' AND UPPER(SECLABEL) != 'SC_NEVER' AND PEVENT IS NULL ORDER BY POSITION"; 
 	
 	Query q = new Query(cn, qry, false);
 	
@@ -17,7 +17,7 @@
 	String id = Util.getId();
 %>
 <b>Event</b> - <%= pname %></b> - [<%= process %>]
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 
 <br/>

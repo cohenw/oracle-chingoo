@@ -78,7 +78,7 @@
 		$("#FORM_query").submit();		
 	}
 
-    $(document).ready(function() {
+	$(document).ready(function() {
     	setHighlight();
     });	    
 
@@ -235,6 +235,20 @@
     		$("#img-custom").attr("src","image/minus.gif");
     		$('#div-custom').slideDown();
     	}
+    }
+
+    function toggleView() {
+    	var img = $("#img-view").attr("src"); 
+    	//alert(img);
+    	if (img.indexOf("minus") > 0) {
+    		$("#img-view").attr("src","image/plus.gif");
+    		$('#div-view').slideUp();
+    	} else {
+    		$("#img-view").attr("src","image/minus.gif");
+    		$('#div-view').slideDown();
+    	}
+
+    	//$('#div-child').toggle();
     }
 
     function toggleText(arg1, arg2) {
@@ -540,7 +554,7 @@
 		$("#sql").val(sql);
 		$("#id").val(id);
 		
-		$("#divSql"+id).html("<b>" + sql + "</b> <a href=\"javascript:openQuery('" + id + "')\"><img src=\"image/sql.png\" border=\"0\"></a> <a href='Javascript:editText("+ id +")'>edit</a> <a href='Javascript:doTextQry("+ id +")'>rerun</a>");
+		$("#divSql"+id).html("<b>" + sql + "</b> <a href=\"javascript:openQuery('" + id + "')\"><img src=\"image/sout.gif\" border=\"0\"></a> <a href='Javascript:editText("+ id +")'>edit</a> <a href='Javascript:doTextQry("+ id +")'>rerun</a>");
 		
 		$("#divText"+id).hide();
 		$("#divSql"+id).show();

@@ -123,7 +123,7 @@ for (int i=0;i<list.size();i++) {
 <br/>
 
 <% id = Util.getId(); %>
-<b><a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
+<b><a href="javascript:toggleData('<%=id%>')"><img src="image/sourcecode.gif" border=0><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
 <div id="div-<%=id %>" style="display: none; margin-left: 20px; background-color: #e0e0e0;">
 <%
 for (int i=0;i<proc0.size();i++) {
@@ -132,6 +132,9 @@ for (int i=0;i<proc0.size();i++) {
 	String label = proc0.get(i)[3];
 	
 	q = "SELECT LINE, TEXT FROM USER_SOURCE WHERE TYPE IN ('PACKAGE BODY','TYPE BODY') AND NAME = '" + pkg + "' AND LINE BETWEEN " + start + " AND " + end+ " ORDER BY LINE";
+	if (cn.getTargetSchema() != null) {
+		q = "SELECT LINE, TEXT FROM ALL_SOURCE WHERE OWNER='" + cn.getTargetSchema() + "' AND TYPE IN ('PACKAGE BODY','TYPE BODY') AND NAME = '" + pkg + "' AND LINE BETWEEN " + start + " AND " + end+ " ORDER BY LINE";
+	}
 	//System.out.println(q);
 	List<String[]> src = cn.query(q, false);
 	String text = "";

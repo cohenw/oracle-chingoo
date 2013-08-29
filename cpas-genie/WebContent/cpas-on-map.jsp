@@ -9,7 +9,7 @@
 <%!
 
 public ArrayList<String> getProcessList(Connect cn, String ptype) {
-	String qry = "SELECT * FROM CPAS_PROCESS WHERE TYPE = '" + ptype + "' AND SECLABEL != 'SC_NEVER' ORDER BY POSITION";
+	String qry = "SELECT * FROM CPAS_PROCESS WHERE TYPE = '" + ptype + "' AND UPPER(SECLABEL) != 'SC_NEVER' ORDER BY POSITION";
 	Query q = new Query(cn, qry, false);
 	ArrayList<String> res = new ArrayList<String>();
 
@@ -48,7 +48,7 @@ public ArrayList<String> getProcessList(Connect cn, String ptype) {
 
 
 public ArrayList<String> getEventList(Connect cn, String process) {
-	String qry = "SELECT * FROM CPAS_PROCESS_EVENT WHERE PROCESS = '" + process + "' AND SECLABEL != 'SC_NEVER' AND PEVENT IS NULL ORDER BY POSITION"; 
+	String qry = "SELECT * FROM CPAS_PROCESS_EVENT WHERE PROCESS = '" + process + "' AND UPPER(SECLABEL) != 'SC_NEVER' AND PEVENT IS NULL ORDER BY POSITION"; 
 	ArrayList<String> res = new ArrayList<String>();
 	Query q = new Query(cn, qry, false);
 
@@ -89,7 +89,7 @@ public ArrayList<String> getEventList(Connect cn, String process) {
 	String actionid = request.getParameter("actionid");
 
 	String qry = "SELECT LEVEL, ITEMID, CAPTION, SWITCH, ACTIONID, TREEKEY, UDATA FROM TREEVIEW A START WITH ACTIONID=" + actionid + " AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' CONNECT BY PARENTID = PRIOR ITEMID AND SDI = 'WP' AND SCHEMA = 'TREEVIEW' " +
-			" AND EXISTS (SELECT 1 FROM TREEACTION_STMT WHERE SDI=A.SDI AND ACTIONID=A.ACTIONID AND ACTIONTYPE='AW' AND ACTIONSTMT!='SC_NEVER') " +
+			" AND EXISTS (SELECT 1 FROM TREEACTION_STMT WHERE SDI=A.SDI AND ACTIONID=A.ACTIONID AND ACTIONTYPE='AW' AND UPPER(ACTIONSTMT) !='SC_NEVER') " +
 			" ORDER BY SORTORDER";	
 
 	Query q = new Query(cn, qry, false);	

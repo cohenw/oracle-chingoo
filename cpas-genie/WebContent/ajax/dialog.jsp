@@ -22,6 +22,12 @@ if (table.equals("ERRORCAT")) conCols = "ERRORID";
 	String condition = Util.buildCondition(conCols, key);
 //System.out.println("condition="+ condition);	
 
+	if (condition.equals("ERROR")) {
+		if (table.equals("FORMULA")) {
+			condition = "FKEY='" + key + "'";
+		}
+	}
+
 	String sql = "SELECT * FROM " + table + " WHERE " + condition;
 	if (sql.endsWith(";")) sql = sql.substring(0, sql.length()-1);
 	sql = sql.replaceAll("&gt;",">").replace("&lt;","<");
@@ -31,7 +37,7 @@ if (table.equals("ERRORCAT")) conCols = "ERRORID";
 <div id="sql-<%=id%>" style="display: none;"><%= sql %></div>
 <%= sql %>
 &nbsp;
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border="0"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border="0"></a>
 &nbsp;
 <%--<a href="Javascript:hideNullColumnTable('<%=id%>')">Hide Null</a> --%>
 <div id="div-<%=id%>">

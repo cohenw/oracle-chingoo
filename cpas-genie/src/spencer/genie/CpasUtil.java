@@ -65,11 +65,13 @@ public class CpasUtil {
 			{"PLAN", "CLNT", "SV_PLAN"},
 			{"PAYMENTID", "PENID", "PENSIONER_PAYMENT"},
 			{"SPROCESSID", "PROCESSID", "BATCH_QUEUE"},
-			{"TASKKEY", "BATCHKEY", "BATCHCAT_TASK"}
+			{"TASKKEY", "BATCHKEY", "BATCHCAT_TASK"},
+			{"EVENT", "PROCESS", "CPAS_PROCESS_EVENT"}
 	};
 			
 	public String logicalLink[][] = {
 			{"PROCESSID", "BATCH"},
+			{"PROCESSKEY", "BATCH"},
 			{"FEED_PROCESSID", "BATCH"},
 			{"PENID", "PENSIONER"},
 			{"PERSONID", "PERSON"},
@@ -97,7 +99,9 @@ public class CpasUtil {
 			{"CLNT", "CLIENT"},
 			{"RULEID", "RULE"},
 			{"CODE", "CPAS_CODE"},
-			{"CODE2", "CPAS_CODE"}
+			{"CODE2", "CPAS_CODE"},
+			{"PROCESS", "CPAS_PROCESS"},
+			{"FKEY", "FORMULA"} 
 	};
 
 	// for special case (with table name)
@@ -300,6 +304,12 @@ public class CpasUtil {
 		} else if (temp.endsWith("REPORTCAT.FILEID")) {
 			String qry = "SELECT FILENAME FROM SYSBINFILE WHERE FILEID='" + value + "'";
 			return cn.queryOne(qry);
+		} else if (temp.endsWith(".PROCESS") && !tname.equals("CPAS_PROCESS")) {
+			String qry = "SELECT NAME FROM CPAS_PROCESS WHERE PROCESS='" + value + "'";
+			return cn.queryOne(qry);
+		} else if (temp.endsWith(".EVENT") && !tname.equals("CPAS_PROCESS_EVENT")) {
+			String qry = "SELECT NAME FROM CPAS_PROCESS_EVENT WHERE PROCESS='" + q.getValue("PROCESS") + "' AND EVENT = '" + value + "'";
+			return cn.queryOne(qry);
 		} else if (temp.endsWith(".TRANID") && tname.startsWith("BATCH_BUF")) {
 			for (int i=0; i<tranId.length;i++) {
 				if (value.equals(tranId[i][0])) return tranId[i][1];
@@ -307,6 +317,12 @@ public class CpasUtil {
 			return null;
 		} else if (temp.endsWith(".CODE") && !tname.equals("CPAS_CODE")) {
 			String qry = "SELECT CAPTION FROM CPAS_CODE WHERE GRUP='" + value + "'";
+			return cn.queryOne(qry);
+		} else if (temp.endsWith(".FKEY") && !tname.equals("FORMULA")) {
+			String qry = "SELECT FDESC FROM FORMULA WHERE FKEY='" + value + "' AND ROWNUM=1";
+			return cn.queryOne(qry);
+		} else if (temp.equals("CALC_CUSTOM.KEY")) {
+			String qry = "SELECT NAME FROM PLAN_CALCTYPE_CUSTOM WHERE KEY='" + value + "' AND ROWNUM=1";
 			return cn.queryOne(qry);
 		} else if (temp.equals("CPAS_TABLE_COL.CODE2")) {
 			String qry = "SELECT CAPTION FROM CPAS_CODE WHERE GRUP='" + value + "'";

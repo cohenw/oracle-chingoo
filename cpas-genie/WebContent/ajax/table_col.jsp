@@ -47,7 +47,7 @@ Please select a Table to see the detail.
 <div id="<%= divId %>">
 <a href="Javascript:copyPaste('<%=table %>');"><b><%= table %></b></a> <span class="rowcountstyle"><%= cn.getTableRowCount(table) %></span> <a href="Javascript:removeDiv('<%= divId %>')">x</a> 
 <a href="Javascript:toggleSort('<%= divId %>')"><img src="image/a.gif"></a>
-&nbsp;&nbsp;&nbsp;<a href="pop.jsp?key=<%= table %>" target="_blank" title="view detail"><img src="image/sql.png"></a>
+&nbsp;&nbsp;&nbsp;<a href="pop.jsp?key=<%= table %>" target="_blank" title="view detail"><img src="image/detail.png"></a>
 <br/>
 
 <div id="<%= divId %>-a">

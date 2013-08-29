@@ -10,7 +10,7 @@
 	String keyword = request.getParameter("keyword");
 	String key = keyword.toUpperCase().trim();
 
-	String qry = "SELECT * FROM CPAS_PROCESS WHERE (UPPER(NAME) LIKE '%" + key + "%' OR SECLABEL = '"+key +"') AND SECLABEL !='SC_NEVER' ORDER BY type, position"; 
+	String qry = "SELECT * FROM CPAS_PROCESS WHERE (UPPER(NAME) LIKE '%" + key + "%' OR SECLABEL = '"+key +"') AND UPPER(SECLABEL) !='SC_NEVER' ORDER BY type, position"; 
 	
 	Query q = new Query(cn, qry, false);
 	
@@ -62,7 +62,7 @@
 
 <%
 	String qry2 = "SELECT A.*, (SELECT TYPE FROM CPAS_PROCESS WHERE process=A.process) TYPE FROM CPAS_PROCESS_EVENT A WHERE " +
-		"((UPPER(NAME) LIKE '%" + key + "%' OR SECLABEL = '"+key +"') AND SECLABEL != 'SC_NEVER') " +
+		"((UPPER(NAME) LIKE '%" + key + "%' OR SECLABEL = '"+key +"') AND UPPER(SECLABEL) != 'SC_NEVER') " +
 		" OR (PROCESS,EVENT) IN (SELECT PROCESS, EVENT FROM CPAS_PROCESS_EVENT_VIEW WHERE TREEKEY= '" + key +"' " +
 		                         " OR TREEKEY IN (SELECT TREEKEY FROM TREEVIEW WHERE (SDI, SCHEMA, ACTIONID) IN (SELECT SDI, SCHEMA, ACTIONID FROM TREEACTION_STMT WHERE ACTIONTYPE IN ('MS','DS') AND ACTIONSTMT LIKE '%" + key+ "%') ) )" +
 		" ORDER BY type, process, position"; 

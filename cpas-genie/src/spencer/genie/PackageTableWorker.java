@@ -34,8 +34,15 @@ public class PackageTableWorker {
 		//List<String> packages = new ArrayList<String>();
 		
 		String q = "SELECT OBJECT_NAME FROM USER_OBJECTS WHERE OBJECT_TYPE IN ('PACKAGE BODY','TYPE BODY') ORDER BY 1";
+		if (cn.getTargetSchema() != null) {
+			q = "SELECT OBJECT_NAME FROM ALL_OBJECTS WHERE OWNER='" + cn.getTargetSchema() + "' AND OBJECT_TYPE IN ('PACKAGE BODY','TYPE BODY') ORDER BY 1";
+		}
+
 		if (cn.isTVS("GENIE_PA")) {
 			q = "SELECT object_name FROM user_objects A where object_type IN ('PACKAGE BODY','TYPE BODY') AND NOT EXISTS (SELECT 1 FROM GENIE_PA WHERE PACKAGE_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
+			if (cn.getTargetSchema() != null) {
+				q = "SELECT object_name FROM all_objects A where OWNER='" + cn.getTargetSchema() + "' AND object_type IN ('PACKAGE BODY','TYPE BODY') AND NOT EXISTS (SELECT 1 FROM GENIE_PA WHERE PACKAGE_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
+			}
 		}
 		
 		running = true;
@@ -51,6 +58,9 @@ public class PackageTableWorker {
 
 			progressStr = currentPkg + "<br/>" + progressStr;
 			q = "SELECT TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME='" + currentPkg +"' AND TYPE IN ('PACKAGE BODY','TYPE BODY') ORDER BY TYPE, LINE";
+			if (cn.getTargetSchema() != null) {
+				q = "SELECT TYPE, LINE, TEXT FROM ALL_SOURCE WHERE OWNER='" + cn.getTargetSchema() + "' AND NAME='" + currentPkg +"' AND TYPE IN ('PACKAGE BODY','TYPE BODY') ORDER BY TYPE, LINE";
+			}
 			List<String[]> list = cn.query(q, 20000, false);
 			
 			String text = "";

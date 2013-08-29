@@ -95,7 +95,8 @@
 	String tbl = Util.getMainTable(sql);
 	List<String> tbls = Util.getTables(sql); 
 	if (tbls.size()>0) tbl = tbls.get(0);
-//System.out.println("XXX TBL=" + tbl);
+//	System.out.println("XXX TBLs=" + tbls);
+//	System.out.println("XXX TBL=" + tbl);
 
 	boolean hasDataLink = false;
 	String tname = tbl;
@@ -155,6 +156,7 @@
 	int pkColIndex = -1;
 	
 	List<String> pkColList = null;
+//System.out.println("pkName=" + pkName);			
 	if (pkName != null) {
 		pkColList = cn.getConstraintColList(pkName);
 //System.out.println("pkColList=" + pkColList.size());			
@@ -183,6 +185,7 @@
 			hasDataLink = true;
 		}
 
+//		System.out.println("matchCount=" + matchCount + ", pkColList.size()="+pkColList.size() + ",refTabs.size()="+refTabs.size());			
 //		System.out.println("pkLink=" + pkLink);			
 //		System.out.println("hasPK=" + hasPK);			
 	
@@ -214,7 +217,7 @@ if (!hasPK && q.hasColumn("ROWID")) hasRowid = true;
 --%>
  
 <span style="color:#666666;"><%= cn.getUrlString() %> - <%= new java.util.Date() %></span> 
-<pre style="font-family: Consolas; font-size: 16px;"><b id="qqq"><%=new HyperSyntax().getHyperSyntax(cn, sql, "SQL")%></b><a title="Edit Query" style="margin-left: 10px;" href="Javascript:editQuery()"><img border=0 src="image/sql.png"></a></pre>
+<pre style="font-family: Consolas; font-size: 16px;"><b id="qqq"><%=new HyperSyntax().getHyperSyntax(cn, sql, "SQL")%></b><a title="Edit Query" style="margin-left: 10px;" href="Javascript:editQuery()"><img border=0 width=20 height=20 src="image/file_edit.png"></a></pre>
 
 <% if (pgNo>1) { %>
 <a href="Javascript:gotoPage0(<%= pgNo - 1%>)"><img border=0 src="image/btn-prev.png" align="top"></a>

@@ -17,8 +17,6 @@
 
 	<script src="../script/jquery-1.7.2.min.js" type="text/javascript"></script>
 	<script src="../script/main.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
-    <link href='../css/shCore.css' rel='stylesheet' type='text/css' > 
-    <link href="../css/shThemeDefault.css" rel="stylesheet" type="text/css" />
     <link href="../css/style.css?<%= Util.getScriptionVersion() %>" rel="stylesheet" type="text/css" />
 	<link rel="icon" type="../image/png" href="image/Genie-icon.png">
 
