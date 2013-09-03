@@ -182,6 +182,7 @@ public class TriggerTable {
 		// analyze the plsql source code
 		int ln = 0;
 		int prcStart=0;
+		boolean skipNextLoop = false;
 		for (String s: lines) {
 			ln++;
 			
@@ -247,8 +248,15 @@ public class TriggerTable {
 					
 					if (tokenSeq==1 && (tokenUp.equals("BEGIN")||tokenUp.equals("IF")||tokenUp.equals("FOR")||tokenUp.equals("LOOP")
 							||tokenUp.equals("CASE")||tokenUp.equals("WHILE")  )) {
-						Block block = new Block(ln, tokenUp);
-						blocks.push(block);	// begining of body
+						if (tokenUp.equals("LOOP") && skipNextLoop) {
+							skipNextLoop = false;
+						} else {
+							Block block = new Block(ln, tokenUp);
+							blocks.push(block);	// begining of body
+						}
+						
+						// For WHILE and FOR, skip until LOOP is found
+						if ((tokenUp.equals("FOR")||tokenUp.equals("WHILE")) && s.indexOf("LOOP") < 0) skipNextLoop = true; 
 					}
 
 					if (tokenUp.equals("END")) {
@@ -298,6 +306,7 @@ public class TriggerTable {
 		// analyze the plsql source code
 		int ln = 0;
 		int prcStart=0;
+		boolean skipNextLoop = false;
 		for (String s: lines) {
 			ln++;
 			
@@ -368,10 +377,17 @@ public class TriggerTable {
 						prgIdx = 10;
 					}
 					
-					if (tokenSeq==1 && (tokenUp.equals("BEGIN")||tokenUp.equals("IF")||tokenUp.equals("FOR")||tokenUp.equals("LOOP")
+					if (tokenSeq==1 && (tokenUp.equals("BEGIN")||tokenUp.equals("IF")||tokenUp.equals("FOR")||tokenUp.equals("WHILE")||tokenUp.equals("LOOP")
 							||tokenUp.equals("CASE")||tokenUp.equals("WHILE")  )) {
-						Block block = new Block(ln, tokenUp);
-						blocks.push(block);	// begining of body
+						if (tokenUp.equals("LOOP") && skipNextLoop) {
+							skipNextLoop = false;
+						} else {
+							Block block = new Block(ln, tokenUp);
+							blocks.push(block);	// begining of body
+						}
+						
+						// For WHILE and FOR, skip until LOOP is found
+						if ((tokenUp.equals("FOR")||tokenUp.equals("WHILE")) && s.indexOf("LOOP") < 0) skipNextLoop = true; 
 					}
 
 					if (tokenUp.equals("END")) {

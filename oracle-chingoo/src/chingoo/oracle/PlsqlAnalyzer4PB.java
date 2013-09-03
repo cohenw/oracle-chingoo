@@ -35,6 +35,7 @@ public class PlsqlAnalyzer4PB {
 		String paramsSaved = "";
 		String varsSaved = "";
 		
+		boolean skipNextLoop = false;
 		for (String s: lines) {
 			ln++;
 			
@@ -129,11 +130,18 @@ public class PlsqlAnalyzer4PB {
 						prgIdx = 10;
 					}
 					
-					if (tokenSeq==1 && (tokenUp.equals("BEGIN")||tokenUp.equals("IF")||tokenUp.equals("FOR")||tokenUp.equals("LOOP"))) {
-						Block block = new Block(ln, tokenUp);
-						blocks.push(block);	// begining of body
+					if (tokenSeq==1 && (tokenUp.equals("BEGIN")||tokenUp.equals("IF")||tokenUp.equals("FOR")||tokenUp.equals("CASE")||tokenUp.equals("WHILE")||tokenUp.equals("LOOP"))) {
+						if (tokenUp.equals("LOOP") && skipNextLoop) {
+							skipNextLoop = false;
+						} else {
+							Block block = new Block(ln, tokenUp);
+							blocks.push(block);	// begining of body
+						}
+						
+						// For WHILE and FOR, skip until LOOP is found
+						if ((tokenUp.equals("FOR")||tokenUp.equals("WHILE")) && s.indexOf("LOOP") < 0) skipNextLoop = true; 
 					}
-
+					
 					if (tokenUp.equals("END")) {
 						if (blocks.empty()) continue;
 

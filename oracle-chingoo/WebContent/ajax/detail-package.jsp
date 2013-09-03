@@ -31,7 +31,7 @@
 	String typeName = cn.getObjectType(owner, name);
 %>
 <div id="objectTitle" style="display:none"><%= typeName %>: <%= name %></div>
-<h2><%= typeName %>: <%= name %> &nbsp;&nbsp;<a href="<%=sourceUrl%>" target="_blank"><img border=0 src="image/icon_query.png" title="Source code"></a>
+<h2><%= typeName %>: <%= name %> &nbsp;&nbsp;<a href="<%=sourceUrl%>" target="_blank"><img border=0 src="image/sourcecode.gif" title="Source code"></a>
 <a href="pop.jsp?type=PACKAGE&key=<%=name%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
 <% if (hasChingooTable && (typeName.equals("PACKAGE")||typeName.equals("TYPE"))) { %>
 <a target="_blank" href="analyze-package.jsp?name=<%= name %>">Analyze</a>

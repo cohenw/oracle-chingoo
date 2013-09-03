@@ -238,4 +238,11 @@ Build 1064
 	CRUD information for Synonym
 	Bugfix: Blob download in data-link page
 	Bugfix: PA ignores forward declarations
+
+Build 1065
+	Bugfix: Data-link logical child cache issue
+ 	PA ignores WHILE, LOOP
+ 	Fix for Util.getTables table order
+ 	Datalink to Views
+ 	Duplicated dynamic parameter - fixed 
 	

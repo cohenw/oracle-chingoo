@@ -34,9 +34,6 @@
 	<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css"/>
     <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'> 
 
-    <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
-    <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-
     <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'>
 	<link rel="icon" type="image/png" href="image/chingoo-icon.png">
 
@@ -135,13 +132,20 @@ $(document).ready(function() {
 <input id="sql-query" name="sql" type="hidden"/>
 </form>
 
-<img align=top src="image/chingoo-small.gif" alt="Ver. <%= Util.getVersionDate() %>"/>
+
+<div style="background-color: #EEEEEE; padding: 6px; border:1px solid #888888; border-radius:10px;">
+<img src="image/ball.gif" width=20 height=20 align="top"/>
+<span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">&nbsp;</span>
 <b><%= cn.getUrlString() %></b>
 &nbsp;&nbsp;&nbsp;&nbsp;
 
+<a href="index.jsp" target="_blank">Home</a> |
 <a href="query.jsp" target="_blank">Query</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Search <input id="globalSearch" style="width: 200px;"/>
+
+<span style="float:right;">
+Search <input id="globalSearch" style="width: 200px;" placeholder="table or view name"/>
+</span>
+</div>
 
 <div id="outer-result1-div">
 	<div id="inner-nav">

@@ -31,7 +31,7 @@ if (table.equals("ERRORCAT")) conCols = "ERRORID";
 <div id="sql-<%=id%>" style="display: none;"><%= sql %></div>
 <%= sql %>
 &nbsp;
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border="0"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border="0"></a>
 &nbsp;
 <%--<a href="Javascript:hideNullColumnTable('<%=id%>')">Hide Null</a> --%>
 <div id="div-<%=id%>">

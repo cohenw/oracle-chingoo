@@ -232,6 +232,28 @@ function hi_off(v) {
 function changeLevel() {
 	$("#form_level").submit();
 }
+
+$(function() {
+	$( "#globalSearch" ).autocomplete({
+		source: "ajax/auto-complete2.jsp",
+		minLength: 2,
+		select: function( event, ui ) {
+			popObject( ui.item ?
+				ui.item.value: "" );
+		}
+	}).data( "autocomplete" )._renderItem = function( ul, item ) {
+		return $( "<li></li>" )
+		.data( "item.autocomplete", item )
+		.append( "<a>" + item.label + " <span class='rowcountstyle'>" + item.desc + "</span></a>" )
+		.appendTo( ul );
+	};
+});	
+function popObject(oname) {
+//	alert(oname);
+	$("#popKey").val(oname);
+	$("#FormPop").submit();
+}
+    
 </script>
 
 </head>
@@ -241,27 +263,20 @@ function changeLevel() {
 <input id="name-map" name="name" type="hidden">
 </form>
 
-	<table width=100% border=0>
-		<td width=40><img src="image/tree.png"
-			title="Version <%=Util.getVersionDate()%>" /></td>
-		<td><h2 style="color: blue;">Package Tree</h2></td>	
-		<td></td>
-		<td>&nbsp;</td>
-
-		<td>
-<a href="index.jsp">Home</a> |
+<div style="background-color: #EEEEEE; padding: 6px; border:1px solid #888888; border-radius:10px;">
+<img src="image/tree.png" align="middle"/>
+<span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Package Tree</span>
+ 
+&nbsp;&nbsp;
+<b><%= cn.getUrlString() %></b>
+&nbsp;&nbsp;
+<a href="index.jsp" target="_blank">Home</a> |
 <a href="query.jsp" target="_blank">Query</a>
-		</td>
-		<td><b><%=cn.getUrlString()%></b></td>
 
-<td align=right nowrap>
-<%--
-<b>Search</b> <input id="globalSearch" style="width: 200px;"/>
-<input type="button" value="Find" onClick="Javascript:processSearch($('#globalSearch').val())"/>
- --%>
- </td>
-
- 	</table>
+<span style="float:right;">
+Search <input id="globalSearch" style="width: 200px;" placeholder="table or view name"/>
+</span>
+</div>
  	
 <h2><%= gPkg + "." + cn.getProcedureLabel(gPkg, gPrc)  %></h2>
 &nbsp;&nbsp;
@@ -315,7 +330,7 @@ for (int i=0;i<list0.size();i++) {
 <%
 	id = Util.getId();
 %>
-<b><a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
+<b><a href="javascript:toggleData('<%=id%>')"><img src="image/sourcecode.gif" border=0><img id="img-<%=id%>" border=0 align=top src="image/plus.gif">Source Code</a></b>
 <div id="div-<%=id %>" style="display: none; margin-left: 20px; background-color: #eeeeee;">
 <%
 for (int i=0;i<proc0.size();i++) {
@@ -497,6 +512,10 @@ while (true) {
 <br/><br/><br/><br/><br/>
 <form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
 <input id="sql-query" name="sql" type="hidden"/>
+</form>
+<form id="FormPop" name="FormPop" target="_blank" method="post" action="pop.jsp">
+<input id="popType" name="type" type="hidden" value="OBJECT">
+<input id="popKey" name="key" type="hidden">
 </form>
 
 <script type="text/javascript">

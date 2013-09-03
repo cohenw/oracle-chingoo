@@ -2,7 +2,6 @@
 	import="chingoo.oracle.*" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>pageEncoding="utf-8"
 %>
-
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
 	String name = request.getParameter("name");
@@ -62,8 +61,9 @@ $(document).ready(function() {
 			text += ln;
 			
 		}
+		
 		PackageTable pt = new PackageTable(pkgName, text);
-		cn.AddPackageTable(pkgName, pt.getHM());
+		cn.AddPackageTable(pkgName, pt.getHM(), pt.getHMIns(), pt.getHMUpd(), pt.getHMDel());
 //		System.out.println(pt.getHM());
 //		out.println(pt.getHM()+"<br/>");
 
