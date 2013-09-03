@@ -34,11 +34,6 @@
 	<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css"/>
     <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'> 
 
-    <link href='css/shCore.css' rel='stylesheet' type='text/css' > 
-    <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="script/shCore.js"></script>
-	<script type="text/javascript" src="script/shBrushSql.js"></script>
-
 <style>
   .highlight { background:yellow; }
 </style>
@@ -166,6 +161,17 @@ $(document).ready(function(){
 		}
 	}
 	
+
+	function checkResizeW() {
+		var w = $(window).width();
+		var tmp = w - $('#tabs').width() - $('#outer-result2').width() - 45;
+		if (!$("#outer-result2").is(":visible"))
+			tmp = w - $('#tabs').width() - 45;
+
+		if (tmp < 660) tmp = 660;
+		$('#outer-result1').width(tmp);
+	}
+
 function callserver() {
 	var remoteURL = 'ping.jsp';
 	$.get(remoteURL, function(data) {
@@ -180,6 +186,10 @@ function callserver() {
 function hideHist() {
 	$("#outer-result2").hide();
 	checkResize();
+}
+function toggleHist() {
+	$("#outer-result2").toggle();
+	checkResizeW();
 }
 </script>
 
@@ -350,10 +360,11 @@ function hideHist() {
 
 <body>
 
-<div id="topline" style="width: 1024px;" background-color: #ffffff;">
-<table width=100% border=0>
+<div id="topline" style="background-color: #E6F8E0; padding: 0px; border:1px solid #CCCCCC; border-radius:10px;">
+
+<table width=100% border=0 cellpadding=0 cellspacing=0>
 <td width="44">
-<img align=top src="image/chingoo-small.gif" title="Oracle Chingoo - Build <%= Util.getBuildNo() %>"/>
+<img align=top src="image/puppy.gif" title="Oracle Chingoo - Build <%= Util.getBuildNo() %>"/>
 </td>
 <td>
 <span style="font-face: Arial; font-size:24px; color: #0000FF;">Oracle Chingoo</span>
@@ -375,12 +386,13 @@ function hideHist() {
 <!-- <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
  -->
 <input type="button" value="Find" onClick="Javascript:globalSearch($('#globalSearch').val())" />
+<a href="Javascript:toggleHist()"><img src="image/downarrow_small_black.png"></a>
 </td>
 </table>
 </div>
+<div style="height: 4px;"></div>
 
-
-<table border=0 cellspacing=0>
+<table border=0 cellspacing=0 cellpadding=1>
 <td valign=top width=280>
 
 <div id="tabs">
@@ -434,8 +446,8 @@ function hideHist() {
 </td>
 <td valign=top>
 <div id="outer-result2">
-	<a href="Javascript:hideHist()" style="float:right;">hide</a>
-	<div id="inner-result2"><%= quickLinks %></div>
+<!-- 	<a href="Javascript:hideHist()" style="float:right;">hide</a>
+ -->	<div id="inner-result2"><%= quickLinks %></div>
 </div>
 </td>
 </table>

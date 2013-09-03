@@ -20,11 +20,11 @@
 		prc = name.substring(idx+1).toUpperCase();
 	}
 	
-	String q = "SELECT TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE FROM GENIE_PA_TABLE WHERE PACKAGE_NAME='" + pkg +"' AND PROCEDURE_NAME='" + prc + "' ORDER BY table_name";
+	String q = "SELECT TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE FROM CHINGOO_PA_TABLE WHERE PACKAGE_NAME='" + pkg +"' AND PROCEDURE_NAME='" + prc + "' ORDER BY table_name";
 //	System.out.println(q);
 	List<String[]> list = cn.query(q, false);
 
-	q = "SELECT TARGET_PKG_NAME, TARGET_PROC_NAME FROM GENIE_PA_DEPENDENCY WHERE PACKAGE_NAME='" + pkg +"' AND PROCEDURE_NAME='" + prc + "' ORDER BY DECODE(TARGET_PKG_NAME,'" + pkg + "','0',TARGET_PKG_NAME), 2";
+	q = "SELECT TARGET_PKG_NAME, TARGET_PROC_NAME FROM CHINGOO_PA_DEPENDENCY WHERE PACKAGE_NAME='" + pkg +"' AND PROCEDURE_NAME='" + prc + "' ORDER BY DECODE(TARGET_PKG_NAME,'" + pkg + "','0',TARGET_PKG_NAME), 2";
 //	System.out.println(q);
 	List<String[]> proc1 = cn.query(q, false);
 

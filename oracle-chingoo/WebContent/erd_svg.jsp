@@ -62,9 +62,11 @@ List<TableCol> list = cn.getTableDetail(owner, table);
 <head> 
 	<title>Chingoo - ERD for <%= tname %></title>
     <script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
+	<script src="script/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
     <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
 
     <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'>
+	<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css"/>
 	<link rel="icon" type="image/png" href="image/chingoo-icon.png">
 
 <style>
@@ -75,12 +77,45 @@ text
 </style>
 
 </head> 
+<script type="text/javascript">
+	$(function() {
+		$( "#globalSearch" ).autocomplete({
+			source: "ajax/auto-complete2.jsp",
+			minLength: 2,
+			select: function( event, ui ) {
+				popObject( ui.item ?
+					ui.item.value: "" );
+			}
+		}).data( "autocomplete" )._renderItem = function( ul, item ) {
+			return $( "<li></li>" )
+			.data( "item.autocomplete", item )
+			.append( "<a>" + item.label + " <span class='rowcountstyle'>" + item.desc + "</span></a>" )
+			.appendTo( ul );
+		};
+	});	
+	function popObject(oname) {
+//		alert(oname);
+		$("#popKey").val(oname);
+    	$("#FormPop").submit();
+	}
+	    
+</script>
 
 <body>
 
+<div style="background-color: #EEEEEE; padding: 6px; border:1px solid #888888; border-radius:10px;">
 <img src="image/data-link.png" align="middle"/>
-<%= cn.getUrlString() %>
+<span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Simple ERD</span>
+<b><%= cn.getUrlString() %></b>
+&nbsp;&nbsp;&nbsp;&nbsp;
 
+<a href="index.jsp" target="_blank">Home</a> |
+<a href="query.jsp" target="_blank">Query</a>
+
+<span style="float:right;">
+Search <input id="globalSearch" style="width: 200px;" placeholder="table or view name"/>
+</span>
+</div>
 <br/>
 
 <h3>ERD  for <%= tname %></h3>
@@ -230,6 +265,11 @@ if (cnt2 > 1) {
 <form id="form_qry" target="_blank" action="query.jsp" method="post">
 <input id="sql" name="sql" type="hidden">
 <input name="norun" type="hidden" value="y">
+</form>
+
+<form id="FormPop" name="FormPop" target="_blank" method="post" action="pop.jsp">
+<input id="popType" name="type" type="hidden" value="OBJECT">
+<input id="popKey" name="key" type="hidden">
 </form>
 
 <script type="text/javascript">

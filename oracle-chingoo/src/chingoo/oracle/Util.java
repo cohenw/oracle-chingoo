@@ -115,7 +115,8 @@ public class Util {
 	
 	public static List<String> getTables(String sql) {
 		List<String> tables = new ArrayList<String>();
-		Set<String> tbls = new HashSet<String>();
+		List<String> tables2 = new ArrayList<String>();
+//		Set<String> tbls = new HashSet<String>();
 
 		// remove comments
 		ArrayList<Range> ranges = extractComments(sql);
@@ -162,8 +163,8 @@ public class Util {
 							if (tmp.endsWith(")")) tmp = tmp.substring(0, tmp.length()-1);
 							if (tmp.startsWith("'")) continue;
 
-							tbls.add(tmp);
-							
+							//tbls.add(tmp);
+							if (!tables2.contains(tmp)) tables2.add(tmp);
 							
 							ttt = ttt.substring(y + 4);
 						}
@@ -178,11 +179,12 @@ public class Util {
 				if (tname.endsWith(")")) tname = tname.substring(0, tname.length()-1);
 				if (tname.startsWith("'")) continue;
 
-				tbls.add(tname);
+				//tbls.add(tname);
+				if (!tables.contains(tname)) tables.add(tname);
 			}			
 		}
 		
-		tables.addAll(tbls);
+		tables.addAll(tables2);
 		
 		return tables;
 	}
@@ -449,11 +451,11 @@ public class Util {
 	}
 
 	public static String getBuildNo() {
-		return "1064";
+		return "1065";
 	}
 
 	public static String getVersionDate() {
-		return "Aug 9, 2013";
+		return "Sep 3, 2013";
 	}
 
 	public static void p(String str) {

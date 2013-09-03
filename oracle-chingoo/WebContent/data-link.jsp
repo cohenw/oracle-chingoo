@@ -25,6 +25,7 @@ public String getQryStmt(String sql, Query q) {
 			int end = sql.indexOf(" ", start);
 			if (end <0) end = sql.length();
 			tmp = sql.substring(start+1, end);
+			if (tmp.endsWith(")")||tmp.endsWith(",")) tmp = tmp.substring(0, tmp.length()-1);
 		
 			params.add(tmp);
 			prev = end+1;
@@ -178,12 +179,12 @@ public String getQryStmt(String sql, Query q) {
 	String id = Util.getId();
 %>
 
-<div style="background-color: #ffffff;">
-<img src="image/star-big.png" align="middle"/>
-
- <b>DATA LINK</b>
+<div style="background-color: #E6F8E0; padding: 6px; border:1px solid #CCCCCC; border-radius:10px;">
+<img src="image/star-big.png" width=20 height=20 align="top"/>
+<span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Data Link</span>
+ 
 &nbsp;&nbsp;
-<%= cn.getUrlString() %>
+<b><%= cn.getUrlString() %></b>
 
 &nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -194,10 +195,12 @@ public String getQryStmt(String sql, Query q) {
 <a id="showERD" href="Javascript:showERD('<%=table%>')">Show ERD</a> |
 <a href="erd_svg.jsp?tname=<%= table %>" target="_blank">ERD</a>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<!-- <a href="Javascript:openWorksheet()">Open Work Sheet</a>
- -->
+<span style="float:right;">
 Search <input id="globalSearch" style="width: 200px;" placeholder="table or view name"/>
+</span>
 </div>
+
+<br/>
 
 <div id="tableList1" style="display: hidden; margin-left: 20px;">
 </div>
@@ -209,7 +212,8 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 %>
 
 <b><%= table %></b> (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(table) %>)
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 title="<%=sql%>"/></a>
+&nbsp;&nbsp<a href="pop.jsp?key=<%= table %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
+ <a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 title="<%=sql%>"/></a>
 <%-- <%= sql %> --%>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
 <div style="display: none;" id="mode-<%=id%>">hide</div>
@@ -306,7 +310,10 @@ if (cn.isViewTable(table)) {
 <div id="div-fkk-<%=id%>"  style="margin-left: 70px;">
 <a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(ft) %>)
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=fsql%>"/></a>
+
+&nbsp;&nbsp;
+<a href="pop.jsp?key=<%= ft %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=fsql%>"/></a>
 (<%= table %>.<%= fc.toLowerCase() %>)
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
@@ -348,7 +355,10 @@ if (cn.isViewTable(table)) {
 <div id="div-fkk-<%=id%>"  style="margin-left: 70px;">
 > <a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(ft) %>)
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" border=0 align=middle  title="<%=fsql%>"/></a>
+
+&nbsp;&nbsp;
+<a href="pop.jsp?key=<%= ft %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=fsql%>"/></a>
 (<%= table %>.<%= fc.toLowerCase() %>)
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
@@ -406,7 +416,9 @@ if (cn.isViewTable(table)) {
 <a style="margin-left: 40px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= recCount %></span> / <%= cn.getTableRowCount(refTab) %>)
 
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle border=0 title="<%=refsql%>"/></a>
+&nbsp;&nbsp;
+<a href="pop.jsp?key=<%= refTab %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" align=middle border=0 title="<%=refsql%>"/></a>
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-child-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 
 <div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>
@@ -443,7 +455,9 @@ if (cn.isViewTable(table)) {
 <div id="div-custom-<%=id%>">
 <a style="margin-left: 40px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
 
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sql.png" align=middle border=0 title="<%=refsql%>"/></a>
+&nbsp;&nbsp;
+<a href="pop.jsp?key=<%= refTab %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" align=middle border=0 title="<%=refsql%>"/></a>
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-child-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>
 <div style="display: none;" id="hide-<%=id%>"></div>
@@ -457,6 +471,64 @@ if (cn.isViewTable(table)) {
 <% 	} %>
 </div>
 <%} %>
+
+
+<%
+List<String> refViews = cn.getReferencedViews(table);
+
+int cnt=0;
+if (refViews.size()>0) {
+%>
+
+<br/>
+<b><a style="margin-left: 20px;" href="Javascript:toggleView()">View <img id="img-view" border=0 src="image/plus.gif"></a></b><br/>
+<div id="div-view" style="display:none; margin-left: 40px;">
+
+<%
+	String condition = Util.buildCondition(pkCols,  key);
+	String[] pks = pkCols.split("\\,");
+//	for (String pk: pks)
+		//Util.p("pks="+pk);
+	for (int i=0; i<refViews.size(); i++) {
+	
+		String refView = refViews.get(i);
+
+		List<TableCol> cols = cn.getTableDetail(null, refView);
+		//Util.p(refView + " size=" + cols.size());
+		//Util.p(" " + cols);
+		boolean isOK = false;
+		for (String c: pks) { // for every PK columns
+			c = c.trim();
+			isOK = false;
+			//Util.p("c=" + c);
+			for (TableCol co: cols) { // make sure the PK column is in the view
+				//Util.p("*=" + co.getName());
+				if ( co.getName().equals(c)) {
+					isOK = true;
+					//Util.p("found=" + co.getName());
+					break;
+				}
+			}
+			if (!isOK) break;
+		}
+		if (!isOK) {
+			//Util.p("no found - " + refView);
+			continue;
+		}
+		//Util.p(cols.toString());
+
+		cnt++;
+//		String refsql = cn.getRelatedLinkSql(refView, fkColName, key);
+
+		String refsql = "SELECT * FROM " + refView + " WHERE " + condition;
+		id = Util.getId();
+%>	
+	<div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>
+	<a href="Javascript:openQuery('<%= id %>')"><%= refView %></a>&nbsp;&nbsp;<br/>		
+<% } }%>
+</div>
+
+
 
 <br/><br/>
 <a href="Javascript:window.close()">Close</a>

@@ -1781,7 +1781,7 @@ public class Connect implements HttpSessionBindingListener {
 			qry = "SELECT COUNT(*) FROM " + tname + " WHERE CALCID IN (SELECT CALCID FROM CALC WHERE PROCESSID='" + keys + "')";
 		}
 		
-		String res = this.queryOne(qry);
+		String res = this.queryOne(qry, false);
 		if (res==null || res.equals("")) return 0;
 		cnt = Integer.parseInt(res);
 		
