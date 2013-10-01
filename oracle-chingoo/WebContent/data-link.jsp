@@ -394,7 +394,11 @@ if (cn.isViewTable(table)) {
 	int cntRef = 0;
 	for (int i=0; rowid==null && i<refTabs.size(); i++) {
 		String refTab = refTabs.get(i);
-//System.out.println("refTab="+refTab);		
+		if (refTab.startsWith(cn.getSchemaName().toUpperCase()+".")) {
+			refTab = refTab.substring(refTab.indexOf(".")+1); 
+		}
+		
+		//System.out.println("refTab="+refTab);		
 		String fkColName = cn.getRefConstraintCols(table, refTab);
 //System.out.println("fkColName="+fkColName);		
 		int recCount = cn.getPKLinkCount(refTab, fkColName , key);

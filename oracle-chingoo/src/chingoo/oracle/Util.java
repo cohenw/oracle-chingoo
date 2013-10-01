@@ -451,11 +451,11 @@ public class Util {
 	}
 
 	public static String getBuildNo() {
-		return "1065";
+		return "1066";
 	}
 
 	public static String getVersionDate() {
-		return "Sep 3, 2013";
+		return "Oct 1, 2013";
 	}
 
 	public static void p(String str) {
