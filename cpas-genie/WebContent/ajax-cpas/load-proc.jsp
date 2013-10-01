@@ -6,7 +6,7 @@
 	pageEncoding="utf-8"
 %>
 <%!
-public String getTables(List<String[]> list0, String type) {
+public String getTables(List<String[]> list0, String type, Connect cn) {
 	String res ="";
 	
 	for (int i=0;i<list0.size();i++) {
@@ -17,10 +17,10 @@ public String getTables(List<String[]> list0, String type) {
 		String opU = list0.get(i)[4];
 		String opD = list0.get(i)[5];
 		
-		if (opI.equals("1") && type.equals("INSERT")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
-		if (opS.equals("1") && type.equals("SELECT")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
-		if (opU.equals("1") && type.equals("UPDATE")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
-		if (opD.equals("1") && type.equals("DELETE")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
+		if (opI.equals("1") && type.equals("INSERT")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a> <span class='rowcountstyle'>" + cn.getTableRowCount(tname) + "</span><br/>";
+		if (opS.equals("1") && type.equals("SELECT")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a> <span class='rowcountstyle'>" + cn.getTableRowCount(tname) + "</span><br/>";
+		if (opU.equals("1") && type.equals("UPDATE")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a> <span class='rowcountstyle'>" + cn.getTableRowCount(tname) + "</span><br/>";
+		if (opD.equals("1") && type.equals("DELETE")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a> <span class='rowcountstyle'>" + cn.getTableRowCount(tname) + "</span><br/>";
 	}
 	
 	return res;
@@ -92,10 +92,10 @@ public String getTables(List<String[]> list0, String type) {
 	<th class="headerRow">DELETE</th>
 </tr>
 <tr>
-<td valign=top><%= getTables(list, "SELECT") %></td>
-<td valign=top><%= getTables(list, "INSERT") %></td>
-<td valign=top><%= getTables(list, "UPDATE") %></td>
-<td valign=top><%= getTables(list, "DELETE") %></td>
+<td valign=top><%= getTables(list, "SELECT", cn) %></td>
+<td valign=top><%= getTables(list, "INSERT", cn) %></td>
+<td valign=top><%= getTables(list, "UPDATE", cn) %></td>
+<td valign=top><%= getTables(list, "DELETE", cn) %></td>
 </tr>
 </table>
 <!-- 
@@ -114,7 +114,10 @@ for (int i=0;i<list.size();i++) {
 		if (opU.equals("1")) op += "U";
 		if (opD.equals("1")) op += "D";
 %>
-	<a target=_blank href="pop.jsp?key=<%= tname %>"><b><%= tname %></b></a> <span style='color: red; font-weight: bold;'><%= op %></span></br/>
+	<a target=_blank href="pop.jsp?key=<%= tname %>"><b><%= tname %></b></a> <span style='color: red; font-weight: bold;'><%= op %></span>
+		<span class="rowcountstyle"><%= cn.getTableRowCount(tname) %></span>		
+		</br/>
+	
 <%		
 	}
 %>

@@ -72,13 +72,13 @@ $(document).ready(function() {
 		}
 		PackageTable pt = new PackageTable(pkgName, text);
 /*		
- 		System.out.println("pt.getHM()=[" + pt.getHM() + "]");
-		System.out.println("pt.getHMIns()=[" + pt.getHMIns() + "]");
-		System.out.println("pt.getHMUpd()=[" + pt.getHMUpd() + "]");
-		System.out.println("pt.getHMDel()=[" + pt.getHMDel() + "]");
+ 		out.println("pt.getHM()=[" + pt.getHM() + "]<br/>");
+		out.println("pt.getHMIns()=[" + pt.getHMIns() + "]<br/>");
+		out.println("pt.getHMUpd()=[" + pt.getHMUpd() + "]<br/>");
+		out.println("pt.getHMDel()=[" + pt.getHMDel() + "]<br/>");
 */
 		cn.AddPackageTable(pkgName, pt.getHM(), pt.getHMIns(), pt.getHMUpd(), pt.getHMDel());
-		System.out.println(pt.getHM());
+//		System.out.println(pt.getHM());
 //		out.println(pt.getHM()+"<br/>");
 
 		HyperSyntax hs = new HyperSyntax();

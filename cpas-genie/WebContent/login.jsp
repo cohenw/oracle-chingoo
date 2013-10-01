@@ -107,7 +107,7 @@ or
     <table border=0 style="margin-left: 20px;">
     <tr>
     	<td><span style="font-size:20px; color: blue;">JDBC URL</span></td>
-    	<td><input style="font-size:20px;" size=60 name="url" id="url" value="<%= initJdbcUrl %>"/></td>
+    	<td><input style="font-size:20px;" size=80 name="url" id="url" value="<%= initJdbcUrl %>"/></td>
     </tr>
     <tr>
     	<td><span style="font-size:20px; color: blue;">User Name</span></td>
@@ -228,10 +228,11 @@ or
 
 <table>
 <td>
-<div style="margin: 10px; padding:5px; width:500px; height:300px; overflow: scroll; border: 1px solid #666666;">
+<div style="margin: 10px; padding:5px; width:550px; height:300px; overflow: scroll; border: 1px solid #666666;">
 
 ACTRA<br/>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.CPAS.COM:1521/ACTRA', 'cpasdba')">cpasdba@jdbc:oracle:thin:@s-ora-004.CPAS.COM:1521/ACTRA</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@W-BRANIMIRP-171.CPAS.COM:1521/LDEV', 'cpasdba')">cpasdba@jdbc:oracle:thin:@W-BRANIMIRP-171.CPAS.COM:1521/LDEV</a>
 <br/>
 
 AFM (MPF)<br/>
@@ -284,6 +285,10 @@ COR<br/>
 DALLAS<br/>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/DALLAS', 'client_55dl')">client_55dl@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/DALLAS</a>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/DALLAS', 'client_55d')">client_55d@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/DALLAS</a>
+<br/>
+
+GMA<br/>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/GMA', 'client_gma_dev')">client_gma_dev@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/GMA</a>
 <br/>
 
 GOODYEAR<br/>
@@ -383,6 +388,10 @@ VANGUARD<br/>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-003.cpas.com:1521/VANGUARD', 'client_54')">client_54@jdbc:oracle:thin:@s-ora-003.cpas.com:1521/VANGUARD</a>
 <br/>
 
+Web Demo<br/>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@vs-oratest-001.cpas.com:1521/WEBDEMO', 'client_55db')">client_55db@jdbc:oracle:thin:@vs-oratest-001.cpas.com:1521/WEBDEMO</a>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@vs-oratest-001.cpas.com:1521/WEBDEMO', 'client_55dc')">client_55dc@jdbc:oracle:thin:@vs-oratest-001.cpas.com:1521/WEBDEMO</a>
+<br/>
 </div>
 
 </td>

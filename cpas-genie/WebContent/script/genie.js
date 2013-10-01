@@ -557,6 +557,23 @@
 		});		
 	}
 
+	function showCpasLayout(tname) {
+		var id = "id"+(new Date().getTime());
+		var temp ="<div id='" + id + "' title='" + tname + "' style='background-color: #ffffcc;'>"
+		$.ajax({
+			url: "ajax-cpas/cpas-layout.jsp?tname=" + tname,
+			success: function(data){
+				temp = temp + data + "</div>";
+				$("BODY").append(temp);
+				$("#"+id).dialog({ width: 700, height: 350 });
+				setHighlight();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});		
+	}
+
 	function hideNullColumn() {
 		$("table ").each(function() {
 			var divName = $(this).attr('id');

@@ -10,6 +10,8 @@
 	if (sdi!=null && treekey !=null) {
 		actionId = cn.queryOne("SELECT actionid FROM TREEVIEW WHERE SDI = '"+sdi+"' AND TREEKEY='"+treekey+"'");
 	}
+	
+	String search = request.getParameter("search");
 %>
 
 <html>
@@ -99,6 +101,11 @@ $(document).ready(function(){
 	}, 500);
 <% } %>
 
+<% if (search != null ) {%>
+window.setTimeout(function() {
+	tvSearch('<%=search%>');
+}, 500);
+<% } %>
 })
 
 function replaceall(str,replace,with_this)

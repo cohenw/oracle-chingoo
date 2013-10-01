@@ -537,7 +537,7 @@ if (fkLinkTab.size()>0 && dLink && false) {
 						if (colName.equals(cn.getCpasUtil().logicalLink2[j][0]) && !tname.equals(cn.getCpasUtil().logicalLink2[j][2])) {
 							String theOtherVal = q.getValue( cn.getCpasUtil().logicalLink2[j][1] );
 
-							if (theOtherVal != null && !theOtherVal.equals("")) {
+							if (theOtherVal != null && !theOtherVal.equals("") ) {
 								isLinked = true;
 								lTable = cn.getCpasUtil().logicalLink2[j][2];
 								keyValue = q.getValue(cn.getCpasUtil().logicalLink2[j][1]) + "^" + val;
@@ -573,7 +573,7 @@ if (fkLinkTab.size()>0 && dLink && false) {
 						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
 					}
 					
-					if (val==null || val.equals("*")) isLinked = false;
+					if (val==null || val.equals("*")|| val.equals("")) isLinked = false;
 					if (isLinked) {
 						isLogicalLink = true;
 						linkImage = "image/view2.png";

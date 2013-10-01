@@ -370,6 +370,71 @@ qSlave.rewind(1000, 1);
 }
 %>
 
+<br/>
+<%
+String qryUt = "SELECT * FROM CPAS_PROCESS_EVENT_TASK A WHERE PROCESS='" + process + "' AND EVENT='" + event + "'";
+Query qUt = new Query(cn, qryUt, false);
+
+if (qUt.hasData()) {
+	id = Util.getId();
+%>
+
+<b>User Task</b>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qryUt%>"/></a>
+<div style="display: none;" id="sql-<%=id%>"><%= qryUt%></div>
+<br/>
+
+<table id="dataTable" border=1 class="gridBody">
+<tr>
+	<th class="headerRow">Task Type</th>
+	<th class="headerRow">Action</th>
+	<th class="headerRow">Status</th>
+	<th class="headerRow">Fire When</th>
+	<th class="headerRow">Assigned To</th>
+	<th class="headerRow">Remark</th>
+	<th class="headerRow">Public Comment</th>
+	<th class="headerRow">Condition</th>
+ </tr>
+
+<%
+	rowCnt = 0;
+qUt.rewind(1000, 1);
+	while (qUt.next() && rowCnt < 1000) {
+		String ttype = qUt.getValue("ttype");
+		String action = qUt.getValue("action");
+		String status = qUt.getValue("status");
+		String firewhen = qUt.getValue("firewhen");
+		String assigned = qUt.getValue("assigned");
+		String remarks = qUt.getValue("remarks");
+		String commentary = qUt.getValue("commentary");
+		String rkey = qUt.getValue("rkey");
+
+		rowCnt ++;
+		String rowClass = "oddRow";
+		if (rowCnt%2 == 0) rowClass = "evenRow";		
+		
+		String tname = cn.getCpasUtil().getCodeValue("CPAS_PROCESS_EVENT_TASK", "TTYPE", ttype, null); 
+		
+%>
+<tr class="simplehighlight">
+	<td class="<%= rowClass%>" nowrap><%= ttype %> <span class='cpas'><%= tname %></span></td>
+	<td class="<%= rowClass%>" nowrap><%= action %> <span class='cpas'><%= cn.getCpasUtil().getCodeValue("CPAS_PROCESS_EVENT_TASK", "ACTION", action, null) %></span></td>
+	<td class="<%= rowClass%>" nowrap><%= status %> <span class='cpas'><%= cn.getCpasUtil().getCodeValue("CPAS_PROCESS_EVENT_TASK", "STATUS", status, null) %></span></td>
+	<td class="<%= rowClass%>" nowrap><%= firewhen %> <span class='cpas'><%= cn.getCpasUtil().getCodeValue("CPAS_PROCESS_EVENT_TASK", "FIREWHEN", firewhen, null) %></span></td>
+	<td class="<%= rowClass%>" nowrap><%= assigned==null?"":assigned %></td>
+	<td class="<%= rowClass%>" nowrap><%= remarks==null?"":remarks %></td>
+	<td class="<%= rowClass%>" nowrap><%= commentary==null?"":commentary %></td>
+	<td class="<%= rowClass%>" nowrap><%= rkey==null?"":rkey %></td>
+</tr>
+<%
+	} 
+%>
+</table>
+<%
+}
+%>
+
+
 <script type="text/javascript">
 <% if (defaultActionId != null) { %>
 	loadSTMT('<%= defaultSdi %>', <%= defaultActionId %>, '<%= defaultTv %>');

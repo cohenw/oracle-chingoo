@@ -12,7 +12,7 @@
 
 	String qry = "SELECT * FROM TREEVIEW WHERE UPPER(CAPTION) LIKE '%" + key + "%' OR TREEKEY='" + key + "' " +
 				"UNION " +
-				"SELECT * FROM TREEVIEW WHERE (SDI, SCHEMA, ACTIONID) IN (SELECT SDI, SCHEMA, ACTIONID FROM TREEACTION_STMT WHERE actiontype IN ('MS','DS') AND upper(actionstmt) like '%" + key + "%') " +
+				"SELECT * FROM TREEVIEW WHERE (SDI, SCHEMA, ACTIONID) IN (SELECT SDI, SCHEMA, ACTIONID FROM TREEACTION_STMT WHERE actiontype IN ('MS','DS','MT','DT') AND upper(actionstmt) like '%" + key + "%') " +
 				"ORDER BY 1, 2"; 
 	Query q = new Query(cn, qry, false);
 	
