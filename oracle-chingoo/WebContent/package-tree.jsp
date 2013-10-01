@@ -4,7 +4,7 @@
 
 <%!
 
-public String getTables(List<String[]> list0, String type) {
+public String getTables(List<String[]> list0, String type, Connect cn) {
 	String res ="";
 	
 	for (int i=0;i<list0.size();i++) {
@@ -15,16 +15,16 @@ public String getTables(List<String[]> list0, String type) {
 		String opU = list0.get(i)[4];
 		String opD = list0.get(i)[5];
 		
-		if (opI.equals("1") && type.equals("INSERT")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
-		if (opS.equals("1") && type.equals("SELECT")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
-		if (opU.equals("1") && type.equals("UPDATE")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
-		if (opD.equals("1") && type.equals("DELETE")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a><br/>";
+		if (opI.equals("1") && type.equals("INSERT")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a> <span class='rowcountstyle'>" + cn.getTableRowCount(tname) + "</span><br/>";
+		if (opS.equals("1") && type.equals("SELECT")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a> <span class='rowcountstyle'>" + cn.getTableRowCount(tname) + "</span><br/>";
+		if (opU.equals("1") && type.equals("UPDATE")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a> <span class='rowcountstyle'>" + cn.getTableRowCount(tname) + "</span><br/>";
+		if (opD.equals("1") && type.equals("DELETE")) res += "<a target=_blank href='pop.jsp?key=" + tname + "'><b>" + tname + "</b></a> <span class='rowcountstyle'>" + cn.getTableRowCount(tname) + "</span><br/>";
 	}
 	
 	return res;
 }
 
-public void DFS(Connect cn, int maxLevel, String pkg, String prc, ArrayList<PTree> pt, HashSet<String> explored, ArrayList<String> path, int level) {
+public void BFS(Connect cn, int maxLevel, String pkg, String prc, ArrayList<PTree> pt, HashSet<String> explored, ArrayList<String> path, int level) {
 
 	if (level >=maxLevel) return;
 	
@@ -47,7 +47,7 @@ public void DFS(Connect cn, int maxLevel, String pkg, String prc, ArrayList<PTre
 		newPath.add(target);		
 		if (!explored.contains(target)) {
 			explored.add(target);
-			DFS(cn, maxLevel, sPkg, sPrc, pt, explored, newPath, level +1);
+			BFS(cn, maxLevel, sPkg, sPrc, pt, explored, newPath, level +1);
 		}
 	}
 }
@@ -298,10 +298,10 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 	<th class="headerRow">DELETE</th>
 </tr>
 <tr>
-<td valign=top><%= getTables(list0, "SELECT") %></td>
-<td valign=top><%= getTables(list0, "INSERT") %></td>
-<td valign=top><%= getTables(list0, "UPDATE") %></td>
-<td valign=top><%= getTables(list0, "DELETE") %></td>
+<td valign=top><%= getTables(list0, "SELECT", cn) %></td>
+<td valign=top><%= getTables(list0, "INSERT", cn) %></td>
+<td valign=top><%= getTables(list0, "UPDATE", cn) %></td>
+<td valign=top><%= getTables(list0, "DELETE", cn) %></td>
 </tr>
 </table>
 <!-- 
@@ -390,7 +390,7 @@ level
 	ArrayList<PTree> pt = new ArrayList<PTree>(); 
 	HashSet<String> explored = new HashSet<String>();
 	ArrayList<String> path = new ArrayList<String>(); 
-	DFS(cn, maxLevel, gPkg, gPrc, pt, explored, path, 0);
+	BFS(cn, maxLevel, gPkg, gPrc, pt, explored, path, 0);
 	int divOpen = 0;
 
 	int prev = 0;
@@ -449,7 +449,9 @@ for (int k=0;k<list.size();k++) {
 		if (opU.equals("1")) op += "U";
 		if (opD.equals("1")) op += "D";
 %>
-	<a target=_blank href="pop.jsp?key=<%= tname %>"><b><%= tname %></b></a> <span style='color: red; font-weight: bold;'><%= op %></span></br/>
+	<a target=_blank href="pop.jsp?key=<%= tname %>"><b><%= tname %></b></a> <span style='color: red; font-weight: bold;'><%= op %></span><
+	<span class="rowcountstyle"><%= cn.getTableRowCount(tname) %></span>		
+	</br/>
 <%		
 }
 %>

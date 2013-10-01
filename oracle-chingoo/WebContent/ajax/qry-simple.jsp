@@ -295,8 +295,7 @@ Found: <%= filteredCount %>
 					isLinked = true;
 					String tpkName = cn.getPrimaryKeyName(tbl);
 					String tpkCol = cn.getConstraintCols(tpkName);
-					String tpkValue = q.getValue(tpkCol);
-					//String tpkValue = pkValues;
+					String tpkValue = pkValues;
 					
 //					linkUrl ="ajax/blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
 					String fname = q.getValue("filename");
