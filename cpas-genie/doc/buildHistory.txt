@@ -334,7 +334,7 @@ Build CPAS1084
 	Bugfix: PA ignores forward declarations
 
 Build CPAS1085
-	Data-Link for BATCH include logical tables based on PA/CRUD (using DFS)
+	Data-Link for BATCH include logical tables based on PA/CRUD (using BFS)
 	PA/TA for Target Schema
 	Bugfix: Data-link logical child cache issue
 	CPAS online - hides quick links from event view list	
@@ -347,6 +347,24 @@ Build CPAS1085
  	Dblink to Views
  	Duplicated dynamic parameter - fixed 
  	FKEY link to Formula
+
+Build CPAS1086
+	CPAS Rules
+	pentype
+	processid/batchrunid -> batchcat.batchkey
+	CPAS online - User Tasks
+	Load Table/Code from TreeView/Layout (recovery)
+	CPAS Layout in Table/View
+	
+Build CPAS1087
+	Link to %personid
+	CALC_REPORT_FILED / CALC_REPORT_DATE	
+	Load table from TreeView
+	Data link - Child table for Synonym
+	sdi, treekey -> Treeview
+	fix bug: Blob download for composite pk table
+	cn.hasColumn(tname, cname)
+	Display table rownumber in PA/Package Tree
 			
 Known Issue
 	PA does not include Stored procedures and functions

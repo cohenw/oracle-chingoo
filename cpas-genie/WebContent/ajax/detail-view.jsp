@@ -48,7 +48,7 @@
 	<th class="headerRow">Default</th>
  	<th class="headerRow">Comments</th>
  <% if (hasCpas) { %>	
-	<th class="headerRow">CPAS</th>
+	<th class="headerRow">CPAS <a href="Javascript:showCpasLayout('<%=view%>')">layout</a></th>
 <% } %>	
  </tr>
 

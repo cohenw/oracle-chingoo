@@ -148,12 +148,19 @@ if (sql2 !=null && !sql2.equals("")) {
 	}
 //	System.out.println("subKeys=" + subKeys);
 }
+
+List<String[]> layoutCols = cn.query("SELECT CNAME, CPOS, CWIDTH,  (select code from cpas_table_col where tname=A.tname and cname=A.cname) code FROM CPAS_LAYOUT_COL A WHERE USERNAME='DEFAULT_SETUP' AND TNAME='" + layout + "' AND CPOS > 0 ORDER BY CPOS", false);
+
+boolean applyLayout = false;
+if (appLayout!=null && appLayout.equals("1") && layoutCols.size() > 0) applyLayout = true;
+
+
 String id2 = Util.getId(); 
 %>
 <%-- 
 sortColumn, sortDirection = <%=sortColumn +"," + sortDirection %> Layout=<%= layout %><br/>
  --%>
-<%= sql %>
+<span style="font-family: Consolas; font-size: 16px;"><b><%=new HyperSyntax().getHyperSyntax(cn, sql, "SQL")%></b></span>
 <a href="javascript:openQuery('<%=id2%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=sql%>"/></a>
 <a href="javascript:toggleLayout('<%=id%>')">Layout</a>
 <div style="display: none;" id="sql-<%=id2%>"><%= sql%></div>
@@ -211,15 +218,16 @@ Rows/Page
  --%>
 <div id="help-<%= id %>" style="float: left; display: block;" >
 &nbsp; &nbsp;
+<% if (!applyLayout) { %>
 <a id="modeHide-<%=id%>" href="Javascript:setColumnMode(<%=id%>,'hide')">Hide</a>
 <a href="Javascript:showAllColumnTable('table-<%=id%>')">Show All</a>&nbsp;
 <% if (totalCount>=2) { %>
 <a id="modeSort-<%=id%>" href="Javascript:setColumnMode(<%=id%>,'sort')">Sort</a>
 <% } %>
-
+<% } %>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <% if (totalCount>=5) { %>
-<img src="image/view.png" border=0 ><input id="search-<%=id%>" value="<%= searchValue %>" size=15 onChange="searchTable(<%=id%>,$(this).val())">
+<img src="image/view.png" border=0 ><input id="search-<%=id%>" value="<%= searchValue %>" size=15 onChange="searchTable(<%=id%>,$(this).val())"  placeholder="search">
 <a href="Javascript:clearSearch(<%=id%>)"><img border="0" border=0 src="image/clear.gif"></a>
 <% } %>
 </div>
@@ -248,11 +256,6 @@ Rows/Page
 	boolean hasData = q.hasMetaData();
 	int colIdx = 0;
 
-	List<String[]> layoutCols = cn.query("SELECT CNAME, CPOS, CWIDTH,  (select code from cpas_table_col where tname=A.tname and cname=A.cname) code FROM CPAS_LAYOUT_COL A WHERE USERNAME='DEFAULT_SETUP' AND TNAME='" + layout + "' AND CPOS > 0 ORDER BY CPOS", false);
-	
-	boolean applyLayout = false;
-	if (appLayout!=null && appLayout.equals("1")) applyLayout = true;
-
 	String colTypes[] = new String[layoutCols.size()];
 	String colPicts[] = new String[layoutCols.size()];
 	
@@ -269,7 +272,8 @@ if (applyLayout) {
 		colPicts[i] = cn.getCpasUtil().getColumnPict(layout, cname);
 		if (colPicts[i]==null) colPicts[i] = "";
 %>
-<th class="headerRow"><%=colDisp%><br/><span class='cpas'><%= colTypes[i] %> <%= colPicts[i] %></span></th>
+<%-- <th class="headerRow"><%=colDisp%><br/><span class='cpas'><%= colTypes[i] %> <%= colPicts[i] %></span></th>
+ --%><th class="headerRow"><%=colDisp%></th>
 <%
 		i++;
 	}
@@ -463,9 +467,10 @@ if (cpas) {
 		}
 %>
 </tr>
-<%		if (q.hasData()) counter++;
-		if (counter >= linesPerPage) break;
+<%
 	}
+	if (q.hasData()) counter++;
+	if (counter >= linesPerPage) break;
 	}
 %>
 </table>

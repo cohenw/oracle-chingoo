@@ -7,10 +7,10 @@ import java.util.List;
 
 public class CpasUtil {
 	private Connect cn = null;
-	Hashtable<String, String> htCode = new Hashtable<String, String>();
-	Hashtable<String, String> htCapt = new Hashtable<String, String>();
-	HashSet<String> hsTable = new HashSet<String>();
-	HashSet<String> hsTableLoaded = new HashSet<String>();
+	public Hashtable<String, String> htCode = new Hashtable<String, String>();
+	public Hashtable<String, String> htCapt = new Hashtable<String, String>();
+	public HashSet<String> hsTable = new HashSet<String>();
+	public HashSet<String> hsTableLoaded = new HashSet<String>();
 	boolean isCpas = false;
 	int cpasType = 1;
 
@@ -59,6 +59,25 @@ public class CpasUtil {
 			{"TU", "Test Unknown"}
 	};
 	
+	String accountClass[][] = {
+			{"AR", "Receivable"},
+			{"AP", "Payable"},
+			{"C", "DC"},
+			{"P", "DB"},
+			{"B", "GB"},
+			{"MP", "Portfolio"}
+	};
+
+	String fireWhen[][] = {
+			{"A", "Always"},
+			{"N", "Never"},
+			{"S", "Made Submit"},
+			{"F", "Failed Submit"},
+			{"B", "Aborted Edit"},
+			{"C", "Condition"},
+			{"E", "Browser Commit"}
+	};
+
 	public String logicalLink2[][] = {
 			{"MKEY", "CLNT", "MEMBER"},
 			{"ERKEY", "CLNT", "EMPLOYER"},
@@ -72,6 +91,7 @@ public class CpasUtil {
 	public String logicalLink[][] = {
 			{"PROCESSID", "BATCH"},
 			{"PROCESSKEY", "BATCH"},
+			{"BATCHRUNID", "BATCH"},
 			{"FEED_PROCESSID", "BATCH"},
 			{"PENID", "PENSIONER"},
 			{"PERSONID", "PERSON"},
@@ -229,6 +249,18 @@ public class CpasUtil {
 				if (value.equals(calcStage[i][0])) return calcStage[i][1];
 			}
 			return null;
+		} else if (temp.endsWith(".ACCTCLASS")) {
+			for (int i=0; i<accountClass.length;i++) {
+				if (value.equals(accountClass[i][0])) return accountClass[i][1];
+			}
+			return null;
+/*			
+		} else if (temp.endsWith(".FIREWHEN")) {
+			for (int i=0; i<fireWhen.length;i++) {
+				if (value.equals(fireWhen[i][0])) return fireWhen[i][1];
+			}
+			return null;
+*/			
 		} else if (temp.equals("REQUEST.STATUS")||temp.equals("REQUEST_TASK.STATUS")) {
 			for (int i=0; i<rqStatus.length;i++) {
 				if (value.equals(rqStatus[i][0])) return rqStatus[i][1];
@@ -295,6 +327,9 @@ public class CpasUtil {
 		} else if (temp.endsWith(".PERSONID") && !tname.equals("PERSON")) {
 			String qry = "SELECT UNAME FROM PERSON WHERE PERSONID='" + value + "'";
 			return cn.queryOne(qry);
+		} else if (temp.endsWith("PERSONID") && !tname.equals("PERSON")) {
+			String qry = "SELECT UNAME FROM PERSON WHERE PERSONID='" + value + "'";
+			return cn.queryOne(qry);
 		} else if (temp.endsWith(".ERRORID") && !tname.equals("ERRORCAT")) {
 			String qry = "SELECT SHORTDESC FROM ERRORCAT WHERE ERRORID='" + value + "'";
 			return cn.queryOne(qry);
@@ -321,11 +356,26 @@ public class CpasUtil {
 		} else if (temp.endsWith(".FKEY") && !tname.equals("FORMULA")) {
 			String qry = "SELECT FDESC FROM FORMULA WHERE FKEY='" + value + "' AND ROWNUM=1";
 			return cn.queryOne(qry);
+		} else if (temp.endsWith(".PENTYPE") && !tname.equals("PLAN_PENSIONTYPE")) {
+			String qry = "SELECT NAME FROM PLAN_PENSIONTYPE WHERE PENTYPE='" + value + "' AND ROWNUM=1";
+			return cn.queryOne(qry);
 		} else if (temp.equals("CALC_CUSTOM.KEY")) {
 			String qry = "SELECT NAME FROM PLAN_CALCTYPE_CUSTOM WHERE KEY='" + value + "' AND ROWNUM=1";
 			return cn.queryOne(qry);
 		} else if (temp.equals("CPAS_TABLE_COL.CODE2")) {
 			String qry = "SELECT CAPTION FROM CPAS_CODE WHERE GRUP='" + value + "'";
+			return cn.queryOne(qry);
+		} else if (temp.equals("CALC_REPORT_FIELD.FIELD")) {
+			String qry = "SELECT DESCR FROM PLAN_CALCTYPE_REPFIELD WHERE FIELD='" + value + "' AND ROWNUM=1";
+			return cn.queryOne(qry);
+		} else if (temp.equals("CALC_REPORT_DATE.FIELD")) {
+			String qry = "SELECT DESCR FROM PLAN_CALCTYPE_REPDATE WHERE FIELD='" + value + "' AND ROWNUM=1";
+			return cn.queryOne(qry);
+		} else if (temp.endsWith(".PROCESSID")||temp.endsWith(".BATCHRUNID")) {
+			String qry = "SELECT BATCHKEY FROM BATCH WHERE PROCESSID='" + value + "'";
+			return cn.queryOne(qry);
+		} else if (temp.endsWith(".TTYPE")) {
+			String qry = "SELECT CAPT FROM CPAS_TASKTYPE WHERE TTYPE='" + value + "'";
 			return cn.queryOne(qry);
 		}
 		
@@ -340,6 +390,7 @@ public class CpasUtil {
 		}
 		
 		String grup = htCode.get(key);
+
 		if (grup == null) {
 			if (cname.equals("CLNT"))
 				grup = "CL";
@@ -467,14 +518,14 @@ public class CpasUtil {
 			}
 		}
 		String capt = htCapt.get(key);
-
+/*
 		if (capt == null) {
 			if (cname.equals("CLNT"))
 				return "Client";
 			if (cname.equals("ERKEY"))
 				return "Employer";
 		}
-
+*/
 		return capt;
 	}
 
@@ -497,13 +548,16 @@ public class CpasUtil {
 
 		String key = tname + "." + cname;
 		String grup = htCode.get(key);
+
 		if (grup == null) {
 			if (cname.equals("CLNT"))
 				grup = "CL";
 			if (cname.equals("ERKEY"))
 				grup = "ER";
+			if (cname.equals("CTYPE"))
+				grup = "CTC";
 		}
-
+		
 		return grup;
 	}
 
@@ -582,6 +636,20 @@ public class CpasUtil {
 
 		List<String[]> list = cn.query(qry);
 
+		// recover by TREEVIEW
+		if (/*list.size()==0 */ cn.isTVS("TREEACTION_STMT") && cn.isTVS("CPAS_TABLE_COL")) {
+			
+			String tmp = "SELECT actionstmt from TREEACTION_STMT WHERE (sdi, schema, actionid) in ( " +
+						"SELECT sdi, schema, actionid FROM TREEACTION_STMT WHERE actiontype='MS' AND actionstmt like '%FROM " + tname + " %') and actiontype='MT' and actionstmt not like 'SELECT%'" +
+						"union " +
+						"SELECT actionstmt from TREEACTION_STMT where (sdi, schema, actionid) in ( " +
+						"SELECT sdi, schema, actionid FROM TREEACTION_STMT WHERE actiontype='DS' AND actionstmt like '%FROM " + tname + " %') and actiontype='DT' and actionstmt not like 'SELECT%'";		
+			
+			qry = "SELECT TNAME, CNAME, CODE, CAPT FROM CPAS_TABLE_COL WHERE (TNAME IN ( " + tmp + " ))" +
+					" AND (CODE IS NOT NULL OR CAPT IS NOT NULL)";
+			list = cn.query(qry);
+		}
+		
 		for (String[] row : list) {
 			String cname = row[2];
 			String code = row[3];

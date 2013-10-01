@@ -1465,6 +1465,10 @@ public class Connect implements HttpSessionBindingListener {
 
 	public synchronized List<String> getReferencedTables(String tname) {
 		
+		if (this.isSynonym(tname)) {
+			tname = this.getSynonym(tname);
+		}
+		
 		if (tname.contains(".")) {
 			String[] temp = tname.split("\\.");
 			return getReferencedTables(temp[0], temp[1]);
@@ -2050,6 +2054,21 @@ public class Connect implements HttpSessionBindingListener {
 		return false;
 	}
 
+	public boolean hasColumn(String tname, String cname) throws SQLException {
+		List<TableCol> cols = getTableDetail(tname);
+		if (cols==null) return false;
+		
+		boolean hasCol = false;
+		for (TableCol col: cols) {
+			if (col.name.equalsIgnoreCase(cname)) {
+				hasCol = true;
+				break;
+			}
+		}
+		
+		return hasCol;
+	}
+	
 	public List<TableCol> getTableDetail(String tname) throws SQLException {
 		String owner = null;
 		if (tname.contains(".")) {

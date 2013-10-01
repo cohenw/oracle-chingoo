@@ -21,7 +21,7 @@
 	String label[][] = {
 			{"AW", "Display when"},
 			{"MB", "Repeat while"},
-			{"SK", "Set Key"},
+			{"AK", "Set Key"},
 			{"AG", "Generate Script"},
 			{"AS", "Action"},
 			{"ML", "Url"},

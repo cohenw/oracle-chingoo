@@ -7,7 +7,7 @@
 	pageEncoding="utf-8"
 %>
 <%!
-public void DFS(Connect cn, int maxLevel, String pkg, String prc, ArrayList<PTree> pt, HashSet<String> explored, ArrayList<String> path, int level) {
+public void BFS(Connect cn, int maxLevel, String pkg, String prc, ArrayList<PTree> pt, HashSet<String> explored, ArrayList<String> path, int level) {
 
 	if (level >=maxLevel) return;
 	
@@ -30,7 +30,7 @@ public void DFS(Connect cn, int maxLevel, String pkg, String prc, ArrayList<PTre
 		newPath.add(target);		
 		if (!explored.contains(target)) {
 			explored.add(target);
-			DFS(cn, maxLevel, sPkg, sPrc, pt, explored, newPath, level +1);
+			BFS(cn, maxLevel, sPkg, sPrc, pt, explored, newPath, level +1);
 		}
 	}
 }
@@ -40,6 +40,7 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 	List<String> list = new ArrayList<String>();
 
 	if ( tname.equals("BATCH") ) {
+		list.add("CALC");
 		// 1 Param table
 		String paramTable = cn.queryOne("SELECT PARAMTABLE FROM BATCHCAT WHERE BATCHKEY='" +q.getValue("BATCHKEY") +"'");
 		//System.out.println("paramTable=" + paramTable);
@@ -67,7 +68,7 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 				ArrayList<PTree> pt = new ArrayList<PTree>(); 
 				HashSet<String> explored = new HashSet<String>();
 				ArrayList<String> path = new ArrayList<String>(); 
-				DFS(cn, 5, pkg, "PERFORM", pt, explored, path, 0);
+				BFS(cn, 5, pkg, "PERFORM", pt, explored, path, 0);
 
 				HashSet<String> pkgs = new HashSet<String>();
 				for (int i=0; i< pt.size(); i++) {
@@ -83,14 +84,14 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 					String q2 = "SELECT distinct table_name " +
 							"FROM GENIE_PA_TABLE A WHERE PACKAGE_NAME='" + pkgName + "' AND " +
 									" (op_insert='1' OR " +
-	                    			"  (cols_update like '%|PROCESSIDY|%' OR cols_update like '%|PROCESSKEY|%')) AND " +
-									" exists (select 1 from user_tab_columns where table_name=A.table_name and column_name in ('PROCESSKEY','PROCESSID'))";
+	                    			"  (cols_update like '%|PROCESSID|%' OR cols_update like '%|PROCESSKEY|%' OR cols_update like '%|BATCHRUNID|%')) AND " +
+									" exists (select 1 from user_tab_columns where table_name=A.table_name and column_name in ('PROCESSKEY','PROCESSID','BATCHRUNID'))";
 					if (cn.getTargetSchema() != null) {
 						q2 = "SELECT distinct table_name " +
 								"FROM GENIE_PA_TABLE A WHERE PACKAGE_NAME='" + pkgName + "' AND " +
 										" (op_insert='1' OR " +
-		                    			"  (cols_update like '%|PROCESSIDY|%' OR cols_update like '%|PROCESSKEY|%')) AND " +
-										" exists (select 1 from all_tab_columns where owner='" + cn.getTargetSchema() + "' and table_name=A.table_name and column_name in ('PROCESSKEY','PROCESSID'))";					}
+		                    			"  (cols_update like '%|PROCESSID|%' OR cols_update like '%|PROCESSKEY|%' OR cols_update like '%|BATCHRUNID|%')) AND " +
+										" exists (select 1 from all_tab_columns where owner='" + cn.getTargetSchema() + "' and table_name=A.table_name and column_name in ('PROCESSKEY','PROCESSID','BATCHRUNID'))";					}
 					
 					//Util.p(q2);
 					List<String> l2 = cn.queryMulti(q2);
@@ -136,6 +137,8 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 			list.add("BATCH_ERROR");
 		if (!list.contains("CALC_ERROR"))
 			list.add("CALC_ERROR");
+		if (!list.contains("TASK"))
+			list.add("TASK");
 		
 
 	} else if ( tname.equals("ERRORCAT") ) {
@@ -235,7 +238,9 @@ public String getQryStmt(String sql, Query q) {
 	Query q = new Query(cn, sql);
 
 	List<String> lcTabs = getLogicalChildTables(cn, table, q); // logical child tables
+	//Util.p(refTabs.toString());
 	lcTabs.removeAll(refTabs);
+	if (table.equals("BATCH")) lcTabs.add("BD_CALC_REQUEST");
 
 	// Foreign keys - For FK lookup
 	List<ForeignKey> fks = cn.getForeignKeys(table);
@@ -609,6 +614,9 @@ if (cn.isViewTable(table)) {
 	int cntRef = 0;
 	for (int i=0; rowid==null && i<refTabs.size(); i++) {
 		String refTab = refTabs.get(i);
+		if (refTab.startsWith(cn.getSchemaName().toUpperCase()+".")) {
+			refTab = refTab.substring(refTab.indexOf(".")+1); 
+		}
 //System.out.println("refTab="+refTab);		
 		String fkColName = cn.getRefConstraintCols(table, refTab);
 //System.out.println("fkColName="+fkColName);
@@ -672,14 +680,19 @@ if (cn.isViewTable(table)) {
 		if (table.equals("BATCH")) {
 		
 			String qr = "SELECT COLUMN_NAME from user_tab_columns where table_name='" + refTab + "' " + 
-					"and COLUMN_NAME in ('PROCESSID', 'PROCESSKEY')";
+					"and COLUMN_NAME in ('PROCESSID', 'PROCESSKEY', 'BATCHRUNID')";
 			if (cn.getTargetSchema() != null) {
 				qr = "SELECT COLUMN_NAME from all_tab_columns where owner='" + cn.getTargetSchema() + "' and table_name='" + refTab + "' " + 
-						"and COLUMN_NAME in ('PROCESSID', 'PROCESSKEY')";
+						"and COLUMN_NAME in ('PROCESSID', 'PROCESSKEY', 'BATCHRUNID')";
 			}
 		
 			fkColName = cn.queryOne(qr);
 			if (fkColName== null) fkColName = "PROCESSID";
+			if (refTab.equals("TASK")) {
+				if (cn.hasColumn("TASK", "BATCHRUNID"))
+					fkColName = "BATCHRUNID";
+			}
+			//if (refTab.equals("BD_CALC_REQUEST")) fkColName = "FEED_PROCESSID";
 			
 		} else if (table.equals("CALC")) {
 			fkColName = "CALCID";
@@ -693,9 +706,9 @@ if (cn.isViewTable(table)) {
 		} else if (refTab.equals("PLAN_CALCTYPE_REPFIELD")||refTab.equals("MEMBER_PLAN_OVERRIDE")) {
 			fkColName = "FKEY";
 			key = q.getValue("FKEY");
-		} 
+		}
 
-		//Util.p(table+" - "+refTab);				
+		//Util.p(table+"-"+refTab + "-");				
 		int recCount = 0;
 		String refsql = "";
 		if ((table.equals("MEMBER")||table.equals("SV_MEMBER")) && refTab.equals("ACCOUNT")) {
@@ -704,6 +717,12 @@ if (cn.isViewTable(table)) {
 			recCount = cn.getQryCount(tmp);
 		} else if ((table.equals("MEMBER")||table.equals("SV_MEMBER")) && refTab.equals("MEMBER_PLAN_ACCOUNT")) {
 			refsql = "SELECT * FROM MEMBER_PLAN_ACCOUNT WHERE ACCOUNTID IN (SELECT ACCOUNTID FROM MEMBER_PLAN_ACCOUNT WHERE CLNT='"+q.getValue("CLNT")+"' AND MKEY='"+q.getValue("MKEY")+"')";
+			String tmp = refsql.replace("SELECT * ", "SELECT COUNT(*) ");
+			recCount = cn.getQryCount(tmp);
+		} else if (table.equals("BATCH") && refTab.equals("BD_CALC_REQUEST")) {
+			refsql = "SELECT * FROM BD_CALC_REQUEST WHERE PROCESSID="+ key + " OR FEED_PROCESSID=" + key;
+			Util.p(refsql);
+			
 			String tmp = refsql.replace("SELECT * ", "SELECT COUNT(*) ");
 			recCount = cn.getQryCount(tmp);
 		} else {

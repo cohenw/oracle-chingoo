@@ -71,7 +71,7 @@ Please select a Table to see the detail.
 	<th class="headerRow">Default</th>
 	<th class="headerRow">Comments</th>
 <% if (hasCpas) { %>	
-	<th class="headerRow">CPAS</th>
+	<th class="headerRow">CPAS <a href="Javascript:showCpasLayout('<%=tname%>')">layout</a></th>
 <% } %>	
 </tr>
 
@@ -393,7 +393,7 @@ Please select a Table to see the detail.
 	} 
 %>
 
-		<a href="Javascript:loadPackage('<%= refPkg %>')"><%= refPkg %></a>&nbsp;&nbsp;<%= cn.getCRUD(refPkg, table) %><br/>		
+		<a href="Javascript:loadPackage('<%= refPkg %>')"><%= refPkg %></a>&nbsp;&nbsp;<%= cn.getCRUD(refPkg, table) %><br/>
 <% }
 	for (; cols<=3; cols++) {
 %>

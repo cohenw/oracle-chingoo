@@ -91,7 +91,8 @@ $(document).ready(function(){
 			}
 		},
         error:function (jqXHR, textStatus, errorThrown){
-        	alert(jqXHR.status + " " + errorThrown);
+        	if (errorThrown != "0")
+        	alert(jqXHR.status + ":" + errorThrown);
         }  
 	});	
 })
@@ -112,7 +113,9 @@ $(document).ready(function(){
 				}
 			},
             error:function (jqXHR, textStatus, errorThrown){
-                alert(jqXHR.status + " " + errorThrown);
+            	
+            	if (errorThrown != "0")
+                alert(jqXHR.status + ":" + errorThrown);
             }  
 		});	    	
     }	

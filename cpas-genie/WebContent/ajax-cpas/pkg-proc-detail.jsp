@@ -45,7 +45,9 @@
 		if (opU.equals("1")) op += "U";
 		if (opD.equals("1")) op += "D";
 %>
-	<a target=_blank href="pop.jsp?key=<%= tname %>"><b><%= tname %></b></a> <span style='color: red; font-weight: bold;'><%= op %></span></br/>
+	<a target=_blank href="pop.jsp?key=<%= tname %>"><b><%= tname %></b></a> <span style='color: red; font-weight: bold;'><%= op %></span>
+	<span class="rowcountstyle"><%= cn.getTableRowCount(tname) %></span>
+	</br/>
 <%		
 	}
 %>

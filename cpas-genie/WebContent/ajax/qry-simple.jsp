@@ -305,8 +305,7 @@ Found: <%= filteredCount %>
 					isLinked = true;
 					String tpkName = cn.getPrimaryKeyName(tbl);
 					String tpkCol = cn.getConstraintCols(tpkName);
-					String tpkValue = q.getValue(tpkCol);
-					//String tpkValue = pkValues;
+ 					String tpkValue = pkValues;
 					
 //					linkUrl ="ajax/blob.jsp?table=" + tbl + "&col=" + colName + "&key=" + Util.encodeUrl(tpkValue);
 					String fname = q.getValue("filename");
@@ -364,6 +363,7 @@ Found: <%= filteredCount %>
 						lTable = "PERSON";
 						keyValue = val;
 						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
+						dialogUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
 					}
 
 					if (val==null || val.equals("*")) isLinked = false;
@@ -391,6 +391,12 @@ if (cpas) {
 		else
 			valDisp += "<br/> &gt; <span class='cpas2'>" + code + "</span>";
 	}
+	
+	if (colName.equalsIgnoreCase("TREEKEY") && !q.getValue("SDI").equals("")) {
+		linkUrl ="cpas-treeview.jsp?sdi=" + q.getValue("SDI") + "&treekey="+val;
+		linkImage="image/sout.gif";
+		isLinked = true;
+	}
 }
 
 %>
@@ -399,6 +405,7 @@ if (cpas) {
  --%>
 <%= (val!=null && isLinked && linkImage.startsWith("image/view")? "<a href='Javascript:showDialog(" + dialogUrl + ")'><img border=0 src='" + linkImage + "'></a>":"")%>
 <%= (val!=null && isLinked && linkImage.equals("image/download.gif")? "<a href='" + linkUrl + "' target=_blank><img border=0 src='" + linkImage + "'></a>":"")%>
+<%= (val!=null && isLinked && linkImage.equals("image/sout.gif")? "<a href='" + linkUrl + "' target=_blank><img border=0 src='" + linkImage + "'></a>":"")%>
 <%
 	if (tname.equals("CPAS_VALIDATION") && colName.equals("VNAME")) {
 		String pkg = q.getValue("PACKNAME") + "." + q.getValue("VNAME");

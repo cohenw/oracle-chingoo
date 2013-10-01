@@ -152,6 +152,7 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 
 <form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
 <input id="sql-query" name="sql" type="hidden"/>
+<input name="norun" type="hidden" value="YES"/>
 </form>
 
 <form id="FormPop" name="FormPop" target="_blank" method="post" action="pop.jsp">

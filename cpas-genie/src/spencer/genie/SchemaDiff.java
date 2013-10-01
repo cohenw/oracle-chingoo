@@ -117,7 +117,7 @@ public class SchemaDiff {
 			addProgress(tname);
 
 			// addProgress(tname);
-			String qry2 = "SELECT column_id, column_name, data_type, data_length, data_precision, data_scale, nullable "
+			String qry2 = "SELECT column_id, column_name, data_type, case when data_type in ('BLOB','CLOB') then 0 else data_length end case, data_precision, data_scale, nullable "
 					+ "FROM user_tab_cols where table_name= '"
 					+ tname
 					+ "' order by column_id";
