@@ -212,8 +212,9 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 %>
 
 <b><%= table %></b> (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(table) %>)
-&nbsp;&nbsp<a href="pop.jsp?key=<%= table %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
- <a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 title="<%=sql%>"/></a>
+&nbsp;&nbsp<a href="pop.jsp?key=<%= table %>" target="_blank" title="Detail"><img border=0 src="image/detail.png"></a>
+<a href="erd2.jsp?tname=<%= table %>" target="_blank" title="ERD"><img border=0 src="image/erd-s.gif"></a>
+ <a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=sql%>"/></a>
 <%-- <%= sql %> --%>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
 <div style="display: none;" id="mode-<%=id%>">hide</div>
@@ -308,12 +309,13 @@ if (cn.isViewTable(table)) {
 <% } %>
 
 <div id="div-fkk-<%=id%>"  style="margin-left: 70px;">
-<a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
+<a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(ft) %>)
 
 &nbsp;&nbsp;
-<a href="pop.jsp?key=<%= ft %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=fsql%>"/></a>
+<a href="pop.jsp?key=<%= ft %>" target="_blank" title="Detail"><img border=0 src="image/detail.png"></a>
+<a href="erd2.jsp?tname=<%= ft %>" target="_blank" title="ERD"><img border=0 src="image/erd-s.gif"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=fsql%>"/></a>
 (<%= table %>.<%= fc.toLowerCase() %>)
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
@@ -353,12 +355,13 @@ if (cn.isViewTable(table)) {
 %>
 
 <div id="div-fkk-<%=id%>"  style="margin-left: 70px;">
-> <a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
+> <a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(ft) %>)
 
 &nbsp;&nbsp;
-<a href="pop.jsp?key=<%= ft %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=fsql%>"/></a>
+<a href="pop.jsp?key=<%= ft %>" target="_blank" title="Detail"><img border=0 src="image/detail.png"></a>
+<a href="erd2.jsp?tname=<%= ft %>" target="_blank" title="ERD"><img border=0 src="image/erd-s.gif"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=fsql%>"/></a>
 (<%= table %>.<%= fc.toLowerCase() %>)
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>
@@ -417,12 +420,13 @@ if (cn.isViewTable(table)) {
 <% } %>
 
 <div id="div-child-<%=id%>">
-<a style="margin-left: 40px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
+<a style="margin-left: 40px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 src="image/plus.gif"></a>
 (<span class="rowcountstyle"><%= recCount %></span> / <%= cn.getTableRowCount(refTab) %>)
 
 &nbsp;&nbsp;
-<a href="pop.jsp?key=<%= refTab %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" align=middle border=0 title="<%=refsql%>"/></a>
+<a href="pop.jsp?key=<%= refTab %>" target="_blank" title="Detail"><img border=0 src="image/detail.png"></a>
+<a href="erd2.jsp?tname=<%= refTab %>" target="_blank" title="ERD"><img border=0 src="image/erd-s.gif"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=refsql%>"/></a>
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-child-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 
 <div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>
@@ -457,11 +461,12 @@ if (cn.isViewTable(table)) {
 		String refsql = getQryStmt(stmt, q);
 %>
 <div id="div-custom-<%=id%>">
-<a style="margin-left: 40px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
+<a style="margin-left: 40px;" href="javascript:loadData('<%=id%>',0)"><b><%= refTab %></b> <img id="img-<%=id%>" border=0 src="image/plus.gif"></a>
 
 &nbsp;&nbsp;
-<a href="pop.jsp?key=<%= refTab %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" align=middle border=0 title="<%=refsql%>"/></a>
+<a href="pop.jsp?key=<%= refTab %>" target="_blank" title="Detail"><img border=0 src="image/detail.png"></a>
+<a href="erd2.jsp?tname=<%= refTab %>" target="_blank" title="ERD"><img border=0 src="image/erd-s.gif"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=refsql%>"/></a>
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-child-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>
 <div style="display: none;" id="hide-<%=id%>"></div>

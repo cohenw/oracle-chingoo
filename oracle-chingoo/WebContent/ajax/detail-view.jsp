@@ -21,6 +21,8 @@
 //	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nView: " + view);
 	
 	String catalog = cn.getSchemaName();
+	String vname = view;
+	if (owner!=null && !owner.equalsIgnoreCase(cn.getSchemaName())) vname = owner + "." + view;
 
 	String qry = "SELECT TEXT FROM USER_VIEWS WHERE VIEW_NAME='" + view +"'";
 	if (owner != null) 
@@ -29,8 +31,8 @@
 	List<String> refProc = cn.getReferencedProc(view);
 %>
 <div id="objectTitle" style="display:none">VIEW: <%= view %></div>
-<h2>VIEW: <%= view %> &nbsp;&nbsp;<a href="Javascript:runQuery('<%=catalog%>','<%=view%>')"><img border=0 src="image/icon_query.png" title="query"></a>
-<a href="crud-matrix.jsp?table=<%=view%>" target="_blank"><img title="CRUD Matrix" src="image/matrix.gif"></a>
+<h2>VIEW: <%= vname %> &nbsp;&nbsp;<a href="Javascript:runQuery('','<%=vname%>')"><img border=0 src="image/icon_query.png" title="query"></a>
+<a href="crud-matrix.jsp?table=<%=view%>" target="_blank"><img title="CRUD Matrix" border=0 src="image/matrix.gif"></a>
 <a href="pop.jsp?type=VIEW&key=<%=view%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
 </h2>
 
@@ -80,7 +82,7 @@
 	String text = cn.queryOne(qry, false);
 %>
 <b>Definition</b> 
-<a href="Javascript:toggleDiv('imgDef','divDef')"><img id="imgDef" src="image/minus.gif"></a>
+<a href="Javascript:toggleDiv('imgDef','divDef')"><img id="imgDef" border=0 src="image/minus.gif"></a>
 <div id="divDef" style="margin-left: 20px;">
 <pre style="font-family: Consolas;">
 <%=new HyperSyntax().getHyperSyntax(cn, text, "VIEW")%>

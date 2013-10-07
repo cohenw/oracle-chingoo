@@ -30,7 +30,11 @@
 	boolean hideEmpty = request.getParameter("hideEmpty") != null;
 	//hideEmpty = true;
 	
-	String qry = "SELECT TABLE_NAME, NUM_ROWS FROM USER_TABLES ORDER BY 1"; 	
+	String schema = request.getParameter("schema");
+	if (schema==null) schema = cn.getSchemaName().toUpperCase();
+//Util.p("*** " + schema);	
+	
+	String qry = "SELECT TABLE_NAME, NUM_ROWS FROM ALL_TABLES WHERE OWNER='"+schema+"' ORDER BY 1"; 
 	//List<String> list = cn.queryMulti(qry);
 	List<String[]> list = cn.query(qry, true);
 	
@@ -53,8 +57,11 @@ Found <%= selectedCnt %> table(s).
 		if (filter != null && !list.get(i)[1].contains(filter)) continue;
 		if (hideEmpty && getNumRows(list.get(i)[2]).equals("0")) continue;
 		if (hideEmpty && list.get(i)[2] == null) continue;
+		
+		String ttt = list.get(i)[1];
+		if (!schema.equals(cn.getSchemaName().toUpperCase())) ttt = schema + "." + ttt;
 %>
-	<li><a href="javascript:loadTable('<%=list.get(i)[1]%>');"><%=list.get(i)[1]%></a> <span class="rowcountstyle"><%= getNumRows(list.get(i)[2]) %></span></li>
+	<li><a href="javascript:loadTable('<%=ttt%>');"><%=list.get(i)[1]%></a> <span class="rowcountstyle"><%= getNumRows(list.get(i)[2]) %></span></li>
 <% 
 	} 
 %>
