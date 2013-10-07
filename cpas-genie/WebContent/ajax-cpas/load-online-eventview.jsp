@@ -28,7 +28,7 @@
 <div style="display: none;">
 
 <b>Process</b>
- <a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry1%>"/></a>
+ <a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry1%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry1%></div>
 
 <br/>
@@ -74,7 +74,7 @@
 id = Util.getId();
 %>
 <b>Event</b>
- <a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry0%>"/></a>
+ <a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry0%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry0%></div>
 <table id="dataTable" border=1 class="gridBody">
 <tr>
@@ -144,7 +144,7 @@ id = Util.getId();
 		<% id = Util.getId();
 			qry0 = "SELECT * FROM CPAS_ACTION WHERE ACTION='" + action + "'";
 		%>
-		<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry0%>"/></a>
+		<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry0%>"/></a>
 		<div style="display: none;" id="sql-<%=id%>"><%= qry0 %></div>
 	</td>
 	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel + " <span class='cpas'>" + secName + "</span>"%></td>
@@ -178,7 +178,7 @@ id = Util.getId();
 
 
 <b>Event View</b> - <%= ename %> [<%= process %>,<%= event %>]
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 <br/>
 
@@ -263,7 +263,7 @@ if (tv!=null && sdi!=null && actionId != null) {
 	lupd = lupd==null?"":lupd;
 	ldel = ldel==null?"":ldel;
 %>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry%>"/></a>
 <%-- 
 <br/>
 <a href="javascript:openSimul('<%=sdi%>','<%=tv%>')">Simulator</a>
@@ -303,7 +303,7 @@ if (qSlave.hasData()) {
 %>
 
 <b>Slave Event</b>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qrySlave%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qrySlave%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qrySlave%></div>
 <br/>
 
@@ -380,7 +380,7 @@ if (qUt.hasData()) {
 %>
 
 <b>User Task</b>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qryUt%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qryUt%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qryUt%></div>
 <br/>
 

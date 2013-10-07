@@ -30,13 +30,15 @@
 	if (owner != null) sourceUrl += "&owner=" + owner;
 	
 	String typeName = cn.getObjectType(owner, name);
+	String pname = name;
+	if (owner!=null && !owner.equalsIgnoreCase(cn.getSchemaName())) pname = owner + "." + name;
 %>
 <div id="objectTitle" style="display:none"><%= typeName %>: <%= name %></div>
-<h2><%= typeName %>: <%= name %> &nbsp;&nbsp;<a href="<%=sourceUrl%>" target="_blank"><img border=0 src="image/sourcecode.gif" title="Source code"></a>
-<a href="pop.jsp?type=PACKAGE&key=<%=name%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
+<h2><%= typeName %>: <%= pname %> &nbsp;&nbsp;<a href="<%=sourceUrl%>" target="_blank"><img border=0 src="image/sourcecode.gif" title="Source code"></a>
+<a href="pop.jsp?type=PACKAGE&key=<%=pname%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
 <% if (hasGenieTable && (typeName.equals("PACKAGE")||typeName.equals("TYPE"))) { %>
-<a target=_blank href="package-browser.jsp?name=<%= name %>">Package Browser</a>
-<a target="_blank" href="analyze-package.jsp?name=<%= name %>">Analyze</a>
+<a target=_blank href="package-browser.jsp?name=<%= pname %>">Package Browser</a>
+<a target="_blank" href="analyze-package.jsp?name=<%= pname %>">Analyze</a>
 <% } %>
 </h2>
 
@@ -112,7 +114,7 @@ for (int k=0;k<types.size();k++) {
 	<a target="_blank" href="<%= sourceUrl%>#<%= list.get(i).toLowerCase() %>"><%= list.get(i).toLowerCase() %></a>
 	&nbsp;
 <% if (hasGenieTable) { %>	
- 	<a target="_blank" href="package-tree.jsp?name=<%= name + "." + list.get(i) %>"><img src="image/link.gif"></a>
+ 	<a target="_blank" href="package-tree.jsp?name=<%= name + "." + list.get(i) %>"><img border=0 src="image/link.gif"></a>
 
 <% } %> 	<br/>		
 <% }

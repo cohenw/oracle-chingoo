@@ -365,6 +365,22 @@ Build CPAS1087
 	fix bug: Blob download for composite pk table
 	cn.hasColumn(tname, cname)
 	Display table rownumber in PA/Package Tree
+
+Build CPAS1088
+	Bug fix - Data link / TASK, BD_CALC_REQUEST
+	Data link - CALC's logical child tables by index(calcid)
+	Show elapsed time in query page
+	ERD - popup table
+	ERD2 - up to 5 levels
+	cleanup UI for IE (image link without border)
+	link to ERD2 from Query/Data Link
+
+Build CPAS1089
+	Data Link - CONNSESSION / CPASSESSION
+	Logical Link - WIZARD -> CPAS_WIZARD.CAPTION
+	CONNSESSION_PROCESS.processkey -> CPAS_PROCESS.name
+	Change Schema for Table/View/Package
+	load TVS for other schema objects
 			
 Known Issue
 	PA does not include Stored procedures and functions

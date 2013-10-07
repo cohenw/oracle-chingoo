@@ -29,7 +29,7 @@
 %>
 <b>Process</b> - <%= pname %> [<%= ptype %>]
 
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 <br/>
 <table id="dataTable" border=1 class="gridBody">

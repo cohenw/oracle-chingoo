@@ -663,7 +663,8 @@ Rows/Page
 
 
 <input id="recordCount" value="<%= q.getRecordCount() %>" type="hidden">
-
+<br/>
+Elapsed : <%= q.getElapsedTime()/1000.0 %> sec.
 <%--
 <%= counter %> rows found.<br/>
 Elapsed Time <%= q.getElapsedTime() %>ms.<br/>

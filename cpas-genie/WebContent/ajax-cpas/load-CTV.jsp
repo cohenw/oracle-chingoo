@@ -21,7 +21,7 @@
 	String id = Util.getId();
 %>
 <b><%= name %></b>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=sql%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=sql%>"/></a>
 <a href="Javascript:openAll();">Open All</a>
 <a href="Javascript:closeAll();">Close All</a>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
@@ -69,7 +69,7 @@ List<String[]> list2 = cn.query(sql);
 
 String id = Util.getId();
 %>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=sql%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=sql%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= sql %></div>
 <br/>
 

@@ -132,6 +132,7 @@
     <script type="text/javascript">
 	$(document).ready(function() {
 <% for (String tname : tbls) { 
+//	Util.p("*** " +  tname);
 %>
 		showTable('<%=tname%>');
 <%

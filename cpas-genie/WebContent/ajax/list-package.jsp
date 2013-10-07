@@ -9,9 +9,11 @@
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
 	String filter = request.getParameter("filter");
-
-	String qry = "SELECT OBJECT_NAME FROM USER_OBJECTS WHERE object_type IN ('PACKAGE','PROCEDURE','FUNCTION','TYPE') order by 1"; 	
-	if (cn.getTargetSchema() != null)
+	String schema = request.getParameter("schema");
+	if (schema==null) schema = cn.getSchemaName().toUpperCase();
+	
+	String qry = "SELECT OBJECT_NAME FROM ALL_OBJECTS WHERE OWNER='" + schema +"' AND object_type IN ('PACKAGE','PROCEDURE','FUNCTION','TYPE') order by 1"; 	
+	if (cn.getTargetSchema() != null && false)
 		qry = "SELECT OBJECT_NAME FROM ALL_OBJECTS WHERE OWNER='" + cn.getTargetSchema() + "' and object_type IN ('PACKAGE','PROCEDURE','FUNCTION','TYPE') order by 1";
 
 	List<String> list = cn.queryMulti(qry);
@@ -30,8 +32,10 @@ Found <%= selectedCnt %> program(s).
 	if (filter !=null) filter = filter.toUpperCase();
 	for (int i=0; i<list.size();i++) {
 		if (filter != null && !list.get(i).contains(filter)) continue;
+		String ttt = list.get(i);
+		if (!schema.equals(cn.getSchemaName().toUpperCase())) ttt = schema + "." + ttt;
 %>
-	<li><a href="javascript:loadPackage('<%=list.get(i)%>');"><%=list.get(i)%></a></li>
+	<li><a href="javascript:loadPackage('<%=ttt%>');"><%=list.get(i)%></a></li>
 <% 
 	} 
 %>

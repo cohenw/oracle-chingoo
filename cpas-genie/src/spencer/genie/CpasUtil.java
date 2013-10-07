@@ -121,7 +121,8 @@ public class CpasUtil {
 			{"CODE", "CPAS_CODE"},
 			{"CODE2", "CPAS_CODE"},
 			{"PROCESS", "CPAS_PROCESS"},
-			{"FKEY", "FORMULA"} 
+			{"FKEY", "FORMULA"},
+			{"WIZARD", "CPAS_WIZARD"}
 	};
 
 	// for special case (with table name)
@@ -376,6 +377,12 @@ public class CpasUtil {
 			return cn.queryOne(qry);
 		} else if (temp.endsWith(".TTYPE")) {
 			String qry = "SELECT CAPT FROM CPAS_TASKTYPE WHERE TTYPE='" + value + "'";
+			return cn.queryOne(qry);
+		} else if (temp.endsWith(".WIZARD")) {
+			String qry = "SELECT CAPTION FROM CPAS_WIZARD WHERE WIZARD='" + value + "'";
+			return cn.queryOne(qry);
+		} else if (temp.endsWith("CONNSESSION_PROCESS.PROCESSKEY")) {
+			String qry = "SELECT NAME FROM CPAS_PROCESS WHERE PROCESS='" + value + "'";
 			return cn.queryOne(qry);
 		}
 		

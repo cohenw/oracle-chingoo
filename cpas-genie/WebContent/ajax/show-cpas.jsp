@@ -6,15 +6,17 @@
 	pageEncoding="utf-8"
 %>
 <%
-	String tables1[] = {"MEMBER", "PERSON", "PENSIONER", "ACCOUNT", "CALC", "BATCH", "EMPLOYER", "FUND"};
-	String tables2[] = {"BATCHCAT", "BATCHCAT_TASK", "ERRORCAT", "REPORTCAT", "REQUESTCAT", "TASKCAT", "FWIZCAT", "WIZARDCAT"};
-	String tables3[] = {"CPAS_CODE", "CPAS_CALCTYPE", "CPAS_CATALOG", "CPAS_REPORT", "CPAS_WIZARD", "CPAS_VALIDATION", "CPAS_ACTION", "CPAS_TABLE", "CPAS_LAYOUT"};
-	String tables4[] = {"CPAS_DATE", "CPAS_JML", "CPAS_GROUP", "CPAS_SEARCHTYPE", "CPASFIND", "CPAS_DOC", /*"CPAS_FORM",*/ "CPAS_PARAMETER", "CPAS_AGE", "CPAS_KIT"};
-	String tables5[] = {"FORMULA", "RULE", "EXPOSE", "EXPOSE_RULE", "PLAN_RULEID", "", "CPAS_ROLE", "SECSWITCH"};
+	String tables1[] = {"MEMBER", "CLIENT", "PLAN", "EMPLOYER", "PERSON", "PENSIONER", "", "ACCOUNT", "CALC", "BATCH",  "FUND", "REQUEST", "TASK"};
+	String tables2[] = {"BATCHCAT", "BATCHCAT_TASK", "ERRORCAT", "REPORTCAT", "REQUESTCAT", "TASKCAT", "FWIZCAT", "WIZARDCAT", "", "CPAS_CODE", "CPAS_REPORT", "CPAS_KIT", "CPAS_WIZARD", "CPAS_VALIDATION"};
+	String tables3[] = {"CPAS_CALCTYPE", "CPAS_CATALOG", "CPAS_ACTION", "CPAS_TABLE", "CPAS_LAYOUT", "CPAS_DATE", "CPAS_JML", "CPAS_GROUP", "CPAS_DOC", /*"CPAS_FORM",*/ "CPAS_PARAMETER", "CPAS_AGE", "", "CPAS_SEARCHTYPE", "CPASFIND"};
+	String tables4[] = {"FORMULA", "RULE", "EXPOSE", "EXPOSE_RULE", "PLAN_RULEID", "", "CPAS_ROLE", "SECSWITCH"};
 
 	Connect cn = (Connect) session.getAttribute("CN");
 
 	if (cn.isTVS("SV_MEMBER")) tables1[0] = "SV_MEMBER";
+	if (cn.isTVS("SV_CLIENT")) tables1[1] = "SV_CLIENT";
+	if (cn.isTVS("SV_PLAN")) tables1[2] = "SV_PLAN";
+
 	String cntCustom = cn.queryOne("SELECT count(*) FROM USER_OBJECTS WHERE OBJECT_NAME='CUSTOMTREEVIEW'");
 	boolean hasCustomTV = cntCustom.equals("1");
 %>
@@ -34,8 +36,9 @@
 </head>
 
 <div>
-<h3><img src="image/cpas.jpg"> CPAS Catalog</h3>
-
+<!-- <h3><img src="image/cpas.jpg"> CPAS Catalog</h3>
+ -->
+ <h3>
 <% if (cn.isTVS("CPAS_SDI")) { %>
 <a href="cpas-on.jsp" target="_blank">CPAS Online</a>
 	<% if (hasCustomTV) { %>
@@ -68,72 +71,10 @@
 <% } else { %>
 <span class="nullstyle">Role Privileges</span>
 <% } %>
-
-<br/><br/>
-<table width=700 style="margin-left: 20px;">
-<td valign=top>
-<% for (String tbl : tables1) {%>
-	<% if (tbl.equals("")) { %>
-	<br/>
-	<% } else if (cn.isTVS(tbl)) { %>
-	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
-	<% } else { %>
-	<li><span class="nullstyle"><%=tbl%></span></li>
-	<% } %>
-<% } %>
-</td>
-<td valign=top>
-<% for (String tbl : tables2) {%>
-	<% if (tbl.equals("")) { %>
-	<br/>
-	<% } else if (cn.isTVS(tbl)) { %>
-	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
-	<% } else { %>
-	<li><span class="nullstyle"><%=tbl%></span></li>
-	<% } %>
-<% } %>
-</td>
-<td valign=top>
-<% for (String tbl : tables3) {%>
-	<% if (tbl.equals("")) { %>
-	<br/>
-	<% } else if (cn.isTVS(tbl)) { %>
-	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
-	<% } else { %>
-	<li><span class="nullstyle"><%=tbl%></span></li>
-	<% } %>
-<% } %>
-</td>
-<td valign=top>
-<% for (String tbl : tables4) {%>
-	<% if (tbl.equals("")) { %>
-	<br/>
-	<% } else if (cn.isTVS(tbl)) { %>
-	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
-	<% } else { %>
-	<li><span class="nullstyle"><%=tbl%></span></li>
-	<% } %>
-<% } %>
-</td>
-<td valign=top>
-<% for (String tbl : tables5) {%>
-	<% if (tbl.equals("")) { %>
-	<br/>
-	<% } else if (cn.isTVS(tbl)) { %>
-	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
-	<% } else { %>
-	<li><span class="nullstyle"><%=tbl%></span></li>
-	<% } %>
-<% } %>
-</td>
-</table>
-
-<form id="form1" name="form1" target=_blank action="query.jsp" method="post">
-<input id="sql" name="sql" type="hidden" value="select * from tab"/>
-</form>
+</h3>
 
 <b>Quick Search</b>
-<form id="form1" name="form1" target=_blank action="query.jsp" method="post" style="margin-left: 20px;">
+<form id="form0" name="form0" target=_blank action="query.jsp" method="post" style="margin-left: 20px;">
 <input name="key" type="radio" id="mkey" value="mkey" checked><label for="mkey">mkey</label>
 <input name="key" type="radio" id="calcid" value="calcid"><label for="calcid">calcid</label>
 <input name="key" type="radio" id="processid" value="processid"><label for="processid">processid</label>
@@ -147,7 +88,6 @@
 <input type="submit">
 </form>
 
-<br/>
 <table>
 <td valign=top>
 <b>Quick Query</b><br/>
@@ -177,7 +117,7 @@
 <% } %>
 
 <% if (cn.isTVS("WIZARD_RUN")) { %>
-<li><a href="Javascript:qr('SELECT * FROM WIZARD_RUN ORDER BY RUNID DESC')">Latest Web Wizards</a></li>
+<li><a href="Javascript:qr('SELECT * FROM WIZARD_RUN ORDER BY RUNID DESC')">Latest Web Wizard Runs</a></li>
 <% } %>
 
 <% if (cn.isTVS("CALC")) { %>
@@ -210,7 +150,58 @@
 </td>
 </table>
 
-<br/><br/>
+<b>Tables</b>
+<table width=650 style="margin-left: 20px;">
+<td valign=top width=25%>
+<% for (String tbl : tables1) {%>
+	<% if (tbl.equals("")) { %>
+	<br/>
+	<% } else if (cn.isTVS(tbl)) { %>
+	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
+	<% } else { %>
+	<li><span class="nullstyle"><%=tbl%></span></li>
+	<% } %>
+<% } %>
+</td>
+<td valign=top width=25%>
+<% for (String tbl : tables2) {%>
+	<% if (tbl.equals("")) { %>
+	<br/>
+	<% } else if (cn.isTVS(tbl)) { %>
+	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
+	<% } else { %>
+	<li><span class="nullstyle"><%=tbl%></span></li>
+	<% } %>
+<% } %>
+</td>
+<td valign=top width=25%>
+<% for (String tbl : tables3) {%>
+	<% if (tbl.equals("")) { %>
+	<br/>
+	<% } else if (cn.isTVS(tbl)) { %>
+	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
+	<% } else { %>
+	<li><span class="nullstyle"><%=tbl%></span></li>
+	<% } %>
+<% } %>
+</td>
+<td valign=top width=25%>
+<% for (String tbl : tables4) {%>
+	<% if (tbl.equals("")) { %>
+	<br/>
+	<% } else if (cn.isTVS(tbl)) { %>
+	<li><a href="Javascript:q('<%=tbl%>')"><%=tbl%></a> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span></li>
+	<% } else { %>
+	<li><span class="nullstyle"><%=tbl%></span></li>
+	<% } %>
+<% } %>
+</td>
+</table>
+
+<form id="form1" name="form1" target=_blank action="query.jsp" method="post">
+<input id="sql" name="sql" type="hidden" value="select * from tab"/>
+</form>
+
 
 <b>Note:</b>
 <div style="margin-left: 20px;">
@@ -219,7 +210,8 @@ Thanks.
 <br/><br/>
 Spencer Hwang
 <br/>
-<a href="mailto:spencerh@cpas.com">spencerh@cpas.com</a>
+<a href="mailto:spencerh@cpas.com">spencerh@cpas.com</a><br/>
+x350
 </div>
 
 </div>

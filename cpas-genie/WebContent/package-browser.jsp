@@ -483,7 +483,7 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 	String id = Util.getId();
 %>
 <b>Packages</b>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 <br/>
 			
