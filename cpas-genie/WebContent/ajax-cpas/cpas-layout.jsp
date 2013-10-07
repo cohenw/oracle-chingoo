@@ -45,7 +45,7 @@
 <div id="sql-<%=id%>" style="display: none;"><%= sql %></div>
 <span id="sqlorig-<%=id%>" style="display: none;"><%= sql %></span>
 &nbsp;
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border="0"></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border="0"></a>
 &nbsp;
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
 <div style="display: none;" id="mode-<%=id%>">sort</div>

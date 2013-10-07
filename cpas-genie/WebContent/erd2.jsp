@@ -36,23 +36,27 @@
 	
 	ArrayList<String> pk = cn.getPrimaryKeys(owner, tname);
 	if (pkName == null && owner != null) pkName = cn.getPrimaryKeyName(owner, table);
-
+	//System.out.println("pkName=" + pkName);
 	String pkCols = cn.getConstraintCols(owner, pkName);
+	//System.out.println("0pkCols=" + pkCols);
 	if (pkName != null && pkCols.equals(""))
 		pkCols = cn.getConstraintCols(owner, pkName);
-	
+	//System.out.println("pkCols=" + pkCols);
 	List<ForeignKey> fks = cn.getForeignKeys(owner, table);
 	if (owner != null) fks = cn.getForeignKeys(owner, table);
 	
 	List<String> refTabs = cn.getReferencedTables(owner, table);
 	
 //	List<TableCol> list = cn.getTableDetail(owner, table);	
-	List<TableCol> list = cn.getTableDetail(table);	
+	List<TableCol> list = cn.getTableDetail(table);
+	List<String[]> refIdx = cn.getIndexes(owner, tname);
+	List<String> refConst = cn.getConstraints(owner, tname);
+	
 %>
 
 <html>
 <head> 
-	<title>Genie - ERD</title>
+	<title>ERD: <%= tname %></title>
 	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
 	<script src="script/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
     <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
@@ -112,12 +116,17 @@
 	
 	function runQuery(tab) {
 		var sList = "";
-		var form = "DIV_" + tab; 
+		//var form = "DIV_" + tab; 
 
 		var query = "SELECT * FROM " + tab + " A";
 		
-		$("#sql").val(query);
+		$("#sql-query").val(query);
 		$("#FORM_query").submit();
+	}
+
+	function loadTable(tname) {
+		$("#tname").val(tname);
+		$("#FORM_load").submit();
 	}
 	
 	$(function() {
@@ -173,8 +182,14 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 <input name="norun" type="hidden" value="YES"/>
 </form>
 
-<div id="parentDiv" style="width: 100%; overflow:auto;">
-&nbsp;
+<form id="FORM_load" name="FORM_load" action="erd2.jsp" method="get">
+<input id="tname" name="tname" type="hidden"/>
+</form>
+
+
+<div style="width: 1400px;">
+
+<div id="div1" style="width: 450; float:left; margin: 4px; padding: 6px; border:0px solid #888888; ">
 
 <% 
 HashSet <String> hsTable = new HashSet<String>();
@@ -190,11 +205,42 @@ for (ForeignKey rec: fks) {
 	
 	String id = Util.getId();
 %>
-<div id="div-<%=id%>" style="margin-left: 20px; background-color: #ffffcc; width:220px; border: 1px solid #cccccc; float: left;">
-<a href="erd.jsp?tname=<%= rec.rTableName %>"><%= rec.rTableName %></a> <span id="rowcnt-<%=id%>" class="rowcountstyle"><%= cn.getTableRowCount(rec.rTableName) %></span>
-<a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" align=top src="image/plus.gif"></a>
-<a href="javascript:runQuery('<%= rec.rTableName %>')"><img src="image/view.png"></a>
-<a href="pop.jsp?type=TABLE&key=<%= rec.rTableName%>" target="_blank"><img width=12 height=12 src="image/popout.png"></a>
+<table border=0 cellpadding=0 sellspacing=0>
+<td width=180 valign=top>
+<%
+HashSet <String> hsTable0 = new HashSet<String>();
+List<ForeignKey> fks0 = cn.getForeignKeys(owner, rec.rTableName);
+if (owner != null) fks0 = cn.getForeignKeys(owner, rec.rTableName);
+for (ForeignKey rec0: fks0) {
+	if (hsTable0.contains(rec0.rTableName)) 
+		continue;
+	else
+		hsTable0.add(rec0.rTableName);
+	
+	String tbl2 = rec0.rTableName;
+%>
+<div style="margin: 4px; padding:6px; background-color: #ffffcc; width:170px; border: 1px solid #cccccc; float: left;">
+<b><a href="erd2.jsp?tname=<%= tbl2 %>"><%= tbl2 %></a></b> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl2) %></span>
+<a href="javascript:runQuery('<%= tbl2 %>')"><img border=0 src="image/view.png"></a>
+<a href="pop.jsp?type=TABLE&key=<%= tbl2 %>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
+</div><br/>
+
+<% } %>
+<div style="margin: 4px; padding:6px; width:174px;">&nbsp;</div>
+</td>
+<td width=36 valign=top>
+<% if (hsTable0.size() > 0) { %>
+<img src="image/blue_arrow_left.png" style="margin-top:5px; float:left">
+<% } %>
+<br/>
+<div style="width: 32px;"></div>
+</td>
+<td valign=top>
+<div id="div-<%=id%>" style="margin: 4px; padding:6px; background-color: #ffffcc; width:200px; border: 1px solid #cccccc; float: left;">
+<b><a href="erd2.jsp?tname=<%= rec.rTableName %>"><%= rec.rTableName %></a></b> <span id="rowcnt-<%=id%>" class="rowcountstyle"><%= cn.getTableRowCount(rec.rTableName) %></span>
+<a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif"></a>
+<a href="javascript:runQuery('<%= rec.rTableName %>')"><img border=0 src="image/view.png"></a>
+<a href="pop.jsp?type=TABLE&key=<%= rec.rTableName%>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
 <a href="javascript:hideDiv('<%= id %>')">x</a>
 
 <div id="sub-<%=id%>" style="display: none;">
@@ -217,23 +263,23 @@ for (TableCol t: list1) {
 </table>
 </div>
 </div>
+</td></table>
 <% } %>
 
 </div>
 
-<% if (fks.size() >0 ) { %>
-<img style="margin-left:170px;" src="image/arrow_up.jpg">
-<% } %>
+<img src="image/blue_arrow_left.png" style="margin-top:20px; float:left">
 
+<div id="div2" style="width: 250; float:left; margin: 4px; padding: 6px; border:0px solid #888888; ">
 <%
 	String id = Util.getId();
 %>
 
-<div id="mainDiv" style="margin-left: 60px; padding:4px; background-color: #99FFFF; width:240px; border: 2px solid #333333;">
+<div id="mainDiv" style="margin: 4px; padding:6px; background-color: #99FFFF; width:230px; border: 2px solid #333333;">
 <b><%= tname %></b> <span class="rowcountstyle"><%= cn.getTableRowCount(tname) %></span>
-<a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" align=top src="image/minus.gif"></a>
-<a href="javascript:runQuery('<%= tname %>')"><img src="image/view.png"></a>
-<a href="pop.jsp?type=TABLE&key=<%= tname %>" target="_blank"><img width=12 height=12 src="image/popout.png"></a>
+<a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" border=0 align=top src="image/minus.gif"></a>
+<a href="javascript:runQuery('<%= tname %>')"><img border=0 src="image/view.png"></a>
+<a href="pop.jsp?type=TABLE&key=<%= tname %>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
 <div id="sub-<%=id%>" style="display: block;">
 <table>
 <%
@@ -255,24 +301,131 @@ for (TableCol t: list) {
 </div>
 </div>
 
-<% if (refTabs.size() >0 ) { %>
-<img style="margin-left:170px;" src="image/arrow_up.jpg">
+<br/>
+<%-- TABLE DETAIL --%>
+<% if (pkName != null)  {%>
+<b>Primary Key</b><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<%= pkName %> (<%= pkCols.toLowerCase() %>) 
+
+<br/><br/>
 <% } %>
 
-<div id="childDiv">
+<% 
+	if (fks.size()>0) { 
+%>
+<b>Foreign Key</b><br/>
+<%
 
-<% for (String tbl: refTabs) { 
+	for (int i=0; i<fks.size(); i++) {
+		ForeignKey rec = fks.get(i);
+		String rTable = rec.rTableName; //cn.getTableNameByPrimaryKey(rec.rConstraintName);
+		boolean tabLink = true;
+		if (rTable == null) {
+//			rTable = rec.rOwner + "." + rec.rConstraintName;
+
+			rTable = cn.getTableNameByPrimaryKey(rec.rOwner, rec.rConstraintName);
+			
+//			rTable = rec.rOwner + "." + rec.tableName;
+			tabLink = false;
+			tabLink = true;
+		}
+		if (!(rec.rOwner.equalsIgnoreCase(cn.getSchemaName()) || rec.rOwner.equalsIgnoreCase(cn.getTargetSchema()))) rTable = rec.rOwner + "." + rTable;
+%>
+&nbsp;&nbsp;&nbsp;&nbsp;<%= rec.constraintName %>
+	(<%= cn.getConstraintCols(rec.owner, rec.constraintName).toLowerCase() %>)
+	->
+<%
+	if (tabLink) {
+%>
+	<a href="Javascript:loadTable('<%= rTable %>')"><%= rTable %></a> <span class="rowcountstyle"><%= cn.getTableRowCount(rTable) %></span>
+<%
+	} else {
+%>	
+	<%= rTable %>
+<%
+	}
+%>
+	(<%= cn.getConstraintCols(rec.rOwner, rec.rConstraintName).toLowerCase() %>)
+	
+	On delete <%= rec.deleteRule %>
+	<br/>
+<%
+ }
+%>
+	<br/>
+<%
+} 
+%>
+
+<% 
+	if (refConst.size()>0) { 
+%>
+<b>Constraints</b><br/>
+<%
+
+	for (int i=0; i<refConst.size(); i++) {
+		String constName = refConst.get(i);
+%>
+	&nbsp;&nbsp;&nbsp;&nbsp;<%= constName %> 
+	<br/>
+<%
+	}
+%>
+<br/>
+<%
+	}
+%>
+
+<% 
+	if (refIdx.size()>0) { 
+%>
+<b>Index</b><br/>
+<%
+
+	for (int i=0; i<refIdx.size(); i++) {
+		String indexName = refIdx.get(i)[0];
+		String indexType = refIdx.get(i)[1];
+		if (indexType.equals("NONUNIQUE")) indexType= "";
+%>
+	&nbsp;&nbsp;&nbsp;&nbsp;<%= indexName %> 
+	<%= cn.getIndexColumns(owner, indexName).toLowerCase() %>
+	<%= indexType %> 
+	<br/>
+<%
+	}
+%>
+<br/>
+<%
+}
+%>
+
+
+</div>
+
+<img src="image/blue_arrow_left.png" style="margin-top:20px; float:left">
+
+<div id="div3" style="float:left; margin: 4px; padding: 6px; border:0px solid #888888; ">
+
+<% for (String tbl: refTabs) {
+	if (tbl.equals(tname)) continue;
+		
+	List<String> refTabs2 = cn.getReferencedTables(owner, tbl);
 	List<TableCol> list1 = cn.getTableDetail(tbl);
 	ArrayList<String> pk1 = cn.getPrimaryKeys(tbl);
 	id = Util.getId();
 %>
 
-<div id="div-<%=id%>" style="margin-left: 20px; background-color: #ffffcc; width:220px; border: 1px solid #cccccc; float: left;">
-<a href="erd.jsp?tname=<%= tbl %>"><%= tbl %></a> <span id="rowcnt-<%=id%>" class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span>
-<a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" align=top src="image/plus.gif"></a>
-<a href="javascript:runQuery('<%= tbl %>')"><img src="image/view.png"></a>
-<a href="pop.jsp?type=TABLE&key=<%= tbl %>" target="_blank"><img width=12 height=12 src="image/popout.png"></a>
+<div id="div-<%=id%>">
+<table cellpadding=0 cellspacing=0 border=0>
+<td valign=top>
+
+<div id="div3-<%=id%>" style="margin: 4px; padding:6px; background-color: #ffffcc; width:200px; border: 1px solid #cccccc; float: left;">
+<b><a href="erd2.jsp?tname=<%= tbl %>"><%= tbl %></a></b> <span id="rowcnt-<%=id%>" class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span>
+<a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif"></a>
+<a href="javascript:runQuery('<%= tbl %>')"><img border=0 src="image/view.png"></a>
+<a href="pop.jsp?type=TABLE&key=<%= tbl %>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
 <a href="javascript:hideDiv('<%= id %>')">x</a>
+
 
 <div id="sub-<%=id%>" style="display: none;">
 <table>
@@ -294,8 +447,40 @@ for (TableCol t: list1) {
 </table>
 </div>
 </div>
+
+</td>
+<td valign=top>
+<% if (refTabs2.size() > 0 ) { %>
+<img src="image/blue_arrow_left.png" style="margin-top:5px; float:left">
+<% } %>
+</td>
+
+<td valign=top>
+<%
+
+  for (String tbl2: refTabs2) { 
+	List<TableCol> list2 = cn.getTableDetail(tbl);
+	ArrayList<String> pk2 = cn.getPrimaryKeys(tbl);
+	id = Util.getId();
+%>
+<div id="div-<%=id%>" style="margin: 4px; padding:6px; background-color: #ffffcc; width:200px; border: 1px solid #cccccc; float: left;">
+<b><a href="erd2.jsp?tname=<%= tbl2 %>"><%= tbl2 %></a></b> <span id="rowcnt-<%=id%>" class="rowcountstyle"><%= cn.getTableRowCount(tbl2) %></span>
+<a href="javascript:runQuery('<%= tbl2 %>')"><img border=0 src="image/view.png"></a>
+<a href="pop.jsp?type=TABLE&key=<%= tbl2 %>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
+</div><br/>
+<% } %>
+
+</div>
+<br/>
+</td>
+</table>
+</div>
 <% } %>
 </div>
+
+</div>
+
+<br clear="all"/>
 
     <script type="text/javascript">
     $(document).ready(function(){

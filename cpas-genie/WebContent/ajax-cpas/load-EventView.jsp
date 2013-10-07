@@ -17,7 +17,7 @@
 	String id = Util.getId();
 %>
 <b>Event View</b> - <%= ename %> [<%= process %>,<%= event %>]
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 <br/>
 
@@ -95,7 +95,7 @@ if (tv!=null && sdi!=null) {
 	lupd = lupd==null?"":lupd;
 	ldel = ldel==null?"":ldel;
 %>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry%>"/></a>
 <br/>
 <a href="javascript:openSimul('<%=sdi%>','<%=tv%>')">Simulator</a>
 <a href="cpas-treeview.jsp?sdi=<%= sdi %>&treekey=<%= tv %>" target="_blank">Treeview</a>

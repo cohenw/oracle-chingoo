@@ -499,11 +499,11 @@ public static void main(String args[]) {
 	}
 
 	public static String getBuildNo() {
-		return "CPAS-1087";
+		return "CPAS-1089";
 	}
 
 	public static String getVersionDate() {
-		return "Sep 30, 2013";
+		return "Oct 7, 2013";
 	}
 
 	public static void p(String str) {

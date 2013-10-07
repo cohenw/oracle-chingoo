@@ -400,7 +400,7 @@ function submitSub() {
 	String qry = "SELECT * FROM CPAS_LAYOUT WHERE TNAME='" + mainLayout + "'";
 %>
 <b>Master</b> [<%= mainLayout %>]
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 
 <div style="padding: 4px;">
@@ -421,7 +421,7 @@ function submitSub() {
 	qry = "SELECT * FROM CPAS_LAYOUT WHERE TNAME='" + subLayout + "'";
 %>
 <b>Detail</b> [<%= subLayout %>]
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 
 <div style="padding: 4px;">

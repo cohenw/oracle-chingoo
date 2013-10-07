@@ -503,11 +503,11 @@ for (int i=0; i<fkLinkTab.size(); i++) {
 %>
 <div id="div-fkk-<%=id %>">
 <br/>
-<a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 align=middle src="image/plus.gif"></a>
+<a href="javascript:loadData('<%=id%>',1)"><b><%=ft%></b> <img id="img-<%=id%>" border=0 src="image/plus.gif"></a>
 <span class="cpas"><%= cn.getCpasComment(ft) %></span>
 &nbsp;&nbsp;
 <a href="pop.jsp?key=<%= tname %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" align=middle border=0 title="<%=fsql%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=fsql%>"/></a>
 (<%= tname %>.<%=fc.toLowerCase() %>)
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>

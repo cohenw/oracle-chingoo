@@ -399,7 +399,7 @@ function loadSTMT(sdi, actionid, treekey) {
 	String id = Util.getId();
 %>
 <b>CPAS Online Tab</b>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 			
 <table border=0>

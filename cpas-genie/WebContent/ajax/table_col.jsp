@@ -43,11 +43,11 @@ Please select a Table to see the detail.
 
 	if (cols.size()==0) return;
 %>
-
 <div id="<%= divId %>">
 <a href="Javascript:copyPaste('<%=table %>');"><b><%= table %></b></a> <span class="rowcountstyle"><%= cn.getTableRowCount(table) %></span> <a href="Javascript:removeDiv('<%= divId %>')">x</a> 
-<a href="Javascript:toggleSort('<%= divId %>')"><img src="image/a.gif"></a>
-&nbsp;&nbsp;&nbsp;<a href="pop.jsp?key=<%= table %>" target="_blank" title="view detail"><img src="image/detail.png"></a>
+<a href="Javascript:toggleSort('<%= divId %>')"><img border=0 src="image/a.gif"></a>
+&nbsp;&nbsp;&nbsp;<a href="pop.jsp?key=<%= table %>" target="_blank" title="view detail"><img border=0 src="image/detail.png"></a>
+<a href="erd2.jsp?tname=<%= table %>" target="_blank" title="ERD"><img border=0 src="image/erd-s.gif"></a>
 <br/>
 
 <div id="<%= divId %>-a">

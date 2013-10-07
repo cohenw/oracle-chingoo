@@ -426,7 +426,7 @@ function rowsPerPage(rows) {
 	String qry = "SELECT * FROM CPAS_LAYOUT WHERE TNAME='" + mainLayout + "'";
 %>
 <b>Master</b> [<%= mainLayout %>]
-<%-- <a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
+<%-- <a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry%>"/></a>
 --%>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 
@@ -446,7 +446,7 @@ if (subQry != null && !subQry.equals("")) {
 %>
 
 <b>Detail</b> [<%= subLayout %>]
-<%-- <a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 align=middle  title="<%=qry%>"/></a>
+<%-- <a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry%>"/></a>
  --%>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 

@@ -18,7 +18,8 @@
 		owner = table.substring(0, idx);
 		table = table.substring(idx+1);
 	}
-	
+//Util.p("owner=" + owner);
+//Util.p("table=" + table);
 	//System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nTable: " + table);
 	//System.out.println("owner=" + owner);
 	
@@ -46,14 +47,16 @@ Please select a Table to see the detail.
 //System.out.println("hasCpas=" +hasCpas);
 	String cpasComment = cn.getCpasComment(table);
 	boolean isTempTable = cn.isTempTable(table);
+	
+	if (owner!=null && !owner.equalsIgnoreCase(cn.getSchemaName())) tname = owner + "." + table;
 %>
 
 <div id="objectTitle" style="display:none"><%=(isTempTable?"TEMPORARY TABLE":"TABLE")%>: <%= table %></div>
-<h2><%=(isTempTable?"TEMPORARY TABLE":"TABLE")%>: <%= table %> &nbsp;&nbsp;<span class="rowcountstyle"><%= cn.getTableRowCount(owner, table) %></span>
+<h2><%=(isTempTable?"TEMPORARY TABLE":"TABLE")%>: <%= tname %> &nbsp;&nbsp;<span class="rowcountstyle"><%= cn.getTableRowCount(owner, table) %></span>
 <a href="Javascript:runQuery('','<%=tname%>')"><img border=0 src="image/icon_query.png" title="query"></a>
-<a href="erd.jsp?tname=<%=tname%>" target="_blank"><img title="ERD" border=0 src="image/erd.gif"></a>
+<a href="erd2.jsp?tname=<%=tname%>" target="_blank"><img title="ERD" border=0 src="image/erd.gif"></a>
 <a href="erd_svg.jsp?tname=<%=tname%>" target="_blank"><img title="Simple ERD" border=0 src="image/simple-erd.png"></a>
-<a href="crud-matrix.jsp?table=<%=tname%>" target="_blank"><img title="CRUD Matrix" src="image/matrix.gif"></a>
+<a href="crud-matrix.jsp?table=<%=tname%>" target="_blank"><img title="CRUD Matrix" border=0 src="image/matrix.gif"></a>
 <a href="pop.jsp?type=TABLE&key=<%=tname%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
 </h2>
 <%= owner==null?cn.getComment(tname):cn.getSynTableComment(owner, tname) %> <span class="cpas"><%= cpasComment %></span><br/>
@@ -76,7 +79,7 @@ Please select a Table to see the detail.
 </tr>
 
 <%	
-	List<TableCol> list = cn.getTableDetail(owner, tname);
+	List<TableCol> list = cn.getTableDetail(owner, table);
 	int rowCnt = 0;
 	for (int i=0;i<list.size();i++) {
 		TableCol rec = list.get(i);

@@ -287,6 +287,10 @@ DALLAS<br/>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-001.cpas.com:1521/DALLAS', 'client_55d')">client_55d@jdbc:oracle:thin:@s-ora-001.cpas.com:1521/DALLAS</a>
 <br/>
 
+General Dynamics<br>
+<a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-004.cpas.com:1521/GENDYN', 'GD_CANADIAN_DEV')">GD_CANADIAN_DEV@jdbc:oracle:thin:@s-ora-004.cpas.com:1521/GENDYN</a>
+<br/>
+
 GMA<br/>
 <a style="margin-left: 60px;" href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/GMA', 'client_gma_dev')">client_gma_dev@jdbc:oracle:thin:@s-ora-002.cpas.com:1526/GMA</a>
 <br/>

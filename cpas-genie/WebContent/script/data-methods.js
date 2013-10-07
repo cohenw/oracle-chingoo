@@ -554,7 +554,7 @@
 		$("#sql").val(sql);
 		$("#id").val(id);
 		
-		$("#divSql"+id).html("<b>" + sql + "</b> <a href=\"javascript:openQuery('" + id + "')\"><img src=\"image/sout.gif\" border=\"0\"></a> <a href='Javascript:editText("+ id +")'>edit</a> <a href='Javascript:doTextQry("+ id +")'>rerun</a>");
+		$("#divSql"+id).html("<b>" + sql + "</b> <a href=\"javascript:openQuery('" + id + "')\"><img src=\"image/linkout.png\" border=\"0\"></a> <a href='Javascript:editText("+ id +")'>edit</a> <a href='Javascript:doTextQry("+ id +")'>rerun</a>");
 		
 		$("#divText"+id).hide();
 		$("#divSql"+id).show();
