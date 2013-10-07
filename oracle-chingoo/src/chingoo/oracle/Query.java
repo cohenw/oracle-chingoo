@@ -47,6 +47,8 @@ public class Query {
 	boolean isError = false;
 	int lastSortIdx = -1;
 	boolean lastSortAsc = true;
+	long before = System.currentTimeMillis();
+	long after;
 
 	public Query(Connect cn, String qry) {
 		this(cn, qry, 1000, true);
@@ -114,6 +116,8 @@ public class Query {
 			System.out.println(e.toString());
 			System.out.println("targetQry="+targetQry);
 		}
+		after = System.currentTimeMillis();
+		this.elapsedTime = (int) (after - before);
 	}
 	
 	public String getMessage() {

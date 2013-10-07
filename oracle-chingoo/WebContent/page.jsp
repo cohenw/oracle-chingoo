@@ -110,7 +110,7 @@
 <b style="margin-left:<%= indent%>px;">
 <a href="Javascript:toggleDiv('img-<%= id %>','div-<%= id %>')"><%= title %>
 <a href="Javascript:toggleDiv('img-<%= id %>','div-<%= id %>')"><img id="img-<%= id %>" border=0 src="image/plus.gif"></a></b>
-&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/sout.gif" border=0 title="<%=sql%>"/></a>
+&nbsp;&nbsp;<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=sql%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
 <div style="display: none;" id="hide-<%=id%>"></div>
 <div style="display: none;" id="sort-<%=id%>"></div>

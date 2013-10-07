@@ -76,11 +76,11 @@
   </head>
   
 <body>
-    <h1>Oracle Chingoo - Build <%= Util.getBuildNo() %></h1>
+    <h1>Oracle Chingoo<%--  - Build <%= Util.getBuildNo() %> --%></h1>
 
 <table>
 <td>
-<img src="image/chingoo.png" title="<%= Util.getVersionDate() + " Build" + Util.getBuildNo() %>"/>
+<img src="image/chingoo.png" title="<%= Util.getVersionDate() + " Build" + Util.getBuildNo() %>" width=128 height=128 />
 </td>
 <td>
 <form action="connect_new.jsp" method="POST">
@@ -88,16 +88,16 @@
 
     <table border=0>
     <tr>
-    	<td><span style="font-size:20px; color: blue;">JDBC URL</span></td>
-    	<td><input style="font-size:20px;" size=60 name="url" id="url" value="<%= initJdbcUrl %>"/></td>
+    	<td><span style="font-size:16px; color: blue;">JDBC URL</span></td>
+    	<td><input style="font-size:16px;" size=60 name="url" id="url" value="<%= initJdbcUrl %>"/></td>
     </tr>
     <tr>
-    	<td><span style="font-size:20px; color: blue;">User Name</span></td>
-    	<td><input style="font-size:20px;" name="username" id="username" value="<%= initUserName %>"/></td>
+    	<td><span style="font-size:16px; color: blue;">User Name</span></td>
+    	<td><input style="font-size:16px;" name="username" id="username" value="<%= initUserName %>"/></td>
     </tr>
     <tr>
-    	<td><span style="font-size:20px; color: blue;">Password</span></td>
-    	<td><input style="font-size:20px;" name="password" type="password"/></td>
+    	<td><span style="font-size:16px; color: blue;">Password</span></td>
+    	<td><input style="font-size:16px;" name="password" type="password"/></td>
     </tr>
     </table>
     <input type="submit" value="Connect"/>

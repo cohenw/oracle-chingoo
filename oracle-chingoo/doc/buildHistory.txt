@@ -250,4 +250,14 @@ Build 1066
 	Data link - Child table for Synonym
 	fix bug: Blob download for composite pk table
 	cn.hasColumn(tname, cname)
+
+Build 1067
+	Show elapsed time in query page
+	ERD - popup table
+	ERD2 - up to 5 levels
+	cleanup UI for IE (image link without border)
+	link to ERD2 from Query/Data Link
+	Change Schema for Table/View/Package
+	load TVS for other schema objects
+	
 		

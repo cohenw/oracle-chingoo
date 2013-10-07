@@ -11,6 +11,12 @@
 
 	String title = "Chingoo " + cn.getUrlString();
 	String quickLinks = cn.getQuickLinks();
+	String schema = request.getParameter("schema");
+	if (schema==null) {
+		schema = cn.getSchemaName().toUpperCase();
+		//if (cn.getTargetSchema() != null) schema = cn.getTargetSchema();
+	}
+	//Util.p("*** schema=" + schema);
 %>
 
 <html>
@@ -53,6 +59,7 @@ var to;
 var to2;
 var stack = [];
 var stackFwd = [];
+var gschema="<%=schema%>";
 
 $(window).resize(function() {
 	checkResize();
@@ -191,6 +198,19 @@ function toggleHist() {
 	$("#outer-result2").toggle();
 	checkResizeW();
 }
+
+function changeSchema(schema) {
+	//alert(schema);
+	gschema = schema;
+	$("#searchFilter1").val("");
+	$("#searchFilter2").val("");
+	$("#searchFilter3").val("");
+	$("#searchFilter4").val("");
+	loadCount=0;
+	loadList("ajax/list-view.jsp?schema="+gschema, "list-view");	
+	loadList("ajax/list-package.jsp?schema="+gschema, "list-package");
+	loadList("ajax/list-table.jsp?schema="+gschema, "list-table");	
+}
 </script>
 
 	<style>
@@ -235,12 +255,11 @@ function toggleHist() {
 	function initLoad() {
 		$("#list-table").html("<img src='image/loading.gif'/>");
 		$("#inner-result1").html("<img src='image/loading.gif'/>");
-		loadList("ajax/list-view.jsp", "list-view");	
-		loadList("ajax/list-synonym.jsp", "list-synonym");	
-		loadList("ajax/list-package.jsp", "list-package");	
+		loadList("ajax/list-view.jsp?schema="+gschema, "list-view");	
+		loadList("ajax/list-synonym.jsp?schema="+gschema, "list-synonym");	
+		loadList("ajax/list-package.jsp?schema="+gschema, "list-package");	
 		loadList("ajax/list-tool.jsp", "list-tool");	
-		loadList("ajax/list-table.jsp", "list-table");	
-		
+		loadList("ajax/list-table.jsp?schema="+gschema, "list-table");	
 	}
 	
 	function loadList(url, targetDiv) {
@@ -261,9 +280,9 @@ function toggleHist() {
 	
 	function searchWithFilter1(filter) {
 		if($('#hideEmpty').attr('checked'))
-			gotoUrl = "ajax/list-table.jsp?filter=" + filter+"&hideEmpty=true";
+			gotoUrl = "ajax/list-table.jsp?schema="+gschema+"&filter=" + filter+"&hideEmpty=true";
 		else 
-			gotoUrl = "ajax/list-table.jsp?filter=" + filter;
+			gotoUrl = "ajax/list-table.jsp?schema="+gschema+"&filter=" + filter;
 
 		$.ajax({
 			url: gotoUrl,
@@ -277,7 +296,7 @@ function toggleHist() {
 		
 	}
 	function searchWithFilter2(filter) {
-		gotoUrl = "ajax/list-view.jsp?filter=" + filter;
+		gotoUrl = "ajax/list-view.jsp?schema="+gschema+"&filter=" + filter;
 
 		$.ajax({
 			url: gotoUrl,
@@ -363,30 +382,49 @@ function toggleHist() {
 <div id="topline" style="background-color: #E6F8E0; padding: 0px; border:1px solid #CCCCCC; border-radius:10px;">
 
 <table width=100% border=0 cellpadding=0 cellspacing=0>
-<td width="44">
+<td width="50">
 <img align=top src="image/puppy.gif" title="Oracle Chingoo - Build <%= Util.getBuildNo() %>"/>
 </td>
 <td>
 <span style="font-face: Arial; font-size:24px; color: #0000FF;">Oracle Chingoo</span>
 </td>
 
-<td><b><%= cn.getUrlString() %></b></td>
+<td><b><%= cn.getUrlString() %></b>
+
+
+<% 
+String q = "SELECT owner, count(*) from all_tables group by owner";
+List<String[]> ls = cn.query(q, true);
+if (ls.size()>1) {
+%>
+<select id="tableSchema" onChange="changeSchema(this.value)">
+<%
+	for (String str[]:ls) {
+		boolean isCurrent = schema.equals(str[1]);
+%>
+<option value="<%= str[1] %>" <%= isCurrent?"SELECTED":"" %>><%= str[1] %><%-- (<%= str[2] %>) --%></option>
+<% }
+%>
+</select>
+<%
+} %>
+</td>
 <td nowrap>
 <a href="query.jsp" target="_blank">Query</a> |
 <!-- <a href="worksheet.jsp" target="_blank">Work Sheet</a> |
  -->
 <a target=_blank href="history.jsp">History</a> |
 <a href="javascript:clearCache()">Clear Cache</a> |
-<a href='Javascript:aboutChingoo()'>About Chingoo</a> |
+<a href='Javascript:aboutChingoo()'>About</a> |
 <a href="logout.jsp">Log out</a>
 
 </td>
 <td align=right nowrap>
-<b>Global Search</b> <input id="globalSearch" style="width: 200px;" placeholder="table, view or package name"/>
+<b>Search</b> <input id="globalSearch" style="width: 180px;" placeholder="table, view or package name"/>
 <!-- <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
  -->
 <input type="button" value="Find" onClick="Javascript:globalSearch($('#globalSearch').val())" />
-<a href="Javascript:toggleHist()"><img src="image/downarrow_small_black.png"></a>
+<a href="Javascript:toggleHist()"><img src="image/downarrow_small_black.png" border=0></a>
 </td>
 </table>
 </div>

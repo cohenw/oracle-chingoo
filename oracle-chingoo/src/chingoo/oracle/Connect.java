@@ -931,11 +931,15 @@ public class Connect implements HttpSessionBindingListener {
 		procedureSet.clear();
 		
 		Statement stmt = conn.createStatement();
-		String qry = "SELECT object_name, object_type FROM user_objects WHERE object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE', 'PROCEDURE','FUNCTION','TYPE')";
+//		String qry = "SELECT object_name, object_type FROM user_objects WHERE object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE', 'PROCEDURE','FUNCTION','TYPE')";
+		String qry = "SELECT object_name, object_type, owner FROM all_objects WHERE owner not in ('PUBLIC') and object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE', 'PROCEDURE','FUNCTION','TYPE')";
 		ResultSet rs = stmt.executeQuery(qry);
 		while (rs.next()){
 			String name = rs.getString(1);
 			String type = rs.getString(2);
+			String owner = rs.getString(3);
+
+			if (!owner.equalsIgnoreCase(this.getSchemaName())) name = owner +"." + name;
 
 			if (type.equals("TABLE")) tables.add(name);
 			else if (type.equals("VIEW")) views.add(name);
@@ -1869,19 +1873,24 @@ public class Connect implements HttpSessionBindingListener {
 		return false;
 	}
 
-	public boolean hasColumn(String tname, String cname) throws SQLException {
-		List<TableCol> cols = getTableDetail(tname);
-		if (cols==null) return false;
-		
-		boolean hasCol = false;
-		for (TableCol col: cols) {
-			if (col.name.equalsIgnoreCase(cname)) {
-				hasCol = true;
-				break;
+	public boolean hasColumn(String tname, String cname) {
+		List<TableCol> cols;
+		try {
+			cols = getTableDetail(tname);
+			boolean hasCol = false;
+			for (TableCol col: cols) {
+				if (col.name.equalsIgnoreCase(cname)) {
+					hasCol = true;
+					break;
+				}
 			}
+			return hasCol;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		return hasCol;
+
+		return false;
 	}
 	
 	public List<TableCol> getTableDetail(String tname) throws SQLException {
