@@ -34,7 +34,7 @@ Found <%= selectedCnt %> view(s).
 	for (int i=0; i<list.size();i++) {
 		if (filter != null && !list.get(i).contains(filter)) continue;
 		String ttt = list.get(i);
-		if (!schema.equals(cn.getSchemaName().toUpperCase())) ttt = schema + "." + ttt;
+		if (!schema.equals(cn.getSchema().toUpperCase())) ttt = schema + "." + ttt;
 
 %>
 	<li><a href="javascript:loadView('<%=ttt%>');"><%=list.get(i)%></a></li>

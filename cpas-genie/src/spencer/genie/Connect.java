@@ -313,6 +313,11 @@ public class Connect implements HttpSessionBindingListener {
     	return this.schemaName;
     }
     
+    public String getSchema() {
+    	if (this.targetSchema != null) return targetSchema;
+    	return this.schemaName.toUpperCase();
+    }
+    
     public List<String> getSchemas() {
     	return this.schemas;
     }
@@ -1520,7 +1525,7 @@ public class Connect implements HttpSessionBindingListener {
 		String pkName = getPrimaryKeyName(owner, tname);
 		
 		String qry = "SELECT OWNER||'.'||TABLE_NAME FROM ALL_CONSTRAINTS WHERE " +
-				"R_CONSTRAINT_NAME='" + pkName +"' ORDER BY TABLE_NAME";
+				"R_OWNER='" + owner + "' AND R_CONSTRAINT_NAME='" + pkName +"' ORDER BY TABLE_NAME";
 		
 		return this.queryMultiUnique(qry);
 	}
@@ -1880,6 +1885,7 @@ public class Connect implements HttpSessionBindingListener {
 
        		if (rs.next()) {
        			res = rs.getString(1);
+       			//if (res != null) res = res.trim();
        		}
        		
        		rs.close();

@@ -296,7 +296,7 @@ public class CpasUtil {
 		} else if (temp.endsWith(".KITCODE") && !tname.equals("CPAS_KIT")) {
 			String qry = "SELECT KITNAME FROM CPAS_KIT WHERE KITCODE='" + value + "'";
 			return cn.queryOne(qry);
-		} else if (temp.endsWith(".CLNT") && !tname.equals("CLIENT")) {
+		} else if (temp.endsWith(".CLNT") && !tname.equals("CLIENT") && cn.hasColumn("CLIENT", "SNAME")) {
 			String qry = "SELECT SNAME FROM CLIENT WHERE CLNT='" + value + "'";
 			return cn.queryOne(qry);
 		} else if (temp.endsWith(".VKEY") && !tname.equals("CPAS_VALIDATION")) {
@@ -744,5 +744,16 @@ public class CpasUtil {
 	public int getCpasType() {
 		return cpasType;
 	}
-	
+
+	public String getLinkedTable(String tname, String colName) {
+		for (int j=0; j < logicalLink.length; j++) {
+			if (colName.equals(logicalLink[j][0]) && !tname.equals(logicalLink[j][1])) {
+				String lname = logicalLink[j][1];
+				if (lname.equals("BATCH") && tname.startsWith("PROCESS")) lname = null;
+				return lname;
+			}
+		}
+		
+		return null;
+	}
 }

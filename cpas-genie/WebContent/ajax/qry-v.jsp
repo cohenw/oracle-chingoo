@@ -498,13 +498,11 @@ if (fkLinkTab.size()>0 && dLink && false) {
 						}
 					}
 
-					for (int j=0; !isLinked && j < cn.getCpasUtil().logicalLink.length; j++) {
-						if (colName.equals(cn.getCpasUtil().logicalLink[j][0]) && !tname.equals(cn.getCpasUtil().logicalLink[j][1])) {
-							isLinked = true;
-							lTable = cn.getCpasUtil().logicalLink[j][1];
-							keyValue = val;
-							linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
-						}
+					lTable = cn.getCpasUtil().getLinkedTable(tname, colName);
+					if (lTable != null && !isLinked) {
+						isLinked = true;
+						keyValue = val;
+						linkUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
 					}
 
 					String tc = tname + "." + colName;

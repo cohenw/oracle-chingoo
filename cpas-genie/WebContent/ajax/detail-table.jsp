@@ -18,6 +18,7 @@
 		owner = table.substring(0, idx);
 		table = table.substring(idx+1);
 	}
+	
 //Util.p("owner=" + owner);
 //Util.p("table=" + table);
 	//System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nTable: " + table);
@@ -48,7 +49,7 @@ Please select a Table to see the detail.
 	String cpasComment = cn.getCpasComment(table);
 	boolean isTempTable = cn.isTempTable(table);
 	
-	if (owner!=null && !owner.equalsIgnoreCase(cn.getSchemaName())) tname = owner + "." + table;
+	if (owner!=null && !owner.equalsIgnoreCase(cn.getSchema())) tname = owner + "." + table;
 %>
 
 <div id="objectTitle" style="display:none"><%=(isTempTable?"TEMPORARY TABLE":"TABLE")%>: <%= table %></div>

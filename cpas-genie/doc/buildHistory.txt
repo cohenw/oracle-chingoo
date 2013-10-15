@@ -381,6 +381,12 @@ Build CPAS1089
 	CONNSESSION_PROCESS.processkey -> CPAS_PROCESS.name
 	Change Schema for Table/View/Package
 	load TVS for other schema objects
+
+Build CPAS1090
+	Bug Fix: FK relationship between multiple schema
+	PROCESS*.processid not linked to BATCH
+	cn.getSchema() added
+
 			
 Known Issue
 	PA does not include Stored procedures and functions
