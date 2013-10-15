@@ -407,8 +407,12 @@ for (TableCol t: list) {
 
 <% for (String tbl: refTabs) {
 	if (tbl.equals(tname)) continue;
+	if (tbl.startsWith(owner+".")) {
+		int x = tbl.indexOf(".");
+		tbl = tbl.substring(x+1);
+	}
 		
-	List<String> refTabs2 = cn.getReferencedTables(owner, tbl);
+	List<String> refTabs2 = cn.getReferencedTables(tbl);
 	List<TableCol> list1 = cn.getTableDetail(tbl);
 	ArrayList<String> pk1 = cn.getPrimaryKeys(tbl);
 	id = Util.getId();

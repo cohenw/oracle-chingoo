@@ -455,7 +455,7 @@ public class Util {
 	}
 
 	public static String getVersionDate() {
-		return "Oct 7, 2013";
+		return "Oct 8, 2013";
 	}
 
 	public static void p(String str) {

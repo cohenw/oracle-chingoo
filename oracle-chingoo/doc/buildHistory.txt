@@ -259,5 +259,6 @@ Build 1067
 	link to ERD2 from Query/Data Link
 	Change Schema for Table/View/Package
 	load TVS for other schema objects
+	Bug Fix: FK relationship between multiple schema
 	
 		
