@@ -1358,7 +1358,7 @@ public class Connect implements HttpSessionBindingListener {
 		String pkName = getPrimaryKeyName(owner, tname);
 		
 		String qry = "SELECT OWNER||'.'||TABLE_NAME FROM ALL_CONSTRAINTS WHERE " +
-				"R_CONSTRAINT_NAME='" + pkName +"' ORDER BY TABLE_NAME";
+				"R_OWNER='" + owner + "' AND R_CONSTRAINT_NAME='" + pkName +"' ORDER BY TABLE_NAME";
 		
 		return this.queryMultiUnique(qry);
 	}
