@@ -62,7 +62,7 @@ Found <%= selectedCnt %> table(s).
 		if (hideEmpty && list.get(i)[2] == null) continue;
 		
 		String ttt = list.get(i)[1];
-		if (!schema.equals(cn.getSchemaName().toUpperCase())) ttt = schema + "." + ttt;
+		if (!schema.equals(cn.getSchema().toUpperCase())) ttt = schema + "." + ttt;
 %>
 	<li><a href="javascript:loadTable('<%=ttt%>');"><%=list.get(i)[1]%></a> <span class="rowcountstyle"><%= getNumRows(list.get(i)[2]) %></span></li>
 <% 

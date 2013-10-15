@@ -541,6 +541,11 @@ if (cn.isViewTable(table)) {
 			}
 		}
 
+		ft = cn.getCpasUtil().getLinkedTable(table, label);
+		if (ft != null) {
+			fsql = cn.getPKLinkSql(ft, q.getValue(label));
+		}
+/*
 		for (int j=0; ft==null && j < cn.getCpasUtil().logicalLink.length; j++) {
 			if (label.equals(cn.getCpasUtil().logicalLink[j][0])) {
 				ft = cn.getCpasUtil().logicalLink[j][1];
@@ -549,7 +554,7 @@ if (cn.isViewTable(table)) {
 				break;
 			}
 		}
-
+*/
 		String tc = table + "." + label;
 		for (int j=0; ft==null && j < cn.getCpasUtil().logicalLinkSpec.length; j++) {
 			if (tc.equals(cn.getCpasUtil().logicalLinkSpec[j][0])) {

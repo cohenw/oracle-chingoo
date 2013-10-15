@@ -74,7 +74,7 @@
 //		cookie.setPath("/");
 		response.addCookie(cookie);
 
-		if (email != null && email.length() > 2) {
+		if (email != null && email.length() > 2 && email.contains("@")) {
 			Cookie cookie2 = new Cookie ("email", email);
 			cookie2.setMaxAge(365 * 24 * 60 * 60);
 //			cookie.setPath("/");

@@ -23,5 +23,19 @@
 <body>
 
 <%=cn.getCpasUtil().htCapt.toString() %>
+
+<%
+String owner="CLIENT_CAAT_DC";
+String tname="PROCESS";
+
+String pkName = cn.getPrimaryKeyName(owner, tname);
+pkName = pkName.trim();
+Util.p("*** pkName " + pkName);
+
+String qry = "SELECT OWNER||'.'||TABLE_NAME FROM ALL_CONSTRAINTS WHERE " +
+		"R_OWNER='" + owner + "' AND R_CONSTRAINT_NAME='" + pkName +"' ORDER BY TABLE_NAME";
+
+Util.p("*** qry " + qry);
+%>
 </body>
 </html>

@@ -21,7 +21,7 @@
 //	System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nView: " + view);
 	
 	String catalog = cn.getSchemaName();
-	if (cn.getTargetSchema() != null) owner = cn.getTargetSchema();
+	if (cn.getTargetSchema() != null) owner = cn.getSchema();
 
 	String vname = view;
 	if (owner!=null && !owner.equalsIgnoreCase(cn.getSchemaName())) vname = owner + "." + view;

@@ -27,12 +27,16 @@
 	}
 	if (catalog==null) catalog = cn.getSchemaName();
  */
-	if (owner==null) owner = cn.getSchemaName().toUpperCase();
+	if (owner==null) {
+		owner = cn.getSchemaName().toUpperCase();
+		if (cn.getTargetSchema() != null) owner = cn.getTargetSchema();
+	}
+ 	
 	//System.out.println("owner=" + owner);
 	//System.out.println("tname=" + tname);
 	
 	String pkName = cn.getPrimaryKeyName(owner, table);
-	//System.out.println("pkName=" + pkName);
+	//System.out.println("0pkName=" + pkName);
 	
 	ArrayList<String> pk = cn.getPrimaryKeys(owner, tname);
 	if (pkName == null && owner != null) pkName = cn.getPrimaryKeyName(owner, table);
@@ -408,8 +412,12 @@ for (TableCol t: list) {
 
 <% for (String tbl: refTabs) {
 	if (tbl.equals(tname)) continue;
+	if (tbl.startsWith(owner+".")) {
+		int x = tbl.indexOf(".");
+		tbl = tbl.substring(x+1);
+	}
 		
-	List<String> refTabs2 = cn.getReferencedTables(owner, tbl);
+	List<String> refTabs2 = cn.getReferencedTables(tbl);
 	List<TableCol> list1 = cn.getTableDetail(tbl);
 	ArrayList<String> pk1 = cn.getPrimaryKeys(tbl);
 	id = Util.getId();
