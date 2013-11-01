@@ -247,6 +247,10 @@
     	});	
     }	
 
+    $.expr[':'].textEquals = function(a, i, m) {
+        return $(a).text().match("^" + m[3] + "$");
+    };
+    
     function saveQuickLinkOnServer(type, name) {
     	$.ajax({
     		url: "save-quicklink.jsp?type=" + type + "&name=" + name + "&t=" + (new Date().getTime()),
@@ -697,7 +701,7 @@
 	function openQuery(id) {
 		var sql = $("#sql-" + id).html();
 		var divName = "div-" + id;
-		//alert(sql);
+//		alert(sql);
 		
 		$("#sql-query").val(sql);
 		$("#FORM_query").submit();
@@ -761,7 +765,13 @@
 
 		reloadDataWork(id);
 	}
-	    
+
+	function gotoPageSimul(id, pageNo) {
+		$("#pageNo").val(pageNo);
+
+		reloadDataSim(id);
+	}
+	
 	function reloadDataWork(id) {
 		var divName = "div-" + id;
 		var sql = $("#sql-" + id).html();

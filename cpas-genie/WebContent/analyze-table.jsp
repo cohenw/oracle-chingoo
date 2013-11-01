@@ -97,7 +97,7 @@ $(document).ready(function() {
 <%
 	q = "SELECT object_name FROM user_objects A where object_type='TRIGGER' AND object_name IN (SELECT NAME FROM USER_DEPENDENCIES WHERE REFERENCED_NAME='" + name + "' AND TYPE in ('TRIGGER')) AND NOT EXISTS (SELECT 1 FROM GENIE_TR WHERE TRIGGER_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
 	if (cn.getTargetSchema() != null) {
-		q = "SELECT object_name FROM user_objects A where OWNER='" + cn.getTargetSchema() + "' AND object_type='TRIGGER' AND object_name IN (SELECT NAME FROM ALL_DEPENDENCIES WHERE OWNER='" + cn.getTargetSchema() + "' AND REFERENCED_NAME='" + name + "' AND TYPE in ('TRIGGER')) AND NOT EXISTS (SELECT 1 FROM GENIE_TR WHERE TRIGGER_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
+		q = "SELECT object_name FROM all_objects A where OWNER='" + cn.getTargetSchema() + "' AND object_type='TRIGGER' AND object_name IN (SELECT NAME FROM ALL_DEPENDENCIES WHERE OWNER='" + cn.getTargetSchema() + "' AND REFERENCED_NAME='" + name + "' AND TYPE in ('TRIGGER')) AND NOT EXISTS (SELECT 1 FROM GENIE_TR WHERE TRIGGER_NAME=A.OBJECT_NAME AND CREATED > A.LAST_DDL_TIME) ORDER BY 1";
 	}
 	List<String[]> trgs = cn.query(q, false);
 %>
@@ -132,11 +132,21 @@ $(document).ready(function() {
 		}
 		TriggerTable tt = new TriggerTable(trgName, text);
 		cn.AddTriggerTable(trgName, tt.getHM(), tt.getHMIns(), tt.getHMUpd(), tt.getHMDel());
+
+		HyperSyntax hs = new HyperSyntax();
+		String syntax = hs.getHyperSyntax(cn, text, "TRIGGER BODY", trgName);
+		HashSet<String> packageProc = hs.getPackageProcedure();
+//		System.out.println(packageProc);
+		cn.AddTriggerProc(trgName, packageProc);			
+		
 //		System.out.println(pt.getHM());
 //		out.println(pt.getHM()+"<br/>");
 
 	}
 
+	cn.loadPackageTable();
+	cn.loadPackageProc();
+	cn.loadTriggerTable();
 	out.println("Done.<br/>");
 %>
 

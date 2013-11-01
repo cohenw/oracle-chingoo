@@ -210,6 +210,7 @@ function changeSchema(schema) {
 	loadList("ajax/list-view.jsp?schema="+gschema, "list-view");	
 	loadList("ajax/list-package.jsp?schema="+gschema, "list-package");
 	loadList("ajax/list-table.jsp?schema="+gschema, "list-table");	
+	loadList("ajax/list-synonym.jsp?schema="+gschema, "list-synonym");	
 }
 </script>
 
@@ -258,7 +259,7 @@ function changeSchema(schema) {
 		loadList("ajax/list-view.jsp?schema="+gschema, "list-view");	
 		loadList("ajax/list-synonym.jsp?schema="+gschema, "list-synonym");	
 		loadList("ajax/list-package.jsp?schema="+gschema, "list-package");	
-		loadList("ajax/list-tool.jsp", "list-tool");	
+		loadList("ajax/list-tool.jsp?schema="+gschema, "list-tool");	
 		loadList("ajax/list-table.jsp?schema="+gschema, "list-table");	
 		
 		//$("#inner-result1").html('<img src="image/genie_bw.png"/>');
@@ -504,7 +505,7 @@ CPAS</a> |
 </form>
 
 <div id="dialog-modal" title="About Genie" style="display:none; background: #ffffff;">
-<img src="image/genie-lamp.jpg" align="center" />
+<img src="image/genie-lamp.jpg" width="200" height="155" title="<%= Util.getVersionDate() + " Build " + Util.getBuildNo() %>"/>
 <br/>
 
 <% if (isCPAS) { %>

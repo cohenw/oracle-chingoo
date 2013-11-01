@@ -269,9 +269,11 @@ function reloadData(id) {
 	});	
 }
 
-function queryDetail(fields, values) {
+function queryDetail(fields, values, slayout) {
 //	alert("Query Detail");
-	
+
+	$("#layout").val(slayout);
+	//$("#subLayoutName").html(slayout);
 	runSub(fields, values);
 }
 
@@ -320,7 +322,7 @@ function runSub(fields, values) {
 	
 	$("#sql-2").html(newQry);
 	$("#sql2").val("");
-	$("#layout").val("<%=subLayout%>");
+//	$("#layout").val("<%=subLayout%>");
 //	alert(newQry);
 
 	$("#div-2").html("");

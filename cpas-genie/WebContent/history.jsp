@@ -9,6 +9,14 @@
 
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
+	String action = request.getParameter("action");
+	String sql = request.getParameter("sql");
+
+	if (action != null && action.equals("remove")) {
+		Util.p("remove " + sql);
+		cn.removeQueryHistory(sql);
+	}
+	
 	HashMap<String, QueryLog> map = cn.getQueryHistory();
 	
     List<QueryLog> logs = new ArrayList<QueryLog>(map.values());
@@ -47,12 +55,14 @@
 	function run(divName) {
 		var qry = $("#" + divName).html();
 		$("#sql").val(qry);
-		//alert(qry);
 		$("#form1").submit();
-		//document.forms["form1"].submit();
-		
-		
 	}	
+	function remove(divName) {
+		var qry = $("#" + divName).html();
+		$("#sql2").val(qry);
+		$("#form2").submit();
+	}	
+
 	$(document).ready(function() {
 		$("abbr.timeago").timeago();
 	});	
@@ -78,7 +88,7 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 
 <table id="dataTable" class="gridBody" border=1 width=1000>
 <tr class="rowHeader">
-<th>Run</th>
+<th>Action</th>
 <th>Query</th>
 <th>Time Ago</th>
 </tr>
@@ -101,7 +111,11 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 		if (idx%2 == 0) rowClass = "even";
 %>
 	<tr class="<%=rowClass%>">
-		<td><a href="Javascript:run('<%= divName %>')">run</a></td>
+		<td nowrap>
+			<a href="Javascript:run('<%= divName %>')">Run</a>
+			<a href="Javascript:remove('<%= divName %>')">X</a>
+		
+		</td>
 		<td>
 			<div style="display: none;" id="<%= divName %>"><%= ql.getQueryString() %></div>
 			<div style="font-family: Consolas;"><%=new HyperSyntax().getHyperSyntax(cn, ql.getQueryString(), "SQL")%></div>
@@ -119,6 +133,12 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 <form id="form1" name="form1" target=_blank action="query.jsp" method="post">
 <input id="sql" name="sql" type="hidden" value="select * from tab"/>
 </form>
+
+<form id="form2" name="form2" method="post">
+<input id="sql2" name="sql" type="hidden" value=""/>
+<input name="action" type="hidden" value="remove"/>
+</form>
+
 
 <br/><br/>
 <a href="Javascript:window.close()">Close</a>

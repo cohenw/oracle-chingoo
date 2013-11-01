@@ -87,6 +87,7 @@ function readyWork() {
 	<td>This process will create Trigger / Table relationship in the following tables.<br>
 	GENIE_TR : Trigger and timestamp<br>
 	GENIE_TR_TABLE : Trigger / Table CRUD info<br>
+	GENIE_TR_DEPENDENCY : Trigger / Package dependencies
 </tr>
 <tr>
 	<td>&nbsp;</td>

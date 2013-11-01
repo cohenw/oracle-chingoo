@@ -77,10 +77,12 @@
 <form id="form0" name="form0" target=_blank action="query.jsp" method="post" style="margin-left: 20px;">
 <input name="key" type="radio" id="mkey" value="mkey" checked><label for="mkey">mkey</label>
 <input name="key" type="radio" id="calcid" value="calcid"><label for="calcid">calcid</label>
+<input name="key" type="radio" id="memno" value="memno"><label for="memno">memno</label>
+<input name="key" type="radio" id="personid" value="personid"><label for="personid">personid</label>
+<input name="key" type="radio" id="sin" value="sin"><label for="sin">sin</label>
 <input name="key" type="radio" id="processid" value="processid"><label for="processid">processid</label>
 <input name="key" type="radio" id="accountid" value="accountid"><label for="accountid">accountid</label>
 <input name="key" type="radio" id="penid" value="penid"><label for="penid">penid</label>
-<input name="key" type="radio" id="personid" value="personid"><label for="personid">personid</label>
 <input name="key" type="radio" id="errorid" value="errorid"><label for="errorid">errorid</label>
 <input name="key" type="radio" id="requestid" value="requestid"><label for="requestid">requestid</label>
 <br/>
@@ -92,6 +94,12 @@
 <td valign=top>
 <b>Quick Query</b><br/>
 <table style="margin-left: 20px;"><td nowrap>
+<% if (cn.isTVS("CALC")) { %>
+<li><a href="Javascript:qr('SELECT * FROM CALC ORDER BY CALCID DESC')">Latest Calcs</a></li>
+<% } else { %>
+	<li><span class="nullstyle">Latest Calcs</span></li>
+<% } %>
+
 <% if (cn.isTVS("BATCH")) { %>
 	<li><a href="Javascript:qr('SELECT * FROM BATCH ORDER BY PROCESSID DESC')">Latest Batches</a></li>
 <% } else { %>
@@ -118,12 +126,6 @@
 
 <% if (cn.isTVS("WIZARD_RUN")) { %>
 <li><a href="Javascript:qr('SELECT * FROM WIZARD_RUN ORDER BY RUNID DESC')">Latest Web Wizard Runs</a></li>
-<% } %>
-
-<% if (cn.isTVS("CALC")) { %>
-<li><a href="Javascript:qr('SELECT * FROM CALC ORDER BY CALCID DESC')">Latest Calcs</a></li>
-<% } else { %>
-	<li><span class="nullstyle">Latest Calcs</span></li>
 <% } %>
 
 <% if (cn.isTVS("CONNSESSION")) { %>

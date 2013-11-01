@@ -415,7 +415,7 @@ public class Connect implements HttpSessionBindingListener {
 		if (url.indexOf("8888")>0) return; // local test
 		
    		if (this.email != null && email.length() > 2 && map.size() > 0 && isInCpasNetwork() && cnt > 0) {
-    		Email.sendEmail(email, title + this.urlString, qryHist);
+    		Email.sendEmail(email, title + this.urlString + " " +(this.targetSchema != null?this.targetSchema:""), qryHist);
     	}
 
    		qryHist =  url + "\nWho: " + who + "\nAgent: " + getUserAgent() + "\nBuild No: " + Util.getBuildNo() + "\n\n" + qryHist + "\n\n"; //+ extractJS(this.getAddedHistory());
@@ -1267,6 +1267,10 @@ public class Connect implements HttpSessionBindingListener {
 	
 	public HashMap<String,QueryLog> getQueryHistory() {
 		return queryLog;
+	}
+	
+	public void removeQueryHistory(String sql) {
+		queryLog.remove(sql);
 	}
 	
 	public void ping() {
@@ -2523,6 +2527,29 @@ public class Connect implements HttpSessionBindingListener {
         addToTableList("GENIE_TR_TABLE");
 	}
 	
+	public void createTrg2() throws SQLException {
+		if (this.isTVS("GENIE_TR_DEPENDENCY")) return; 
+
+        conn.setReadOnly(false);
+        
+		String stmt1 = 
+				"CREATE TABLE GENIE_TR_DEPENDENCY (	"+
+				"TRIGGER_NAME	VARCHAR2(30), " +
+				"TARGET_PKG_NAME	VARCHAR2(30), " +
+				"TARGET_PROC_NAME	VARCHAR2(30), " +
+				"PRIMARY KEY (TRIGGER_NAME,TARGET_PKG_NAME, TARGET_PROC_NAME) )";
+		
+		Statement stmt = conn.createStatement();
+		stmt.execute(stmt1);
+		stmt.execute("CREATE INDEX GENIE_TR_DEPENDENCY_IDX ON GENIE_TR_DEPENDENCY(TARGET_PKG_NAME, TARGET_PROC_NAME)");
+		stmt.close();
+
+		conn.setReadOnly(true);
+		trgProcCreated = true;
+        
+        addToTableList("GENIE_TR_DEPENDENCY");
+	}
+
 	public void saveLink(String tname, String sqlStmt) throws SQLException {
 		if (!linkTableCreated) createLinkTable();
 		try {
@@ -3307,6 +3334,57 @@ public class Connect implements HttpSessionBindingListener {
 	        	} catch (SQLException e) {
 	        		e.printStackTrace();
 	        		System.out.println(pkgName + "," + item);
+	        		pstmt.close();
+	        	}
+	        }
+        
+	        conn.setReadOnly(true);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void AddTriggerProc(String trgName, HashSet<String> hs) throws SQLException {
+		createTrg2();
+		try {
+	        conn.setReadOnly(false);
+
+	        Statement stmt = conn.createStatement();
+	        String sql = "DELETE FROM GENIE_TR_DEPENDENCY WHERE TRIGGER_NAME='" + trgName + "'";
+	        stmt.executeUpdate(sql);
+
+	        stmt.close();
+
+	        for (String str : hs) {
+				String[] temp = str.split(" ");
+				
+	        	sql = "INSERT INTO GENIE_TR_DEPENDENCY (TRIGGER_NAME,TARGET_PKG_NAME, TARGET_PROC_NAME) VALUES (?,?,?)";
+	        	PreparedStatement pstmt = conn.prepareStatement(sql);
+	        
+	        	String targetPkg = temp[0];
+	        	String targetPrc = temp[1];
+	        	String[] target = temp[1].split("\\.");
+	        	if (target.length>2) continue;
+	        	if (target.length>1) {
+	        		targetPkg = target[0];
+	        		targetPrc = target[1];
+	        	}
+
+	        	if (!isPackage(targetPkg)) continue;
+	        	
+	        	try {
+//System.out.println(pkgName + " " + temp[0] + " " + targetPkg + " " + targetPrc);
+	        		pstmt.setString(1, trgName);
+	        		pstmt.setString(2, targetPkg);
+	        		pstmt.setString(3, targetPrc);
+	        		pstmt.executeUpdate();
+	        		pstmt.close();
+	        	} catch (SQLException e) {
+	        		if (e.getErrorCode()!=1) {
+	        			e.printStackTrace();
+	        			System.out.println(e.getErrorCode() + "," +trgName + "," + targetPkg + "," + targetPrc);
+	        		}
 	        		pstmt.close();
 	        	}
 	        }

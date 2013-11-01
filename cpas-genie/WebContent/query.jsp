@@ -44,6 +44,8 @@
 			sql = "SELECT * FROM BATCH WHERE PROCESSID='" + value + "'";
 		else if (key.equals("mkey"))
 			sql = "SELECT * FROM MEMBER WHERE MKEY='" + value + "'";
+		else if (key.equals("memno"))
+			sql = "SELECT * FROM MEMBER WHERE MEMNO='" + value + "'";
 		else if (key.equals("accountid"))
 			sql = "SELECT * FROM ACCOUNT WHERE ACCOUNTID='" + value + "'";
 		else if (key.equals("penid"))
@@ -56,6 +58,8 @@
 			sql = "SELECT * FROM ERRORCAT WHERE ERRORID='" + value + "'";
 		else if (key.equals("requestid"))
 			sql = "SELECT * FROM REQUEST WHERE REQUESTID='" + value + "'";
+		else if (key.equals("sin"))
+			sql = "SELECT * FROM PERSON WHERE SIN='" + value + "'";
 	}
 	
 	int maxRow = Integer.parseInt(upto);
@@ -83,7 +87,7 @@
 		}
 	}	
 	int lineLength = Util.countLines(sql);
-	if (lineLength <3) lineLength = 4;
+	if (lineLength <5) lineLength = 5;
 	if (lineLength >50) lineLength = 50;
 	
 	cn.queryCache.removeQuery(sqlh);
@@ -706,6 +710,7 @@
 &nbsp;&nbsp;&nbsp;
 <a href="index.jsp" target="_blank">Home</a> |
 <a href="query.jsp" target="_blank">Query</a> |
+<a href="Javascript:newQry()">Pop Query</a> |
 <a target=_blank href="history.jsp">History</a>
 <!-- <a href="q.jsp" target="_blank">Q</a> |
 
@@ -946,7 +951,6 @@ Up to
 
 <form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
 <input id="sql-query" name="sql" type="hidden"/>
-<input name="norun" type="hidden" value="YES"/>
 </form>
 
 </body>

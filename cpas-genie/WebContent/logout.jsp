@@ -23,7 +23,7 @@
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
   </head>
 
- <img src="image/genie-lamp.jpg"/>
+<img src="image/genie-lamp.jpg" width="200" height="155" title="<%= Util.getVersionDate() + " Build " + Util.getBuildNo() %>"/>
 
 <h2>Disconnected. Good Bye!</h2>
 
