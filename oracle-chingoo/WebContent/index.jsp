@@ -210,6 +210,7 @@ function changeSchema(schema) {
 	loadList("ajax/list-view.jsp?schema="+gschema, "list-view");	
 	loadList("ajax/list-package.jsp?schema="+gschema, "list-package");
 	loadList("ajax/list-table.jsp?schema="+gschema, "list-table");	
+	loadList("ajax/list-synonym.jsp?schema="+gschema, "list-synonym");	
 }
 </script>
 
@@ -258,7 +259,7 @@ function changeSchema(schema) {
 		loadList("ajax/list-view.jsp?schema="+gschema, "list-view");	
 		loadList("ajax/list-synonym.jsp?schema="+gschema, "list-synonym");	
 		loadList("ajax/list-package.jsp?schema="+gschema, "list-package");	
-		loadList("ajax/list-tool.jsp", "list-tool");	
+		loadList("ajax/list-tool.jsp?schema="+gschema, "list-tool");	
 		loadList("ajax/list-table.jsp?schema="+gschema, "list-table");	
 	}
 	

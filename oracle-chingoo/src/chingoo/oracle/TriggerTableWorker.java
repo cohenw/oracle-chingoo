@@ -77,17 +77,17 @@ public class TriggerTableWorker {
 			//System.out.println("text=[" + text + "]");
 			//System.out.println("tt.getHM()="+ tt.getHM());
 			cn.AddTriggerTable(currentTrg, tt.getHM(), tt.getHMIns(), tt.getHMUpd(), tt.getHMDel());
-/*			
+			
 			HyperSyntax hs = new HyperSyntax();
-			String syntax = hs.getHyperSyntax(cn, text, "PACKAGE BODY", currentPkg);
+			String syntax = hs.getHyperSyntax(cn, text, "TRIGGER", currentTrg);
 			HashSet<String> packageProc = hs.getPackageProcedure();
 //System.out.println(packageProc);
 
-			cn.AddPackageProcDetail(currentPkg, pt.getPD());
-			cn.AddPackageProc(currentPkg, packageProc);
+//			cn.AddPackageProcDetail(currentPkg, pt.getPD());
+			cn.AddTriggerProc(currentTrg, packageProc);
 			hs = null;
 			list=null;
-*/			
+			
 			if (!running) break;
 		}
 

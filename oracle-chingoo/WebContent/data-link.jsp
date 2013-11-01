@@ -193,7 +193,7 @@ public String getQryStmt(String sql, Query q) {
 <a href="Javascript:newQry()">Pop Query</a> |
 <a href="query.jsp" target="_blank">Query</a> |
 <a id="showERD" href="Javascript:showERD('<%=table%>')">Show ERD</a> |
-<a href="erd_svg.jsp?tname=<%= table %>" target="_blank">ERD</a>
+<a href="erd2.jsp?tname=<%= table %>" target="_blank">ERD</a>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <span style="float:right;">
 Search <input id="globalSearch" style="width: 200px;" placeholder="table or view name"/>
