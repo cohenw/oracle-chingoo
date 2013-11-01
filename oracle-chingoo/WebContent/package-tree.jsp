@@ -83,6 +83,21 @@ public ArrayList<String> getCallerList(Connect cn, String pkg, String prc) {
 	return res;
 }
 
+public ArrayList<String> getTriggerCallerList(Connect cn, String pkg, String prc) {
+
+	String q = "SELECT trigger_name FROM CHINGOO_TR_DEPENDENCY WHERE TARGET_PKG_NAME='" + pkg + "' AND TARGET_PROC_NAME='" + prc + "' ORDER BY 1";
+	List<String[]> trg1 = cn.query(q, false);
+
+	ArrayList<String> res = new ArrayList<String>(); 
+	for (int i=0;i<trg1.size();i++) {
+		String target = trg1.get(i)[1];
+
+		res.add(target);
+	}
+	
+	return res;
+}
+
 public String showPath(Connect cn, String mainPkg, ArrayList<String> path) {
 	String res = "";
 	
@@ -424,12 +439,19 @@ level
 <% 
 	id = Util.getId();
 	divOpen++;
+	
+	String img = "image/minus.gif";
+	String displayDiv = "block";
+	
+	if (!s.startsWith(gPkg)) {
+		img = "image/plus.gif";
+		displayDiv = "none";
+	}
 %>
-<a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/minus.gif"></a>
+<a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="<%= img %>"></a>
 <a href="package-tree.jsp?name=<%=s%>"> <%= disp(cn, gPkg, s) %></a>
 <br/>
-<div id="div-<%=id%>" style='margin-left: 80px;'> 
-
+<div id="div-<%=id%>" style='margin-left: 80px; display: <%= displayDiv %>;'> 
 <%
 	
 	q1 = "SELECT TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE FROM CHINGOO_PA_TABLE WHERE PACKAGE_NAME='" + pkg +"' AND PROCEDURE_NAME='" + prc + "' ORDER BY table_name";
@@ -509,7 +531,17 @@ while (true) {
 		
 	}
 %>
+<br/>
+<%
+//for Triggers
 
+		ArrayList<String> list = getTriggerCallerList(cn, gPkg, gPrc); 
+		for (String s: list) {
+%>			
+	<a target="_blank" href="pop.jsp?type=PACKAGE&key=<%=s %>"><%= s %></a><br/>
+<%			
+		}
+%>
 </div>
 <br/><br/><br/><br/><br/>
 <form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">

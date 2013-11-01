@@ -261,4 +261,12 @@ Build 1067
 	load TVS for other schema objects
 	Bug Fix: FK relationship between multiple schema
 	
-		
+Build Build1068
+	ERD2 support VIEW
+	Encode URL for ROWID
+	Schema change triggers synonym reload
+	Package Tree opens local procedures/functions
+	Reload Package/Trigger analyzed info after analyze package/table
+	Trigger Dependency CHINGOO_TR_DEPENDENCY
+
+	

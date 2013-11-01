@@ -87,6 +87,7 @@ function readyWork() {
 	<td>This process will create Trigger / Table relationship in the following tables.<br>
 	CHINGOO_TR : Trigger and timestamp<br>
 	CHINGOO_TR_TABLE : Trigger / Table CRUD info<br>
+	CHINGOO_TR_DEPENDENCY : Trigger / Package dependencies
 </tr>
 <tr>
 	<td>&nbsp;</td>

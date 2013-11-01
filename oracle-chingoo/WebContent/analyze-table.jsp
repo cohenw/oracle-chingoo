@@ -124,6 +124,10 @@ $(document).ready(function() {
 
 	}
 
+	cn.loadPackageTable();
+	cn.loadPackageProc();
+	cn.loadTriggerTable();
+
 	out.println("Done.<br/>");
 %>
 

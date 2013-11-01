@@ -11,6 +11,7 @@
 	String table = request.getParameter("tname");
 	String tname = table;
 	String owner = request.getParameter("owner");
+	boolean isView = false; 
 	
 	// incase owner is null & table has owner info
 	if (owner==null && table!=null && table.indexOf(".")>0) {
@@ -43,6 +44,20 @@
 	
 	List<ForeignKey> fks = cn.getForeignKeys(owner, table);
 	if (owner != null) fks = cn.getForeignKeys(owner, table);
+
+	if(fks.size()==0) {
+		// check if it is VIEW
+		String q = "SELECT distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + 
+			"' and NAME='" + tname + "' AND REFERENCED_TYPE IN ('TABLE','VIEW') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME";
+		List<String[]> lst = cn.query(q, false);
+		for (int i=0;i<lst.size();i++) {
+			ForeignKey fk = new ForeignKey();
+			fk.rOwner = lst.get(i)[1];
+			fk.rTableName = lst.get(i)[2];
+			fks.add(fk);
+		}		
+		isView = true;
+	}
 	
 	List<String> refTabs = cn.getReferencedTables(owner, table);
 	
@@ -310,7 +325,7 @@ for (TableCol t: list) {
 <% } %>
 
 <% 
-	if (fks.size()>0) { 
+	if (fks.size()>0 && !isView) { 
 %>
 <b>Foreign Key</b><br/>
 <%
