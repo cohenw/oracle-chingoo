@@ -435,7 +435,7 @@ hasCpas = true;
 		
 		if (hasRowid) {
 			keyValue = q.getValue("ROWID");
-			linkUrlTree = "data-link.jsp?table=" + tname + "&rowid=" + keyValue;
+			linkUrlTree = "data-link.jsp?table=" + tname + "&rowid=" + Util.encodeUrl(keyValue);
 		}
 %>
 	<td class="<%= rowClass%>">

@@ -100,7 +100,9 @@ function toggle(id, itemid) {
 		var con = $("#div-" + id).html();
 		if (con == "*") {
 			$("#div-" + id).html("<img src='image/loading.gif'/>");
-			loadChild(id, itemid);
+			var legacy=$("#legacy-" + id).html();
+			if (legacy==null) legacy="";
+			loadChild(id, itemid, legacy);
 		}
 		$("#div-" + id).slideDown();
 	} else {
@@ -109,9 +111,9 @@ function toggle(id, itemid) {
 	}
 }
 
-function loadChild(id, itemid) {
+function loadChild(id, itemid, legacy) {
 	$.ajax({
-		url: "ajax-cpas/load-child-tv.jsp?sdi=RU&parentid=" + itemid,
+		url: "ajax-cpas/load-child-tv.jsp?sdi=RU&parentid=" + itemid + "&legacy=" + legacy,
 		success: function(data){
 			$("#div-" + id).html(data);
 		},
@@ -149,6 +151,21 @@ function loadCon2(sdi, actionid, treekey, divid, itemid, key) {
         }  
 	});	
 }
+
+function loadContent(sdi, actionid, treekey, divid, itemid, key, legacy) {
+	$.ajax({
+		url: "ajax-cpas/tv-simul.jsp?sdi=" + sdi + "&actionid=" + actionid + "&divid="+divid + "&itemid=" +itemid + "&key=" +key + "&legacy=" +legacy,
+		success: function(data){
+			$("#inner-con").html(data);
+		    $('#inner-tv a.selected').removeClass('selected');
+		    $("#aa-" + divid).addClass('selected');
+		},
+        error:function (jqXHR, textStatus, errorThrown){
+            alert(jqXHR.status + " " + errorThrown);
+        }  
+	});	
+}
+
 function hideIfAny(id) {
 	var hiddenCols = $("#hide-" + id).val();
 	if (hiddenCols!=undefined && hiddenCols != '') {
@@ -201,19 +218,26 @@ function gotoPage(id, pageNo) {
 
 
 <%
+	String id=""; String itemid="";
 	q.rewind(1000, 1);
 	int rowCnt = 0;
 	while (q.next()) {
 		String caption = q.getValue("CAPTION");
-		String itemid = q.getValue("ITEMID");
+		itemid = q.getValue("ITEMID");
 		String treekey = q.getValue("TREEKEY");
 		rowCnt ++;
-		String id = Util.getId();
+		id = Util.getId();
 %>
 	<a href="Javascript:toggle(<%=id%>, <%=itemid%>)"><img id="img-<%=id%>" src="image/plus.gif" align="top"><%= caption %></a><br/>
 	<div id="div-<%=id%>" style="margin-left: 10px; display:none;">*</div>
+	
 <% 	} %>
 
+<script type="text/javascript">
+$(document).ready(function(){
+	toggle(<%=id%>, <%=itemid%>);	
+})
+</script>
 
 </div>
 </div>

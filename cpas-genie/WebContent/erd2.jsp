@@ -11,6 +11,7 @@
 	String table = request.getParameter("tname");
 	String tname = table;
 	String owner = request.getParameter("owner");
+	boolean isView = false; 
 	
 	// incase owner is null & table has owner info
 	if (owner==null && table!=null && table.indexOf(".")>0) {
@@ -48,6 +49,20 @@
 	//System.out.println("pkCols=" + pkCols);
 	List<ForeignKey> fks = cn.getForeignKeys(owner, table);
 	if (owner != null) fks = cn.getForeignKeys(owner, table);
+
+	if(fks.size()==0) {
+		// check if it is VIEW
+		String q = "SELECT distinct REFERENCED_OWNER, REFERENCED_NAME, REFERENCED_TYPE from all_dependencies WHERE OWNER='" + owner + 
+			"' and NAME='" + tname + "' AND REFERENCED_TYPE IN ('TABLE','VIEW') AND REFERENCED_OWNER != 'PUBLIC' ORDER BY REFERENCED_NAME";
+		List<String[]> lst = cn.query(q, false);
+		for (int i=0;i<lst.size();i++) {
+			ForeignKey fk = new ForeignKey();
+			fk.rOwner = lst.get(i)[1];
+			fk.rTableName = lst.get(i)[2];
+			fks.add(fk);
+		}		
+		isView = true;
+	}
 	
 	List<String> refTabs = cn.getReferencedTables(owner, table);
 	
@@ -226,7 +241,7 @@ for (ForeignKey rec0: fks0) {
 <div style="margin: 4px; padding:6px; background-color: #ffffcc; width:170px; border: 1px solid #cccccc; float: left;">
 <b><a href="erd2.jsp?tname=<%= tbl2 %>"><%= tbl2 %></a></b> <span class="rowcountstyle"><%= cn.getTableRowCount(tbl2) %></span>
 <a href="javascript:runQuery('<%= tbl2 %>')"><img border=0 src="image/view.png"></a>
-<a href="pop.jsp?type=TABLE&key=<%= tbl2 %>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
+<a href="pop.jsp?key=<%= tbl2 %>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
 </div><br/>
 
 <% } %>
@@ -244,7 +259,7 @@ for (ForeignKey rec0: fks0) {
 <b><a href="erd2.jsp?tname=<%= rec.rTableName %>"><%= rec.rTableName %></a></b> <span id="rowcnt-<%=id%>" class="rowcountstyle"><%= cn.getTableRowCount(rec.rTableName) %></span>
 <a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif"></a>
 <a href="javascript:runQuery('<%= rec.rTableName %>')"><img border=0 src="image/view.png"></a>
-<a href="pop.jsp?type=TABLE&key=<%= rec.rTableName%>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
+<a href="pop.jsp?key=<%= rec.rTableName%>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
 <a href="javascript:hideDiv('<%= id %>')">x</a>
 
 <div id="sub-<%=id%>" style="display: none;">
@@ -283,7 +298,7 @@ for (TableCol t: list1) {
 <b><%= tname %></b> <span class="rowcountstyle"><%= cn.getTableRowCount(tname) %></span>
 <a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" border=0 align=top src="image/minus.gif"></a>
 <a href="javascript:runQuery('<%= tname %>')"><img border=0 src="image/view.png"></a>
-<a href="pop.jsp?type=TABLE&key=<%= tname %>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
+<a href="pop.jsp?key=<%= tname %>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
 <div id="sub-<%=id%>" style="display: block;">
 <table>
 <%
@@ -315,7 +330,7 @@ for (TableCol t: list) {
 <% } %>
 
 <% 
-	if (fks.size()>0) { 
+	if (fks.size()>0 && !isView) { 
 %>
 <b>Foreign Key</b><br/>
 <%
@@ -431,7 +446,7 @@ for (TableCol t: list) {
 <b><a href="erd2.jsp?tname=<%= tbl %>"><%= tbl %></a></b> <span id="rowcnt-<%=id%>" class="rowcountstyle"><%= cn.getTableRowCount(tbl) %></span>
 <a href="javascript:toggleDiv('<%= id %>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif"></a>
 <a href="javascript:runQuery('<%= tbl %>')"><img border=0 src="image/view.png"></a>
-<a href="pop.jsp?type=TABLE&key=<%= tbl %>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
+<a href="pop.jsp?key=<%= tbl %>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
 <a href="javascript:hideDiv('<%= id %>')">x</a>
 
 
@@ -474,7 +489,7 @@ for (TableCol t: list1) {
 <div id="div-<%=id%>" style="margin: 4px; padding:6px; background-color: #ffffcc; width:200px; border: 1px solid #cccccc; float: left;">
 <b><a href="erd2.jsp?tname=<%= tbl2 %>"><%= tbl2 %></a></b> <span id="rowcnt-<%=id%>" class="rowcountstyle"><%= cn.getTableRowCount(tbl2) %></span>
 <a href="javascript:runQuery('<%= tbl2 %>')"><img border=0 src="image/view.png"></a>
-<a href="pop.jsp?type=TABLE&key=<%= tbl2 %>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
+<a href="pop.jsp?key=<%= tbl2 %>" target="_blank"><img border=0 width=12 height=12 src="image/popout.png"></a>
 </div><br/>
 <% } %>
 

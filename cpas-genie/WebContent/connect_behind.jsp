@@ -39,6 +39,17 @@
 	String password = request.getParameter("password");
 	String email = request.getParameter("email");
 	String targetSchema = request.getParameter("targetSchema");
+
+	// CPAS User ID login 
+	String cpasuserid = request.getParameter("cpasuserid");
+//	Util.p("cpasuserid="+cpasuserid);
+	if (cpasuserid != null && !cpasuserid.equals("")) {
+		targetSchema = username;
+		username = cpasuserid;
+	}
+//	Util.p("targetSchema="+targetSchema);
+//	Util.p("username="+username);
+//	Util.p("password="+password);
 	
 	String ipAddress = Util.getIpAddress(request);
 	
@@ -58,8 +69,23 @@
 		// get cookie
 		String oldUrls = getCookie(request, "url");
 		
+		// keep only 20 urls
+		StringTokenizer st = new StringTokenizer(oldUrls, " ");
+		int i = 0;
+		String tmp = "";
+		while (st.hasMoreTokens()) {
+			i++;
+			tmp += st.nextToken() + " ";
+			if (i>=20) break;
+		}
+		oldUrls = tmp;
+		
 		// set Cookie
 		String newUrl = username + "@" + url;
+//Util.p("newUrl=" + newUrl);
+		if (targetSchema != null && !targetSchema.equals(""))
+			newUrl = targetSchema + "@" + url;
+//Util.p("newUrl2=" + newUrl);
 		String newUrls = "";
 		
 		if (oldUrls != null) {

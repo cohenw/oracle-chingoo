@@ -14,12 +14,15 @@
 	String sql2 = request.getParameter("sql2");
 	String id = request.getParameter("id");
 	String layout = request.getParameter("layout");
+	String sublayout = request.getParameter("sublayout");
 	String appLayout = request.getParameter("applylayout");
 	String rowsPerPage = request.getParameter("rowsPerPage");
 	if (rowsPerPage==null || rowsPerPage.equals("")) rowsPerPage = "10";
 
 	String as = request.getParameter("as");  // action statement
-System.out.println("AS=" + as);	
+//System.out.println("AS=" + as);	
+//System.out.println("layout=" + layout);	
+System.out.println("sql2=" + sql2);	
 	boolean showFKLink = false;  
 
 	String pageNo = request.getParameter("pageNo");
@@ -170,7 +173,7 @@ sortColumn, sortDirection = <%=sortColumn +"," + sortDirection %> Layout=<%= lay
 
 <div style="float: left;">
 <% if (pgNo>1) { %>
-<a href="Javascript:gotoPage(<%=id%>, <%= pgNo - 1%>)"><img border=0 src="image/prev.png" border=0 align="bottom"></a>
+<a href="Javascript:gotoPageSimul(<%=id%>, <%= pgNo - 1%>)"><img border=0 src="image/prev.png" border=0 align="bottom"></a>
 <% } %>
 
 <% if (totalPage > 1) { %>
@@ -178,7 +181,7 @@ Page: <b><%= pgNo %></b> of <%= totalPage %>
 <% } %>
 
 <% if (q.getTotalPage(linesPerPage) > pgNo) { %>
-<a href="Javascript:gotoPage(<%=id%>, <%= pgNo + 1%>)"><img border=0 src="image/next.png" border=0 align="bottom"></a>
+<a href="Javascript:gotoPageSimul(<%=id%>, <%= pgNo + 1%>)"><img border=0 src="image/next.png" border=0 align="bottom"></a>
 <% } %>
 
 Found: <b><%= filteredCount %></b>
@@ -186,10 +189,10 @@ Found: <b><%= filteredCount %></b>
 (of <%= totalCount %>)
 <% } %>
 
-<% if (filteredCount > 10) {%>
+<% if (filteredCount > 10 && (sql2.equals(""))) {%>
 &nbsp;&nbsp;&nbsp;
 Rows/Page 
-<select id="linePerPage" name="linePerPage" onChange="rowsPerPage(this.options[this.selectedIndex].value);">
+<select id="linePerPage" name="linePerPage" onChange="rowsPerPageSimul(this.options[this.selectedIndex].value, 1);">
 <option value="1" <%= (linesPerPage==1?"SELECTED":"") %>>1</option>
 <option value="2" <%= (linesPerPage==2?"SELECTED":"") %>>2</option>
 <option value="5" <%= (linesPerPage==5?"SELECTED":"") %>>5</option>
@@ -226,7 +229,7 @@ Rows/Page
 <% } %>
 <% } %>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<% if (totalCount>=5) { %>
+<% if (totalCount>=5 && false) { %>
 <img src="image/view.png" border=0 ><input id="search-<%=id%>" value="<%= searchValue %>" size=15 onChange="searchTable(<%=id%>,$(this).val())"  placeholder="search">
 <a href="Javascript:clearSearch(<%=id%>)"><img border="0" border=0 src="image/clear.gif"></a>
 <% } %>
@@ -338,12 +341,32 @@ if (!applyLayout) {
 		for (String c : hs) {
 			subValues += q.getValue(c) + "|";
 		}
-		
+		String subLayout = sublayout;
+		if (sublayout !=null && sublayout.startsWith("SELECT")) {
+			// dynamic layout
+			String tmp = sublayout;
+			for (String c: hs) {
+				String col = ":A." + c;
+				String val = "'" + q.getValue(c) + "'";
+				val = val.replaceAll("\\$", "XXXXX");
+Util.p(col +"," + val);
+				tmp = tmp.replaceAll(col, val);
+				tmp = tmp.replace("XXXXX", "$");
+			}
+			Util.p("$$$$ " + tmp);
+			Util.p("$$$$ " + hs.size());
+			if (!tmp.contains(":"))
+				subLayout = cn.queryOne(tmp);
+			else
+				subLayout = "none";
+			//Util.p("$$$$ " + subLayout);
+		}
+	
 %>
 <tr class="simplehighlight">
 <% if (sql2 != null && !sql2.equals("")) { %>
 	<td class="<%= rowClass%>">
-		<input name="select" type="radio" onChange="Javascript:queryDetail('<%= subKeys %>','<%=subValues%>')">
+		<input name="select" type="radio" onChange="Javascript:queryDetail('<%= subKeys %>','<%=subValues%>','<%=subLayout%>')">
 	</td>
 <%
 	}

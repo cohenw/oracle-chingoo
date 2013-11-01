@@ -384,6 +384,12 @@ public class CpasUtil {
 		} else if (temp.endsWith("CONNSESSION_PROCESS.PROCESSKEY")) {
 			String qry = "SELECT NAME FROM CPAS_PROCESS WHERE PROCESS='" + value + "'";
 			return cn.queryOne(qry);
+		} else if (temp.startsWith("CPAS_CALCTYPE.DEFAULT_") && temp.endsWith("DATE")) {
+			String qry = "SELECT NAME FROM CPAS_DATE WHERE RDATE=to_date('" + value.substring(0,10) + "','yyyy-mm-dd')";
+			return cn.queryOne(qry);
+		} else if (temp.endsWith(".RDATE") && value.startsWith("1800")) {
+			String qry = "SELECT NAME FROM CPAS_DATE WHERE RDATE=to_date('" + value.substring(0,10) + "','yyyy-mm-dd')";
+			return cn.queryOne(qry);
 		}
 		
 		String key = (tname + "." + cname).toUpperCase();

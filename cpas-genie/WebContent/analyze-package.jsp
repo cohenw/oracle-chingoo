@@ -92,6 +92,10 @@ $(document).ready(function() {
 		list=null;
 	}
 
+	// reload cache
+	cn.loadPackageTable();
+	cn.loadPackageProc();
+
 //	out.println("Done.<br/>");
 %>
 

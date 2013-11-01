@@ -407,7 +407,12 @@ if (cpas) {
 <%
 	if (tname.equals("CPAS_VALIDATION") && colName.equals("VNAME")) {
 		String pkg = q.getValue("PACKNAME") + "." + q.getValue("VNAME");
-		out.println(" <a target=_blank href='package-tree.jsp?name=" + pkg + "'>Source</a>");
+		out.println(" <a target=_blank href='package-tree.jsp?name=" + pkg + "'><img src='image/sourcecode.gif' border='0' width=16 heigh=16>Source</a>");
+	}
+
+	if (tname.equals("CPAS_WIZARD_SETUP") && colName.equals("PACKAGE_NAME")) {
+		String pkg = q.getValue("PACKAGE_NAME");
+		out.println(" <a target=_blank href='pop.jsp?type=PACKAGE&key=" + pkg + "'><img src='image/sourcecode.gif' border='0' width=16 heigh=16>Detail</a>");
 	}
 
 %>

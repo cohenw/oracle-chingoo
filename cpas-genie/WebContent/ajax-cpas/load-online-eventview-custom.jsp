@@ -147,6 +147,18 @@ id = Util.getId();
 		%>
 		<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry0%>"/></a>
 		<div style="display: none;" id="sql-<%=id%>"><%= qry0 %></div>
+		<%
+			if (!action.equals("NN") && cn.isTVS("CPAS_WIZARD")) {
+				String q = "SELECT WIZARD FROM CPAS_WIZARD WHERE CLASS IN (SELECT CLASS FROM CPAS_ACTION WHERE ACTION='" + action + "')";
+				String wizard = cn.queryOne(q);
+				if (wizard != null) {
+		%>
+			<br/>
+			Wizard: <span class="pk"><a href="data-link.jsp?qry=CPAS_WIZARD|<%= wizard %>" target="_blank"><%= wizard %></a></span>
+		<%
+				}
+			}
+		%>		
 	</td>
 	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel + " <span class='cpas'>" + secName + "</span>"%></td>
 	<td class="<%= rowClass%>" nowrap><%= uparam==null?"":uparam %> <span class='cpas'><%= batchTask %></span> <%= dataLink %></td>

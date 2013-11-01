@@ -386,8 +386,29 @@ Build CPAS1090
 	Bug Fix: FK relationship between multiple schema
 	PROCESS*.processid not linked to BATCH
 	cn.getSchema() added
+	ERD2 support VIEW
+	Encode URL for ROWID
+	Schema change triggers synonym reload
 
-			
+Build CPAS1091
+	Package Tree opens local procedures/functions
+	Connect using CPAS user id
+	Reload Package/Trigger analyzed info after analyze package/table
+	Bug Fix: Data link to 2 column logical FK (ex: MEMBER)
+	Remove dup in Datalink - Logical FK list
+
+Build CPAS1092
+	Data link to CPAS_WIZARD from CPAS_ACTION
+	Data link to Package detail from CPAS_WIZARD_SETUP
+	CPAS online links to WIZARD
+	Rule date link to CPAS_DATE
+
+Build CPAS1093
+	Trigger Dependency GENIE_TR_DEPENDENCY
+	pop query on Query page
+	CPAS database list in login page
+	Login cookie keeps the last 20 login
+				
 Known Issue
 	PA does not include Stored procedures and functions
 

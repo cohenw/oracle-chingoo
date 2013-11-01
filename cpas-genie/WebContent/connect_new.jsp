@@ -26,6 +26,10 @@ String imgList[] = {
 	String password = request.getParameter("password");
 	String email = request.getParameter("email");
 	String targetSchema = request.getParameter("targetSchema");
+	String cpasuserid = request.getParameter("cpasuserid");
+	if (targetSchema==null) targetSchema = "";
+	if (cpasuserid==null) cpasuserid = "";
+	
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -159,6 +163,7 @@ function stopShow() {
   	<input name="password" type="hidden" value="<%= password %>">
   	<input name="email" type="hidden" value="<%= email %>">
   	<input name="targetSchema" type="hidden" value="<%= targetSchema %>">
+  	<input name="cpasuserid" type="hidden" value="<%= cpasuserid %>">
   </form>
   
 <!--   <img src="image/genie-lamp.jpg"/>

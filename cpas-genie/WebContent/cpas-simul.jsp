@@ -140,6 +140,12 @@ $(document).ready(function() {
 
 });	    
 
+function gotoPageSimul(id, pageNo) {
+	$("#pageNo").val(pageNo);
+
+	reloadDataSim(id);
+}
+
 function loadSessionValue(sid) {
 	$.ajax({
 		url: "ajax-cpas/load-connsession.jsp?sid=" + sid + "&t=" + (new Date().getTime()),
@@ -269,9 +275,11 @@ function reloadData(id) {
 	});	
 }
 
-function queryDetail(fields, values) {
+function queryDetail(fields, values, slayout) {
 //	alert("Query Detail");
 	
+	$("#layout").val(slayout);
+	//$("#subLayoutName").html(slayout);
 	runSub(fields, values);
 }
 
@@ -320,7 +328,7 @@ function runSub(fields, values) {
 	
 	$("#sql-2").html(newQry);
 	$("#sql2").val("");
-	$("#layout").val("<%=subLayout%>");
+//	$("#layout").val("<%=subLayout%>");
 //	alert(newQry);
 
 	$("#div-2").html("");
@@ -372,12 +380,12 @@ function submitSub() {
 	$("#subQryEdit").hide();
 }
 
-function rowsPerPage(rows) {
+function rowsPerPageSimul(rows, type) {
 	$("#rowsPerPage").val(rows);
 	$("#pageNo").val(1);
 //	$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
 	
-	reloadData(1);
+	reloadData(type);
 }
 
 </script>

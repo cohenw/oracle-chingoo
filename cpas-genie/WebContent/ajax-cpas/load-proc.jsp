@@ -25,6 +25,22 @@ public String getTables(List<String[]> list0, String type, Connect cn) {
 	
 	return res;
 }
+
+public ArrayList<String> getTriggerCallerList(Connect cn, String pkg, String prc) {
+
+	String q = "SELECT trigger_name FROM GENIE_TR_DEPENDENCY WHERE TARGET_PKG_NAME='" + pkg + "' AND TARGET_PROC_NAME='" + prc + "' ORDER BY 1";
+	List<String[]> trg1 = cn.query(q, false);
+
+	ArrayList<String> res = new ArrayList<String>(); 
+	for (int i=0;i<trg1.size();i++) {
+		String target = trg1.get(i)[1];
+
+		res.add(target);
+	}
+	
+	return res;
+}
+
 %>
 <%
 	Connect cn = (Connect) session.getAttribute("CN");
@@ -205,5 +221,18 @@ for (int i=0;i<proc0.size();i++) {
 <%		
 	}
 %>
+
+<br/>
+<%
+//for Triggers
+
+		ArrayList<String> list2 = getTriggerCallerList(cn, pkg, prc); 
+		for (String s: list2) {
+%>			
+	<a target="_blank" href="pop.jsp?type=PACKAGE&key=<%=s %>"><%= s %></a><br/>
+<%			
+		}
+%>
+
 </div>
 

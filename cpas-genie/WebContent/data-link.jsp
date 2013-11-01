@@ -168,6 +168,9 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 	} else if (tname.equals("CPASSESSION")) {
 		if (cn.isTVS("CONNSESSION"))
 			list.add("CONNSESSION");
+	} else if (tname.equals("CPAS_ACTION")) {
+		if (cn.isTVS("CPAS_WIZARD"))
+			list.add("CPAS_WIZARD");
 	}
 
 	return list;
@@ -263,7 +266,6 @@ public String getQryStmt(String sql, Query q) {
 		ForeignKey rec = fks.get(i);
 		String linkCol = cn.getConstraintCols(rec.constraintName);
 		String rTable = cn.getTableNameByPrimaryKey(rec.rConstraintName);
-		
 		fkLinkTab.add(rTable);
 		fkLinkCol.add(linkCol);
 		hs.add(linkCol);
@@ -365,7 +367,7 @@ public String getQryStmt(String sql, Query q) {
 <a href="Javascript:newQry()">Pop Query</a> |
 <a href="query.jsp" target="_blank">Query</a> |
 <a id="showERD" href="Javascript:showERD('<%=table%>')">Show ERD</a> |
-<a href="erd_svg.jsp?tname=<%= table %>" target="_blank">ERD</a>
+<a href="erd2.jsp?tname=<%= table %>" target="_blank">ERD</a>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <!-- <a href="Javascript:openWorksheet()">Open Work Sheet</a>
  -->
@@ -525,6 +527,7 @@ if (cn.isViewTable(table)) {
 // see if there is logial foreign key
   int cntLFK = 0;
 
+	List<String> lfks = new ArrayList<String>();
 	for (int i=0; i< q.getColumnCount(); i++) {
 		String label = q.getColumnLabel(i);
 		String ft=null, fsql="", fc="";
@@ -541,9 +544,11 @@ if (cn.isViewTable(table)) {
 			}
 		}
 
-		ft = cn.getCpasUtil().getLinkedTable(table, label);
-		if (ft != null) {
-			fsql = cn.getPKLinkSql(ft, q.getValue(label));
+		if (ft==null) {
+			ft = cn.getCpasUtil().getLinkedTable(table, label);
+			if (ft != null) {
+				fsql = cn.getPKLinkSql(ft, q.getValue(label));
+			}
 		}
 /*
 		for (int j=0; ft==null && j < cn.getCpasUtil().logicalLink.length; j++) {
@@ -568,6 +573,7 @@ if (cn.isViewTable(table)) {
 		if (fkLinkTab.contains(ft)) continue;
 		if (ft.equals(table)) continue;
 		if (q.getValue(label)==null) continue;
+		if (lfks.contains(ft)) continue;
 		
 		// check if there is matched record
 		Query qc = new Query(cn, fsql);
@@ -576,6 +582,7 @@ if (cn.isViewTable(table)) {
 		fc = label;
 		id = Util.getId();
 		autoLoadFK.add(id);
+		lfks.add(ft);
 		cntLFK++;
 
 %>
@@ -728,6 +735,9 @@ if (cn.isViewTable(table)) {
 		} else if (refTab.equals("CONNSESSION")&&table.equals("CPASSESSION")) {
 			fkColName = "SESSIONID";
 			key = q.getValue("SESSIONID");
+		} else if (refTab.equals("CPAS_WIZARD")&&table.equals("CPAS_ACTION")) {
+			fkColName = "CLASS";
+			key = q.getValue("CLASS");
 		}
 
 		//Util.p(table+"-"+refTab + "-");				
@@ -849,7 +859,8 @@ if (refViews.size()>0) {
 
 <%
 	String condition = Util.buildCondition(pkCols,  key);
-	String[] pks = pkCols.split("\\,");
+	String[] pks = {};
+	if (pkCols !=null) pks = pkCols.split("\\,");
 //	for (String pk: pks)
 		//Util.p("pks="+pk);
 	for (int i=0; i<refViews.size(); i++) {

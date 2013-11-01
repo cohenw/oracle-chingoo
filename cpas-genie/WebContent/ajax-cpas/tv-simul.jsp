@@ -17,6 +17,7 @@
 	String divid = request.getParameter("divid");
 	String itemid = request.getParameter("itemid");
 	String key = request.getParameter("key");
+	String legacy = request.getParameter("legacy");
 
 	if (actionid==null && tv != null) {
 		actionid = cn.queryOne("SELECT actionid FROM TREEVIEW WHERE SDI = '" + sdi + "' AND TREEKEY='" + tv + "'");
@@ -24,16 +25,16 @@
 Util.p("actionid=" + actionid);
 	
 	String mainQry = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='MS'");
-Util.p("mainQry=" + mainQry);
+//Util.p("mainQry=" + mainQry);
 if (key !=null && mainQry != null) mainQry = mainQry.replace(":P.TV_CODECATEGORY", "'" + key + "'");
-if (mainQry != null) mainQry = mainQry.replace(":S.CLNT", "'CAAT'");
-Util.p("mainQry=" + mainQry);
+//if (mainQry != null) mainQry = mainQry.replace(":S.CLNT", "'CAAT'");
+//Util.p("mainQry=" + mainQry);
 	String subQry = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='DS'");
 	String mainLayout = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='MT'");
 	if (mainLayout != null && mainLayout.startsWith("SELECT")) mainLayout = "";
 	
 	String subLayout = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='DT'");
-Util.p("subLayout="+subLayout);
+//Util.p("subLayout="+subLayout);
 	if (subLayout == null /*&& subLayout.startsWith("SELECT")*/) subLayout = "";
 	String as = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='AS'");
 	
@@ -61,7 +62,7 @@ Util.p("subLayout="+subLayout);
 		q = cn.query("SELECT caption, treekey FROM CUSTOMTREEVIEW WHERE SDI='"+sdi+"' and actionid="+actionid, false);
 	}
 	
-	if (subQry != null) subQry = subQry.replace(":S.CLNT", "'CAAT'");
+//	if (subQry != null) subQry = subQry.replace(":S.CLNT", "'CAAT'");
 	String caption = "";
 	String treekey = "";
 	if (q != null && q.size()>0) {
@@ -124,6 +125,31 @@ Util.p("subLayout="+subLayout);
 	if (language==null) language = "";
 	
 //	String mQry = cn.getCpasUtil().getQryReplaced(mainQry);
+
+
+Util.p("mainQry=" + mainQry + ":" + legacy);
+if (!legacy.equals("") && mainQry.contains(":")) {
+	HashSet<String> hs = new HashSet<String>();
+	StringTokenizer st = new StringTokenizer(mainQry, " ");
+
+	while (st.hasMoreTokens()) {
+		String token = st.nextToken();
+		if (token.startsWith(":P.")) {
+			hs.add(token.substring(3));
+		}
+	}
+	
+	String x[] = legacy.split("=");
+	
+	String col = ":P." + x[0];
+	String val = "'" + x[1] + "'";
+	if (col.equals(":P.TV_CLIENTS_ITEM")) {
+		col = ":S.CLNT";
+	}
+Util.p("*** col="+col);	
+	mainQry = mainQry.replaceAll(col, val);
+Util.p("2 mainQry=" + mainQry + ":" + legacy);
+}
 %>
 
 
@@ -228,23 +254,26 @@ newAs=newAs.replace(new RegExp(":EXC", 'g'), "?");
 //	alert(mainQry);
 	$("#sql-1").html(newQry);
 	$("#layout").val("<%=mainLayout%>");
+	$("#sublayout").val("<%=subLayout%>");
 	$("#sql2").val($("#subQry").html());
 	$("#as").val(newAs);
 //	alert(newQry);
 
 	$("#div-1").html("");
 	$("#div-2").html("");
-	reloadData(1);
+	reloadDataSim(1);
 }
 
-function reloadData(id) {
+function reloadDataSim(id) {
 	var divName = "div-" + id;
 	var sql = $("#sql-" + id).html();
+//console.log(id);
+//console.log(sql);
+	if (id==1) {
+		$("#layout").val( $("#layout-1").html() );
+		$("#sql2").val($("#subQry").html());
+	}
 
-//	alert("pageNo=" + $("#pageNo").val());
-
-	//	alert("id=" + id);
-//	alert("sql=" + sql);		
 	$("#sql").val(sql);
 	$("#id").val(id);
 	$("#sortColumn").val($("#sort-"+id).val());
@@ -269,15 +298,19 @@ function reloadData(id) {
 	});	
 }
 
-function queryDetail(fields, values) {
+function queryDetail(fields, values, slayout) {
 //	alert("Query Detail");
+	
+	$("#layout").val(slayout);
+	$("#subLayoutName").html(slayout);
 	
 	runSub(fields, values);
 }
 
 function runSub(fields, values) {
 	var subQry = $("#subQry").html();
-
+//	console.log(subQry);	
+//	console.log(values);	
 	var clnt = $("#CLNT").val();
 	var mkey = $("#MKEY").val();
 	var erkey = $("#ERKEY").val();
@@ -315,16 +348,19 @@ function runSub(fields, values) {
 		if (vals[i].length==10 && vals[i].charAt(4) == '-' && vals[i].charAt(7) == '-')
 			newQry=newQry.replace(new RegExp(":A."+keys[i], 'g'), "TO_DATE('"+vals[i]+ "','YYYY-MM-DD')");
 		else
-			newQry=newQry.replace(new RegExp(":A."+keys[i], 'g'), "'"+vals[i]+ "'");
+			newQry=newQry.replace(new RegExp(":A."+keys[i], 'g'), "'"+vals[i].replace('$','XXXXX' ) + "'");
 	}
-	
+//console.log(newQry);	
+	newQry = newQry.replace('XXXXX','$');
+//	console.log(newQry);	
 	$("#sql-2").html(newQry);
 	$("#sql2").val("");
-	$("#layout").val("<%=subLayout%>");
+//	$("#layout").val("<%=subLayout%>");
+	$("#pageNo").val(1);
 //	alert(newQry);
 
 	$("#div-2").html("");
-	reloadData(2);
+	reloadDataSim(2);
 }
 
 function toggleLayout(id) {
@@ -340,7 +376,7 @@ function toggleLayout(id) {
 	} else {
 		$("#sql2").val('');
 		$("#layout").val("<%=subLayout%>");	}
-	reloadData(id);
+	reloadDataSim(id);
 }
 
 function toggleEditMain() {
@@ -363,12 +399,12 @@ function submitSub() {
 	$("#subQryEdit").hide();
 }
 
-function rowsPerPage(rows) {
+function rowsPerPageSimul(rows, type) {
 	$("#rowsPerPage").val(rows);
 	$("#pageNo").val(1);
 //	$("#data-div").html("<div id='wait'><img src='image/loading.gif'/></div>");
 	
-	reloadData(1);
+	reloadDataSim(type);
 }
 
 </script>
@@ -391,15 +427,19 @@ function rowsPerPage(rows) {
 <input type="hidden" id="pageNo" name="pageNo" value="1">
 <input type="hidden" id="rowsPerPage" name="rowsPerPage" value="10">
 <input type="hidden" id="layout" name="layout" value="">
+<input type="hidden" id="sublayout" name="sublayout" value="">
 <input type="hidden" id="applylayout" name="applylayout" value="1">
 </form>
+
 </div>
+
 
 <div style="display: none;" id="sql-1"></div>
 <div style="display: none;" id="mode-1">sort</div>
 <div style="display: none;" id="hide-1"></div>
 <div style="display: none;" id="sort-1"></div>
 <div style="display: none;" id="sortdir-1">0</div>
+<div style="display: none;" id="layout-1"><%=mainLayout %></div>
 
 <div style="display: none;" id="sql-2"></div>
 <div style="display: none;" id="mode-2">sort</div>
@@ -407,7 +447,9 @@ function rowsPerPage(rows) {
 <div style="display: none;" id="sort-2"></div>
 <div style="display: none;" id="sortdir-2">0</div>
 
-<b><%= caption %></b> [<%= treekey %>]
+<%= treekey %>
+<h2><b><%= caption %></b></h2>
+  
 <!-- <input type="button" value="Submit" onClick="javascript:run()"/>
  -->
 <div style="padding: 4px;" id="div-as"><%= as %></div>
@@ -424,8 +466,11 @@ function rowsPerPage(rows) {
 
 	String id = Util.getId();
 	String qry = "SELECT * FROM CPAS_LAYOUT WHERE TNAME='" + mainLayout + "'";
+	
+ 	if (!mainQry.equals("")) {
 %>
 <b>Master</b> [<%= mainLayout %>]
+<%	} %>
 <%-- <a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry%>"/></a>
 --%>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
@@ -438,6 +483,7 @@ function rowsPerPage(rows) {
 
 <hr/>
 <%
+
 if (subQry != null && !subQry.equals("")) {
 
 	Util.getId();
@@ -445,7 +491,7 @@ if (subQry != null && !subQry.equals("")) {
 	
 %>
 
-<b>Detail</b> [<%= subLayout %>]
+<b>Detail</b> [<span id="subLayoutName"><%= subLayout %></span>]
 <%-- <a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry%>"/></a>
  --%>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>

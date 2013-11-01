@@ -124,7 +124,7 @@ Please select a Table to see the detail. ?table=TABLE_NAME
 &nbsp;&nbsp;&nbsp;
 <a href="query.jsp" target="_blank">Query</a> |
 <a href="q.jsp" target="_blank">Q</a> |
-<a href="erd_svg.jsp?tname=<%= table %>" target="_blank">ERD</a> |
+<a href="erd2.jsp?tname=<%= table %>" target="_blank">ERD</a> |
 <a href="worksheet.jsp" target="_blank">Work Sheet</a>
 
 <br/><br/>
