@@ -465,6 +465,7 @@ function runQuery(catalog,tab) {
     	if (cnt >=5) sql = sql.replace("[5]", p5);
 //    	alert(sql);
     	$("#param-sql").val(sql);
+    	$("#param1").val($("#param-1").val());
     	
 		$("#paramQueryResult").html("<div id='wait'><img src='image/loading.gif'/></div>");
     	$.ajax({

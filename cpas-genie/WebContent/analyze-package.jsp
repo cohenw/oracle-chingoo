@@ -71,7 +71,7 @@ $(document).ready(function() {
 			
 		}
 		PackageTable pt = new PackageTable(pkgName, text);
-/*		
+/*
  		out.println("pt.getHM()=[" + pt.getHM() + "]<br/>");
 		out.println("pt.getHMIns()=[" + pt.getHMIns() + "]<br/>");
 		out.println("pt.getHMUpd()=[" + pt.getHMUpd() + "]<br/>");
@@ -84,8 +84,26 @@ $(document).ready(function() {
 		HyperSyntax hs = new HyperSyntax();
 		String syntax = hs.getHyperSyntax(cn, text, "PACKAGE BODY", pkgName);
 		HashSet<String> packageProc = hs.getPackageProcedure();
-//		System.out.println(packageProc);
-//		System.out.println("pt.getPD()=[" + pt.getPD() + "]");
+		//out.println(packageProc+"<br/><br/>");
+		//out.println("pt.getPD()=[" + pt.getPD() + "]");
+		
+			  for (String str : packageProc) {
+				String[] temp = str.split(" ");
+				
+	        	String targetPkg = pkgName;
+	        	String targetPrc = temp[1];
+	        	String[] target = temp[1].split("\\.");
+	        	if (target.length>2) continue;
+	        	if (target.length>1) {
+	        		targetPkg = target[0];
+	        		targetPrc = target[1];
+	        	}
+
+	        	if (pkgName.equals(targetPkg) && temp[0].equals(targetPrc)) continue;
+//	        	if ( temp[0].equals("PMLOADRETIRE"))
+//					out.println(pkgName + " " + temp[0] + " " + targetPkg + " " + targetPrc + "<br/>");
+	        }
+
 		cn.AddPackageProcDetail(pkgName, pt.getPD());
 		cn.AddPackageProc(pkgName, packageProc);		
 		hs = null;

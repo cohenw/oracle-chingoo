@@ -71,6 +71,13 @@
 <% } else { %>
 <span class="nullstyle">Role Privileges</span>
 <% } %>
+|
+<% if (cn.isTVS("CT$MATRIX")) { %>
+<a href="matrix_test.jsp" target="_blank">Matrix Test</a>
+<% } else { %>
+<span class="nullstyle">Matrix Test</span>
+<% } %>
+
 </h3>
 
 <b>Quick Search</b>
@@ -206,6 +213,11 @@
 
 
 <b>Note:</b>
+<br/>
+<img src="image/video.png">
+<a href="http://genie.cpas.com/genie-video/index.html" target=_blank><span style="background-color: yellow;">Watch tutorial videos</span></a>
+<br/><br/>
+
 <div style="margin-left: 20px;">
 Please send me any bug report, feedback, enhancement ideas.<br/>
 Thanks.

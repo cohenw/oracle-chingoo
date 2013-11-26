@@ -173,6 +173,8 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 			list.add("CPAS_WIZARD");
 	}
 
+	list.remove(tname);
+	
 	return list;
 }
 
@@ -321,7 +323,7 @@ public String getQryStmt(String sql, Query q) {
 	}	
 	</style>
 	    
-    <script>
+    <script type="text/javascript">
 	$(function() {
 		$( "#globalSearch" ).autocomplete({
 			source: "ajax/auto-complete2.jsp",
@@ -413,6 +415,11 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 	String fname = eid.replace('-', '_') + ".error";
 %>
 	<a target="_blank" href="cpas-extract.jsp?id=<%=eid%>&fname=<%=fname%>&type=ERROR">Extract Script</a>
+<% } %>
+<% if (table.equals("CALC") && cn.isTVS("CT$MATRIX")) {
+	String calcid = key;
+%>
+	<a target="_blank" href="matrix_test.jsp?calcid=<%=calcid%>">Matrix Test</a>
 <% } %>
 
 <br/>

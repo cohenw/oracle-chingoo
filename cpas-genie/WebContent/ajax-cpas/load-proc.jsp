@@ -193,7 +193,7 @@ for (int i=0;i<proc0.size();i++) {
 		id = Util.getId();
 		String cpkg = proc1.get(i)[1];
 		String cprc = proc1.get(i)[2];
-		if (!cn.isPackage(cpkg)) continue;
+		if (!cn.isPackageType(cpkg)) continue;
 %>
 	<a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif"></a>
 	<a href="javascript:loadProc('<%=cpkg%>','<%=cprc%>')"><%= disp %></a></br/>
@@ -215,7 +215,7 @@ for (int i=0;i<proc0.size();i++) {
 		if (proc2.get(i)[1].equals(pkg)) disp = cn.getProcedureLabel(proc2.get(i)[1], proc2.get(i)[2]);
 		String cpkg = proc2.get(i)[1];
 		String cprc = proc2.get(i)[2];
-		if (!cn.isPackage(cpkg)) continue;
+		if (!cn.isPackageType(cpkg)) continue;
 %>
 	<a href="javascript:loadProc('<%=cpkg%>','<%=cprc%>')"><%= disp %></a></br/>
 <%		

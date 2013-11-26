@@ -21,5 +21,5 @@
 </html>
 
 <%
-System.out.println("log.jsp " + Util.getIpAddress(request) + " " + (new java.util.Date()) + " " + request.getHeader("referer"));
+System.out.println("* log.jsp " + Util.getIpAddress(request) + " " + (new java.util.Date()) + " " + request.getHeader("referer"));
 %>

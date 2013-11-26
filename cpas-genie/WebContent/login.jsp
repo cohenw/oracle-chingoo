@@ -49,6 +49,11 @@
 	    	}
 	    }
 	}
+
+	String jdbcurl = request.getParameter("jdbcurl");
+	String schema = request.getParameter("schema");
+	if (jdbcurl != null ) initJdbcUrl = jdbcurl;
+	if (schema != null) initUserName = schema;
 	
 %>
 
@@ -69,6 +74,7 @@
     	function setLogin(jdbcUrl, userId) {
     		$("#url").val(jdbcUrl);
     		$("#username").val(userId);
+    		$("#cpasuserid").val('');
     		$('html, body').animate({scrollTop:0}, 'fast');
     	}
     	
@@ -231,7 +237,7 @@ or
 
 </select>
 
-<img style="margin-left: 250px;" src="http://i2.itools.com/i/fav/youtube-video-search.png">
+<img style="margin-left: 250px;" src="image/video.png">
 <a href="http://genie.cpas.com/genie-video/index.html" target=_blank><span style="background-color: yellow;">Watch tutorial videos</span></a>
 <br/>
 

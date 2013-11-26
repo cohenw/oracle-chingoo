@@ -33,6 +33,7 @@
 	boolean hasCpas = cn.hasCpas(view);
 	String cpasComment = cn.getCpasComment(view);
 	List<String> refProc = cn.getReferencedProc(view);
+	List<String> refViews = cn.getReferencedViews(vname);
 %>
 <div id="objectTitle" style="display:none">VIEW: <%= view %></div>
 <h2>VIEW: <%= vname %> &nbsp;&nbsp;<a href="Javascript:runQuery('','<%=vname%>')"><img border=0 src="image/icon_query.png" title="query"></a>
@@ -115,6 +116,49 @@
 <hr>
 
 <br/>
+
+<% 
+	if (refViews.size()>0) { 
+%>
+<b>Related View</b>
+<a href="Javascript:toggleDiv('imgView','divView')"><img id="imgView" border=0 src="image/minus.gif"></a>
+<div id="divView">
+<table border=0 width=800>
+<td width=4%>&nbsp;</td>
+<td valign=top width=32%>
+<%
+	int listSize = (refViews.size() / 3) + 1;
+	int cnt = 0;
+	int cols = 1;
+	for (int i=0; i<refViews.size(); i++) {
+		String refView = refViews.get(i);
+		cnt++;
+%>
+
+<% if ((cnt-1)>=listSize) { %>
+		</td><td valign=top width=32%>
+<%
+		cnt = 1;
+		cols++;
+	} 
+%>
+
+		<a href="Javascript:loadView('<%= refView %>')"><%= refView %></a>&nbsp;&nbsp;<br/>		
+<% }
+	for (; cols<=3; cols++) {
+%>
+	</td><td valign=top width=32%>
+<% } %>
+
+</td>
+</table>
+</div>
+<br/>
+<%
+	}
+%>
+
+
 <%
 
 	List<String> refTrgs = cn.getReferencedTriggers(view);

@@ -569,6 +569,8 @@ public class CpasUtil {
 				grup = "ER";
 			if (cname.equals("CTYPE"))
 				grup = "CTC";
+			if (tname.equals("CALC") && cname.equals("STAGE"))
+				grup = "CS";
 		}
 		
 		return grup;

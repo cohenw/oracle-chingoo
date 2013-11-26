@@ -47,7 +47,7 @@
 #outer-sdi {
     background-color: #FFFFFF;
     border: 1px solid #999999;
-    width: 250px;
+    width: 200px;
     height: 600px;
     overflow: auto;
     float: left;
@@ -355,7 +355,7 @@ function setYellow(sdi, treekey) {
 
 </td>
 <td align=right nowrap>
-<b>TreeView Search</b> <input id="globalSearch" style="width: 200px;" onChange="tvSearch($('#globalSearch').val())"/>
+<b>TreeView Search</b> <input id="globalSearch" style="width: 200px;" onChange="tvSearch($('#globalSearch').val())" placeholder="treeview item or table/view"/>
 <input type="button" value="Find" onClick="Javascript:tvSearch($('#globalSearch').val())"/>
 </td>
 </table>

@@ -385,8 +385,8 @@ function loadSTMT(sdi, actionid, treekey) {
 
 </td>
 <td align=right nowrap>
-<b>Search</b> <input id="globalSearch" style="width: 200px;"/>
-<input type="button" value="Find" onClick="Javascript:processSearch($('#globalSearch').val())"/>
+<b>Search</b> <input id="globalSearch" style="width: 200px;" placeholder="process, event or table/view"/>
+<input type="button" value="Find" onClick="Javascript:processSearch($('#globalSearch').val())" />
 </td>
 </table>
 </div>
@@ -398,7 +398,7 @@ function loadSTMT(sdi, actionid, treekey) {
 <%
 	String id = Util.getId();
 %>
-<b>CPAS Online Tab</b>
+<b>Tab</b>
 <a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=qry%>"/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= qry%></div>
 			

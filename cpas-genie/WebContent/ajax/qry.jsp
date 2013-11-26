@@ -550,7 +550,8 @@ if (fkLinkTab.size()>0 && dLink && false) {
 					if (lTable != null && !isLinked) {
 						isLinked = true;
 						keyValue = val;
-						linkUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+						//linkUrl = "\"" + lTable + "\",\"" + Util.encodeUrl(keyValue) + "\"";
+						linkUrl = "Javascript:showDialog('" + lTable + "','" + Util.encodeUrl(keyValue) + "' )";
 					}
 
 					String tc = tname + "." + colName;
@@ -594,6 +595,7 @@ if (fkLinkTab.size()>0 && dLink && false) {
 							valDisp += "<br/> &gt; <span class='cpas2'>" + code + "</span>";
 					}
 				}
+//Util.p("linkUrl="+linkUrl);
 %>
 <td class="<%= rowClass%>" <%= (numberCol[colIdx])?"align=right":""%>><%=valDisp%>
 <%= (dLink && val!=null && !val.equals("") && isLinked && !linkUrl.startsWith("Javascript")?"<a target=_blank href=\"" + linkUrl  + "\"><img border=0 src='" + linkImage + "'></a>":"")%>

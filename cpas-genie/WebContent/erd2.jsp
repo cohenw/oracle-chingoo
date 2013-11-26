@@ -267,7 +267,7 @@ for (ForeignKey rec0: fks0) {
 <%
 for (TableCol t: list1) {
 	String colDisp = t.getName().toLowerCase();
-	if (pk1.contains(t.getName())) colDisp = "<b>" + colDisp + "</b>";
+	if (pk1.contains(t.getName())) colDisp = "<span class='primary-key'>" + colDisp + "</span>";
 %>
 <tr>
 <td width="10">&nbsp;</td>
@@ -304,7 +304,7 @@ for (TableCol t: list1) {
 <%
 for (TableCol t: list) {
 	String colDisp = t.getName().toLowerCase();
-	if (pk.contains(t.getName())) colDisp = "<b>" + colDisp + "</b>";
+	if (pk.contains(t.getName())) colDisp = "<span class='primary-key'>" + colDisp + "</span>";
 %>
 <tr>
 <td width="10">&nbsp;</td>
@@ -455,7 +455,7 @@ for (TableCol t: list) {
 <%
 for (TableCol t: list1) {
 	String colDisp = t.getName().toLowerCase();
-	if (pk1.contains(t.getName())) colDisp = "<b>" + colDisp + "</b>";
+	if (pk1.contains(t.getName())) colDisp = "<span class='primary-key'>" + colDisp + "</span>";
 %>
 <tr>
 <td width="10">&nbsp;</td>

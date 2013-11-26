@@ -1,10 +1,6 @@
-<%@ page language="java" 
-	import="java.util.*" 
-	import="java.sql.*" 
-	import="spencer.genie.*" 
-	contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"
-%>
+<%@ page language="java" import="java.util.*" import="java.sql.*"
+	import="spencer.genie.*" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
 
 <%
 	boolean isCPAS = request.getRequestURI().contains("cpas-genie");
@@ -13,36 +9,45 @@
 	String title = "Genie " + cn.getUrlString();
 	String quickLinks = cn.getQuickLinks();
 	String schema = request.getParameter("schema");
-	if (schema==null) {
+	if (schema == null) {
 		schema = cn.getSchemaName().toUpperCase();
-		if (cn.getTargetSchema() != null) schema = cn.getTargetSchema();
+		if (cn.getTargetSchema() != null)
+			schema = cn.getTargetSchema();
 	}
-//	Util.p("*** schema=" + schema);
+	//	Util.p("*** schema=" + schema);
 %>
 
 <html>
-<head> 
-	<title><%= title %></title>
+<head>
+<title><%=title%></title>
 
-	<meta name="description" content="Genie is an open-source, web based oracle database schema navigator." />
-	<meta name="keywords" content="Oracle Web Database OpenSource JDBC" />
-	<meta name="author" content="Spencer Hwang" />
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
-	
-	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
-	<script src="script/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
-    <script src="script/genie.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
-    <script src="script/data-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
+<meta name="description"
+	content="Genie is an open-source, web based oracle database schema navigator." />
+<meta name="keywords" content="Oracle Web Database OpenSource JDBC" />
+<meta name="author" content="Spencer Hwang" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src="script/jquery-ui-1.8.18.custom.min.js"
+	type="text/javascript"></script>
+<script src="script/genie.js?<%=Util.getScriptionVersion()%>"
+	type="text/javascript"></script>
+<script src="script/data-methods.js?<%=Util.getScriptionVersion()%>"
+	type="text/javascript"></script>
 <%--
 	<script src="script/main.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
     <script src="script/query-methods.js?<%= Util.getScriptionVersion() %>" type="text/javascript"></script>
 --%>
-	<link rel="icon" type="image/png" href="image/Genie-icon.png">
-	<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css"/>
-    <link rel='stylesheet' type='text/css' href='css/style.css?<%= Util.getScriptionVersion() %>'> 
+<link rel="icon" type="image/png" href="image/Genie-icon.png">
+<link rel="stylesheet"
+	href="css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css" />
+<link rel='stylesheet' type='text/css'
+	href='css/style.css?<%=Util.getScriptionVersion()%>'>
 
 <style>
-  .highlight { background:yellow; }
+.highlight {
+	background: yellow;
+}
 </style>
 
 <script type="text/javascript">
@@ -53,7 +58,7 @@ function hi_off(v) {
 	$("." + v).removeClass("highlight");
 }
 </script>
-	
+
 <script type="text/javascript">
 var CATALOG="";
 var to;
@@ -96,7 +101,7 @@ $(document).ready(function(){
 
 	initLoad();
 	checkResize();
-	CATALOG = "<%= cn.getSchemaName()%>";
+	CATALOG = "<%=cn.getSchemaName()%>";
 //	toggleKeepAlive();
 	callserver();
 
@@ -215,23 +220,27 @@ function changeSchema(schema) {
 </script>
 
 <style>
-.ui-autocomplete-loading { background: white url('image/ui-anim_basic_16x16.gif') right center no-repeat; }
+.ui-autocomplete-loading {
+	background: white url('image/ui-anim_basic_16x16.gif') right center
+		no-repeat;
+}
+
 .ui-autocomplete {
-		max-height: 500px;
-		overflow-y: auto;
-		/* prevent horizontal scrollbar */
-		overflow-x: hidden;
-		/* add padding to account for vertical scrollbar */
-		padding-right: 20px;
-	}
-	/* IE 6 doesn't support max-height
+	max-height: 500px;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+	/* add padding to account for vertical scrollbar */
+	padding-right: 20px;
+}
+/* IE 6 doesn't support max-height
 	 * we use height instead, but this forces the menu to always be this tall
 	 */
-	* html .ui-autocomplete {
-		height: 500px;
-	}	
+* html .ui-autocomplete {
+	height: 500px;
+}
 </style>
-	<script>
+<script>
 	var loadCount=0;
 	$(function() {
 		$( "#globalSearch" ).autocomplete({
@@ -377,235 +386,257 @@ function changeSchema(schema) {
 		searchWithFilter5('');
 	}
 	
-	</script>    
+	</script>
 
-</head> 
+</head>
 
 <body>
 
-<div id="topline" style="background-color: #E6F8E0; padding: 0px; border:1px solid #CCCCCC; border-radius:10px;">
+	<div id="topline"
+		style="background-color: #E6F8E0; padding: 0px; border: 1px solid #CCCCCC; border-radius: 10px;">
 
-<table width=100% border=0 cellpadding=0 cellspacing=0>
-<td width="44">
-<% if (isCPAS && false) {%>
-	<img align=middle src="image/cpas.jpg" alt="Ver. <%= Util.getVersionDate() %>"/>
-<% } else { %>
-	<img align=top src="image/lamp.png" alt="Ver. <%= Util.getVersionDate() %>" title="<%= Util.getBuildNo() %>"/>
-<% } %>
-</td>
-<td>
-<span style="font-family: Arial; font-size:18px;"><span style="background-color:black; color: white;">C</span><span style="background-color:#FF9900; color: white;">PAS</span> <span style="color: blue; font-family: Arial; font-size:18px; font-weight:bold;">Genie</span></span>
-</td>
-<!-- <td nowrap><h2 style="color: blue;">Genie</h2></td> -->
-<td><b><%= cn.getUrlString() %></b>
+		<table width=100% border=0 cellpadding=0 cellspacing=0>
+			<td width="44">
+				<%
+					if (isCPAS && false) {
+				%> <img align=middle src="image/cpas.jpg"
+				alt="Ver. <%=Util.getVersionDate()%>" /> <%
+ 	} else {
+ %> <img
+				align=top src="image/lamp.png"
+				alt="Ver. <%=Util.getVersionDate()%>"
+				title="<%=Util.getBuildNo()%>" /> <%
+ 	}
+ %>
+			</td>
+			<td><span style="font-family: Arial; font-size: 18px;"><span
+					style="background-color: black; color: white;">C</span><span
+					style="background-color: #FF9900; color: white;">PAS</span> <span
+					style="color: blue; font-family: Arial; font-size: 18px; font-weight: bold;">Genie</span></span>
+			</td>
+			<!-- <td nowrap><h2 style="color: blue;">Genie</h2></td> -->
+			<td><b><%=cn.getUrlString()%></b> <%
+ 	String q = "SELECT owner, count(*) from all_tables group by owner";
+ 	List<String[]> ls = cn.query(q, true);
+ 	if (ls.size() > 1 && cn.getTargetSchema() == null) {
+ %> <select id="tableSchema" onChange="changeSchema(this.value)">
+					<%
+						for (String str[] : ls) {
+								boolean isCurrent = schema.equals(str[1]);
+					%>
+					<option value="<%=str[1]%>" <%=isCurrent ? "SELECTED" : ""%>><%=str[1]%><%-- (<%= str[2] %>) --%></option>
+					<%
+						}
+					%>
+			</select> <%
+ 	}
+ %></td>
+			<td nowrap>
+				<%
+					if (cn.isCpas() && isCPAS) {
+				%> <a href="javascript:showCPAS()"><img
+					border=0 src="image/cpas.jpg" width=12 height=12> CPAS</a> | <%
+ 	}
+ %>
+				<a href="query.jsp" target="_blank">Query</a> | <a target=_blank
+				href="history.jsp">History</a> | <a href="javascript:clearCache()">Clear Cache</a> |
+				<a href="reload.jsp" target="_blank">Reload</a> |  
+					<a href='Javascript:aboutGenie()'>About</a> | <a
+				href="logout.jsp">Log out</a>
 
-<% 
-String q = "SELECT owner, count(*) from all_tables group by owner";
-List<String[]> ls = cn.query(q, true);
-if (ls.size()>1 && cn.getTargetSchema()==null) {
-%>
-<select id="tableSchema" onChange="changeSchema(this.value)">
-<%
-	for (String str[]:ls) {
-		boolean isCurrent = schema.equals(str[1]);
-%>
-<option value="<%= str[1] %>" <%= isCurrent?"SELECTED":"" %>><%= str[1] %><%-- (<%= str[2] %>) --%></option>
-<% }
-%>
-</select>
-<%
-} %>
-</td>
-<td nowrap>
-<% if (cn.isCpas() && isCPAS) { %>
-<a href="javascript:showCPAS()"><img border=0 src="image/cpas.jpg" width=12 height=12>
-CPAS</a> |
-<% } %>
-<a href="query.jsp" target="_blank">Query</a> |
-<a target=_blank href="history.jsp">History</a> |
-<a href="javascript:clearCache()">Clear Cache</a> |
-<a href='Javascript:aboutGenie()'>About</a> |
-<a href="logout.jsp">Log out</a>
+			</td>
+			<td align=right nowrap><b>Search</b> <input id="globalSearch"
+				style="width: 180px;" placeholder="table, view or package name" />
+				<!-- <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
+ --> <input type="button" value="Find"
+				onClick="Javascript:globalSearch($('#globalSearch').val())" /> <a
+				href="Javascript:toggleHist()"><img
+					src="image/downarrow_small_black.png" border=0></a></td>
+		</table>
+	</div>
+	<div style="height: 4px;"></div>
+	<table border=0 cellspacing=0 cellpadding=1>
+		<td valign=top width=280>
 
-</td>
-<td align=right nowrap>
-<b>Search</b> <input id="globalSearch" style="width: 180px;" placeholder="table, view or package name"/>
-<!-- <a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
- -->
-<input type="button" value="Find" onClick="Javascript:globalSearch($('#globalSearch').val())"/>
-<a href="Javascript:toggleHist()"><img src="image/downarrow_small_black.png" border=0></a>
-</td>
-</table>
-</div>
-<div style="height: 4px;"></div>
-<table border=0 cellspacing=0 cellpadding=1>
-<td valign=top width=280>
+			<div id="tabs">
+				<ul>
+					<li><a href="#tabs-1">Table</a></li>
+					<li><a href="#tabs-2">View</a></li>
+					<li><a href="#tabs-3">Synonym</a></li>
+					<li><a href="#tabs-4">Program</a></li>
+					<li><a href="#tabs-5">Tool</a></li>
+				</ul>
+				<div id="tabs2" style="overflow: auto;">
+					<div id="tabs-1">
+						<b>Filter</b> <input id="searchFilter1" style="width: 180px;"
+							placeholder="table name" /> <a href="Javascript:clearField1()"><img
+							border=0 src="image/clear.gif"></a> <br /> <input
+							id="hideEmpty" value="1" type="checkbox">Hide Empty
+						tables
+						<div id="list-table"></div>
+					</div>
+					<div id="tabs-2">
+						<b>Filter</b> <input id="searchFilter2" style="width: 180px;"
+							placeholder="view name" /> <a href="Javascript:clearField2()"><img
+							border=0 src="image/clear.gif"></a>
+						<div id="list-view"></div>
+					</div>
+					<div id="tabs-3">
+						<b>Filter</b> <input id="searchFilter3" style="width: 180px;"
+							placeholder="synonym name" /> <a href="Javascript:clearField3()"><img
+							border=0 src="image/clear.gif"></a>
+						<div id="list-synonym"></div>
+					</div>
+					<div id="tabs-4">
+						<b>Filter</b> <input id="searchFilter4" style="width: 180px;"
+							placeholder="program name" /> <a href="Javascript:clearField4()"><img
+							border=0 src="image/clear.gif"></a>
+						<div id="list-package"></div>
+					</div>
+					<div id="tabs-5">
+						<b>Filter</b> <input id="searchFilter5" style="width: 180px;" />
+						<a href="Javascript:clearField5()"><img border=0
+							src="image/clear.gif"></a>
+						<div id="list-tool"></div>
+					</div>
+				</div>
+			</div>
 
-<div id="tabs">
-	<ul>
-		<li><a href="#tabs-1">Table</a></li>
-		<li><a href="#tabs-2">View</a></li>
-		<li><a href="#tabs-3">Synonym</a></li>
-		<li><a href="#tabs-4">Program</a></li>
-		<li><a href="#tabs-5">Tool</a></li>
-	</ul>
-<div id="tabs2" style="overflow: auto;">
-	<div id="tabs-1">
-<b>Filter</b> <input id="searchFilter1" style="width: 180px;" placeholder="table name"/>
-<a href="Javascript:clearField1()"><img border=0 src="image/clear.gif"></a>
-<br/><input id="hideEmpty" value="1" type="checkbox">Hide Empty tables
-<div id="list-table"></div>
-	</div>
-	<div id="tabs-2">
-<b>Filter</b> <input id="searchFilter2" style="width: 180px;" placeholder="view name"/>
-<a href="Javascript:clearField2()"><img border=0 src="image/clear.gif"></a>
-<div id="list-view"></div>
-	</div>
-	<div id="tabs-3">
-<b>Filter</b> <input id="searchFilter3" style="width: 180px;"  placeholder="synonym name"/>
-<a href="Javascript:clearField3()"><img border=0 src="image/clear.gif"></a>
-<div id="list-synonym"></div>
-	</div>
-	<div id="tabs-4">
-<b>Filter</b> <input id="searchFilter4" style="width: 180px;"  placeholder="program name"/>
-<a href="Javascript:clearField4()"><img border=0 src="image/clear.gif"></a>
-<div id="list-package"></div>
-	</div>
-	<div id="tabs-5">
-<b>Filter</b> <input id="searchFilter5" style="width: 180px;"/>
-<a href="Javascript:clearField5()"><img border=0 src="image/clear.gif"></a>
-<div id="list-tool"></div>
-	</div>
-</div>
-</div>
-
-</td>
-<td valign=top>
-<div id="outer-result1">
-	<div id="inner-nav">
-		<a href="Javascript:goBack()"><img id="imgBackward" src="image/blue_arrow_left.png" title="back" border="0" style="display:none;"></a>
-		&nbsp;&nbsp;
-		<a href="Javascript:goFoward()"><img id="imgForward" src="image/blue_arrow_right.png" title="forward" border="0" style="display:none;"></a>
-	</div>
-	<div id="inner-result1"><img src='image/loading.gif'/></div>
-</div>
-</td>
-<td valign=top>
-<div id="outer-result2">
-<%--
+		</td>
+		<td valign=top>
+			<div id="outer-result1">
+				<div id="inner-nav">
+					<a href="Javascript:goBack()"><img id="imgBackward"
+						src="image/blue_arrow_left.png" title="back" border="0"
+						style="display: none;"></a> &nbsp;&nbsp; <a
+						href="Javascript:goFoward()"><img id="imgForward"
+						src="image/blue_arrow_right.png" title="forward" border="0"
+						style="display: none;"></a>
+				</div>
+				<div id="inner-result1">
+					<img src='image/loading.gif' />
+				</div>
+			</div>
+		</td>
+		<td valign=top>
+			<div id="outer-result2">
+				<%--
 	<a href="Javascript:hideHist()" style="float:right;">hide</a>
 --%>
- 	<div id="inner-result2"><%= quickLinks %></div>
-</div>
-</td>
-</table>
-<form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
-<input id="sql-query" name="sql" type="hidden"/>
-<input name="norun" type="hidden" value="YES"/>
-</form>
+				<div id="inner-result2"><%=quickLinks%></div>
+			</div>
+		</td>
+	</table>
+	<form id="FORM_query" name="FORM_query" action="query.jsp"
+		target="_blank" method="post">
+		<input id="sql-query" name="sql" type="hidden" /> <input name="norun"
+			type="hidden" value="YES" />
+	</form>
 
-<div id="dialog-modal" title="About Genie" style="display:none; background: #ffffff;">
-<img src="image/genie-lamp.jpg" width="200" height="155" title="<%= Util.getVersionDate() + " Build " + Util.getBuildNo() %>"/>
-<br/>
+	<div id="dialog-modal" title="About Genie"
+		style="display: none; background: #ffffff;">
+		<img src="image/genie-lamp.jpg" width="200" height="155"
+			title="<%=Util.getVersionDate() + " Build " + Util.getBuildNo()%>" />
+		<br />
 
-<% if (isCPAS) { %>
-Thanks for using CPAS Genie.<br/>
+		<%
+			if (isCPAS) {
+		%>
+		Thanks for using CPAS Genie.<br /> CPAS Genie is for CPAS Oracle
+		database.<br /> Genie will help you navigate through database objects
+		and their relationships.<br /> <br /> If you have any question or
+		suggestion, please feel free to contact me. <br /> <br />
 
-CPAS Genie is for CPAS Oracle database.<br/>
-Genie will help you navigate through database objects and their relationships.<br/> 
-
-<br/>
-If you have any question or suggestion, please feel free to contact me.
-<br/><br/>
-
-<%--
+		<%--
 Please download the latest community version here:<br/>
 <a href="http://code.google.com/p/oracle-genie/">http://code.google.com/p/oracle-genie/</a>
 <br/><br/>
 --%>
 
-<%= Util.getVersionDate() %><br/>
-Build: <%= Util.getBuildNo() %><br/>
-Spencer Hwang<br/>
-<!-- <a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>
- --><a href="mailto:spencerh@cpas.com">spencerh@cpas.com</a>
+		<%=Util.getVersionDate()%><br /> Build:
+		<%=Util.getBuildNo()%><br /> Spencer Hwang<br />
+		<!-- <a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>
+ -->
+		<a href="mailto:spencerh@cpas.com">spencerh@cpas.com</a>
 
-<% } else { %>
-Thanks for using Oracle Genie.<br/>
+		<%
+			} else {
+		%>
+		Thanks for using Oracle Genie.<br /> Genie will help you navigate
+		through database objects and their relationships.<br /> <br /> If
+		you have any question or suggestion, please feel free to contact me. <br />
+		<br /> Please download the latest community version here:<br /> <a
+			href="http://code.google.com/p/oracle-genie/">http://code.google.com/p/oracle-genie/</a>
+		<br /> <br />
 
-Genie will help you navigate through database objects and their relationships.<br/> 
+		<%=Util.getVersionDate()%><br /> Build:
+		<%=Util.getBuildNo()%><br /> Spencer Hwang - the creator of Genie<br />
+		<a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>
 
-<br/>
-If you have any question or suggestion, please feel free to contact me.
-<br/><br/>
+		<%
+			}
+		%>
 
-Please download the latest community version here:<br/>
-<a href="http://code.google.com/p/oracle-genie/">http://code.google.com/p/oracle-genie/</a>
-<br/><br/>
+	</div>
 
-<%= Util.getVersionDate() %><br/>
-Build: <%= Util.getBuildNo() %><br/>
-Spencer Hwang - the creator of Genie<br/>
-<a href="mailto:spencer.hwang@gmail.com">spencer.hwang@gmail.com</a>
-
-<% } %>
-
-</div>
-
-<script type="text/javascript">
+	<script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', '<%= Util.trackingId() %>']);
+  _gaq.push(['_setAccount', '<%=Util.trackingId()%>']);
   _gaq.push(['_setDomainName', 'none']);
   _gaq.push(['_trackPageview']);
 
   _gaq.push(['_setCustomVar',
              1,                   // This custom var is set to slot #1.  Required parameter.
              'Database',     // The name acts as a kind of category for the user activity.  Required parameter.
-             '<%= cn.getUrlString() %>',               // This value of the custom variable.  Required parameter.
+             '<%=cn.getUrlString()%>',               // This value of the custom variable.  Required parameter.
              2                    // Sets the scope to session-level.  Optional parameter.
           ]);
 
   _gaq.push(['_setCustomVar',
              2,                   // This custom var is set to slot #1.  Required parameter.
              'Email',     // The name acts as a kind of category for the user activity.  Required parameter.
-             '<%= cn.getEmail() %>',               // This value of the custom variable.  Required parameter.
+             '<%=cn.getEmail()%>',               // This value of the custom variable.  Required parameter.
              2                    // Sets the scope to session-level.  Optional parameter.
           ]);
 
   _gaq.push(['_setCustomVar',
              3,                   // This custom var is set to slot #1.  Required parameter.
              'IP',     // The name acts as a kind of category for the user activity.  Required parameter.
-             '<%= cn.getIPAddress() %>',               // This value of the custom variable.  Required parameter.
+             '<%=cn.getIPAddress()%>',               // This value of the custom variable.  Required parameter.
              2                    // Sets the scope to session-level.  Optional parameter.
           ]);
 
   _gaq.push(['_setCustomVar',
              4,                   // This custom var is set to slot #1.  Required parameter.
              'BuildNo',     // The name acts as a kind of category for the user activity.  Required parameter.
-             '<%= Util.getBuildNo() %>',               // This value of the custom variable.  Required parameter.
+             '<%=Util.getBuildNo()%>',               // This value of the custom variable.  Required parameter.
              2                    // Sets the scope to session-level.  Optional parameter.
           ]);
   
   _gaq.push(['_setCustomVar',
              5,                   // This custom var is set to slot #1.  Required parameter.
              'URL',     // The name acts as a kind of category for the user activity.  Required parameter.
-             '<%= request.getRequestURL() %>',               // This value of the custom variable.  Required parameter.
-             2                    // Sets the scope to session-level.  Optional parameter.
-          ]);
+             '<%=request.getRequestURL()%>
+		', // This value of the custom variable.  Required parameter.
+		2 // Sets the scope to session-level.  Optional parameter.
+		]);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
+		(function() {
+			var ga = document.createElement('script');
+			ga.type = 'text/javascript';
+			ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl'
+					: 'http://www')
+					+ '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
 
 </body>
 </html>
 
 <%
-
-cn.getSynonym("XXX");
+	cn.getSynonym("XXX");
 %>

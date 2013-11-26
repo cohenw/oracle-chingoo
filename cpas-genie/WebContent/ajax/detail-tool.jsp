@@ -32,6 +32,10 @@
 		qry = "SELECT OWNER, TABLE_NAME, NUM_ROWS FROM ALL_TABLES WHERE TABLE_NAME IN (SELECT TABLE_NAME FROM ALL_TAB_COLS WHERE COLUMN_NAME = upper('[Column Name]')) ORDER BY 1";
 		ttype = "SEARCH_COLUMN";
 	}
+	else if (tool.equalsIgnoreCase("table/view columns")) {
+		qry = "SELECT TABLE_NAME FROM ALL_TAB_COLS WHERE COLUMN_NAME = upper('[ColumnName1, Column Name2, ...]')";
+		ttype = "SEARCH_COLUMNS";
+	}
 	else if (tool.equalsIgnoreCase("invalid objects")) 
 		qry = "SELECT object_type, object_name, status FROM user_objects WHERE status != 'VALID' ORDER BY object_type, object_name";
 	else if (tool.equalsIgnoreCase("oracle version"))

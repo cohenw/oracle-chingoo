@@ -2,6 +2,7 @@ package spencer.genie;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -12,6 +13,7 @@ public class PlsqlAnalyzer4PB {
 	private String type;
 	private String returnType;
 	private HashSet<String> hs = new HashSet<String>();
+	private Hashtable<String,String> ht = new Hashtable<String,String>();
 	int cntProc = 0;
 	
 	String params = "";
@@ -19,10 +21,12 @@ public class PlsqlAnalyzer4PB {
 
 	Stack<Block> blocks = new Stack<Block>();
 	ArrayList<Block> bls = new ArrayList<Block>();
+	HashSet<String> typeSet;
 	
 	public int prgIdx = 0;	// internal process index
 
-	public PlsqlAnalyzer4PB(String str) {
+	public PlsqlAnalyzer4PB(String str, HashSet<String> types) {
+		this.typeSet = types;
 		String[] lines = str.split("\r\n|\r|\n");
 		analyze(lines);
 	}
@@ -210,6 +214,15 @@ public class PlsqlAnalyzer4PB {
 					}
 				}
 				hs.add(procName + "-" + name.toUpperCase());
+				
+				// check for type
+				if (st2.hasMoreTokens()) {
+					String val = procName + "-" + name.toUpperCase();
+					name = st2.nextToken();
+					if (typeSet.contains(name.toUpperCase())) {
+						ht.put(val, name.toUpperCase());
+					}
+				}
 			}
 		}
 		
@@ -257,5 +270,8 @@ public class PlsqlAnalyzer4PB {
 	
 	public HashSet<String> getVariables() {
 		return this.hs;
+	}
+	public Hashtable<String,String> getTypes() {
+		return this.ht;
 	}
 }

@@ -63,7 +63,7 @@
 		String cpkg = proc1.get(i)[1];
 		String cprc = proc1.get(i)[2];
 
-		if (!cn.isPackage(cpkg)) continue;
+		if (!cn.isPackageType(cpkg)) continue;
 %>
 	<a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="image/plus.gif"></a>
 <%-- 	<a href="pkg-link.jsp?name=<%=target%>"><%= disp %></a></br/>

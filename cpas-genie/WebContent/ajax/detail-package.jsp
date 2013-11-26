@@ -76,9 +76,12 @@ for (int k=0;k<types.size();k++) {
 	for (int i=0;i<list2.size();i++) {
 		String ln = list2.get(i)[3];
 		if (!ln.endsWith("\n")) ln += "\n";
-		text += Util.escapeHtml(ln);
+		if (typeName.equals("TRIGGER"))
+			text += ln;
+		else
+			text += Util.escapeHtml(ln);
 	}
-
+//Util.p(text);
 %>
 <b><a href="javascript:tDiv('div-<%=k%>')"><%= type %></a></b><br/>
 <div id="div-<%=k%>" style="display: block;">
@@ -110,8 +113,10 @@ for (int k=0;k<types.size();k++) {
 <%
 		cnt = 1;
 	} 
+	String prcName = list.get(i).toUpperCase();
+	prcName = cn.getProcedureLabel(name+"."+prcName);
 %>
-	<a target="_blank" href="<%= sourceUrl%>#<%= list.get(i).toLowerCase() %>"><%= list.get(i).toLowerCase() %></a>
+	<a target="_blank" href="<%= sourceUrl%>#<%= list.get(i).toLowerCase() %>"><%= prcName %></a>
 	&nbsp;
 <% if (hasGenieTable) { %>	
  	<a target="_blank" href="package-tree.jsp?name=<%= name + "." + list.get(i) %>"><img border=0 src="image/link.gif"></a>

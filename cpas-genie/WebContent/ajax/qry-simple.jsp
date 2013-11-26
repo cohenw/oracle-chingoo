@@ -11,6 +11,8 @@
 	int counter = 0;
 	String sql = request.getParameter("sql");
 	String id = request.getParameter("id");
+	String temp = request.getParameter("cpas");
+	if(temp!=null&&temp.equals("0")) cpas = false;
 
 	String dataLink = request.getParameter("dataLink");
 	boolean dLink = (dataLink != null && dataLink.equals("1"));
