@@ -37,15 +37,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -64,26 +61,8 @@ public class Connect implements HttpSessionBindingListener {
 	private String urlString = null;
 	private String message = "";
 
-	private List<String> tables;
-	private List<String> views;
-	private List<String> synonyms;
-
-	private HashSet<String> tableSet = new HashSet<String>();
-	private HashSet<String> viewSet = new HashSet<String>();
-	private HashSet<String> synonymSet = new HashSet<String>();
-	private HashSet<String> procedureSet = new HashSet<String>();
-	private HashSet<String> psynonymSet = new HashSet<String>();
-	
 	private HashSet<String> comment_tables = new HashSet<String>();
-	private HashSet<String> temp_tables = new HashSet<String>();
-	private HashSet<String> packages = new HashSet<String>();
-	
 	private Hashtable<String,String> comments;
-	private Hashtable<String,String> constraints;
-	private Hashtable<String,String> pkByTab;
-	private Hashtable<String,String> pkByCon;
-
-	private List<ForeignKey> foreignKeys;
 
 	private List<String> schemas;
 	private String schemaName;
@@ -99,11 +78,7 @@ public class Connect implements HttpSessionBindingListener {
 	private ArrayList<QuickLink> qlink;
 	private ArrayList<String> jsplog;
 
-	private HashMap<String, String> viewTables;
-	private HashMap<String, String> packageTables;
-	private HashMap<String, String> packageProcTables;
-	private HashMap<String,String> packageProc;
-	private HashMap<String, String> triggerTables;
+	public CacheSchema cs;
 	
 	public QueryCache queryCache;
 	public ListCache listCache;
@@ -131,6 +106,7 @@ public class Connect implements HttpSessionBindingListener {
 	public String pwd;
 	public String serverUrl;
 	public String connectMessage = "";
+	private long lastMillis = System.currentTimeMillis(); 
 	
 	public HashSet<String> tempSet;
 	
@@ -151,11 +127,6 @@ public class Connect implements HttpSessionBindingListener {
     	//pkColumn = new Hashtable<String, String>();
     	queryResult = new HashMap<String, String>();
     	pkMap = new HashMap<String, ArrayList<String>>();
-    	viewTables = new HashMap<String, String>();
-    	packageTables = new HashMap<String, String>();
-    	packageProcTables = new HashMap<String, String>();
-    	packageProc = new HashMap<String, String>();
-    	triggerTables = new HashMap<String, String>();
 
     	loginDate = new Date();
     	pwd = password;
@@ -189,15 +160,7 @@ public class Connect implements HttpSessionBindingListener {
             
             if (!loadData) return; 
             	
-            tables = new Vector<String>();
-            views = new Vector<String>();
-            synonyms = new Vector<String>();
             comments = new Hashtable<String, String>();
-            constraints = new Hashtable<String, String>();
-            pkByTab = new Hashtable<String, String>();
-            pkByCon = new Hashtable<String, String>();
-            
-            foreignKeys = new ArrayList<ForeignKey>();
             schemas = new Vector<String>();
             queryLog = new HashMap<String, QueryLog>();
             qlink = new ArrayList<QuickLink>();
@@ -219,6 +182,7 @@ public class Connect implements HttpSessionBindingListener {
             packageTableWorker = PackageTableWorker.getInstance();
             triggerTableWorker = TriggerTableWorker.getInstance();
 
+            cs = CacheManager.getInstance().getCacheSchema(this, urlString, schemaName, targetSchema);
             loadData();
             
             loadHistoryFromFile();
@@ -284,11 +248,11 @@ public class Connect implements HttpSessionBindingListener {
     }
     
     public List<String> getTables() {
-    	return this.tables;
+    	return cs.getTables();
     }
 
-    public String getTables(int idx) {
-    	return (String) tables.get(idx);
+    public String getTable(int idx) {
+    	return cs.getTable(idx);
     }
     
     public String getUrlString() {
@@ -470,17 +434,8 @@ public class Connect implements HttpSessionBindingListener {
 		
 		clearCache();
 
-		loadTVS();
 		loadSchema();
-		loadConstraints();
-		loadPrimaryKeys();
-		loadForeignKeys();
 		loadTableRowCount();
-		loadTempTables();
-		loadViewTables();
-		loadPackageTable();
-		loadPackageProc();
-		loadTriggerTable();
 		
         cu = new CpasUtil(this);
         this.isCpas = cu.isCpas;
@@ -505,264 +460,17 @@ public class Connect implements HttpSessionBindingListener {
  		}
 	}
 		
-	private synchronized void loadConstraints() {
-		constraints.clear();
-		try {
-       		Statement stmt = conn.createStatement();
-       		String sql = "SELECT CONSTRAINT_NAME, TABLE_NAME, COLUMN_NAME, POSITION from user_cons_columns where position is not null order by 1,2,4";
-       		if (this.targetSchema != null)
-       			sql = "SELECT CONSTRAINT_NAME, TABLE_NAME, COLUMN_NAME, POSITION from all_cons_columns where owner='" + this.targetSchema + "' and position is not null order by 1,2,4";
-       		ResultSet rs = stmt.executeQuery(sql);	
-
-       		String prevConName = null;
-       		String temp = "";
-       		int counter = 0;
-       		while (rs.next()) {
-       			counter++;
-       			String conName = rs.getString(1);
-       			String tabName = rs.getString(2);
-       			String colName = rs.getString(3);
-       			int position = rs.getInt(4);
-       			
-       			if (position == 1) {
-       				// process previous constraint
-       				if (prevConName != null) {
-       					//temp = temp + ")";
-       					constraints.put(prevConName, temp);
-       					//System.out.println(prevConName + "," + temp);
-       					temp = "";
-       				}
-       				
-       				temp = colName;
-       				prevConName = conName;
-       			} else {
-       				temp += ", " + colName;
-       			}
-       		}
-       		rs.close();
-       		stmt.close();
-
-       		//temp += ")";
-       		if (prevConName != null)
-       			constraints.put(prevConName, temp);
-
-		} catch (SQLException e) {
-             System.err.println ("5.1 Cannot connect to database server");
-             e.printStackTrace();
-             message = e.getMessage();
- 		}
-		addMessage("Loaded Constraints " + constraints.size());
-
-	}
-
-	private synchronized void loadTempTables() {
-		temp_tables.clear();
-		String sql = "SELECT TABLE_NAME FROM USER_TABLES WHERE TEMPORARY='Y'";
-		if (this.targetSchema != null)
-			sql = "SELECT TABLE_NAME FROM ALL_TABLES WHERE OWNER='"+ this.targetSchema + "' AND TEMPORARY='Y'";
-		try {
-       		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery(sql);	
-
-       		while (rs.next()) {
-       			String tabName = rs.getString(1);
-       			temp_tables.add(tabName);
-       		}
-       		rs.close();
-       		stmt.close();
-
-		} catch (SQLException e) {
-             System.err.println ("loadTempTables");
-             e.printStackTrace();
-             message = e.getMessage();
- 		}
-		addMessage("Loaded Temp Tabels " + temp_tables.size());
-
-	}
-
-	private synchronized void loadViewTables() {
-		viewTables.clear();
-		
-		String sql = "SELECT NAME, REFERENCED_NAME from user_dependencies " +
-   				"where name in ( " +
-   				"SELECT name  from user_dependencies " + 
-   				"WHERE type='VIEW' AND REFERENCED_TYPE IN ('TABLE') " + 
-   				"group by name having count(*)=1 " +
-   				") AND REFERENCED_NAME NOT IN ('DUAL','STANDARD') AND REFERENCED_TYPE IN ('TABLE')";
-		
-		if (this.targetSchema != null) {
-			sql = "SELECT NAME, REFERENCED_NAME from all_dependencies " +
-	   				"where owner='" + this.targetSchema + "' and name in ( " +
-	   				"SELECT name  from all_dependencies " + 
-	   				"WHERE owner='" + this.targetSchema + "' and type='VIEW' AND REFERENCED_TYPE IN ('TABLE') " + 
-	   				"group by name having count(*)=1 " +
-	   				") AND REFERENCED_NAME NOT IN ('DUAL','STANDARD') AND REFERENCED_TYPE IN ('TABLE')";
-		}
-		
-		try {
-       		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery(sql);	
-
-       		while (rs.next()) {
-       			String viewName = rs.getString(1);
-       			String tableName = rs.getString(2);
-       			viewTables.put(viewName, tableName);
-       		}
-       		rs.close();
-       		stmt.close();
-
-		} catch (SQLException e) {
-             System.err.println ("loadViewTables");
-             e.printStackTrace();
-             message = e.getMessage();
- 		}
-		addMessage("Loaded View/Table " + viewTables.size());
-
-	}
-
-	public synchronized void loadPackageTable() {
-		packageTables.clear();
-		packageProcTables.clear();
-		if (!this.isTVS("GENIE_PA_TABLE")) return;
-		
-		String sql = "SELECT PACKAGE_NAME, TABLE_NAME, SUM(OP_SELECT), SUM(OP_INSERT), SUM(OP_UPDATE), SUM(OP_DELETE) FROM GENIE_PA_TABLE GROUP BY PACKAGE_NAME, TABLE_NAME";
-		
-		try {
-       		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery(sql);	
-
-       		while (rs.next()) {
-       			String pkgName = rs.getString(1);
-       			String tblName = rs.getString(2);
-       			String opSel =  rs.getString(3);
-       			String opIns =  rs.getString(4);
-       			String opUpd =  rs.getString(5);
-       			String opDel =  rs.getString(6);
-       			
-       			String op = "";
-       			if (!opIns.equals("0")) op += "C";
-       			if (!opSel.equals("0")) op += "R";
-       			if (!opUpd.equals("0")) op += "U";
-       			if (!opDel.equals("0")) op += "D";
-       			
-       			packageTables.put(pkgName+","+tblName, op);
-       		}
-       		rs.close();
-       		stmt.close();
-
-		} catch (SQLException e) {
-             System.err.println ("loadPackageTable");
-             e.printStackTrace();
-             message = e.getMessage();
- 		}
-
-		sql = "SELECT PACKAGE_NAME||'.'||PROCEDURE_NAME, TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE FROM GENIE_PA_TABLE";
-		
-		try {
-       		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery(sql);	
-
-       		while (rs.next()) {
-       			String pkgName = rs.getString(1);
-       			String tblName = rs.getString(2);
-       			String opSel =  rs.getString(3);
-       			String opIns =  rs.getString(4);
-       			String opUpd =  rs.getString(5);
-       			String opDel =  rs.getString(6);
-       			
-       			String op = "";
-       			if (!opIns.equals("0")) op += "C";
-       			if (!opSel.equals("0")) op += "R";
-       			if (!opUpd.equals("0")) op += "U";
-       			if (!opDel.equals("0")) op += "D";
-       			
-       			packageProcTables.put(pkgName+","+tblName, op);
-       		}
-       		rs.close();
-       		stmt.close();
-
-		} catch (SQLException e) {
-             System.err.println ("loadPackageTable");
-             e.printStackTrace();
-             message = e.getMessage();
- 		}
-		
-		addMessage("Loaded packageTables " + packageTables.size());
-		addMessage("Loaded packageProcTables " + packageProcTables.size());
-
-	}
-	
-	public synchronized void loadTriggerTable() {
-		triggerTables.clear();
-		if (!this.isTVS("GENIE_TR_TABLE")) return;
-		
-		String sql = "SELECT TRIGGER_NAME, TABLE_NAME, OP_SELECT, OP_INSERT, OP_UPDATE, OP_DELETE FROM GENIE_TR_TABLE";
-		
-		try {
-       		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery(sql);	
-
-       		while (rs.next()) {
-       			String trgName = rs.getString(1);
-       			String tblName = rs.getString(2);
-       			String opSel =  rs.getString(3);
-       			String opIns =  rs.getString(4);
-       			String opUpd =  rs.getString(5);
-       			String opDel =  rs.getString(6);
-       			
-       			String op = "";
-       			if (!opIns.equals("0")) op += "C";
-       			if (!opSel.equals("0")) op += "R";
-       			if (!opUpd.equals("0")) op += "U";
-       			if (!opDel.equals("0")) op += "D";
-       			
-       			triggerTables.put(trgName+","+tblName, op);
-       		}
-       		rs.close();
-       		stmt.close();
-
-		} catch (SQLException e) {
-             System.err.println ("loadTriggerTable");
-             e.printStackTrace();
-             message = e.getMessage();
- 		}
-
-		addMessage("Loaded triggerTables " + triggerTables.size());
-	}
-	
-	public synchronized void loadPackageProc() {
-		packageProc.clear();
-		
-		if (!this.isTVS("GENIE_PA_PROCEDURE")) return;
-		
-		String sql = "SELECT PACKAGE_NAME||'.'||PROCEDURE_NAME KEY, PROCEDURE_LABEL FROM GENIE_PA_PROCEDURE";
-		
-		try {
-       		Statement stmt = conn.createStatement();
-       		ResultSet rs = stmt.executeQuery(sql);	
-
-       		while (rs.next()) {
-       			String key = rs.getString(1);
-       			String value= rs.getString(2);
-       			
-       			packageProc.put(key, value);
-       		}
-       		rs.close();
-       		stmt.close();
-
-		} catch (SQLException e) {
-             System.err.println ("loadPackageProc");
-             e.printStackTrace();
-             message = e.getMessage();
- 		}
-	}
-
 	public String getProcedureLabel(String pkg, String prc) {
 		return getProcedureLabel(pkg+"."+prc);
 	}
 	
+	public boolean isPackageProc(String key) {
+		String value = cs.packageProc.get(key.toUpperCase());
+		return (value!=null);
+	}
+	
 	public String getProcedureLabel(String key) {
-		String value = packageProc.get(key);
+		String value = cs.packageProc.get(key);
 		if(value==null) {
 			String temp[] = key.split("\\.");
 			value = temp[1];
@@ -773,7 +481,7 @@ public class Connect implements HttpSessionBindingListener {
 	
 	public String getCRUD(String packageName, String tableName) {
 		String key = packageName + "," + tableName;
-		String op = packageTables.get(key);
+		String op = cs.packageTables.get(key);
 		if (op==null) return "";
 		
 		return "<span style='color: red; font-weight: bold;'>" + op + "</span>";
@@ -781,7 +489,7 @@ public class Connect implements HttpSessionBindingListener {
 	
 	public String getCRUD(String packageName, String procedureName, String tableName) {
 		String key = packageName+"."+procedureName + "," + tableName;
-		String op = packageProcTables.get(key);
+		String op = cs.packageProcTables.get(key);
 		if (op==null) return "";
 		
 		return "<span style='color: red; font-weight: bold;'>" + op + "</span>";
@@ -789,81 +497,12 @@ public class Connect implements HttpSessionBindingListener {
 	
 	public String getTriggerCRUD(String triggerName, String tableName) {
 		String key = triggerName + "," + tableName;
-		String op = triggerTables.get(key);
+		String op = cs.triggerTables.get(key);
 		if (op==null) return "";
 		
 		return "<span style='color: red; font-weight: bold;'>" + op + "</span>";
 	}
 	
-	private synchronized void loadPrimaryKeys() {
-		pkByTab.clear();
-		pkByCon.clear();
-		try {
-       		Statement stmt = conn.createStatement();
-       		String sql = "SELECT CONSTRAINT_NAME, TABLE_NAME  from user_constraints where CONSTRAINT_TYPE = 'P'";
-       		if (this.targetSchema != null) 
-       			sql = "SELECT CONSTRAINT_NAME, TABLE_NAME  from all_constraints where owner='" + this.targetSchema + "' and CONSTRAINT_TYPE = 'P'";
-       				
-       		ResultSet rs = stmt.executeQuery(sql);	
-       		String prevConName = null;
-       		String temp = "";
-       		while (rs.next()) {
-       			String conName = rs.getString("CONSTRAINT_NAME");
-       			String tabName = rs.getString("TABLE_NAME");
-
-       			pkByTab.put(tabName, conName);
-       			pkByCon.put(conName, tabName);
-       			//System.out.println(tabName + "," + conName);
-       		}
-       		rs.close();
-       		stmt.close();
-
-		} catch (SQLException e) {
-             System.err.println ("6 Cannot connect to database server");
-             e.printStackTrace();
-             message = e.getMessage();
- 		}
-		addMessage("Loaded Primary Keys " + pkByTab.size());
-		
-	}
-
-	private void loadForeignKeys() {
-		foreignKeys.clear();
-		try {
-       		Statement stmt = conn.createStatement();
-       		String sql = "SELECT OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE FROM ALL_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'R' and (owner=user or owner in (select table_owner from user_synonyms))";
-
-       		if (this.targetSchema != null) 
-       			sql = "SELECT OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE FROM ALL_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'R' and (owner='" + this.targetSchema +"')";
-
-       		ResultSet rs = stmt.executeQuery(sql);	
-//       		ResultSet rs = stmt.executeQuery("SELECT OWNER, CONSTRAINT_NAME, TABLE_NAME, R_OWNER, R_CONSTRAINT_NAME, DELETE_RULE FROM ALL_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'R' and (owner=user)");	
-
-       				
-       		
-       		while (rs.next()) {
-       			ForeignKey fk = new ForeignKey();
-       			fk.owner = rs.getString("OWNER");
-       			fk.constraintName = rs.getString("CONSTRAINT_NAME");
-       			fk.tableName = rs.getString("TABLE_NAME");
-       			fk.rOwner = rs.getString("R_OWNER");
-       			fk.rConstraintName = rs.getString("R_CONSTRAINT_NAME");
-       			fk.deleteRule = rs.getString("DELETE_RULE");
-       			fk.rTableName = getTableNameByPrimaryKey(fk.rConstraintName);
-
-       			foreignKeys.add(fk);
-       		}
-       		rs.close();
-       		stmt.close();
-
-		} catch (SQLException e) {
-             System.err.println ("7 Cannot connect to database server");
-             e.printStackTrace();
-             message = e.getMessage();
- 		}
-		addMessage("Loaded Foreign Keys " + foreignKeys.size());
-	}
-
 	private synchronized void loadTableRowCount() {
 		int cnt=0;
 		// column comments
@@ -1038,70 +677,6 @@ public class Connect implements HttpSessionBindingListener {
 		
 	}
 
-	private synchronized void loadTVS() throws SQLException {
-		tables.clear();
-		views.clear();
-		synonyms.clear();
-		packages.clear();
-		
-		tableSet.clear();
-		viewSet.clear();
-		synonymSet.clear();
-		procedureSet.clear();
-		
-		Statement stmt = conn.createStatement();
-//		String qry = "SELECT object_name, object_type FROM user_objects WHERE object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE', 'PROCEDURE','FUNCTION','TYPE')";
-		String qry = "SELECT object_name, object_type, owner FROM all_objects WHERE owner not in ('PUBLIC') and object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE', 'PROCEDURE','FUNCTION','TYPE')";
-		if (this.targetSchema != null) {
-			qry = "SELECT object_name, object_type, owner FROM all_objects WHERE owner='" +this.targetSchema + "' AND object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE', 'PROCEDURE','FUNCTION','TYPE')";
-			//qry = "SELECT object_name, object_type, owner FROM all_objects WHERE owner not in ('PUBLIC') and object_type in ('TABLE','VIEW','SYNONYM', 'PACKAGE', 'PROCEDURE','FUNCTION','TYPE')";
-		}
-		ResultSet rs = stmt.executeQuery(qry);
-		while (rs.next()){
-			String name = rs.getString(1);
-			String type = rs.getString(2);
-			String owner = rs.getString(3);
-
-			String fname = name;
-			if (!owner.equalsIgnoreCase(this.getSchemaName())) fname = owner +"." + name;
-			if (this.targetSchema!=null && this.targetSchema.equals(owner)) fname= name;
-			
-			if (type.equals("TABLE")) tables.add(fname);
-			else if (type.equals("VIEW")) views.add(fname);
-			else if (type.equals("SYNONYM")) synonyms.add(fname);
-			else if (type.equals("PACKAGE")||type.equals("TYPE")) packages.add(fname);
-			else if (type.equals("PROCEDURE")||type.equals("FUNCTION")) procedureSet.add(fname);
-		}
-		
-		rs.close();
-		stmt.close();
-		
-		tableSet.addAll(tables);
-		viewSet.addAll(views);
-		synonymSet.addAll(synonyms);
-		
-		addMessage("Loaded Tables " + tables.size());
-		addMessage("Loaded Views " + views.size());
-		addMessage("Loaded Synonyms " + synonyms.size());
-		addMessage("Loaded Packages " + packages.size());
-		addMessage("Loaded Procedure/Functions " + procedureSet.size());
-
-		psynonymSet.clear();
-		stmt = conn.createStatement();
-		qry = "SELECT synonym_name FROM all_synonyms WHERE owner='PUBLIC' AND table_owner = 'SYS' AND synonym_name > 'A' AND synonym_name < 'a'";
-		rs = stmt.executeQuery(qry);
-		while (rs.next()){
-			String name = rs.getString(1);
-
-			psynonymSet.add(name);
-		}
-		
-		rs.close();
-		stmt.close();
-		
-		addMessage("Loaded Public Synonyms " + psynonymSet.size());
-	}
-	
 	public synchronized String genie(String value, String tab, String targetCol, String sourceCol) {
 		String res=null;
 		
@@ -1185,7 +760,7 @@ public class Connect implements HttpSessionBindingListener {
 		ArrayList pk = null;
 		String colName = "";
 		
-		String tmp = viewTables.get(tname);
+		String tmp = cs.viewTables.get(tname);
 		if (tmp!=null) tname = tmp;  // viewTable
 		
 		String key = catalog + "." + tname;
@@ -1292,10 +867,10 @@ public class Connect implements HttpSessionBindingListener {
 			return getPrimaryKeyName(temp[0], temp[1]);
 		}
 		
-		String tmp = viewTables.get(tname);
+		String tmp = cs.viewTables.get(tname);
 		if (tmp!=null) tname = tmp;  // viewTable
 
-		String pkName = pkByTab.get(tname.toUpperCase());
+		String pkName = cs.pkByTab.get(tname.toUpperCase());
 		
 		// check for Synonym
 		if (pkName == null) {
@@ -1316,7 +891,7 @@ public class Connect implements HttpSessionBindingListener {
 	}
 
 	public synchronized String getTableNameByPrimaryKey(String kname) {
-		String tName = pkByCon.get(kname.toUpperCase());
+		String tName = cs.pkByCon.get(kname.toUpperCase());
 		
 		// check for other owner
 		if (tName == null) {
@@ -1385,7 +960,7 @@ public class Connect implements HttpSessionBindingListener {
 			return getConstraintCols(temp[0], temp[1]);
 		}
 		
-		String cols = constraints.get(cname.toUpperCase());
+		String cols = cs.constraints.get(cname.toUpperCase());
 		
 		// check for other owner
 		if (cols==null) {
@@ -1426,8 +1001,8 @@ public class Connect implements HttpSessionBindingListener {
 		
 		List<ForeignKey> list = new ArrayList<ForeignKey>();
 		
-		for (int i=0; i<foreignKeys.size(); i++) {
-			ForeignKey fk = foreignKeys.get(i);
+		for (int i=0; i<cs.foreignKeys.size(); i++) {
+			ForeignKey fk = cs.foreignKeys.get(i);
 			if (fk.tableName.equals(tname)) {
 				list.add(fk);
 			}
@@ -1496,8 +1071,8 @@ public class Connect implements HttpSessionBindingListener {
 		String pkName = getPrimaryKeyName(tname);
 		if (pkName == null) return list;
 		
-		for (int i=0; i<foreignKeys.size(); i++) {
-			ForeignKey fk = foreignKeys.get(i);
+		for (int i=0; i<cs.foreignKeys.size(); i++) {
+			ForeignKey fk = cs.foreignKeys.get(i);
 			if (fk.rConstraintName.equals(pkName)) {
 				list.add(fk.tableName);
 			}
@@ -2105,7 +1680,7 @@ public class Connect implements HttpSessionBindingListener {
 	public synchronized List<TableCol> getTableDetail(String owner, String tname) throws SQLException {
 		if (owner==null) {
 			// see if the table is users
-			if (tables.contains(tname)||views.contains(tname)) {
+			if (cs.getTables().contains(tname)||cs.getViews().contains(tname)) {
 				owner = schemaName.toUpperCase();
 				if(this.targetSchema != null) owner = this.targetSchema;
 			} else {
@@ -2117,7 +1692,7 @@ public class Connect implements HttpSessionBindingListener {
 				}
 			}
 			
-			if (psynonymSet.contains(tname)) owner = "PUBLIC";
+			if (cs.psynonymSet.contains(tname)) owner = "PUBLIC";
 		}
 /*		
 		if (owner==null) {
@@ -2135,7 +1710,7 @@ public class Connect implements HttpSessionBindingListener {
 		
 		// for view/Table
 		if (pk==null) {
-			String tmp = viewTables.get(tname);
+			String tmp = cs.viewTables.get(tname);
 			if (tmp!=null) {
 				pk = getPrimaryKeys(owner, tmp);
 				System.out.println("***pk=" + pk);
@@ -2335,6 +1910,11 @@ public class Connect implements HttpSessionBindingListener {
 		
 		if (comment_tables!=null) comment_tables.clear();
 		if (comments!=null) comments.clear();
+		
+	}
+	
+	public void reloadCacheSchema() throws SQLException {
+		cs.reload(this);
 	}
 	
 	public void createTable() throws SQLException {
@@ -2485,8 +2065,8 @@ public class Connect implements HttpSessionBindingListener {
 	}
 	
 	private void addToTableList(String tname) {
-		this.tables.add(tname);
-		this.tableSet.add(tname);
+		cs.tables.add(tname);
+		cs.tableSet.add(tname);
 	}
 	
 	public void createTrg() throws SQLException {
@@ -2772,6 +2352,7 @@ public class Connect implements HttpSessionBindingListener {
 		String res = "";
 		int cnt=0;
 		String lastType="";
+		if (qlink==null) return "";
 		for (QuickLink q:qlink) {
 			cnt++;
 			if (!q.getType().equals(lastType)) {
@@ -2800,13 +2381,13 @@ public class Connect implements HttpSessionBindingListener {
 			name = name.toUpperCase();
 		
 		if (type.equals("object")) {
-			if (tables.contains(name)) 
+			if (cs.tables.contains(name)) 
 				type ="table";
-			else if (views.contains(name))
+			else if (cs.views.contains(name))
 				type = "view";
-			else if (synonyms.contains(name))
+			else if (cs.synonyms.contains(name))
 				type = "synonym";
-			else if (packages.contains(name))
+			else if (cs.packages.contains(name))
 				type = "package";
 		}
 		
@@ -2901,7 +2482,7 @@ public class Connect implements HttpSessionBindingListener {
 	}
 	
 	public boolean isTempTable(String tname) {
-		return temp_tables.contains(tname);
+		return cs.temptableSet.contains(tname);
 	}
 	
 	public String getCpasCodeGrup(String tname, String cname) {
@@ -3007,37 +2588,43 @@ public class Connect implements HttpSessionBindingListener {
 	}
 
 	public boolean isTVS(String oname) {
-		
-		if (tableSet.contains(oname)) return true;
-		if (viewSet.contains(oname)) return true;
-		if (synonymSet.contains(oname)) return true;
-		
-		return false;
+		return cs.isTVS(oname);
+	}
+
+	public boolean isType(String oname) {
+		return cs.isType(oname);
 	}
 
 	public boolean isPublicSynonym(String oname) {
 		
-		return psynonymSet.contains(oname);
+		return cs.psynonymSet.contains(oname);
 	}
 	
 	public boolean isProcedure(String oname) {
 		
-		if (procedureSet.contains(oname)) return true;
+		if (cs.procedureSet.contains(oname)) return true;
 		
 		return false;
 	} 
 	
+	public boolean isPackageType(String name) {
+		return cs.packages.contains(name) || cs.types.contains(name);
+	}
+	
 	public boolean isPackage(String name) {
-		return packages.contains(name);
+		return cs.packages.contains(name);
 	}
 	
 	public boolean isSynonym(String name) {
-		return synonymSet.contains(name);
+		return cs.synonymSet.contains(name);
 	}
 	
 	public void addMessage(String msg) {
 		connectMessage += msg + "<br/>";
-		System.out.println(msg);
+		long currentMillis = System.currentTimeMillis();
+		
+		System.out.println(msg + " " + (currentMillis - lastMillis));
+		lastMillis = currentMillis;
 	}
 	
 	public String getConnectMessage() {
@@ -3045,13 +2632,13 @@ public class Connect implements HttpSessionBindingListener {
 	}
 	
 	public boolean isViewTable(String vname) {
-		String tmp = viewTables.get(vname);
+		String tmp = cs.viewTables.get(vname);
 		
 		return tmp != null;
 	}
 	
 	public String getViewTableName(String vname) {
-		String tmp = viewTables.get(vname);
+		String tmp = cs.viewTables.get(vname);
 		
 		return tmp;
 	}
@@ -3087,7 +2674,7 @@ public class Connect implements HttpSessionBindingListener {
 	        	if (value.contains("D")) opDelete = "1";
 	        	
 	        	if (!this.isTVS(temp[1])) continue;
-	        	if (!isPackage(pkgName)) continue;
+	        	if (!isPackageType(pkgName)) continue;
 
 	        	if (temp[1].length() > 30) {
 	        		System.out.println("Table name too long: [" + temp[1] + "]");
@@ -3283,7 +2870,7 @@ public class Connect implements HttpSessionBindingListener {
 	        	}
 
 	        	if (pkgName.equals(targetPkg) && temp[0].equals(targetPrc)) continue;
-	        	if (!isPackage(targetPkg)) continue;
+	        	if (!isPackageType(targetPkg)) continue;
 	        	
 	        	try {
 //System.out.println(pkgName + " " + temp[0] + " " + targetPkg + " " + targetPrc);
@@ -3371,7 +2958,7 @@ public class Connect implements HttpSessionBindingListener {
 	        		targetPrc = target[1];
 	        	}
 
-	        	if (!isPackage(targetPkg)) continue;
+	        	if (!isPackageType(targetPkg)) continue;
 	        	
 	        	try {
 //System.out.println(pkgName + " " + temp[0] + " " + targetPkg + " " + targetPrc);
@@ -3486,6 +3073,18 @@ public class Connect implements HttpSessionBindingListener {
 	      	//ex.printStackTrace();
 	    }
 		
+	}
+	
+	public void loadPackageTable() {
+		cs.loadPackageTable(conn);
+	}
+	
+	public void loadPackageProc() {
+		cs.loadPackageProc(conn);
+	}
+	
+	public void loadTriggerTable() {
+		cs.loadTriggerTable(conn);
 	}
 }
 

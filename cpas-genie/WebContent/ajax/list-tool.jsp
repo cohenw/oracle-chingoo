@@ -17,6 +17,7 @@
 	list.add("Search Trigger Definition");
 	list.add("");
 	list.add("Table Column");
+	list.add("Table/View Columns");
 	list.add("Schema Diff");
 	list.add("");
 
@@ -69,3 +70,7 @@ CPAS Catalogs</a> <br/><br/>
 	}
 %>
 
+<br>
+<!-- <img src="image/video.png">
+<a href="http://genie.cpas.com/genie-video/index.html" target=_blank><span style="background-color: yellow;">Watch tutorial videos</span></a>
+ -->

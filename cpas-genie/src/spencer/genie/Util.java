@@ -1,6 +1,7 @@
 package spencer.genie;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.instrument.Instrumentation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -499,14 +500,26 @@ public static void main(String args[]) {
 	}
 
 	public static String getBuildNo() {
-		return "CPAS-1093";
+		return "CPAS-1096";
 	}
 
 	public static String getVersionDate() {
-		return "Oct 31, 2013";
+		return "Nov 26, 2013";
 	}
 
 	public static void p(String str) {
 		System.out.println(str);
 	}
+	
+	public static String nvl(String val, String val2) {
+		if (val==null)
+			return val2;
+		
+		return val;
+	}
+
+	public static String nvl(String val) {
+		return nvl(val, "");
+	}
+   
 }

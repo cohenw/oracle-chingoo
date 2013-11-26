@@ -343,6 +343,16 @@
 		}
 	}	
 	
+	function setSessionParam(key, val) {
+		$.ajax({
+			url: "ajax/setSessionParam.jsp?key=" + key + "&val=" + val + "&t=" + (new Date().getTime()),
+			success: function(data){
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+            }  
+		});		
+	}
+	
 	function applyParameter(id) {
 		$("#pageNo").val(1);
 		var dynvar = $("#dyn"+ id + "-vars").val();
@@ -357,6 +367,7 @@
 //			alert("#dyn"+id + "-" +cols[i]);
 //			alert(param);
 			sql = replaceAll(sql, ":" + cols[i], "'" + param + "'", 1);
+			setSessionParam(cols[i], param);
 		}		
 /*		
 		sql = replaceAll(sql, ":CLNT", "'0832'", 1);

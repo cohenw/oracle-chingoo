@@ -408,7 +408,35 @@ Build CPAS1093
 	pop query on Query page
 	CPAS database list in login page
 	Login cookie keeps the last 20 login
-				
+
+Build CPAS1094
+	Bug Fix - Query page logical link
+	src2 shows up to 20K lines
+	Bug Fix - Package Analyze recognize (SELECT 
+	View detail - related views
+	New tool - Table/View Columns 
+	Bug Fix - Trigger source do not escape HTML
+	Matrix Test - CPAS (link from DtataLink)
+	login progress update - every 2 seconds
+
+Build CPAS1095
+	After 60 sec of login, go home
+	login page with jdbcurl and schema
+	CPAS code lookup removes CPAS hint
+	CachSchemaManager and CacheSchema
+	https://github.com/EsotericSoftware/kryo for serialization
+	PA now include TYPE for dependency
+	Loading TYPE for owner only
+
+Build CPAS1096
+	Package Tree show package relation diagram
+	exclude PackageProc with no source
+	memorize session parameters like :CLNT
+	Bug fix - Treeview with treekey
+	HyperSyntax4PB support Types
+	Package procedure label uses mixed case
+	
+	
 Known Issue
 	PA does not include Stored procedures and functions
 

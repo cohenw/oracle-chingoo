@@ -107,8 +107,11 @@ System.out.println("isDynamic=" + isDynamic);
 		for (String var:varAl) {
 			varlist += var.substring(1) + " ";
 			i++;
+			String defaultVal = (String) session.getAttribute(var.substring(1));
+			if (defaultVal==null) defaultVal = "";
+Util.p("-- " + var);			
 %>
-	<%= var %> <input id="dyn<%=id%>-<%= var.substring(1) %>" length=30>
+	<%= var %> <input id="dyn<%=id%>-<%= var.substring(1) %>" length=30 value="<%=defaultVal%>">
 <%
 		}
 %>
@@ -123,8 +126,10 @@ System.out.println("isDynamic=" + isDynamic);
 <div id="div-<%=id%>">
 <jsp:include page='../ajax/qry-simple.jsp'>
 	<jsp:param value="<%= sql %>" name="sql"/>
-	<jsp:param value="1" name="dataLink"/>
+	<jsp:param value="0" name="dataLink"/>
 	<jsp:param value="<%= id %>" name="id"/>
+	<jsp:param value="0" name="dataLink"/>
+	<jsp:param value="0" name="cpas"/>
 </jsp:include>
 </div>
 

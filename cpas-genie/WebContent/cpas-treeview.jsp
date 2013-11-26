@@ -49,7 +49,7 @@
 #outer-sdi {
     background-color: #FFFFFF;
     border: 1px solid #999999;
-    width: 250px;
+    width: 200px;
     height: 600px;
     overflow: auto;
     float: left;
@@ -213,8 +213,9 @@ function loadChildTV(sdi, parentid, divName) {
 
 function loadSTMT(sdi, actionid, treekey) {
 	$.ajax({
-		url: "ajax-cpas/load-STMT.jsp?sdi=" + sdi + "&actionid=" + actionid + "&t=" + (new Date().getTime()),
+		url: "ajax-cpas/load-STMT.jsp?sdi=" + sdi + "&actionid=" + actionid + "&treekey=" + treekey + "&t=" + (new Date().getTime()),
 		success: function(data){
+			$('#inner-tv a.selected').removeClass('selected');
 			$("#inner-tvstmt").html(data);
 			var id = treekey.replace(/_/g,"-");
 			$("#"+id).addClass('selected');		
@@ -364,7 +365,7 @@ function setYellow(sdi, treekey) {
 
 </td>
 <td align=right nowrap>
-<b>TreeView Search</b> <input id="globalSearch" style="width: 200px;" onChange="tvSearch($('#globalSearch').val())"/>
+<b>TreeView Search</b> <input id="globalSearch" style="width: 200px;" onChange="tvSearch($('#globalSearch').val())" placeholder="treeview item or table/view"/>
 <input type="button" value="Find" onClick="Javascript:tvSearch($('#globalSearch').val())"/>
 </td>
 </table>

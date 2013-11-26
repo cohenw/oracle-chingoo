@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -50,6 +51,7 @@ public class HyperSyntax4PB {
 	static HashSet<String> syntax2 = new HashSet<String>(Arrays.asList(syntaxString2));
 	
 	HashSet<String> vars = new HashSet<String>();
+	Hashtable<String,String>types = new Hashtable<String,String>();
 	String procName = "";
 	String pr=null; // procedure name 
 	HashSet<String> packageProc = new HashSet<String>();
@@ -369,6 +371,12 @@ public class HyperSyntax4PB {
 					s.append( "<a style='color: darkblue;' target='_blank' href=\"Javascript:loadProc('" + pkg + "','" + prc + "');\">" + token + "</a>" );
 					packageProc.add(pr + " "  + tmp);
 //					System.out.println(pr + " proc3 " + tmp);
+				} else if (types.containsKey(procName+"-"+pkg)) { 
+					String typename = types.get(procName+"-"+pkg);
+					s.append( "<a style='color: darkblue;' target='_blank' href=\"Javascript:loadProc('" + typename + "','" + prc + "');\">" + token + "</a>" );
+					//s.append( "<span class='"+procName+"-"+pkg+"' onmouseover='hi_on(\"" + procName+"-"+pkg + "\")' xonclick='hi_off(\"" + procName+"-"+pkg + "\")'><a style='color: darkblue;' target='_blank' href='src2.jsp?name=" + typename + "#" + prc.toLowerCase() + "'>" + token + "</a></span>" );
+					packageProc.add(pr + " "  + typename+"."+prc);
+//					System.out.println(" proc4 " + tmp);
 				} else if (vars.contains(procName+"-"+pkg)) { 
 					s.append( "<span class='"+procName+"-"+pkg+"' onmouseover='hi_on(\"" + procName+"-"+pkg + "\")' onclick='hi_off(\"" + procName+"-"+pkg + "\")'>" + token + "</span>" );
 				} else
@@ -401,8 +409,9 @@ public class HyperSyntax4PB {
 		sb2.append( text.substring(start));
 		String s2 = sb2.toString();
 		
-		PlsqlAnalyzer4PB pa = new PlsqlAnalyzer4PB(s2);
+		PlsqlAnalyzer4PB pa = new PlsqlAnalyzer4PB(s2, cn.cs.typeSet);
 		this.vars = pa.getVariables();
+		this.types = pa.getTypes();
 //System.out.println("s2 vars=" + this.vars);
 		
 		//System.out.println("s2 size=" + s2.length());

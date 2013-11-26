@@ -113,7 +113,7 @@ $(document).ready(function(){
 				}
 				
 				if (data.indexOf("Finished ") < 0) {
-					to2 = setTimeout("checkConnectProgress()",1000);
+					to2 = setTimeout("checkConnectProgress()",2000);
 				}
 			},
             error:function (jqXHR, textStatus, errorThrown){
@@ -141,9 +141,14 @@ function slideSwitch() {
         });
 }
 
+function goHome() {
+	$(location).attr('href',"index.jsp");
+}
+
 $(function() {
     setInterval( "slideSwitch()", 2500 );
-    setInterval( "checkConnectProgress()", 1000 );
+    setInterval( "checkConnectProgress()", 2000 );
+    setInterval( "goHome()", 60000 );
 });
 
 function stopShow() {
