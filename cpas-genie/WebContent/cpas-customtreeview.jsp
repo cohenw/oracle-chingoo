@@ -205,8 +205,9 @@ function loadChildTV(sdi, parentid, divName) {
 
 function loadSTMT(sdi, actionid, treekey) {
 	$.ajax({
-		url: "ajax-cpas/load-CSTMT.jsp?sdi=" + sdi + "&actionid=" + actionid + "&t=" + (new Date().getTime()),
+		url: "ajax-cpas/load-CSTMT.jsp?sdi=" + sdi + "&actionid=" + actionid + "&treekey=" + treekey + "&t=" + (new Date().getTime()),
 		success: function(data){
+			$('#inner-tv a.selected').removeClass('selected');
 			$("#inner-tvstmt").html(data);
 			var id = treekey.replace(/_/g,"-");
 			$("#"+id).addClass('selected');		
@@ -372,7 +373,7 @@ function setYellow(sdi, treekey) {
 		</td>
 		<td valign=top>
 			<div id="outer-tv">
-				<div id="inner-tv"></div>
+				<div id="inner-tv" style="width: 400px;"></div>
 			</div>
 		</td>
 		<td valign=top>

@@ -150,6 +150,17 @@ id = Util.getId();
 			if (!action.equals("NN") && cn.isTVS("CPAS_WIZARD")) {
 				String q = "SELECT WIZARD FROM CPAS_WIZARD WHERE CLASS IN (SELECT CLASS FROM CPAS_ACTION WHERE ACTION='" + action + "')";
 				String wizard = cn.queryOne(q);
+
+				// For Benefit Calc, choose right wizard from CPAS_CALCTYPE
+				if (action.equals("BC")) {
+					String up = uparam;
+					if (up.contains(",")) up = up.substring(0,up.indexOf(","));
+					q = "SELECT WIZARD FROM CPAS_CALCTYPE WHERE CTYPE='"+ up+ "'";
+					wizard = cn.queryOne(q);
+					//Util.p(wizard);
+				} else if (action.equals("SW"))
+					wizard = uparam;
+				
 				if (wizard != null) {
 		%>
 			<br/>
