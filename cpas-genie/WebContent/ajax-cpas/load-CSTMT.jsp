@@ -9,6 +9,7 @@
 	Connect cn = (Connect) session.getAttribute("CN");
 	String sdi = request.getParameter("sdi");
 	String actionid = request.getParameter("actionid");
+	String treekey = request.getParameter("treekey");
 
 	String qry = "SELECT actiontype, actionstmt FROM CUSTOMTREEACTION_STMT WHERE SDI = '" + sdi + "' AND ACTIONID=" + actionid + ""; 	
 	List<String[]> list = cn.query(qry);
@@ -83,8 +84,25 @@
 	for (int i=0;i<values.length;i++) values[i] = "";
 	
 	String id = Util.getId();
-	String sql = "SELECT * FROM CUSTOMTREEACTION_STMT WHERE SDI = '" + sdi + "' AND ACTIONID=" + actionid + ""; 	
+	String sql = "SELECT * FROM CUSTOMTREEACTION_STMT WHERE SDI = '" + sdi + "' AND ACTIONID=" + actionid + "";
+	
+	String qq = "SELECT level, caption, actionid, treekey FROM CUSTOMTREEVIEW connect by sdi='" + sdi + "' and itemid = prior parentid " +
+			"start with sdi='" + sdi + "' and actionid= " + actionid + " and treekey='" + treekey + "' order by level desc";
+	List<String[]> tt = cn.query(qq, false);
+
+	String l=null;
+	for (String[] s: tt) {
+		String tkey = s[4];
+		if (l==null)
+			l = "";
+		else {
+			if (!l.equals("")) l += "&gt; ";
+			l += "<a href=\"javascript:loadSTMT('"+sdi+"', "+s[3]+", '" + tkey + "');\">" + Util.escapeHtml(s[2]) + "</a>";
+		}
+	}
 %>
+	<%= l %><br/><br/>	
+
 <b><%= tv.get(0)[1] %></b> <%= tv.get(0)[2] %>
 <a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=sql%>"/></a>
 <a href="javascript:openSimulator()">Simulator <img border=0 src="image/Media-play-2-icon.png"></a>
@@ -117,13 +135,23 @@
 		if (rowCnt%2 == 0) rowClass = "evenRow";
 		
 		String lbl = label[i][0];
+		boolean sqlFormat = false;
+
+		if (label[i][0].equals("MS") || label[i][0].equals("DS")|| label[i][0].equals("AS")
+				|| label[i][0].equals("MI")|| label[i][0].equals("DI")|| label[i][0].equals("MU")
+				|| label[i][0].equals("MD")|| label[i][0].equals("MA")|| label[i][0].equals("MV")
+				|| label[i][0].equals("DD")|| label[i][0].equals("DA")|| label[i][0].equals("DV")
+			)
+				sqlFormat = true;
+
+		if (values[i].startsWith("SELECT") || values[i].startsWith("DECLARE")|| values[i].startsWith("BEGIN")) sqlFormat = true;
 %>
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><%= label[i][1] %></td>
 	<td class="<%= rowClass%>" nowrap><%= label[i][0] %></td>
 	<td class="<%= rowClass%>">
-<%= (label[i][0].equals("MS") || label[i][0].equals("DS")) ? "<span style='font-family: Consolas;'>" + new HyperSyntax().getHyperSyntax(cn, values[i], "SQL") : values[i] %>
-<%= (label[i][0].equals("MS") || label[i][0].equals("DS")) ? "</span>":"" %>
+<%= (sqlFormat) ? "<span style='font-family: Consolas;'>" + new HyperSyntax().getHyperSyntax(cn, values[i], "SQL") : values[i] %>
+<%= (sqlFormat) ? "</span>":"" %>
 
 <% if ((label[i][0].equals("MT") || label[i][0].equals("DT")) && !values[i].equals("") && values[i].length() < 30) {
 	id = Util.getId();
@@ -141,6 +169,7 @@
 <% if (lbl.equals("AW") || lbl.equals("MN") || lbl.equals("ME") || lbl.equals("MR")
 		|| lbl.equals("DN") || lbl.equals("DE") || lbl.equals("DR")) { 
 	String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + values[i] + "'");
+	if (secName == null) secName ="";
 %>
 	<span class='cpas'> <%= secName %></span>
 <% } %>

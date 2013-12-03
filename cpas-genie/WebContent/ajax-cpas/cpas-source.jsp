@@ -24,7 +24,7 @@
 	}
 	
 	String q = "SELECT START_LINE, END_LINE, PROCEDURE_LABEL FROM GENIE_PA_PROCEDURE WHERE PACKAGE_NAME='" + gPkg +"' AND PROCEDURE_NAME='" + gPrc + "' ORDER BY START_LINE";
-	System.out.println(q);
+	//System.out.println(q);
 	List<String[]> proc0 = cn.query(q, false);
 	
 	

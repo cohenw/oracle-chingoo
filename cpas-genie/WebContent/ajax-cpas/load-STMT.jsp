@@ -98,8 +98,10 @@
 		String tkey = s[4];
 		if (l==null)
 			l = "";
-		else
-			l += " &gt; <a href=\"javascript:loadSTMT('"+sdi+"', "+s[3]+", '" + tkey + "');\">" + Util.escapeHtml(s[2]) + "</a>";
+		else {
+			if (!l.equals("")) l += "&gt; ";
+			l += "<a href=\"javascript:loadSTMT('"+sdi+"', "+s[3]+", '" + tkey + "');\">" + Util.escapeHtml(s[2]) + "</a>";
+		}
 	}
 %>
 <%= l %><br/><br/>
@@ -134,13 +136,26 @@
 		rowCnt ++;
 		String rowClass = "oddRow";
 		if (rowCnt%2 == 0) rowClass = "evenRow";
+		
+		String lbl = label[i][0];
+		boolean sqlFormat = false;
+		
+		if (label[i][0].equals("MS") || label[i][0].equals("DS")|| label[i][0].equals("AS")
+			|| label[i][0].equals("MI")|| label[i][0].equals("DI")|| label[i][0].equals("MU")
+			|| label[i][0].equals("MD")|| label[i][0].equals("MA")|| label[i][0].equals("MV")
+			|| label[i][0].equals("DD")|| label[i][0].equals("DA")|| label[i][0].equals("DV")
+		)
+			sqlFormat = true;
+
+		if (values[i].startsWith("SELECT") || values[i].startsWith("DECLARE")|| values[i].startsWith("BEGIN")) sqlFormat = true;
+		
 %>
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><%= label[i][1] %></td>
 	<td class="<%= rowClass%>" nowrap><%= label[i][0] %></td>
 	<td class="<%= rowClass%>">
-<%= (label[i][0].equals("MS") || label[i][0].equals("DS")) ? "<PRE style='font-family: Consolas;'>" + new HyperSyntax().getHyperSyntax(cn, values[i], "SQL"): values[i] %>
-<%= (label[i][0].equals("MS") || label[i][0].equals("DS")) ? "</PRE>":"" %>
+<%= (sqlFormat) ? "<PRE style='font-family: Consolas;'>" + new HyperSyntax().getHyperSyntax(cn, values[i], "SQL"): values[i] %>
+<%= (sqlFormat) ? "</PRE>":"" %>
 <% if ((label[i][0].equals("MT") || label[i][0].equals("DT")) && !values[i].equals("")) {
 	id = Util.getId();
 	qry = "SELECT * FROM CPAS_LAYOUT WHERE TNAME = '" + values[i] + "'";
@@ -153,7 +168,13 @@
 %>
 	<a href="cpas-process.jsp?id=<%= values[i]%>" target="_blank">open process</a>
 <% } %>
-
+<% if (lbl.equals("AW") || lbl.equals("MN") || lbl.equals("ME") || lbl.equals("MR")
+		|| lbl.equals("DN") || lbl.equals("DE") || lbl.equals("DR")) { 
+	String secName = cn.queryOne("SELECT CAPTION FROM SECSWITCH WHERE LABEL ='" + values[i] + "'");
+	if (secName == null) secName ="";
+%>
+	<span class='cpas'> <%= secName %></span>
+<% } %>
 	</td>
 </tr>
 

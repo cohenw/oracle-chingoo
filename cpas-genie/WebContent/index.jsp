@@ -265,11 +265,14 @@ function changeSchema(schema) {
 	function initLoad() {
 		$("#list-table").html("<img src='image/loading.gif'/>");
 		$("#inner-result1").html("<img src='image/loading.gif'/>");
+
 		loadList("ajax/list-view.jsp?schema="+gschema, "list-view");	
 		loadList("ajax/list-synonym.jsp?schema="+gschema, "list-synonym");	
 		loadList("ajax/list-package.jsp?schema="+gschema, "list-package");	
 		loadList("ajax/list-tool.jsp?schema="+gschema, "list-tool");	
+
 		loadList("ajax/list-table.jsp?schema="+gschema, "list-table");	
+		//showCPAS();
 		
 		//$("#inner-result1").html('<img src="image/genie_bw.png"/>');
 	}

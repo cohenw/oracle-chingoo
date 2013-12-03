@@ -381,7 +381,7 @@ function setYellow(sdi, treekey) {
 		</td>
 		<td valign=top>
 			<div id="outer-tv">
-				<div id="inner-tv"></div>
+				<div id="inner-tv" style="width: 400px;"></div>
 			</div>
 		</td>
 		<td valign=top>

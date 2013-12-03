@@ -1137,6 +1137,36 @@ public class Connect implements HttpSessionBindingListener {
 		return list;
 	}
 	
+	public synchronized List<String> getReferencedPackages(String owner, String tname) {
+		if (owner==null) return getReferencedPackages(tname);
+		List<String> list = new ArrayList<String>();
+
+		String sql = "SELECT distinct OWNER, NAME from all_dependencies WHERE REFERENCED_OWNER='" + owner + "' AND REFERENCED_NAME='" + tname + "' AND TYPE IN ('TYPE BODY','PACKAGE BODY','PACKAGE','TYPE','PROCEDURE','FUNCTION') ORDER BY NAME";
+		if (this.targetSchema != null)
+			sql = "SELECT distinct OWNER, NAME from all_dependencies WHERE OWNER='" + this.targetSchema + "' AND REFERENCED_NAME='" + tname + "' AND TYPE IN ('TYPE BODY','PACKAGE BODY','PACKAGE','TYPE','PROCEDURE','FUNCTION') ORDER BY NAME";
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery(sql);	
+
+       		int count = 0;
+       		while (rs.next()) {
+       			count ++;
+       			String own = rs.getString("OWNER");
+       			String name = rs.getString("NAME");
+       			list.add(own + "." + name);
+       		}
+       		
+       		rs.close();
+       		stmt.close();
+		} catch (SQLException e) {
+             System.err.println ("10 Cannot connect to database server");
+             e.printStackTrace();
+             message = e.getMessage();
+ 		}
+		
+		return list;
+	}
+
 	public synchronized List<String> getReferencedProc(String tname) {
 		List<String> list = new ArrayList<String>();
 
@@ -1195,7 +1225,38 @@ public class Connect implements HttpSessionBindingListener {
 		
 		return list;
 	}
-	
+
+	public synchronized List<String> getReferencedViews(String owner, String tname) {
+		if (owner==null) return getReferencedViews(tname);
+		
+		List<String> list = new ArrayList<String>();
+
+		String sql = "SELECT distinct OWNER, NAME from all_dependencies WHERE REFERENCED_OWNER='" + owner + "' AND REFERENCED_NAME='" + tname + "' AND TYPE IN ('VIEW') ORDER BY NAME";
+		if (this.targetSchema != null)
+			sql = "SELECT distinct OWNER, NAME from all_dependencies WHERE OWNER='" + this.targetSchema + "' AND REFERENCED_NAME='" + tname + "' AND TYPE IN ('VIEW') ORDER BY NAME";
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery(sql);	
+
+       		int count = 0;
+       		while (rs.next()) {
+       			count ++;
+       			String own = rs.getString("OWNER");
+       			String name = rs.getString("NAME");
+       			list.add(owner+"."+name);
+       		}
+       		
+       		rs.close();
+       		stmt.close();
+		} catch (SQLException e) {
+             System.err.println ("11 Cannot connect to database server");
+             e.printStackTrace();
+             message = e.getMessage();
+ 		}
+		
+		return list;
+	}
+
 	public synchronized List<String[]> getIndexes(String owner, String tname) {
 		List<String[]> list = new ArrayList<String[]>();
 
@@ -1271,6 +1332,37 @@ public class Connect implements HttpSessionBindingListener {
        			count ++;
        			String name = rs.getString("NAME");
        			list.add(name);
+       		}
+       		
+       		rs.close();
+       		stmt.close();
+		} catch (SQLException e) {
+             System.err.println ("12 Cannot connect to database server");
+             e.printStackTrace();
+             message = e.getMessage();
+ 		}
+		
+		return list;
+	}
+	
+	public synchronized List<String> getReferencedTriggers(String owner, String tname) {
+		if(owner==null) return getReferencedTriggers(tname);
+		List<String> list = new ArrayList<String>();
+
+		String sql = "SELECT distinct OWNER, NAME from all_dependencies WHERE REFERENCED_OWNER='"+owner+"' AND REFERENCED_NAME='" + tname + "' AND TYPE IN ('TRIGGER') ORDER BY NAME";
+
+		if (this.targetSchema != null)
+			sql = "SELECT distinct OWNER, NAME from all_dependencies WHERE OWNER = '" + this.targetSchema + "' AND REFERENCED_NAME='" + tname + "' AND TYPE IN ('TRIGGER') ORDER BY NAME";
+		try {
+       		Statement stmt = conn.createStatement();
+       		ResultSet rs = stmt.executeQuery(sql);	
+
+       		int count = 0;
+       		while (rs.next()) {
+       			count ++;
+       			String own = rs.getString("OWNER");
+       			String name = rs.getString("NAME");
+       			list.add(own+"."+name);
        		}
        		
        		rs.close();

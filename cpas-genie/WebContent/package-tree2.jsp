@@ -165,7 +165,7 @@ public String disp(Connect cn, String mainPkg, String name) {
 //	System.out.println(q1);
 //	System.out.println(pkgs.size());
 	if (pkgs.size() == 0) {
-		response.sendRedirect("analyze-package.jsp?name="+gPkg+"&callback=" +  Util.escapeHtml("package-tree-o.jsp?name=" + name));
+		response.sendRedirect("analyze-package.jsp?name="+gPkg+"&callback=" +  Util.escapeHtml("package-tree2.jsp?name=" + name));
 		return;
 	}
 	
@@ -301,7 +301,7 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 <a target=_blank href="analyze-package.jsp?name=<%= gPkg %>">Analyze</a>
 
 
-<form name="form-map" id="form-map" action="package-tree-o.jsp" method="get">
+<form name="form-map" id="form-map" action="package-tree2.jsp" method="get">
 <input id="name-map" name="name" type="hidden">
 </form>
 
@@ -405,7 +405,7 @@ for (int i=0;i<proc0.size();i++) {
 <br/>
 
 
-<form id="form_level" name="form_level" method="get" action="package-tree-o.jsp">
+<form id="form_level" name="form_level" method="get" action="package-tree2.jsp">
 <input name="name" type="hidden" value="<%=name%>">
 <h3>Drill Down - up to
 <input name="level" type="radio" value="1" onClick="javascript:changeLevel()" <%=(maxLevel==1)?"checked":"" %>>1
@@ -473,7 +473,7 @@ level
 	
 %>
 <a href="javascript:toggleData('<%=id%>')"><img id="img-<%=id%>" border=0 align=top src="<%= img %>"></a>
-<a href="package-tree-o.jsp?name=<%=s%>"> <%= disp(cn, gPkg, s) %></a>
+<a href="package-tree2.jsp?name=<%=s%>"> <%= disp(cn, gPkg, s) %></a>
 <br/>
 <div id="div-<%=id%>" style='margin-left: 80px; display: <%= displayDiv %>;'> 
 
@@ -543,7 +543,7 @@ while (true) {
 			if (s.startsWith("DEF.")) continue;
 			if (marked.contains(s)) continue;
 %>
-			 <%= showReversePath(cn, gPkg, path) %> <a href="package-tree-o.jsp?name=<%=s%>"> <%= disp(cn, gPkg, s) %></a><br/>
+			 <%= showReversePath(cn, gPkg, path) %> <a href="package-tree2.jsp?name=<%=s%>"> <%= disp(cn, gPkg, s) %></a><br/>
 <%
 			marked.add(s);
 

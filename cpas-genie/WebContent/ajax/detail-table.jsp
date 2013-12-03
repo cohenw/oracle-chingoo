@@ -19,8 +19,7 @@
 		table = table.substring(idx+1);
 	}
 	
-//Util.p("owner=" + owner);
-//Util.p("table=" + table);
+
 	//System.out.println(cn.getUrlString() + " " + Util.getIpAddress(request) + " " + (new java.util.Date()) + "\nTable: " + table);
 	//System.out.println("owner=" + owner);
 	
@@ -32,7 +31,7 @@
 		tname = table.substring(idx+1);
 	}
 	if (catalog==null) catalog = cn.getSchemaName();
-	
+
 	String formName = "FORM_" + tname;
 	String divName = "DIV_" + tname;
 	if (table==null) { 
@@ -49,7 +48,7 @@ Please select a Table to see the detail.
 	String cpasComment = cn.getCpasComment(table);
 	boolean isTempTable = cn.isTempTable(table);
 	
-	if (owner!=null && !owner.equalsIgnoreCase(cn.getSchema())) tname = owner + "." + table;
+//	if (owner!=null && !owner.equalsIgnoreCase(cn.getSchema())) tname = owner + "." + table;
 %>
 
 <div id="objectTitle" style="display:none"><%=(isTempTable?"TEMPORARY TABLE":"TABLE")%>: <%= table %></div>
@@ -136,16 +135,15 @@ Please select a Table to see the detail.
 	if (owner != null) fks = cn.getForeignKeys(owner, tname);
 	
 	List<String> refTabs = cn.getReferencedTables(owner, tname);
-	List<String> refPkgs = cn.getReferencedPackages(tname);
-	List<String> refViews = cn.getReferencedViews(tname);
-	List<String> refTrgs = cn.getReferencedTriggers(tname);
+	List<String> refPkgs = cn.getReferencedPackages(owner, tname);
+	List<String> refViews = cn.getReferencedViews(owner, tname);
+	List<String> refTrgs = cn.getReferencedTriggers(owner, tname);
 	List<String[]> refIdx = cn.getIndexes(owner, tname);
 	List<String> refConst = cn.getConstraints(owner, tname);
 
 	List<String> refProc = cn.getReferencedProc(tname);
 %>
 <hr>
-
 
 <% if (pkName != null)  {%>
 <b>Primary Key</b><br/>
