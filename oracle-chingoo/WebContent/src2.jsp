@@ -112,7 +112,7 @@ for (int k=0;k<types.size();k++) {
 	String qry = "SELECT TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME='" + name +"' AND TYPE = '" + type + "' ORDER BY TYPE, LINE";
 	if (owner != null) qry = "SELECT TYPE, LINE, TEXT FROM ALL_SOURCE WHERE OWNER='" + owner + "' AND NAME='" + name +"' AND TYPE = '" + type + "' ORDER BY TYPE, LINE";
 
-	List<String[]> list = cn.query(qry, 10000, false);
+	List<String[]> list = cn.query(qry, 20000, false);
 	
 	String text = "";
 	int line = 0;

@@ -269,4 +269,25 @@ Build Build1068
 	Reload Package/Trigger analyzed info after analyze package/table
 	Trigger Dependency CHINGOO_TR_DEPENDENCY
 
+Build Build1069
+	pop query on Query page
+	Login cookie keeps the last 20 login
+	Bug Fix - Query page logical link
+	src2 shows up to 20K lines
+	Bug Fix - Package Analyze recognize (SELECT 
+	View detail - related views
+	New tool - Table/View Columns 
+	Bug Fix - Trigger source do not escape HTML
+	login progress update - every 2 seconds
+	After 60 sec of login, go home
+	login page with jdbcurl and schema
+	PA now include TYPE for dependency
+	Loading TYPE for owner only
+	Package Tree show package relation diagram
+	exclude PackageProc with no source
+	CachSchemaManager and CacheSchema
+	https://github.com/EsotericSoftware/kryo for serialization
+	HyperSyntax4PB support Types
+	Package procedure label uses mixed case
+	Related Foreign key, View, Package for Synonyms
 	

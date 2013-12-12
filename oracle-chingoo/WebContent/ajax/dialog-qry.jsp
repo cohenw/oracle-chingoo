@@ -16,7 +16,7 @@
 %>
 
 <div id="divText<%=id%>">
-<textarea rows=2 cols=60 id='text-<%=id %>'><%=sql%></textarea>
+<textarea rows=4 cols=80 id='text-<%=id %>'><%=sql%></textarea>
 <br/>
 <input type="button" value="Submit" onClick="doTextQry(<%=id%>)">
 </div>

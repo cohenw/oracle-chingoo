@@ -705,6 +705,7 @@
 &nbsp;&nbsp;&nbsp;
 <a href="index.jsp" target="_blank">Home</a> |
 <a href="query.jsp" target="_blank">Query</a> |
+<a href="Javascript:newQry()">Pop Query</a> |
 <a target=_blank href="history.jsp">History</a>
 <!-- <a href="q.jsp" target="_blank">Q</a> |
 

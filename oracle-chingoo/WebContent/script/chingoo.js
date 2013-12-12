@@ -310,6 +310,7 @@
     	if (cnt >=4) sql = sql.replace("[4]", replaceAll(p4, "'", "''", 1));
     	if (cnt >=5) sql = sql.replace("[5]", replaceAll(p5, "'", "''", 1));
     	$("#param-sql").val(sql);
+    	$("#param1").val($("#param-1").val());
     	
 		$("#paramQueryResult").html("<div id='wait'><img src='image/loading.gif'/></div>");
     	$.ajax({
@@ -735,3 +736,20 @@
 		});	
     }
     
+	function showSource(key) {
+		var id = "id"+(new Date().getTime());
+		var temp ="<div id='" + id + "' title='Source for " + key + "' style='background-color: #dddddd;'>"
+		$.ajax({
+			url: "ajax/pop-source.jsp?key=" + key,
+			success: function(data){
+				temp = temp + data + "</div>";
+				$("BODY").append(temp);
+				$("#"+id).dialog({ width: 900, height: 500 });
+				setHighlight();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});		
+	}
+	

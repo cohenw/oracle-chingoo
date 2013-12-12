@@ -416,6 +416,7 @@ if (ls.size()>1) {
  -->
 <a target=_blank href="history.jsp">History</a> |
 <a href="javascript:clearCache()">Clear Cache</a> |
+<a target="_blank" href="reload.jsp">Reload</a> |
 <a href='Javascript:aboutChingoo()'>About</a> |
 <a href="logout.jsp">Log out</a>
 

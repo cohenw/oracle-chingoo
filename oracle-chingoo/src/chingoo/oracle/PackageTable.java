@@ -518,12 +518,22 @@ public class PackageTable {
 		// search for INSERT
 		int start =0;
 		while (true) {
-			start = text.indexOf(" INSERT ", start);
+
+			String searchStr = "INSERT";
+			start = text.indexOf(searchStr, start);
 			if (start <0) break;
+			String prevChar = text.substring(start-1,start);
+			String nextChar = text.substring(start+searchStr.length(),start+searchStr.length()+1);
+//			Util.p("prevChar [["+ prevChar + "]]");
+//			Util.p("nextChar [["+ nextChar + "]]");
+			if (!" \n\t()".contains(prevChar) || !" \n\t()".contains(nextChar)) {
+				start += searchStr.length();
+				continue;
+			}
 			int end = text.indexOf(";", start);
 			if (end <0) break;
 
-			String tmp = text.substring(start + 8, end);
+			String tmp = text.substring(start + searchStr.length(), end);			
 			ArrayList<String> cols = Util.getInsertColumn(tmp);
 			//System.out.println("[" + tmp + "]");
 			
@@ -561,12 +571,21 @@ public class PackageTable {
 		// search for DELETE
 		start =0;
 		while (true) {
-			start = text.indexOf(" DELETE ", start);
+			String searchStr = "DELETE";
+			start = text.indexOf(searchStr, start);
 			if (start <0) break;
+			String prevChar = text.substring(start-1,start);
+			String nextChar = text.substring(start+searchStr.length(),start+searchStr.length()+1);
+//			Util.p("prevChar [["+ prevChar + "]]");
+//			Util.p("nextChar [["+ nextChar + "]]");
+			if (!" \n\t()".contains(prevChar) || !" \n\t()".contains(nextChar)) {
+				start += searchStr.length();
+				continue;
+			}
 			int end = text.indexOf(";", start);
 			if (end <0) break;
 
-			String tmp = text.substring(start + 8, end);
+			String tmp = text.substring(start + searchStr.length(), end);
 			ArrayList<String> cols = Util.getDeleteColumn(tmp);
 //System.out.println("tmp="+tmp);			
 			StringTokenizer st = new StringTokenizer(tmp, " (");
@@ -606,12 +625,21 @@ public class PackageTable {
 		// search for UPDATE
 		start =0;
 		while (true) {
-			start = text.indexOf(" UPDATE ", start);
+			String searchStr = "UPDATE";
+			start = text.indexOf(searchStr, start);
 			if (start <0) break;
+			String prevChar = text.substring(start-1,start);
+			String nextChar = text.substring(start+searchStr.length(),start+searchStr.length()+1);
+//			Util.p("prevChar [["+ prevChar + "]]");
+//			Util.p("nextChar [["+ nextChar + "]]");
+			if (!" \n\t()".contains(prevChar) || !" \n\t()".contains(nextChar)) {
+				start += searchStr.length();
+				continue;
+			}
 			int end = text.indexOf(";", start);
 			if (end <0) break;
 
-			String tmp = text.substring(start + 8, end);
+			String tmp = text.substring(start + searchStr.length(), end);
 			ArrayList<String> cols = Util.getUpdateColumn(tmp);
 			
 			StringTokenizer st = new StringTokenizer(tmp, " (");
@@ -647,13 +675,21 @@ public class PackageTable {
 		// search for SELECT
 		start =0;
 		while (true) {
-			start = text.indexOf(" SELECT ", start);
+			String searchStr = "SELECT";
+			start = text.indexOf(searchStr, start);
 			if (start <0) break;
+			String prevChar = text.substring(start-1,start);
+			String nextChar = text.substring(start+searchStr.length(),start+searchStr.length()+1);
+//			Util.p("prevChar [["+ prevChar + "]]");
+//			Util.p("nextChar [["+ nextChar + "]]");
+			if (!" \n\t()".contains(prevChar) || !" \n\t()".contains(nextChar)) {
+				start += searchStr.length();
+				continue;
+			}
 			int end = text.indexOf(";", start);
 			if (end <0) break;
 
-			String tmp = text.substring(start+1, end);
-	
+			String tmp = text.substring(start + searchStr.length(), end);
 			List<String> tables = Util.getTables(tmp);
 			
 			for (String tbl:tables) {

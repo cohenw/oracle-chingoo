@@ -44,7 +44,12 @@
 	    	initJdbcUrl = token.substring(idx+1);
 	    }
 	}
-	
+
+
+	String jdbcurl = request.getParameter("jdbcurl");
+	String schema = request.getParameter("schema");
+	if (jdbcurl != null ) initJdbcUrl = jdbcurl;
+	if (schema != null) initUserName = schema;
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
