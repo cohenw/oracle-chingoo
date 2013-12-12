@@ -147,7 +147,7 @@ public String getQryStmt(String sql, Query q) {
 	}	
 	</style>
 	    
-    <script>
+    <script type="text/javascript">
 	$(function() {
 		$( "#globalSearch" ).autocomplete({
 			source: "ajax/auto-complete2.jsp",

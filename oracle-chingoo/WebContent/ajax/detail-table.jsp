@@ -42,7 +42,7 @@ Please select a Table to see the detail.
 	}
 	boolean isTempTable = cn.isTempTable(table);
 	
-	if (owner!=null && !owner.equalsIgnoreCase(cn.getSchemaName())) tname = owner + "." + table;
+//	if (owner!=null && !owner.equalsIgnoreCase(cn.getSchemaName())) tname = owner + "." + table;
 %>
 
 <div id="objectTitle" style="display:none"><%=(isTempTable?"TEMPORARY TABLE":"TABLE")%>: <%= table %></div>
@@ -111,9 +111,9 @@ Please select a Table to see the detail.
 	if (owner != null) fks = cn.getForeignKeys(owner, tname);
 	
 	List<String> refTabs = cn.getReferencedTables(owner, tname);
-	List<String> refPkgs = cn.getReferencedPackages(tname);
-	List<String> refViews = cn.getReferencedViews(tname);
-	List<String> refTrgs = cn.getReferencedTriggers(tname);
+	List<String> refPkgs = cn.getReferencedPackages(owner, tname);
+	List<String> refViews = cn.getReferencedViews(owner, tname);
+	List<String> refTrgs = cn.getReferencedTriggers(owner, tname);
 	List<String[]> refIdx = cn.getIndexes(owner, tname);
 	List<String> refConst = cn.getConstraints(owner, tname);
 	

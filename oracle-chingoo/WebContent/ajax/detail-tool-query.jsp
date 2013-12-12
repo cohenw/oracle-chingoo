@@ -11,6 +11,8 @@
 	int counter = 0;
 	String sql = request.getParameter("qry");
 	String ttype = request.getParameter("ttype");
+	String param1 = request.getParameter("param1");
+	if(param1==null) param1="";
 	if (ttype==null) ttype="";
 	
 	if (sql==null) sql = "SELECT * FROM TABLE";
@@ -47,12 +49,27 @@
 			sql = sql.replace("[" + p + "]", "[" + i + "]");
 		}
 	}
+Util.p("param1="+param1);	
+	// for Table/View Columns
+	if (ttype.equals("SEARCH_COLUMNS") && !param1.equals("")) {
+		Util.p("param1="+ param1);
+ 		StringTokenizer st = new StringTokenizer(param1, " ,");
+		sql = "";
+		while (st.hasMoreTokens()) {
+			String token = st.nextToken().toUpperCase();
+			if (sql.equals(""))
+				sql = "SELECT TABLE_NAME FROM ALL_TAB_COLS WHERE COLUMN_NAME ='" + token+ "'";
+			else
+				sql += "\nintersect\n" + "SELECT TABLE_NAME FROM ALL_TAB_COLS WHERE COLUMN_NAME ='" + token+ "'";
+		}
+	}
 %>
 
 <% if (params.size() >0)  { %>
 <form id="formParam" onSubmit="return false;">
 <input name="ttype" type="hidden" value="<%= ttype %>">
 <input id="param-sql" name="qry" type="hidden" value="<%= sql %>">
+<input id="param1" name="param1" type="hidden">
 <table>
 <%
 	int id=0;
@@ -103,8 +120,10 @@
 %>
 
 <h3>
-<a href="javascript:toolQuery()"><img border=0 src="image/icon_query.png" title="open query"></a>
-<%= sql %>
+<pre style="font-family: Consolas; font-size: 16px;">
+<b><%=new HyperSyntax().getHyperSyntax(cn, sql, "SQL")%></b>
+<a href="javascript:toolQuery()"><img border=0 src="image/linkout.png" title="open query"></a>
+</pre>
 </h3>
 
 <form id="form1" name="form1" target=_blank action="query.jsp" method="post">
@@ -168,10 +187,11 @@
 %>
 <td <%= (numberCol[colIdx])?"align=right":""%>>
 <% if (colIdx==1 && ttype.equals("SEARCH_PROGRAM")) { %>
-<%-- 	<a href="javascript:loadPackage('<%=valDisp%>');"><%=valDisp%></a>
- --%>	<a target=_blank href="pop.jsp?type=PACKAGE&key=<%=valDisp%>"><%=valDisp%></a>
+	<a target=_blank href="pop.jsp?type=PACKAGE&key=<%=valDisp%>"><%=valDisp%></a>
 <% } else if (colIdx==2 && ttype.equals("SEARCH_COLUMN")) { %>
 	<a target=_blank href="pop.jsp?type=TABLE&key=<%=valDisp%>"><%=valDisp%></a>
+<% } else if (colIdx==1 && ttype.equals("SEARCH_COLUMNS")) { %>
+	<a target=_blank href="pop.jsp?type=OBJECT&key=<%=valDisp%>"><%=valDisp%></a>
 <% } else { %>
 	<%=valDisp%>
 <% } %>

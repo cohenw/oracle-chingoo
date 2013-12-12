@@ -17,6 +17,7 @@
 	list.add("Search Trigger Definition");
 	list.add("");
 	list.add("Table Column");
+	list.add("Table/View Columns");
 	list.add("Schema Diff");
 	list.add("");
 

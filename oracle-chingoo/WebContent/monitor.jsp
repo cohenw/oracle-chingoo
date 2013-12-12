@@ -65,6 +65,33 @@ public String extractJS(String str) {
 
 <body>
 
+<b>Cache Schemas</b><br/>
+<%
+	Hashtable<String,CacheSchema> csTable = CacheManager.getInstance().getCsTable();
+%>
+
+<% 
+	List<String> expired = new ArrayList<String>();
+	Date current = new Date();
+	for (CacheSchema cs : csTable.values()) {
+		// expire if it's too old
+
+		if ((current.getTime() - cs.loadDate.getTime()) > (1000 * 60 * 60 * 24)) {  // 24 hours
+			Util.p("expired cs " + cs.dbUrl);
+			expired.add(cs.dbUrl);
+		}
+%>
+	<%= cs.dbUrl %> :  <%= cs.loadDate %><br/>
+<%		
+	}
+
+	for (String exp:expired) {
+		CacheManager.getInstance().getCsTable().remove(exp);
+	}
+%>
+
+<br/><br/>
+
 <b>Chingoo Sessions</b>
 <br/><br/>
 <%= new Date() %><br/>
@@ -81,7 +108,11 @@ public String extractJS(String str) {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 	for (Connect cn : ss) {
 		HashMap<String,QueryLog> map = cn.getQueryHistory();
-		if (map==null) continue;
+	    if (map==null) {
+	    	ss.remove(cn);
+	    	continue;
+	    }
+	    	//map = new HashMap <String,QueryLog>();
 		List<QueryLog> logs = new ArrayList<QueryLog>(map.values());
 
 	    Collections.sort(logs, new Comparator<QueryLog>() {
