@@ -291,3 +291,9 @@ Build Build1069
 	Package procedure label uses mixed case
 	Related Foreign key, View, Package for Synonyms
 	
+Build Build1070
+	Preference Page - tab to space
+	number(0) to number
+	XmlFormatter
+	
+	

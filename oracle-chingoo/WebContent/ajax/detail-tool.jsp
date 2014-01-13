@@ -96,7 +96,7 @@
 <jsp:include page="schema-diff.jsp"/>
 <% } %>
 
-<% if (tool.equalsIgnoreCase("Preferenceses")) { %>
+<% if (tool.equalsIgnoreCase("Preferences")) { %>
 <jsp:include page="pref.jsp"/>
 <% } %>
 
