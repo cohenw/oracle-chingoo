@@ -26,6 +26,9 @@
 		qry = "SELECT * FROM USER_SYS_PRIVS";
 	else if (tool.equalsIgnoreCase("search program")) { 
 		qry = "SELECT * FROM USER_SOURCE WHERE lower(text) like lower('%[Search Keyword (ex: insert into TABLE )]%')";
+		if (cn.getTargetSchema() != null) {
+			qry = "SELECT * FROM ALL_SOURCE WHERE WNER='" + cn.getTargetSchema() + "' AND lower(text) like lower('%[Search Keyword (ex: insert into TABLE )]%')";
+		}
 		ttype = "SEARCH_PROGRAM";
 	}
 	else if (tool.equalsIgnoreCase("table column")) {
@@ -96,7 +99,7 @@
 <jsp:include page="schema-diff.jsp"/>
 <% } %>
 
-<% if (tool.equalsIgnoreCase("Preferenceses")) { %>
+<% if (tool.equalsIgnoreCase("Preferences")) { %>
 <jsp:include page="pref.jsp"/>
 <% } %>
 

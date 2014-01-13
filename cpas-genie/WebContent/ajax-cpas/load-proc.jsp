@@ -28,6 +28,8 @@ public String getTables(List<String[]> list0, String type, Connect cn) {
 
 public ArrayList<String> getTriggerCallerList(Connect cn, String pkg, String prc) {
 
+	if (!cn.isTVS("GENIE_TR_DEPENDENCY")) return null;
+	
 	String q = "SELECT trigger_name FROM GENIE_TR_DEPENDENCY WHERE TARGET_PKG_NAME='" + pkg + "' AND TARGET_PROC_NAME='" + prc + "' ORDER BY 1";
 	List<String[]> trg1 = cn.query(q, false);
 

@@ -306,7 +306,7 @@ public class HyperSyntax {
 		boolean catchName = false;
 		while (st.hasMoreTokens()) {
 			String token = st.nextToken();
-			if (token.equals("\t")) token = "   ";	// convert tab to 3 spaces
+			if (token.equals("\t")) token = cn.getTabSpace();	// convert tab to 3 spaces
 			
 			if (token.length()==1 && token.indexOf(delim)>=0 ) {
 				s.append( Util.escapeHtml(token) );

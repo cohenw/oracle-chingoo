@@ -39,45 +39,72 @@
 <!-- <h3><img src="image/cpas.jpg"> CPAS Catalog</h3>
  -->
  <h3>
+ CPAS 
 <% if (cn.isTVS("CPAS_SDI")) { %>
-<a href="cpas-on.jsp" target="_blank">CPAS Online</a>
+<a href="cpas-on.jsp" target="_blank">Online</a>
 	<% if (hasCustomTV) { %>
 		<a href="cpas-on-custom.jsp" target="_blank">Custom</a>
 	<% } %>
 <% } else { %>
-<span class="nullstyle">CPAS Online</span>
+<span class="nullstyle">Online</span>
 <% } %>
 
 |
 <% if (cn.isTVS("CPAS_SDI")) { %>
-<a href="cpas-treeview.jsp" target="_blank">CPAS Tree View</a>
+<a href="cpas-treeview.jsp" target="_blank">TreeView</a>
 	<% if (hasCustomTV) { %> 
 		<a href="cpas-customtreeview.jsp" target="_blank">Custom</a>
 	<% } %> 
 <% } else { %>
-<span class="nullstyle">CPAS Tree View</span>
+<span class="nullstyle">TreeView</span>
 <% } %>
 
 |
 <% if (cn.isTVS("CPAS_SDI")) { %>
-<a href="cpas-process.jsp" target="_blank">CPAS Process</a>
+<a href="cpas-process.jsp" target="_blank">Process</a>
 <% } else { %>
-<span class="nullstyle">CPAS Process</span>
+<span class="nullstyle">Process</span>
 <% } %>
+
+|
+<% if (cn.isTVS("CPAS_CODE")) { %>
+<a href="cpas-code.jsp" target="_blank">Code</a>
+<% } else { %>
+<span class="nullstyle">Code</span>
+<% } %>
+
 |
 
 <% if (cn.isTVS("CPAS_ROLE_SECSWITCH")) { %>
-<a href="cpas-rolesec.jsp" target="_blank">Role Privileges</a>
+<a href="cpas-rolesec.jsp" target="_blank">Role</a>
 <% } else { %>
-<span class="nullstyle">Role Privileges</span>
+<span class="nullstyle">Role</span>
+<% } %>
+<br/><br/>
+
+Test 
+<% if (cn.isTVS("CT$MATRIX")) { %>
+<a href="bc_matrix.jsp" target="_blank">Matrix</a>
+<% } else { %>
+<span class="nullstyle">Matrix</span>
 <% } %>
 |
-<% if (cn.isTVS("CT$MATRIX")) { %>
-<a href="matrix_test.jsp" target="_blank">Matrix Test</a>
+<% if (cn.isPackage("BC")|| ( cn.isPackageProc("BC.getFormula")&&cn.isPackageProc("BC.setAll"))) { %>
+<a href="bencalc.jsp" target="_blank">BenCalc</a>
+|
+<a href="bencalc_member.jsp" target="_blank">BenCalc-Member</a>
 <% } else { %>
-<span class="nullstyle">Matrix Test</span>
+<span class="nullstyle">Formula</span>
+<% } %>
+<%-- 
+|
+<% if (cn.isPackageProc("BC.setAll")) { %>
+<a href="bc_test.jsp" target="_blank">BenCalc</a>
+<% } else { %>
+<span class="nullstyle">BenCalc</span>
 <% } %>
 
+ --%>
 </h3>
 
 <b>Quick Search</b>

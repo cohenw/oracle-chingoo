@@ -45,7 +45,7 @@
 	list.add("");
 	list.add("Package Analysis");
 	list.add("Trigger Analysis");
-//	list.add("Preferenceses");
+	list.add("Preferences");
 
 %>
 
