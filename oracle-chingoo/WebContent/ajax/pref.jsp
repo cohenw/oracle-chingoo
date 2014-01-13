@@ -12,11 +12,12 @@
 
 <form id="form0" name="form0">
 <table>
-<%-- <tr>
-	<td>Query Max Rows</td>
-	<td><input id="qry_rows" name="qry_rows" size="10" value="<%= cn.QRY_ROWS %>"> (MAX = <%= Def.MAX_ROWS %>)</td>
+<table>
+<tr>
+	<td>Tab to Space</td>
+	<td><input id="tabToSpace" name="tabToSpace" size="10" value="<%= cn.tabToSpace %>"></td>
 </tr>
- --%><tr>
+<tr>
 	<td>&nbsp;</td>
 	<td>
 		<input id="saveButton" type="button" value="Save" onclick="savePref()">

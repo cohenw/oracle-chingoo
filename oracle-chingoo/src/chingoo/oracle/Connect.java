@@ -100,8 +100,16 @@ public class Connect implements HttpSessionBindingListener {
 	public String connectMessage = "";
 	
 	public HashSet<String> tempSet;
+	
 	public CacheSchema cs;
 	private long lastMillis = System.currentTimeMillis(); 
+
+	public int tabToSpace = 3;
+	public String getTabSpace() {
+		String res = "          ";
+		
+		return res.substring(0,tabToSpace);
+	}
 	
 	/**
 	 * Constructor
@@ -1621,7 +1629,7 @@ public class Connect implements HttpSessionBindingListener {
 			if (dType.equals("number")) {
 				if (scale > 0)
 					dType += "(" + decimalDigits + "," +  scale +")";
-				else if (dataSize > 0)
+				else if (dataSize > 0 && decimalDigits > 0)
 					dType += "(" + decimalDigits + ")";
 			}
 

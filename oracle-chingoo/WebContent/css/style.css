@@ -242,6 +242,11 @@ html.busy, html.busy * {
     font-weight: bold;
 }
 
+.pk2 {
+    color: #0101DF;
+    font-weight: bold;
+}
+
 .primary-key {
     color: #DF0101;
 	font-weight: bold;
