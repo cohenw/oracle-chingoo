@@ -405,8 +405,12 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 	String mkey = key.substring(idx+1);
 	String eid = clnt + "_" + mkey;
 	String fname = "C" + clnt + "_M" + mkey + ".member";
+	String plan = cn.queryOne("SELECT PLAN FROM MEMBER_PLAN WHERE CLNT='"+clnt+"' AND MKEY='"+mkey+"'");
 %>
+<%-- 
 	<a target="_blank" href="cpas-extract.jsp?id=<%=eid%>&fname=<%=fname%>&type=MEMBER">Extract Script</a>
+ --%>
+ 	<a target="_blank" href="bencalc_member.jsp?clnt=<%=clnt%>&plan=<%=plan%>&mkey=<%=mkey%>">BenCalc</a>
 <% } %>
 <% if (table.equals("_ERRORCAT")) {
 	String eid = key;
@@ -419,9 +423,19 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 <% if (table.equals("CALC") && cn.isTVS("CT$MATRIX")) {
 	String calcid = key;
 %>
-	<a target="_blank" href="matrix_test.jsp?calcid=<%=calcid%>">Matrix Test</a>
+	<a target="_blank" href="bc_matrix.jsp?calcid=<%=calcid%>">Matrix</a>
 <% } %>
-
+<% if (table.equals("CALC") && cn.isPackageProc("BC.getFormula")&&cn.isPackageProc("BC.setAll")) {
+	String calcid = key;
+%>
+	<a target="_blank" href="bencalc.jsp?calcid=<%=calcid%>">BenCalc</a>
+<% } %>
+<%-- <% if (table.equals("CALC") && cn.isPackageProc("BC.setAll")) {
+	String calcid = key;
+%>
+	<a target="_blank" href="bc_test.jsp?calcid=<%=calcid%>">BenCalc</a>
+<% } %>
+ --%>
 <br/>
 <div id="div-<%=id %>" style1="padding: 5px; background-color: gray;">
 <jsp:include page="ajax/qry-simple.jsp">

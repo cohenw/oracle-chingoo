@@ -26,6 +26,14 @@ public class CpasUtil {
 			"CALC_STATUS.VALU",
 			"-MEMBER_SERVICE.SRVCODE" 
 	};
+	
+	// default code group setting
+	String[][] defaultCode = {
+			{"CALC.STATUS", "CS"},
+			{"CALC.CPAS_PTATUS", "CPAS_PS"},
+			{"CALC.CCLASS", "CPAS_CTYPE"},
+			{"FORMULA.PAGE", "PG"}
+	};
 
 	String calcStage[][] = {
 			{"AA", "Request"},
@@ -143,7 +151,7 @@ public class CpasUtil {
 			htCapt.put(tname + "." + cname, "");
 			hsTable.add(tname);
 		}
-
+		
 		if (cn.isTVS("CPAS_TABLE")) { 
 			String qry = "SELECT distinct table_name FROM user_tab_cols where column_name in ('CLNT','ERKEY','CTYPE') UNION  "
 					+ "SELECT TNAME FROM CPAS_TABLE A WHERE EXISTS (SELECT 1 FROM TAB WHERE TNAME=A.TNAME)";
@@ -270,11 +278,11 @@ public class CpasUtil {
 		} else if (temp.equals("BATCH_QUEUE.TASKKEY") || temp.equals("REPORTHISTORY_TASK") || temp.equals("BATCHSCHEDULE_TASK")) {
 			String qry = "SELECT TASKNAME FROM BATCHCAT_TASK WHERE BATCHKEY='" + q.getValue("BATCHKEY") + "' AND TASKKEY = '" + value + "'";
 			return cn.queryOne(qry);
-		} else if (temp.endsWith(".TASKKEY")) {
-			String qry = "SELECT TASKNAME FROM BATCHCAT_TASK WHERE BATCHKEY='" + q.getValue("BATCHKEY") + "' AND TASKKEY = '" + value + "'";
-			return cn.queryOne(qry);
 		} else if (temp.equals("REQUEST_TASK.TASKKEY")) {
 			String qry = "SELECT TASKNAME FROM TASKCAT WHERE TASKKEY='" + value + "'";
+			return cn.queryOne(qry);
+		} else if (temp.endsWith(".TASKKEY")) {
+			String qry = "SELECT TASKNAME FROM BATCHCAT_TASK WHERE BATCHKEY='" + q.getValue("BATCHKEY") + "' AND TASKKEY = '" + value + "'";
 			return cn.queryOne(qry);
 		} else if (temp.equals("CALC_DATE.RDATE") /* && value.startsWith("1800")*/ ) {
 			String qry = "SELECT NAME FROM CPAS_DATE WHERE RDATE= TO_DATE('" + value + "','YYYY-MM-DD')";
@@ -569,9 +577,13 @@ public class CpasUtil {
 				grup = "ER";
 			if (cname.equals("CTYPE"))
 				grup = "CTC";
-			if (tname.equals("CALC") && cname.equals("STAGE"))
+/*			if (tname.equals("CALC") && cname.equals("STATUS"))
 				grup = "CS";
-		}
+			if (tname.equals("CALC") && cname.equals("CPAS_PTATUS"))
+				grup = "CPAS_PS";
+			if (tname.equals("CALC") && cname.equals("CCLASS"))
+				grup = "CPAS_CTYPE";
+*/		}
 		
 		return grup;
 	}
@@ -676,6 +688,12 @@ public class CpasUtil {
 			if (capt != null && !capt.equals(""))
 				htCapt.put(key, capt);
 		}
+		
+		// add default code group
+		for (String[] row : defaultCode) {
+			htCode.put(row[0], row[1]);
+		}
+		
 		hsTableLoaded.add(tname);
 	}
 

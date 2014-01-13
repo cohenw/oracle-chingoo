@@ -549,6 +549,7 @@
 	
 	function doTextQry(id) {
 		var sql = $("#text-"+id).val();
+		//alert(sql);
 		$("#sql-"+id).html(sql);
 		$("#sql").val(sql);
 		$("#id").val(id);

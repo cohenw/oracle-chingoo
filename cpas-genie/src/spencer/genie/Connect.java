@@ -109,6 +109,15 @@ public class Connect implements HttpSessionBindingListener {
 	private long lastMillis = System.currentTimeMillis(); 
 	
 	public HashSet<String> tempSet;
+	String calcid = "";
+
+	public int tabToSpace = 3;
+	
+	public String getTabSpace() {
+		String res = "          ";
+		
+		return res.substring(0,tabToSpace);
+	}
 	
 	/**
 	 * Constructor
@@ -1837,7 +1846,7 @@ public class Connect implements HttpSessionBindingListener {
 			if (dType.equals("number")) {
 				if (scale > 0)
 					dType += "(" + decimalDigits + "," +  scale +")";
-				else if (dataSize > 0)
+				else if (dataSize > 0 && decimalDigits > 0)
 					dType += "(" + decimalDigits + ")";
 			}
 
@@ -2679,6 +2688,39 @@ public class Connect implements HttpSessionBindingListener {
 		call.close();
 	}
 
+	public float getFormula(String formula) {
+		float res=0;
+		if (conn != null) {
+
+		    String cStmt = "{ ? = call BC.getFormula(?,'Genie') }";
+		    CallableStatement oStmt=null;
+		    int nResult = 0;
+		    
+		    try {
+		    	oStmt = conn.prepareCall(cStmt);
+				oStmt.registerOutParameter(1, OracleTypes.FLOAT);
+		        oStmt.setString(2,formula);
+		        oStmt.execute();
+		        
+		        res = oStmt.getFloat(1);
+
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    } finally {
+			    try {
+			    	if (oStmt != null)
+					    oStmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
+		        
+		}
+		
+		return res;
+	}
+	
 	public boolean isTVS(String oname) {
 		return cs.isTVS(oname);
 	}
@@ -3178,5 +3220,26 @@ public class Connect implements HttpSessionBindingListener {
 	public void loadTriggerTable() {
 		cs.loadTriggerTable(conn);
 	}
+	
+	public void bcSetAll(String calcid) throws SQLException {
+		//if (this.calcid.equals(calcid)) return;
+		String sql = "BEGIN BC.setAll("+calcid+ "); END;";
+		CallableStatement call = conn.prepareCall(sql);
+		call.execute();
+		call.close();	
+		this.calcid = calcid;
+	}
+	
+	public void bcSetAll(String clnt, String plan, String mkey, String calcDate) throws SQLException {
+		String sql = "BEGIN BC.setAll(?,?,?,null,to_date(?,'YYYYMMDD')); END;";
+		CallableStatement call = conn.prepareCall(sql);
+		call.setString(1, clnt);
+		call.setString(2, plan);
+		call.setString(3, mkey);
+		call.setString(4, calcDate);
+		call.execute();
+		call.close();		
+	}
+
 }
 

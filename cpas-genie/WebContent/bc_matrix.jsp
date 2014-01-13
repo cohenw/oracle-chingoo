@@ -16,13 +16,17 @@
 	String fdate = Util.nvl(request.getParameter("fdate"));
 	String tdate = Util.nvl(request.getParameter("tdate"));
 
+	if (calcid.equals("")) {
+		calcid = cn.queryOne("SELECT MAX(calcid) FROM CALC");
+	}
+
 	String clnt=null;
 	if (!calcid.equals(""))
 		clnt = cn.queryOne("SELECT CLNT FROM CALC WHERE CALCID="+calcid);
 	
 	String qry = "SELECT DISTINCT VARNAME, VARDESC FROM PLAN_MATRIX A ORDER BY 2";
 	if (clnt!=null) {
-		qry = "SELECT DISTINCT VARNAME, VARDESC FROM PLAN_MATRIX A WHERE CLNT='"+clnt+"' ORDER BY 2";
+		qry = "SELECT DISTINCT VARNAME, VARDESC FROM PLAN_MATRIX A WHERE CLNT='"+clnt+"' ORDER BY 1";
 	}
 	
 	List<String[]> varnames = cn.query(qry);
@@ -130,7 +134,7 @@ Variable 1
 <%
 	for (String[] var: varnames) {
 %>
-<option value="<%=var[1]%>" <%= (var1.equals(var[1])?"SELECTED":"") %>><%=var[2]%></option>
+<option value="<%=var[1]%>" <%= (var1.equals(var[1])?"SELECTED":"") %>><%=var[1]%>: <%=var[2]%></option>
 <%		
 	}
 %>
@@ -142,7 +146,7 @@ Variable 2
 <%
 	for (String[] var: varnames) {
 %>
-<option value="<%=var[1]%>" <%= (var2.equals(var[1])?"SELECTED":"") %>><%=var[2]%></option>
+<option value="<%=var[1]%>" <%= (var2.equals(var[1])?"SELECTED":"") %>><%=var[1]%>: <%=var[2]%></option>
 <%		
 	}
 %>
@@ -154,7 +158,7 @@ Variable 3
 <%
 	for (String[] var: varnames) {
 %>
-<option value="<%=var[1]%>" <%= (var3.equals(var[1])?"SELECTED":"") %>><%=var[2]%></option>
+<option value="<%=var[1]%>" <%= (var3.equals(var[1])?"SELECTED":"") %>><%=var[1]%>: <%=var[2]%></option>
 <%		
 	}
 %>
@@ -168,6 +172,16 @@ To Date <input name="tdate" type="text" id="datepicker2" value="<%= tdate %>" si
 </form>
 
 <hr>
+<% if (!calcid.equals("")) {%>
+<div id="div-<%=id%>">
+<jsp:include page='ajax/qry-simple.jsp'>
+	<jsp:param value='<%= "SELECT * FROM CALC WHERE CALCID="+calcid %>' name="sql"/>
+	<jsp:param value="1" name="dataLink"/>
+	<jsp:param value="<%= id %>" name="id"/>
+</jsp:include>
+</div>
+<br/>
+<% } %>
 
 <pre style="font-family: Consolas; font-size: 14px;"></pre>
 <pre>

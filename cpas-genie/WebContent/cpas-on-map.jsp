@@ -114,7 +114,7 @@ public ArrayList<String> getEventList(Connect cn, String process) {
 //		qry = "SELECT CAPTION, TREEKEY FROM TREEVIEW where sdi='WP' and actionid=" + actionid;
 %>
 <br/>
-<a href="Javascript:loadProcess('<%=actionName%>');"><%= caption %></a><br/>
+<a href="Javascript:loadProcess('<%=actionName%>');"><%= caption %></a> [<%=actionName%>]<br/>
 <table border=1 cellspacing=0 cellpadding=5 style="margin-left: 20px; border: 1px solid #CCCCCC; border-collapse: collapse;">
 <tr>
 
@@ -124,13 +124,13 @@ public ArrayList<String> getEventList(Connect cn, String process) {
 			String pp[] = p.split(",");
 %>
 <td valign=top nowrap valign=top>
-	<a href="Javascript:setProcess('<%=actionName%>','<%=pp[1]%>');"><%= pp[0] %></a><br/>
+	<a href="Javascript:setProcess('<%=actionName%>','<%=pp[1]%>');"><%= pp[0] %></a> [<%=pp[1]%>]<br/>
 <%			
 			ArrayList<String> events = getEventList(cn, pp[1]);
 			for (String e: events) {
 				String ee[] = e.split(",");
 %>
-				<a style="margin-left: 20px;" href="Javascript:setEvent('<%=actionName%>','<%=pp[1]%>','<%=ee[1]%>')"><%= ee[0] %></a><br/>
+				<a style="margin-left: 20px;" href="Javascript:setEvent('<%=actionName%>','<%=pp[1]%>','<%=ee[1]%>')"><%= ee[0] %></a> [<%=ee[1]%>]<br/>
 <%				
 			}
 

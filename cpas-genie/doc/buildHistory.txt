@@ -440,6 +440,34 @@ Build CPAS1097
 	Tree View shows SQL format
 	Related Foreign key, View, Package for Synonyms
 	CPAS online - Benefit Calc/System wizard pick up by UPARAM
+
+Build CPAS1098
+	CALC Html Detail enhanced - tabname from cpas code
+	CPAS Util added default code group list
+	REQUEST_TASK.Taskkey
+	Formula Test page
+	Display CALC record in Matrix test and Formula test 
+	Formula shows Expose Code pop-up(rule source)
+	BenCalc Test page
+
+Build CPAS1099
+	Connect.bcSetAll(calcid)
+	CPAS Code page, Referenced by
+	BenCalc Parameter / Value
+	BenCalc and BenCalc - Member
+	BenCalc include other functions as well as get*
+
+Build CPAS1100
+	Preference Page - tab to space
+	BenCalc Test
+	number(0) to number
+	XmlFormatter
+
+Build CPAS1101
+	Formula to BenCalc
+	BenCalc shows RuleDates
+	BenCalc shows Service/Earning
+	CPAS online - shows tab / process / event key in sitemap
 	
 Known Issue
 	PA does not include Stored procedures and functions
@@ -449,4 +477,4 @@ New Feature to implement
 
 Known Bug
 	dynamic parameter ex :A.COL1 appears multiple times
-	After Package Analyze, need to reload procedure/crud info into cache
+

@@ -562,6 +562,23 @@
 		});		
 	}
 	
+	function showCpasRule(ruleid) {
+		var id = "id"+(new Date().getTime());
+		var temp ="<div id='" + id + "' title='RULE " + ruleid + "' style='background-color: #ffffcc;'>"
+		$.ajax({
+			url: "ajax-cpas/cpas-rule.jsp?ruleid=" + ruleid,
+			success: function(data){
+				temp = temp + data + "</div>";
+				$("BODY").append(temp);
+				$("#"+id).dialog({ width: 700, height: 350 });
+				setHighlight();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});		
+	}
+	
 	function showSource(key) {
 		var id = "id"+(new Date().getTime());
 		var temp ="<div id='" + id + "' title='Source for " + key + "' style='background-color: #dddddd;'>"

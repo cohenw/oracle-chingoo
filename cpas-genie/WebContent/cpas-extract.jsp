@@ -49,7 +49,7 @@ System.out.println(eid);
 		oStmt.setString(1,cn.getSchemaName().toUpperCase());
 		oStmt.setString(2,type);
 		oStmt.setString(3,eid);
-        oStmt.setString(4,"S");
+        oStmt.setString(4,"C");
 		oStmt.registerOutParameter(5, OracleTypes.CLOB);
 		oStmt.execute();
         

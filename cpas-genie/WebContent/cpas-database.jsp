@@ -72,8 +72,8 @@
 <li><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/GMA', 'client_gma_dev')">client_gma_dev@s-ora-002.GMA</a><br/>
 <li><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/GMA', 'client_gma_test')">client_gma_test@s-ora-002.GMA</a><br/>
 <li><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/GMA', 'client_gma_prod')">client_gma_prod@s-ora-002.GMA</a><br/>
-<!-- 
 <li><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/GMA', 'client_gma_dc')">client_gma_dc@s-ora-002.GMA</a><br/>
+<!-- 
 <li><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-002.cpas.com:1526/GMA', 'client_gma_shell')">client_gma_shell@s-ora-002.GMA</a><br/>
  --><br/>
 

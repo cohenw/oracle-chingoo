@@ -438,7 +438,7 @@ function changeSchema(schema) {
 				<%
 					if (cn.isCpas() && isCPAS) {
 				%> <a href="javascript:showCPAS()"><img
-					border=0 src="image/cpas.jpg" width=12 height=12> CPAS</a> | <%
+					border=0 src="image/cpas.jpg" width=12 height=12> Home</a> | <%
  	}
  %>
 				<a href="query.jsp" target="_blank">Query</a> | <a target=_blank
