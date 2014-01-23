@@ -94,7 +94,7 @@ Test
 |
 <a href="bencalc_member.jsp" target="_blank">BenCalc-Member</a>
 <% } else { %>
-<span class="nullstyle">Formula</span>
+<span class="nullstyle">BenCalc</span>
 <% } %>
 <%-- 
 |

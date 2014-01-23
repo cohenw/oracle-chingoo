@@ -468,10 +468,30 @@ Build CPAS1101
 	BenCalc shows RuleDates
 	BenCalc shows Service/Earning
 	CPAS online - shows tab / process / event key in sitemap
+
+Build CPAS1102
+	BenCalc page show all Formulas
+	bugfix - clnt was hardcoded for GMA1
+	BC.getXXX variables as functions
+	Reorganize Benefit Calculartion page
+	Added Rule Date expose code
+	
+Build CPAS1103
+	Official Release to CPAS staff
+	Added Rule Ages
+	Formula to include fclass='F' if FORMULA.FCLASS exists
+	Download Role Privileges
+	BuildNo from CPAS_VERSION
+	Rule Date/Age comes from FORMULA when build >= 1257
+	login.jsp checks if it's already login		
+
+Build CPAS1104
+	ruletype link to EXPOSE_RULE
+
 	
 Known Issue
 	PA does not include Stored procedures and functions
-
+	Rule Age shows exposed code
 
 New Feature to implement
 

@@ -436,7 +436,7 @@ function changeSchema(schema) {
  %></td>
 			<td nowrap>
 				<%
-					if (cn.isCpas() && isCPAS) {
+					if (true||cn.isCpas() && isCPAS) {
 				%> <a href="javascript:showCPAS()"><img
 					border=0 src="image/cpas.jpg" width=12 height=12> Home</a> | <%
  	}

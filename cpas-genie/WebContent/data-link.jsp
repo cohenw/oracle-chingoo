@@ -425,7 +425,7 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 %>
 	<a target="_blank" href="bc_matrix.jsp?calcid=<%=calcid%>">Matrix</a>
 <% } %>
-<% if (table.equals("CALC") && cn.isPackageProc("BC.getFormula")&&cn.isPackageProc("BC.setAll")) {
+<% if (table.equals("CALC") && cn.isPackage("BC")) {
 	String calcid = key;
 %>
 	<a target="_blank" href="bencalc.jsp?calcid=<%=calcid%>">BenCalc</a>

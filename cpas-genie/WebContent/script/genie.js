@@ -74,8 +74,8 @@
 			   	setHighlight();
 				//alert(data);
 				//$("body").css("cursor", "auto");
+			    _gaq.push(['_trackPageview','ajax/detail-object.jsp?object=' + objectName]);
 			   	_gaq.push(['_trackEvent', 'Object', 'Object ' + oName]);
-			   	_gaq.push(['_trackPageview', '/ajax/detail-object.jsp?object=' + objectName]);
 			},
 	        error:function (jqXHR, textStatus, errorThrown){
 	            alert(jqXHR.status + " " + errorThrown);
@@ -105,8 +105,8 @@
 				//alert(data);
 				//$("body").css("cursor", "auto");
 			   	setTitle();
+			    _gaq.push(['_trackPageview','ajax/detail-table.jsp?table=' + tableName]);
 			   	_gaq.push(['_trackEvent', 'Table', 'Table ' + tName]);
-			   	_gaq.push(['_trackPageview', 'ajax/detail-table.jsp?table=' + tableName]);
 			},
 	        error:function (jqXHR, textStatus, errorThrown){
 	            alert(jqXHR.status + " " + errorThrown);
@@ -128,8 +128,8 @@
 //				SyntaxHighlighter.all();
 			   	setHighlight();
 			   	setTitle();
+			    _gaq.push(['_trackPageview','ajax/detail-view.jsp?view=' + vName]);
 			   	_gaq.push(['_trackEvent', 'View', 'View ' + vName]);
-			   	_gaq.push(['_trackPageview', 'ajax/detail-view.jsp?view=' + vName]);
 			},
 	        error:function (jqXHR, textStatus, errorThrown){
 	            alert(jqXHR.status + " " + errorThrown);
@@ -148,8 +148,8 @@
 				$("#inner-result1").html(data);
 		        SyntaxHighlighter.all();
 			   	setTitle();
+			    _gaq.push(['_trackPageview', 'ajax/detail-package.jsp?name=' + pName]);
 			   	_gaq.push(['_trackEvent', 'Program', 'Program ' + pName]);
-			   	_gaq.push(['_trackPageview', 'ajax/detail-package.jsp?name=' + pName]);
 			},
 	        error:function (jqXHR, textStatus, errorThrown){
 	            alert(jqXHR.status + " " + errorThrown);
@@ -168,8 +168,8 @@
 				$("#inner-result1").html(data);
 			   	setHighlight();
 			   	setTitle();
+			    _gaq.push(['_trackPageview', 'ajax/detail-synonym.jsp?name=' + sName]);
 			   	_gaq.push(['_trackEvent', 'Synonym', 'Synonym ' + sName]);
-			   	_gaq.push(['_trackPageview', 'ajax/detail-synonym.jsp?name=' + sName]);
 			},
 	        error:function (jqXHR, textStatus, errorThrown){
 	            alert(jqXHR.status + " " + errorThrown);
@@ -186,8 +186,8 @@
 			url: "ajax/detail-tool.jsp?name=" + name + "&t=" + (new Date().getTime()),
 			success: function(data){
 				$("#inner-result1").html(data);
+			    _gaq.push(['_trackPageview','ajax/detail-tool.jsp?name=' + name]);
 			   	_gaq.push(['_trackEvent', 'Tool', 'Tool ' + name]);
-			   	_gaq.push(['_trackPageview', 'ajax/detail-tool.jsp?name=' + name]);
 			},
 	        error:function (jqXHR, textStatus, errorThrown){
 	            alert(jqXHR.status + " " + errorThrown);
@@ -579,6 +579,42 @@
 		});		
 	}
 	
+	
+	function showRuleDateCode(ruledate) {
+		var id = "id"+(new Date().getTime());
+		var temp ="<div id='" + id + "' title='Expose Code for Date " + ruledate + "' style='background-color: #ffffcc;'>"
+		$.ajax({
+			url: "ajax-cpas/cpas-date-code.jsp?ruledate=" + ruledate,
+			success: function(data){
+				temp = temp + data + "</div>";
+				$("BODY").append(temp);
+				$("#"+id).dialog({ width: 700, height: 350 });
+				setHighlight();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});		
+	}
+	
+	
+	function showRuleAgeCode(ruleage) {
+		var id = "id"+(new Date().getTime());
+		var temp ="<div id='" + id + "' title='Expose Code for Age " + ruleage + "' style='background-color: #ffffcc;'>"
+		$.ajax({
+			url: "ajax-cpas/cpas-age-code.jsp?ruleage=" + ruleage,
+			success: function(data){
+				temp = temp + data + "</div>";
+				$("BODY").append(temp);
+				$("#"+id).dialog({ width: 700, height: 350 });
+				setHighlight();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});		
+	}
+	
 	function showSource(key) {
 		var id = "id"+(new Date().getTime());
 		var temp ="<div id='" + id + "' title='Source for " + key + "' style='background-color: #dddddd;'>"
@@ -875,3 +911,31 @@
             }  
 		});	
     }    
+    
+	function hideFilterWithOneValue() {
+   	 	var hideCol = []; 
+
+		$("select.filterCol").each(function() {
+			var name = $(this).attr("id");
+			var len = $("#" + name + " option").length;
+			if (len <= 2) {
+				$(this).hide();
+				var n=name.split("-");
+	   	    	hideCol.push( 1 + eval(n[1]) );
+			} 
+			
+		});
+		
+   	 	for (var i = 0, l = hideCol.length; i < l; ++i) {
+   	 		//alert('hide ' + i );
+//   	 		hideColumn(id, hideCol[i]);
+   	 		console.log('hide ' + hideCol[i]);
+   	 		removeFilterCol(eval(hideCol[i]));
+   	    }
+		
+	}    
+	
+	function removeFilterCol(col) {
+		$('table#filterTable').hideCol(col);
+	}
+	

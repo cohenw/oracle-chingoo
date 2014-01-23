@@ -195,6 +195,7 @@ public class Connect implements HttpSessionBindingListener {
             loadData();
             
             loadHistoryFromFile();
+			System.out.println("BuildNo=" + this.getBuildNo());
         }
         catch (Exception e)
         {
@@ -267,6 +268,8 @@ public class Connect implements HttpSessionBindingListener {
     public String getUrlString() {
     	String res = urlString;
     	if (this.targetSchema != null) res += " for " + this.targetSchema;
+    	
+    	res = res.replace("@jdbc:oracle:thin:", "");
     	return res;
     }
 
@@ -3241,5 +3244,8 @@ public class Connect implements HttpSessionBindingListener {
 		call.close();		
 	}
 
+	public String getBuildNo() {
+		return cu.buildNo;
+	}
 }
 
