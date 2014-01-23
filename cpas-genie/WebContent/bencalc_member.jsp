@@ -20,24 +20,19 @@ public String getBC(Connection conn, String fname, String type) {
 	    int nResult = 0;
 	    
 	    try {
+	    	if (type.equals("NUMBER")) 
+	    		cStmt = "{ ? = call round(" + fname+",10) }";
+	    	
 	    	oStmt = conn.prepareCall(cStmt);
-	    	if (type.equals("BOOLEAN")) {
-				oStmt.registerOutParameter(1, OracleTypes.BOOLEAN);
-		        oStmt.execute();
-				res = oStmt.getString(1);
-				//res = (b?"true":"false");
-	    	} else {
-				oStmt.registerOutParameter(1, OracleTypes.VARCHAR);
-		        oStmt.execute();
-		        res = oStmt.getString(1);
-	    	}
-		        
-	        
+			oStmt.registerOutParameter(1, OracleTypes.VARCHAR);
+	        oStmt.execute();
+	        res = oStmt.getString(1);
 
 	    } catch (SQLException e) {
-			Util.p("*** " + fname);
+			//Util.p("***1 " + fname);
 			res = "ERROR: " + e.getMessage();
-	        e.printStackTrace();
+			//Util.p(res);
+	        //e.printStackTrace();
 	    } finally {
 		    try {
 		    	if (oStmt != null)
@@ -52,7 +47,6 @@ public String getBC(Connection conn, String fname, String type) {
 	
 	return res;
 }
-
 public String getBCBoolean(Connection conn, String fname) {
 	String res="";
 	if (conn != null) {
@@ -80,9 +74,9 @@ public String getBCBoolean(Connection conn, String fname) {
 	        res = oStmt.getString(1);
 
 	    } catch (SQLException e) {
-			Util.p("*** " + fname);
+			//Util.p("*** " + fname);
 			res = "ERROR: " + e.getMessage();
-	        e.printStackTrace();
+	        //e.printStackTrace();
 	    } finally {
 		    try {
 		    	if (oStmt != null)
@@ -116,7 +110,7 @@ public String getRuleDate(Connection conn, String dateStr) {
 
 	    } catch (SQLException e) {
 	    	res = "ERROR " + e.getMessage();
-	        e.printStackTrace();
+	        //e.printStackTrace();
 	    } finally {
 		    try {
 		    	if (oStmt != null)
@@ -135,7 +129,7 @@ public String getFormula(Connection conn, String formula) {
 	String res="";
 	if (conn != null) {
 
-	    String cStmt = "{ ? = call BC.getFormula(?,'Genie') }";
+	    String cStmt = "{ ? = call BC.getFormula(?,'') }";
 	    CallableStatement oStmt=null;
 	    int nResult = 0;
 	    
@@ -152,7 +146,7 @@ public String getFormula(Connection conn, String formula) {
 
 	    } catch (SQLException e) {
 	    	res = "ERROR " + e.getMessage();
-	        e.printStackTrace();
+	        //e.printStackTrace();
 	    } finally {
 		    try {
 		    	if (oStmt != null)
@@ -170,7 +164,7 @@ public String getService(Connection conn, String varname) {
 	String res="";
 	if (conn != null) {
 
-	    String cStmt = "{ ? = call BC_SERVICE.getService(?) }";
+	    String cStmt = "{ ? = call round(BC_SERVICE.getService(?),10) }";
 	    CallableStatement oStmt=null;
 	    int nResult = 0;
 	    
@@ -184,7 +178,39 @@ public String getService(Connection conn, String varname) {
 
 	    } catch (SQLException e) {
 	    	res = "ERROR " + e.getMessage() + cStmt;
-	        e.printStackTrace();
+	        //e.printStackTrace();
+	    } finally {
+		    try {
+		    	if (oStmt != null)
+				    oStmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	    }
+	}
+	
+	return res;
+}
+
+public String getAge(Connection conn, String varname) {
+	String res="";
+	if (conn != null) {
+
+	    String cStmt = "{ ? = call round(BC_RULE.getAge(?),10) }";
+	    CallableStatement oStmt=null;
+	    int nResult = 0;
+	    
+	    try {
+	    	oStmt = conn.prepareCall(cStmt);
+			oStmt.registerOutParameter(1, OracleTypes.VARCHAR);
+	        oStmt.setString(2,varname);
+	        oStmt.execute();
+	        
+	        res = oStmt.getString(1);
+
+	    } catch (SQLException e) {
+	    	res = "ERROR " + e.getMessage() + cStmt;
+	        //e.printStackTrace();
 	    } finally {
 		    try {
 		    	if (oStmt != null)
@@ -310,9 +336,9 @@ public String getBCParameter(Connection conn, String param, String datatype) {
 	        res = oStmt.getString(1);
 
 	    } catch (SQLException e) {
-			Util.p("**** " + fname);
+			//Util.p("**** " + fname);
 			res = "ERROR: " + e.getMessage();
-	        e.printStackTrace();
+	        //e.printStackTrace();
 	    } finally {
 		    try {
 		    	if (oStmt != null)
@@ -338,11 +364,9 @@ public String getBCParameter(Connection conn, String param, String datatype) {
 	String cdate = Util.nvl(request.getParameter("cdate"));
 
 	String calcid = Util.nvl(request.getParameter("calcid"));
+	String erkey=null;
 
-	String ftype = Util.nvl(request.getParameter("ftype"));
-	String key = Util.nvl(request.getParameter("key"));
-	String showDetail = Util.nvl(request.getParameter("showdetail"));
-
+	boolean isRun = true; 
 	if (mkey.equals("")) {
 		String q = "SELECT clnt, plan, mkey, to_char(cdate,'yyyymmdd') FROM CALC WHERE calcid = (select MAX(calcid) FROM CALC)";
 		if (!calcid.equals(""))
@@ -352,7 +376,11 @@ public String getBCParameter(Connection conn, String param, String datatype) {
 		plan = res.get(0)[2];
 		mkey = res.get(0)[3];
 		cdate = res.get(0)[4];
+		isRun = false;
 	}
+	if (cdate.equals("")) isRun = false;
+
+	erkey = cn.queryOne("SELECT ERKEY FROM MEMBER_SERVICE WHERE CLNT='"+clnt + "' AND MKEY='" + mkey +"'");
 
 	String qry = "SELECT FTYPE VALU,NAME FROM CPAS_FORMULA ORDER BY NAME";
 	List<String[]> ftypes = cn.query(qry);
@@ -365,7 +393,7 @@ public String getBCParameter(Connection conn, String param, String datatype) {
 %>
 <html>
 <head> 
-	<title>BenCalc - Member</title>
+	<title>BenCalc - Member <%= mkey %></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
 
     <script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -425,6 +453,18 @@ public String getBCParameter(Connection conn, String param, String datatype) {
 		$("#form-map").submit();
 	}	
 
+	function toggleFormula() {
+		var src = $("#imgFormula").attr('src');
+		//alert(src);
+		if (src.indexOf("minus")>0) {
+			$("#BenFormula").slideUp();
+			$("#imgFormula").attr('src','image/plus.gif');
+		} else {
+			$("#BenFormula").slideDown();
+			$("#imgFormula").attr('src','image/minus.gif');
+		}
+
+	}
 	function toggleBenCalc() {
 		var src = $("#imgBenCalc").attr('src');
 		//alert(src);
@@ -478,6 +518,18 @@ public String getBCParameter(Connection conn, String param, String datatype) {
 		} else {
 			$("#BenService").slideDown();
 			$("#imgService").attr('src','image/minus.gif');
+		}
+	}
+
+	function toggleAge() {
+		var src = $("#imgAge").attr('src');
+		//alert(src);
+		if (src.indexOf("minus")>0) {
+			$("#BenAge").slideUp();
+			$("#imgAge").attr('src','image/plus.gif');
+		} else {
+			$("#BenAge").slideDown();
+			$("#imgAge").attr('src','image/minus.gif');
 		}
 	}
 
@@ -537,39 +589,27 @@ Plan <input name="plan" value="<%= plan %>" size=1>
 MKey <input name="mkey" value="<%= mkey %>" size=10>
 Calc Date<input name="cdate" type="text" id="datepicker1" value="<%= cdate %>" size=10/>
 
-Formula Type 
-<select name="ftype">
-<option></option>
-<%
-	for (String[] var: ftypes) {
-%>
-<option value="<%=var[1]%>" <%= (ftype.equals(var[1])?"SELECTED":"") %>><%=var[2]%></option>
-<%		
-	}
-%>
-</select>
-
-Formula Key
-<input name="key" value="<%= key %>"> 
-
-<%-- 
-Show Detail
-<input type="checkbox" name="showdetail" value="1" <%= showDetail.equals("1")?"checked":"" %>>
- --%>
 <input type="submit" value="Run"> 
+clnt=[<%= clnt %>] plan=[<%= plan %>] mkey=[<%= mkey %>] erkey=[<%= erkey %>]
 </form>
 
+<% if (!isRun)  { %>
+</body>
+</html>
+<% 		return;
+	} %>
 <hr>
 
 <% if (mkey != null && !mkey.equals("")) {
 	id = Util.getId();
 	String sql= "SELECT * FROM MEMBER WHERE CLNT='"+clnt +"' AND MKEY='"+mkey +"'"; 
 %>
+<b>MEMBER</b>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
 <div style="display: none;" id="mode-<%=id%>">hide</div>
 <div style="display: none;" id="ori-<%=id%>">H</div>
 <div style="display: none;" id="hide-<%=id%>"></div>
-<div id="div-<%=id%>">
+<div style="margin-left: 20px;" id="div-<%=id%>">
 <jsp:include page='ajax/qry-simple.jsp'>
 	<jsp:param value='<%= sql %>' name="sql"/>
 	<jsp:param value="1" name="dataLink"/>
@@ -579,101 +619,313 @@ Show Detail
 <br/>
 <% } %>
 
+
+
 <br/>
-<span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Formular &amp; Calculated values</span>
+<%
+//	cn.bcSetAll(calcid);
+	cn.bcSetAll(clnt, plan, mkey, cdate);
+
+	id = Util.getId();
+%>
+
+
+<table border=0>
+<tr>
+<td valign=top>
+
+<a href="javascript:toggleService()"><span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Services / Earnings</span><img id="imgService" src="image/minus.gif"></a>
+
+<div id="BenService" style="display: block;">
+<%
+if (cn.isTVS("PLAN_MATRIX")) {
+	id = Util.getId();
+%>
+
 <table id="table-<%= id %>" border=1 class="gridBody" style="margin-left: 40px;">
 <tr>
-	<th class="headerRow">Client</th>
-	<th class="headerRow">Plan</th>
-	<th class="headerRow">ERKey</th>
-	<th class="headerRow">Formula Key</th>
+	<th class="headerRow">Var Name</th>
+	<th class="headerRow">Var Desc</th>
+	<th class="headerRow">Type</th>
 	<th class="headerRow">Value</th>
-	<th class="headerRow">Description</th>
-	<th class="headerRow">Formula Type</th>
-	<th class="headerRow">Category</th>
-	<th class="headerRow">Page</th>
-	<th class="headerRow">Display</th>
-	<th class="headerRow">Formula</th>
-	<th class="headerRow">Modified On</th>
-	<th class="headerRow">Modified By</th>
-	<th class="headerRow">Rule</th>
 </tr>
-
-
 <%
-	if (mkey != null && !mkey.equals("") && (!ftype.equals("")||!key.equals(""))) {
-		cn.bcSetAll(clnt, plan, mkey, cdate);
+	String q2 = "select varname, vardesc, vartype  from PLAN_MATRIX WHERE CLNT = '"+ clnt + "' AND PLAN='"+plan+"' order by 3 desc, 1";
 
-		String q = "SELECT * FROM (SELECT CLNT, PLAN, ERKEY, FKEY, FDESC, (SELECT NAME FROM CPAS_CODE_VALUE WHERE GRUP='PG' AND VALU=PAGE) PAGENAME, DISPLAY, FORMULA, " +
-				"(SELECT NAME FROM CPAS_CODE_VALUE WHERE GRUP='RTY' AND VALU=RTYPE) CATEGORY, TIMESTAMP, USERNAME, RULEID, FTYPE, " +
-				"row_number() over (partition by fkey order by decode(clnt,'"+clnt+"',0,1), decode(plan,'"+plan+"',0,1)) as rn " +
-				"FROM FORMULA WHERE CLNT IN ('*','"+clnt+"') AND PLAN IN ('*','"+plan+"') " + 
-				(ftype.equals("")?"":"AND ftype='"+ftype+"' ") + 
-				"AND (FKEY LIKE '%" + key.toUpperCase() + "%' ) AND ERKEY IN ('*') " +
-				") WHERE rn=1 ORDER BY FKEY";
-//		"AND (FKEY LIKE '%" + key.toUpperCase() + "%' OR UPPER(FDESC) LIKE '%%" + key.toUpperCase() + "%') ORDER BY CLNT, PLAN, ERKEY, FKEY";
+		List<String[]> ff2 = cn.query(q2, false);
 
-		// incase ERKEY is not in FORMULA
-		if (!cn.hasColumn("FORMULA", "ERKEY")) {
-			q = "SELECT * FROM (SELECT CLNT, PLAN, ' ' ERKEY, FKEY, FDESC, (SELECT NAME FROM CPAS_CODE_VALUE WHERE GRUP='PG' AND VALU=PAGE) PAGENAME, DISPLAY, FORMULA, " +
-				"(SELECT NAME FROM CPAS_CODE_VALUE WHERE GRUP='RTY' AND VALU=RTYPE) CATEGORY, TIMESTAMP, USERNAME, RULEID, TYPE, " +
-				"row_number() over (partition by fkey order by decode(clnt,'GMA1',0,1), decode(plan,'"+plan+"',0,1)) as rn " +
-				"FROM FORMULA WHERE CLNT IN ('*','"+clnt+"') AND PLAN IN ('*','"+plan+"') AND ftype='"+ftype+"' AND " +
-				"(FKEY LIKE '%" + key.toUpperCase() + "%') " +
-				") WHERE rn=1 ORDER BY FKEY";;
-//			"(FKEY LIKE '%" + key.toUpperCase() + "%' OR UPPER(FDESC) LIKE '%%" + key.toUpperCase() + "%') ORDER BY CLNT, PLAN, ERKEY, FKEY";
-		}
-		
+		int rowCnt=0;
+		for (String[] fl: ff2) {
+			rowCnt++;
+			String rowClass = "oddRow";
+			if (rowCnt%2 == 0) rowClass = "evenRow";
+
+			String varname = fl[1];
+			String vardesc = fl[2];
+			String value = "";
+			value = getService(cn.getConnection(), varname);
+			if (value==null) value ="";
+			
+			String tooltip = null;
+			if (value.startsWith("ERROR")) {
+				tooltip = value;
+				value = "ERROR";
+			}
+			
+			String vartype = "Service";
+			if (fl[3].equals("E")) vartype = "Earning";
+			
+%>
+<tr class="simplehighlight">
+	<td class="<%= rowClass%>"><%= varname %></td>
+	<td class="<%= rowClass%>"><%= vardesc %></td>
+	<td class="<%= rowClass%>"><%= vartype %></td>
+	<td class="<%= rowClass%>">
+	<% if (tooltip != null) {%>
+		<span class="pk2"><a title='<%=Util.escapeQuote(tooltip)%>'><%= value %></a></span>
+	<% } else {  %>
+		<span class="pk"><%= value %></span>
+	<% } %>
+	
+	</td>
+</tr>
+<%			
+	}
+%>
+
+</table>
+<% } %>
+</div>
+
+</td>
+
+<td valign=top>
+
+<a href="javascript:toggleAge()"><span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Rule Ages</span><img id="imgAge" src="image/minus.gif"></a>
+<div id="BenAge" style="display: block;">
+<%
+if (cn.isTVS("CPAS_AGE")) {
+	id = Util.getId();
+%>
+<table id="table-<%= id %>" border=1 class="gridBody" style="margin-left: 40px;">
+<tr>
+	<th class="headerRow">Var</th>
+	<th class="headerRow">Name</th>
+	<th class="headerRow">Value</th>
+	<th class="headerRow">Code</th>
+</tr>
+<%
+	String q2 = "select valu, name,expcode  from CPAS_AGE order by 1";
+	boolean fromFormula = false;
+	if (cn.getBuildNo().compareTo("1257") >= 0) {
+		q2 = "select fkey, fdesc, ruleid  from FORMULA WHERE fclass='A' and clnt='*' order by 1";
+		fromFormula = true;
+	}
+
+	List<String[]> ff2 = cn.query(q2, false);
+
+		int rowCnt=0;
+		for (String[] fl: ff2) {
+			rowCnt++;
+			String rowClass = "oddRow";
+			if (rowCnt%2 == 0) rowClass = "evenRow";
+
+			String varname = fl[1];
+			String vardesc = fl[2];
+			String value = "";
+			value = getAge(cn.getConnection(), varname);
+			if (value==null) value ="";
+			
+			String tooltip = null;
+			if (value != null && value.startsWith("ERROR")) {
+				tooltip = value;
+				value = "ERROR";
+			}
+			String link = "";
+			if (fl[3] != null && fl[3].length()>2) {
+				link = "<a href='javascript:showRuleAgeCode(\""+varname+"\")'>code</a>";
+				if (fromFormula)
+					link = "<a href='javascript:showCpasRule(\""+fl[3]+"\")'>"+fl[3]+"</a>";
+			}			
+%>
+<tr class="simplehighlight">
+	<td class="<%= rowClass%>"><%= varname %></td>
+	<td class="<%= rowClass%>"><%= vardesc %></td>
+	<td class="<%= rowClass%>">
+	<% if (tooltip != null) {%>
+		<span class="pk2"><a title='<%=Util.escapeQuote(tooltip)%>'><%= value %></a></span>
+	<% } else {  %>
+		<span class="pk"><%= value %></span>
+	<% } %>
+	</td>
+	<td class="<%= rowClass%>"><%= link %></td>
+</tr>
+<%			
+	}
+%>
+
+</table>
+<% } %>
+</div>
+
+</td>
+
+<td valign=top>
+
+<a href="javascript:toggleRuleDate()"><span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Rule Dates</span><img id="imgRuleDate" src="image/minus.gif"></a>
+<div id="RuleDate" style="display: block;">
+<%
+if (cn.isTVS("CPAS_DATE")) {
+	id = Util.getId();
+%>
+<table id="table-<%= id %>" border=1 class="gridBody" style="margin-left: 40px;">
+<tr>
+	<th class="headerRow">Date</th>
+	<th class="headerRow">Name</th>
+	<th class="headerRow">Value</th>
+	<th class="headerRow">Code</th>
+</tr>
+<%
+
+String q = "select to_char(rdate,'YYYYMMDD'), name, expcode from CPAS_DATE order by 1";
+boolean fromFormula = false;
+if (cn.getBuildNo().compareTo("1257") >= 0) {
+	q = "select fkey, fdesc, ruleid from FORMULA where fclass='D' and clnt='*' order by 1";
+	fromFormula = true;
+}
 		List<String[]> ff = cn.query(q, false);
+
+		int rowCnt=0;
+		for (String[] fl: ff) {
+			
+			rowCnt++;
+			String rowClass = "oddRow";
+			if (rowCnt%2 == 0) rowClass = "evenRow";
+			String dateStr = fl[1];
+
+			String value = getRuleDate(cn.getConnection(), dateStr);;
+			if (value==null) value="";
+			String tooltip = null;
+			if (value.startsWith("ERROR")) {
+				tooltip = value;
+				value = "ERROR";
+			}
+			String align="left";
+			
+			String link = "";
+			if (fl[3] != null && fl[3].length()>2) {
+				link = "<a href='javascript:showRuleDateCode(\""+dateStr+"\")'>code</a>";
+				if (fromFormula)
+					link = "<a href='javascript:showCpasRule(\""+fl[3]+"\")'>"+fl[3]+"</a>";
+			}
+%>
+<tr class="simplehighlight">
+	<td class="<%= rowClass%>"><%= dateStr %></td>
+	<td class="<%= rowClass%>"><%= fl[2] %></td>
+	<td class="<%= rowClass%>" align="<%= align %>">
+	<% if (tooltip != null) {%>
+		<span class="pk2"><a title='<%=Util.escapeQuote(tooltip)%>'><%= value %></a></span>
+	<% } else {  %>
+		<span class="pk"><%= value %></span>
+	<% } %>
+		
+	</td>
+	<td class="<%= rowClass%>"><%= link %></td>
+</tr>
+<%			
+		}
+%>
+</table>
+
+<% } %>
+</div>
+
+
+</td>
+
+</tr>
+</table>
+
+
+
+<br/>
+
+<table border=0>
+<tr>
+<td valign=top>
+<%
+if (cn.isTVS("CPAS_PARAMETER")) {
+	id = Util.getId();
+%>
+<a href="javascript:toggleParam()"><span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Parameters</span><img id="imgBenParam" src="image/minus.gif"></a>
+
+<div id="BenParam" style="display: block;">
+<table id="table-<%= id %>" border=1 class="gridBody" style="margin-left: 40px;">
+<tr>
+	<th class="headerRow">Parameter</th>
+	<th class="headerRow">Type</th>
+	<th class="headerRow">Value</th>
+	<th class="headerRow">Reamrk</th>
+</tr>
+<%
+	String q = "select param, datatype, remark from CPAS_PARAMETER order by 1";
+
+	List<String[]> ff = cn.query(q, false);
 
 		int rowCnt=0;
 		for (String[] fl: ff) {
 			rowCnt++;
 			String rowClass = "oddRow";
 			if (rowCnt%2 == 0) rowClass = "evenRow";
+
+			String param = fl[1];
+			String datatype = fl[2];
+			String remark = fl[3];
+			String value = "";
+			value = getBCParameter(cn.getConnection(), param, datatype);
+			if (value==null) value ="";
 			
-			String value = getFormula(cn.getConnection(), fl[4]);
 			String tooltip = null;
-			if (value!=null && value.startsWith("ERROR")) {
+			if (value != null && value.startsWith("ERROR")) {
 				tooltip = value;
-				value ="ERROR";
+				value = "ERROR";
+			}
+			
+			if (remark==null) remark="";
+			String remarkDisp = remark;
+			if (remark !=null && remark.length() > 50) {
+				id = Util.getId();
+				String id_x = Util.getId();
+				remarkDisp = remarkDisp.substring(0,50) + "<a id='"+id_x+"' href='Javascript:toggleText(" +id_x + "," +id +")'>...</a><span id='"+id+"' style='display: none;'>" + remarkDisp.substring(50) + "</span>";
 			}
 %>
 <tr class="simplehighlight">
-	<td class="<%= rowClass%>"><%= fl[1] %></td>
-	<td class="<%= rowClass%>"><%= fl[2] %></td>
-	<td class="<%= rowClass%>"><%= fl[3] %></td>
-	<td class="<%= rowClass%>"><b><%= fl[4] %></b></td>
-	<td class="<%= rowClass%>" align="right">
+	<td class="<%= rowClass%>"><%= param %></td>
+	<td class="<%= rowClass%>"><%= datatype %></td>
+	<td class="<%= rowClass%>">
 	<% if (tooltip != null) {%>
-		<span class="pk2"><a title="<%=tooltip%>"><%= value %></a></span>
+		<span class="pk2"><a title='<%=Util.escapeQuote(tooltip)%>'><%= value %></a></span>
 	<% } else {  %>
 		<span class="pk"><%= value %></span>
 	<% } %>
+	
 	</td>
-	<td class="<%= rowClass%>"><%= fl[5] %></td>
-	<td class="<%= rowClass%>"><%= fl[13]==null?"":hmFtype.get(fl[13]) %></td>
-	<td class="<%= rowClass%>"><%= fl[9] %></td>
-	<td class="<%= rowClass%>"><%= fl[6] %></td>
-	<td class="<%= rowClass%>"><%= fl[7] %></td>
-	<td class="<%= rowClass%>"><%= fl[8]==null?"":Util.escapeHtml( fl[8] ) %>
-	<td class="<%= rowClass%>"><%= fl[10] %></td>
-	<td class="<%= rowClass%>"><%= fl[11] %></td>
-	<td class="<%= rowClass%>"><%= fl[12]==null?"":"<a href='javascript:showCpasRule("+fl[12]+")'>"+fl[12]+"</a>" %></td>
+	<td class="<%= rowClass%>"><%= remarkDisp %></td>
+	</td>
 </tr>
 <%			
-		}
-		
-		
 	}
 %>
+
 </table>
+</div>
 
+</td>
 
+<td valign=top>
+<a href="javascript:toggleBenCalc()"><span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">BC Functions</span><img id="imgBenCalc" src="image/minus.gif"></a>
 <br/>
-<a href="javascript:toggleBenCalc()"><span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">BenCalc Functions</span><img id="imgBenCalc" src="image/plus.gif"></a>
-<br/>
-<div id="BenCalc" style="display: none;">
+<div id="BenCalc" style="display: block;">
 <table id="table-<%= id %>" border=1 class="gridBody" style="margin-left: 40px;">
 <tr>
 	<th class="headerRow">Package.Function</th>
@@ -681,26 +933,53 @@ Show Detail
 	<th class="headerRow">Value</th>
 </tr>
 <%
-	if (mkey != null && !mkey.equals("")) {
-		cn.bcSetAll(clnt,plan,mkey,cdate);
-/*		
-		String q = "select object_name, procedure_name from( "+
-				"SELECT a.*,(select count(*) from user_arguments where object_id=a.object_id and subprogram_id=a.subprogram_id) cnt " +
-				"FROM user_procedures a WHERE OBJECT_NAME LIKE 'BC%' and PROCEDURE_NAME like 'GET%') where cnt=1 order by 1, 2";
-*/
-String q = "select package_name, object_name, pls_type from user_arguments a where package_name like 'BC%' /*and (object_name like 'GET%' OR object_name like 'IS%')*/ " +
+ q = "select package_name, object_name, pls_type from (select package_name, object_name, pls_type from user_arguments a where package_name like 'BC%' /*and (object_name like 'GET%' OR object_name like 'IS%') */ " +
 	"and not exists (select 1 from user_arguments b where object_id=a.object_id and subprogram_id=a.subprogram_id and position=1) and pls_type !='BOOLEAN-' " +
-	"order by package_name, object_name, position";
+	" union all select 'BC', 'getClnt', 'VARCHAR2' from dual " +
+	" union all select 'BC', 'getPlan', 'VARCHAR2' from dual " +
+	" union all select 'BC', 'getMkey', 'VARCHAR2' from dual " +
+	" union all select 'BC', 'getAccountID', 'NUMBER' from dual " +
+	" union all select 'BC', 'getCalcDate', 'DATE' from dual " +
+	" union all select 'BC', 'getCalcId', 'NUMBER' from dual " +
+	" union all select 'BC', 'getClass', 'VARCHAR2' from dual " +
+	" union all select 'BC', 'getCategory', 'VARCHAR2' from dual " +
+	" union all select 'BC', 'getPlanStatus', 'VARCHAR2' from dual " +
+	" union all select 'BC', 'getCPASPlanStatus', 'VARCHAR2' from dual " +
+	" union all select 'BC', 'getCalcStatus', 'VARCHAR2' from dual " +
+	" union all select 'BC', 'getStage', 'VARCHAR2' from dual " +
+	" union all select 'BC', 'getSType', 'VARCHAR2' from dual " +
+	" union all select 'BC', 'getShowDetail', 'BOOLEAN' from dual " +
+	" union all select 'BC', 'getRunDate', 'DATE' from dual " +
+	" union all select 'BC', 'getRecalcID', 'NUMBER' from dual " +
+
+	") order by package_name, upper(object_name)";
 
 if (cn.getTargetSchema() != null) {
-	q = "select package_name, object_name, pls_type from all_arguments a where owner='"+cn.getTargetSchema()+"' and package_name like 'BC%' /*and (object_name like 'GET%' OR object_name like 'IS%')*/ " +
+	q = "select package_name, object_name, pls_type from (select package_name, object_name, pls_type from all_arguments a where owner='"+cn.getTargetSchema()+"' and package_name like 'BC%' /*and (object_name like 'GET%' OR object_name like 'IS%')*/ " +
 			"and not exists (select 1 from all_arguments b where object_id=a.object_id and subprogram_id=a.subprogram_id and position=1) and pls_type !='BOOLEAN-' " +
-			"order by package_name, object_name, position";
+					" union all select 'BC', 'getClnt', 'VARCHAR2' from dual " +
+					" union all select 'BC', 'getPlan', 'VARCHAR2' from dual " +
+					" union all select 'BC', 'getMkey', 'VARCHAR2' from dual " +
+					" union all select 'BC', 'getAccountID', 'NUMBER' from dual " +
+					" union all select 'BC', 'getCalcDate', 'DATE' from dual " +
+					" union all select 'BC', 'getCalcId', 'NUMBER' from dual " +
+					" union all select 'BC', 'getClass', 'VARCHAR2' from dual " +
+					" union all select 'BC', 'getCategory', 'VARCHAR2' from dual " +
+					" union all select 'BC', 'getPlanStatus', 'VARCHAR2' from dual " +
+					" union all select 'BC', 'getCPASPlanStatus', 'VARCHAR2' from dual " +
+					" union all select 'BC', 'getCalcStatus', 'VARCHAR2' from dual " +
+					" union all select 'BC', 'getStage', 'VARCHAR2' from dual " +
+					" union all select 'BC', 'getSType', 'VARCHAR2' from dual " +
+					" union all select 'BC', 'getShowDetail', 'BOOLEAN' from dual " +
+					" union all select 'BC', 'getRunDate', 'DATE' from dual " +
+					" union all select 'BC', 'getRecalcID', 'NUMBER' from dual " +
+
+					") order by package_name, upper(object_name)";
 }
 
-		List<String[]> ff = cn.query(q, false);
+		 ff = cn.query(q, false);
 
-		int rowCnt=0;
+		rowCnt=0;
 		for (String[] fl: ff) {
 			if (fl[2].endsWith("INSTANCE")) continue;
 			
@@ -728,7 +1007,7 @@ if (cn.getTargetSchema() != null) {
 	<td class="<%= rowClass%>"><%= fl[3] %></td>
 	<td class="<%= rowClass%>" align="<%= align %>">
 	<% if (tooltip != null) {%>
-		<span class="pk2"><a title="<%=tooltip%>"><%= value %></a></span>
+		<span class="pk2"><a title='<%=Util.escapeQuote(tooltip)%>'><%= value %></a></span>
 	<% } else {  %>
 		<span class="pk"><%= value %></span>
 	<% } %>
@@ -737,199 +1016,125 @@ if (cn.getTargetSchema() != null) {
 </tr>
 <%			
 		}
-		
-		
-	}
 %>
 </table>
 
 </div>
 
+</td>
+</tr>
+</table>
+
+
+
+
+
+
+
+
+<%
+if (cn.isTVS("FORMULA")) {
+	id = Util.getId();
+%>
+<br/><br/>
+<a href="javascript:toggleFormula()"><span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Formulas</span><img id="imgFormula" src="image/minus.gif"></a>
 <br/>
-<a href="javascript:toggleRuleDate()"><span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Rule Dates</span><img id="imgRuleDate" src="image/plus.gif"></a>
-<br/>
-<div id="RuleDate" style="display: none;">
+<div id="BenFormula" style="display: block;">
 <table id="table-<%= id %>" border=1 class="gridBody" style="margin-left: 40px;">
 <tr>
-	<th class="headerRow">Date</th>
-	<th class="headerRow">Name</th>
+	<th class="headerRow">Client</th>
+	<th class="headerRow">Plan</th>
+	<th class="headerRow">ERKey</th>
+	<th class="headerRow">Formula Key</th>
 	<th class="headerRow">Value</th>
+	<th class="headerRow">Description</th>
+<!-- 	
+	<th class="headerRow">Formula Type</th>
+	<th class="headerRow">Category</th>
+	<th class="headerRow">Page</th>
+	<th class="headerRow">Display</th>
+	<th class="headerRow">Formula</th>
+	<th class="headerRow">Modified On</th>
+	<th class="headerRow">Modified By</th>
+--> 	
+	<th class="headerRow">Rule</th>
 </tr>
+
+
 <%
-if (mkey != null && !mkey.equals("")) {
-//	cn.bcSetAll(clnt,plan,mkey,cdate);
 
-String q = "select to_char(rdate,'YYYYMMDD'), name from CPAS_DATE order by 1";
+		q = "SELECT * FROM (SELECT CLNT, PLAN, ERKEY, FKEY, FDESC, (SELECT NAME FROM CPAS_CODE_VALUE WHERE GRUP='PG' AND VALU=PAGE) PAGENAME, DISPLAY, FORMULA, " +
+				"(SELECT NAME FROM CPAS_CODE_VALUE WHERE GRUP='RTY' AND VALU=RTYPE) CATEGORY, TIMESTAMP, USERNAME, RULEID, FTYPE, " +
+				"row_number() over (partition by fkey order by decode(clnt,'"+clnt+"',0,1), decode(plan,'"+plan+"',0,1), decode(erkey,'"+erkey+"',0,1)) as rn " +
+				"FROM FORMULA WHERE CLNT IN ('*','"+clnt+"') AND PLAN IN ('*','"+plan+"') " + 
+				"AND ERKEY IN ('*','"+erkey+"') " + (cn.hasColumn("FORMULA", "FCLASS")?"AND FCLASS = 'F' ":"") +
+				") WHERE rn=1 ORDER BY FKEY";
 
-		List<String[]> ff = cn.query(q, false);
+		// incase ERKEY is not in FORMULA
+		if (!cn.hasColumn("FORMULA", "ERKEY")) {
+			q = "SELECT * FROM (SELECT CLNT, PLAN, ' ' ERKEY, FKEY, FDESC, (SELECT NAME FROM CPAS_CODE_VALUE WHERE GRUP='PG' AND VALU=PAGE) PAGENAME, DISPLAY, FORMULA, " +
+				"(SELECT NAME FROM CPAS_CODE_VALUE WHERE GRUP='RTY' AND VALU=RTYPE) CATEGORY, TIMESTAMP, USERNAME, RULEID, FTYPE, " +
+				"row_number() over (partition by fkey order by decode(clnt,'"+clnt+"',0,1), decode(plan,'"+plan+"',0,1)) as rn " +
+				"FROM FORMULA WHERE CLNT IN ('*','"+clnt+"') AND PLAN IN ('*','"+plan+"') " +
+				(cn.hasColumn("FORMULA", "FCLASS")?"AND FCLASS = 'F' ":"") +
+				") WHERE rn=1 ORDER BY FKEY";;
+		}
+		
+		ff = cn.query(q, false);
 
-		int rowCnt=0;
+		rowCnt=0;
 		for (String[] fl: ff) {
-			
 			rowCnt++;
 			String rowClass = "oddRow";
 			if (rowCnt%2 == 0) rowClass = "evenRow";
-			String dateStr = fl[1];
-
-			String value = getRuleDate(cn.getConnection(), dateStr);;
-			if (value==null) value="";
+			
+			String value = getFormula(cn.getConnection(), fl[4]);
 			String tooltip = null;
-			if (value.startsWith("ERROR")) {
+			if (value!=null && value.startsWith("ERROR")) {
 				tooltip = value;
-				value = "ERROR";
+				value ="ERROR";
 			}
-			String align="left";
+			// check if there is RULE_SOURCE
+			if (fl[12] != null && fl[12].length()>0) {
+				String ruleid = fl[12]; 
+				String cnt = cn.queryOne("SELECT COUNT(*) FROM RULE_SOURCE WHERE RULEID=" + ruleid);
+				
+				if (cnt.equals("0")) fl[12] = null;
+			}
 %>
 <tr class="simplehighlight">
-	<td class="<%= rowClass%>"><%= dateStr %></td>
+	<td class="<%= rowClass%>"><%= fl[1] %></td>
 	<td class="<%= rowClass%>"><%= fl[2] %></td>
-	<td class="<%= rowClass%>" align="<%= align %>">
+	<td class="<%= rowClass%>"><%= fl[3] %></td>
+	<td class="<%= rowClass%>"><b><%= fl[4] %></b></td>
+	<td class="<%= rowClass%>" align="right">
 	<% if (tooltip != null) {%>
-		<span class="pk2"><a title="<%=tooltip%>"><%= value %></a></span>
+		<span class="pk2"><a title='<%=Util.escapeQuote(tooltip)%>'><%= value %></a></span>
 	<% } else {  %>
 		<span class="pk"><%= value %></span>
 	<% } %>
-		
 	</td>
+	<td class="<%= rowClass%>"><%= fl[5] %></td>
+<!-- 	
+	<td class="<%= rowClass%>"><%= fl[13]==null?"":hmFtype.get(fl[13]) %></td>
+	<td class="<%= rowClass%>"><%= fl[9] %></td>
+	<td class="<%= rowClass%>"><%= fl[6] %></td>
+	<td class="<%= rowClass%>"><%= fl[7] %></td>
+ 	<td class="<%= rowClass%>"><%= fl[8]==null?"":Util.escapeHtml( fl[8] ) %><br/>
+ 	<td class="<%= rowClass%>"><%= fl[10] %></td>
+	<td class="<%= rowClass%>"><%= fl[11] %></td>
+--> 	
+	<td class="<%= rowClass%>"><%= fl[12]==null?"":"<a href='javascript:showCpasRule("+fl[12]+")'>"+fl[12]+"</a>" %></td>
 </tr>
 <%			
 		}
-		
-		
-	}
 %>
 </table>
-
 </div>
-
-
-<br/>
-<%
-	id = Util.getId();
-%>
-<a href="javascript:toggleParam()"><span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">BenCalc Parameters</span><img id="imgBenParam" src="image/plus.gif"></a>
-
-<div id="BenParam" style="display: none;">
-<table id="table-<%= id %>" border=1 class="gridBody" style="margin-left: 40px;">
-<tr>
-	<th class="headerRow">Parameter</th>
-	<th class="headerRow">Type</th>
-	<th class="headerRow">Value</th>
-	<th class="headerRow">Reamrk</th>
-</tr>
-<%
-String q = "select param, datatype, remark from CPAS_PARAMETER order by 1";
-
-		List<String[]> ff = cn.query(q, false);
-
-		int rowCnt=0;
-		for (String[] fl: ff) {
-			rowCnt++;
-			String rowClass = "oddRow";
-			if (rowCnt%2 == 0) rowClass = "evenRow";
-
-			String param = fl[1];
-			String datatype = fl[2];
-			String remark = fl[3];
-			String value = "";
-			value = getBCParameter(cn.getConnection(), param, datatype);
-			if (value==null) value ="";
-			
-			String tooltip = null;
-			if (value != null && value.startsWith("ERROR")) {
-				tooltip = value;
-				value = "ERROR";
-			}
-
-			if (remark==null) remark="";
-			String remarkDisp = remark;
-			if (remark !=null && remark.length() > 50) {
-				id = Util.getId();
-				String id_x = Util.getId();
-				remarkDisp = remarkDisp.substring(0,50) + "<a id='"+id_x+"' href='Javascript:toggleText(" +id_x + "," +id +")'>...</a><span id='"+id+"' style='display: none;'>" + remarkDisp.substring(50) + "</span>";
-			}
-			
-%>
-<tr class="simplehighlight">
-	<td class="<%= rowClass%>"><%= param %></td>
-	<td class="<%= rowClass%>"><%= datatype %></td>
-	<td class="<%= rowClass%>">
-	<% if (tooltip != null) {%>
-		<span class="pk2"><a title="<%=tooltip%>"><%= value %></a></span>
-	<% } else {  %>
-		<span class="pk"><%= value %></span>
-	<% } %>
-	
-	</td>
-	<td class="<%= rowClass%>"><%= remarkDisp %></td>
-	</td>
-</tr>
-<%			
-	}
-%>
-
-</table>
-</div>
+<% } } %>
 
 <br/><br/>
-<%
-	id = Util.getId();
-%>
-<a href="javascript:toggleService()"><span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Service / Earning</span><img id="imgService" src="image/plus.gif"></a>
-
-<div id="BenService" style="display: none;">
-<table id="table-<%= id %>" border=1 class="gridBody" style="margin-left: 40px;">
-<tr>
-	<th class="headerRow">Var Name</th>
-	<th class="headerRow">Var Desc</th>
-	<th class="headerRow">Value</th>
-</tr>
-<%
-	String q2 = "select varname, vardesc from PLAN_MATRIX WHERE CLNT = 'GMA1' AND PLAN='1' order by 1";
-
-		List<String[]> ff2 = cn.query(q2, false);
-
-		int rowCnt2=0;
-		for (String[] fl: ff2) {
-			rowCnt2++;
-			String rowClass = "oddRow";
-			if (rowCnt%2 == 0) rowClass = "evenRow";
-
-			String varname = fl[1];
-			String vardesc = fl[2];
-			String value = "";
-			value = getService(cn.getConnection(), varname);
-			if (value==null) value ="";
-			
-			String tooltip = null;
-			if (value != null && value.startsWith("ERROR")) {
-				tooltip = value;
-				value = "ERROR";
-			}
-			
-%>
-<tr class="simplehighlight">
-	<td class="<%= rowClass%>"><%= varname %></td>
-	<td class="<%= rowClass%>"><%= vardesc %></td>
-	<td class="<%= rowClass%>">
-	<% if (tooltip != null) {%>
-		<span class="pk2"><a title="<%=tooltip%>"><%= value %></a></span>
-	<% } else {  %>
-		<span class="pk"><%= value %></span>
-	<% } %>
-	
-	</td>
-</tr>
-<%			
-	}
-%>
-
-</table>
-</div>
-
-
-<br/><br/>
-<span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">BenCalc Test</span>
+<span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Test</span>
 
 <form id="formTest">
 <input style="margin-left: 40px;" id="testvar" name="testvar" size=40><input type="button" value="Test" onclick="Javascript:testVar()">
@@ -983,4 +1188,5 @@ String q = "select param, datatype, remark from CPAS_PARAMETER order by 1";
 
 </body>
 </html>
+
 

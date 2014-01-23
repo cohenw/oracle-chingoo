@@ -142,6 +142,7 @@ Please select a Table to see the detail.
 	List<String> refConst = cn.getConstraints(owner, tname);
 
 	List<String> refProc = cn.getReferencedProc(tname);
+Util.p("owner=" + owner);	
 %>
 <hr>
 

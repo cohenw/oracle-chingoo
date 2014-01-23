@@ -500,11 +500,11 @@ public static void main(String args[]) {
 	}
 
 	public static String getBuildNo() {
-		return "CPAS-1101";
+		return "CPAS-1104";
 	}
 
 	public static String getVersionDate() {
-		return "Jan 10, 2014";
+		return "Jan 23, 2014";
 	}
 
 	public static void p(String str) {

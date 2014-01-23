@@ -74,6 +74,10 @@ public String getRoleSec(Hashtable<String,String> ht, String role, String sec) {
 $(document).ready(function(){
 	setHighlight();
 })
+
+function download() {
+	$("#formDownload").submit();
+}
 </script>
 
 </head>
@@ -103,8 +107,12 @@ $(document).ready(function(){
 </div>
 <div style="height: 4px;"></div>
 
+<form id="formDownload" action="cpas-rolesec-download.jsp" target="_blank">
+</form>
+
 <form method="get">
 <input type="Submit" value="Refresh">
+<input type="button" value="Download" onClick="download()">
 
 <table id="dataTable" border=1 class="gridBody">
 <tr>

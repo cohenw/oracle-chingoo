@@ -15,9 +15,11 @@
 	String var3 = Util.nvl(request.getParameter("var3"));
 	String fdate = Util.nvl(request.getParameter("fdate"));
 	String tdate = Util.nvl(request.getParameter("tdate"));
+	boolean isRun = true; 
 
 	if (calcid.equals("")) {
 		calcid = cn.queryOne("SELECT MAX(calcid) FROM CALC");
+		isRun = false;
 	}
 
 	String clnt=null;
@@ -171,6 +173,13 @@ To Date <input name="tdate" type="text" id="datepicker2" value="<%= tdate %>" si
 <input type="submit" value="Run"> 
 </form>
 
+<% if (!isRun)  { %>
+</body>
+</html>
+<% 		return;
+	} %>
+
+
 <hr>
 <% if (!calcid.equals("")) {%>
 <div id="div-<%=id%>">
@@ -188,7 +197,7 @@ To Date <input name="tdate" type="text" id="datepicker2" value="<%= tdate %>" si
 <%
 	if (!calcid.equals("")) {
 		String sql = "BEGIN MAIN_RULEBUILD.TESTMATRIX("+calcid+ ",'" + var1 + "','" + var2 + "','" + var3 + "',null,null,'*','D'); END;";
-		Util.p(sql);
+		//Util.p(sql);
 		CallableStatement call = cn.getConnection().prepareCall(sql);
 		call.execute();
 		call.close();

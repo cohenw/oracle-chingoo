@@ -13,6 +13,7 @@ public class CpasUtil {
 	public HashSet<String> hsTableLoaded = new HashSet<String>();
 	boolean isCpas = false;
 	int cpasType = 1;
+	public String buildNo;
 
 	String planTable = "SV_PLAN";
 	
@@ -212,6 +213,12 @@ public class CpasUtil {
 		System.out.println("isCpas="+isCpas);
 		System.out.println("cpasType="+cpasType);
 		System.out.println("plan table=" + planTable);
+		
+		if (cn.isTVS("CPAS_VERSION")) {
+			buildNo = cn.queryOne("SELECT MAX(BUILD_NO) FROM CPAS_VERSION");
+			if (buildNo != null && buildNo.length()>4) buildNo = buildNo.substring(0,4);
+			//System.out.println("BuildNo=" + buildNo);
+		}
 	}
 /*
 	public String getCodeValueCustom(String tname, String cname, String value, Query q) {
@@ -397,6 +404,9 @@ public class CpasUtil {
 			return cn.queryOne(qry);
 		} else if (temp.endsWith(".RDATE") && value.startsWith("1800")) {
 			String qry = "SELECT NAME FROM CPAS_DATE WHERE RDATE=to_date('" + value.substring(0,10) + "','yyyy-mm-dd')";
+			return cn.queryOne(qry);
+		} else if (temp.endsWith(".RULETYPE") && !tname.equals("EXPOSE_RULE")) {
+			String qry = "SELECT CAPTION||'-'||NAME FROM EXPOSE_RULE WHERE RULETYPE='" + value + "'";
 			return cn.queryOne(qry);
 		}
 		
