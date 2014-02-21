@@ -296,4 +296,8 @@ Build Build1070
 	number(0) to number
 	XmlFormatter
 	
+Build Build1071
+	login.jsp checks if it's already login		
+	no exception for file-not-found
+	Change toggle button style in Query page
 	

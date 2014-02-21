@@ -158,11 +158,12 @@ html.busy, html.busy * {
 
 .qryBtn {
 	border: 1px solid #CCCCCC;
-    margin: 5px;
+	border-radius: 6px;
+    margin: 2px;
 	padding-top:5px;
 	padding-bottom:5px;
-	padding-right:5px;
-	padding-left:5px;    
+	padding-right:6px;
+	padding-left:6px;    
 }
 
 .datahighlight_old {
