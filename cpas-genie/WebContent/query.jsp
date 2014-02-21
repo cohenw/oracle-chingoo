@@ -158,6 +158,7 @@
             event.preventDefault();
           });
       });
+    
     </script>
     
 	<style>
@@ -241,7 +242,7 @@
 		}
 		
 		$("#" + select).css("font-weight", "bold");
-		$("#" + select).css("background-color", "yellow");
+		$("#" + select).css("background-color", "#e0e0e0");
 	}
 
 	function submitQuery() {
@@ -880,7 +881,7 @@ Up to
 <TD><a class="qryBtn" id="modeSort" href="Javascript:setDoMode('sort')">Sort</a>
 <TD><a class="qryBtn" id="modeCopy" href="Javascript:setDoMode('copy')">Copy&amp;Paste</a></TD>
 <TD><a class="qryBtn" id="modeHide" href="Javascript:setDoMode('hide')">Hide Column</a>
-	<span id="showAllCol" style="display: none;">
+	<span id="showAllCol" class="qryBtn" style="display: none;">
 		<a href="Javascript:showAllColumn()">Show All</a>&nbsp;
 	</span>
 </TD>

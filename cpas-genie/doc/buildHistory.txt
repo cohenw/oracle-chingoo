@@ -473,7 +473,7 @@ Build CPAS1102
 	BenCalc page show all Formulas
 	bugfix - clnt was hardcoded for GMA1
 	BC.getXXX variables as functions
-	Reorganize Benefit Calculartion page
+	Reorganize Benefit Calculation page
 	Added Rule Date expose code
 	
 Build CPAS1103
@@ -487,12 +487,41 @@ Build CPAS1103
 
 Build CPAS1104
 	ruletype link to EXPOSE_RULE
+	no exception for file-not-found
+	datalink for MEMBER to include MEMBER_PLAN_SERVICE
+	Services/Earnings moved to right column to avoid error
+	Link to testMatrix from BenCalc 
+	BenCalc shows Member detail tables
 
+Build CPAS1105
+	BenCalc use AJAX for Formula
+	BenCalc use AJAX for Member Info
+	Clone Member 
+	Clone Member support download script
+	Clone Member (External DB) and download script
+	Change Year/Month in Date Picker (benCalc Member)
+
+Build CPAS1106
+	Change value/error color code in BenCalc
+	Change toggle button style in Query page
+	Text Matrix accepts fdate/tdate
+	Text Matrix use AJAX for Member Info
+	GRUP link to CPAS_CODE
+
+Build CPAS1107
+	CPAS Code support AJAX keyword search
+	Page count in Monitor page
+	Admin Email include page count
+	Page count: sorted
+	Member Service Timeline
 	
-Known Issue
-	PA does not include Stored procedures and functions
-	Rule Age shows exposed code
-
+Build CAPS1108	
+	Explain Formula
+	Handle 1700 year dates
+	Formula (codegroup FOR) explained
+	Autocomplete Formula and Formula lookup
+	setHighlight after AJAX data load
+	
 New Feature to implement
 
 Known Bug

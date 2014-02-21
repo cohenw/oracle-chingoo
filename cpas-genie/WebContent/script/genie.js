@@ -562,6 +562,23 @@
 		});		
 	}
 	
+	function showServiceTimeline(clnt, mkey) {
+		var id = "id"+(new Date().getTime());
+		var temp ="<div id='" + id + "' title='Service Timeline " + mkey + "' style='background-color: #ffffff;'>"
+		$.ajax({
+			url: "ajax-cpas/service-timeline.jsp?clnt=" + clnt + "&mkey=" + mkey,
+			success: function(data){
+				temp = temp + data + "</div>";
+				$("BODY").append(temp);
+				$("#"+id).dialog({ width: 850, height: 350 });
+				setHighlight();
+			},
+            error:function (jqXHR, textStatus, errorThrown){
+                alert(jqXHR.status + " " + errorThrown);
+            }  
+		});		
+	}
+	
 	function showCpasRule(ruleid) {
 		var id = "id"+(new Date().getTime());
 		var temp ="<div id='" + id + "' title='RULE " + ruleid + "' style='background-color: #ffffcc;'>"

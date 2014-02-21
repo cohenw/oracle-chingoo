@@ -408,6 +408,9 @@ public class CpasUtil {
 		} else if (temp.endsWith(".RULETYPE") && !tname.equals("EXPOSE_RULE")) {
 			String qry = "SELECT CAPTION||'-'||NAME FROM EXPOSE_RULE WHERE RULETYPE='" + value + "'";
 			return cn.queryOne(qry);
+		} else if (temp.endsWith(".GRUP") && !tname.equals("CPAS_CODE")) {
+			String qry = "SELECT CAPTION FROM CPAS_CODE WHERE GRUP='" + value + "'";
+			return cn.queryOne(qry);
 		}
 		
 		String key = (tname + "." + cname).toUpperCase();
@@ -563,7 +566,7 @@ public class CpasUtil {
 	public String getCpasComment(String tname) {
 		if (!isCpas)
 			return "";
-		String qry = "SELECT DESCR FROM CPAS_TABLE WHERE TNAME='" + tname + "'";
+		String qry = "SELECT DESCR FROM CPAS_TABLE WHERE TNAME='" + tname + "' AND GNAME IN ('SYSTEM','BATCH','RULES','ACTIVEDD')";
 		if (cpasType == 5)
 			qry = "SELECT DESCR FROM ADD$TABLE WHERE TNAME='" + tname + "'";
 

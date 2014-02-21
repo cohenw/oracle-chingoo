@@ -150,6 +150,7 @@ public synchronized List<String> getLogicalChildTables(Connect cn, String tname,
 //		Util.p("*** " + list);
 	} else if (tname.equals("MEMBER")||tname.equals("SV_MEMBER")) {
 		list.add("MEMBER_PLAN_ACCOUNT");
+		list.add("MEMBER_PLAN_SERVICE");
 		list.add("ACCOUNT");
 	} else if (tname.equals("CALC")) {
 //		String qry = "SELECT TABLE_NAME FROM USER_TABLES A WHERE TABLE_NAME LIKE 'CALC_%' AND EXISTS (SELECT 1 FROM USER_TAB_COLS WHERE TABLE_NAME=A.TABLE_NAME AND COLUMN_NAME = 'CALCID') ORDER BY 1";
@@ -399,7 +400,7 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 <div style="display: none;" id="mode-<%=id%>">hide</div>
 <div style="display: none;" id="ori-<%=id%>">H</div>
 <div style="display: none;" id="hide-<%=id%>"></div>
-<% if (table.equals("MEMBER")) {
+<% if (table.equals("MEMBER")||table.equals("SV_MEMBER")) {
 	int idx = key.indexOf("^");
 	String clnt= key.substring(0,idx);
 	String mkey = key.substring(idx+1);
@@ -407,9 +408,9 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 	String fname = "C" + clnt + "_M" + mkey + ".member";
 	String plan = cn.queryOne("SELECT PLAN FROM MEMBER_PLAN WHERE CLNT='"+clnt+"' AND MKEY='"+mkey+"'");
 %>
-<%-- 
+
 	<a target="_blank" href="cpas-extract.jsp?id=<%=eid%>&fname=<%=fname%>&type=MEMBER">Extract Script</a>
- --%>
+
  	<a target="_blank" href="bencalc_member.jsp?clnt=<%=clnt%>&plan=<%=plan%>&mkey=<%=mkey%>">BenCalc</a>
 <% } %>
 <% if (table.equals("_ERRORCAT")) {
@@ -698,7 +699,13 @@ if (cn.isViewTable(table)) {
 <% if (refTab.equals("CALC_HTMLDETAIL")) { %>
 	<a target="_blank" href="cpas-calchtmldetail.jsp?calcid=<%=key%>">Calc Detail</a>
 <% } %>
-
+<% if (refTab.equals("MEMBER_SERVICE")) { 
+	int idx = key.indexOf("^");
+	String clnt= key.substring(0,idx);
+	String mkey = key.substring(idx+1);
+%>
+	<a target="_blank" href="Javascript:showServiceTimeline('<%=clnt%>','<%=mkey%>')">Service Timeline</a>
+<% } %>
 <div style="display: none;" id="sql-<%=id%>"><%= refsql%></div>
 <div style="display: none;" id="hide-<%=id%>"></div>
 <div style="display: none;" id="sort-<%=id%>"></div>
@@ -770,6 +777,10 @@ if (cn.isViewTable(table)) {
 			recCount = cn.getQryCount(tmp);
 		} else if ((table.equals("MEMBER")||table.equals("SV_MEMBER")) && refTab.equals("MEMBER_PLAN_ACCOUNT")) {
 			refsql = "SELECT * FROM MEMBER_PLAN_ACCOUNT WHERE ACCOUNTID IN (SELECT ACCOUNTID FROM MEMBER_PLAN_ACCOUNT WHERE CLNT='"+q.getValue("CLNT")+"' AND MKEY='"+q.getValue("MKEY")+"')";
+			String tmp = refsql.replace("SELECT * ", "SELECT COUNT(*) ");
+			recCount = cn.getQryCount(tmp);
+		} else if ((table.equals("MEMBER")||table.equals("SV_MEMBER")) && refTab.equals("MEMBER_PLAN_SERVICE")) {
+			refsql = "SELECT * FROM MEMBER_PLAN_SERVICE WHERE CLNT='"+q.getValue("CLNT")+"' AND MKEY='"+q.getValue("MKEY")+"'";
 			String tmp = refsql.replace("SELECT * ", "SELECT COUNT(*) ");
 			recCount = cn.getQryCount(tmp);
 		} else if (table.equals("BATCH") && refTab.equals("BD_CALC_REQUEST")) {

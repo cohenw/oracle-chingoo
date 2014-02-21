@@ -52,10 +52,10 @@ function setLogin(jdbcUrl, userId) {
 
 </script>
 
-To compare schema object, you need to connect to 2nd database.
+To clone member from/to other DB, you need to connect to 2nd database.
 <br/><br/>
 
-	<form action="schema-diff.jsp" method="POST" target="_blank">
+	<form action="clone-member-ext.jsp" method="POST" target="_blank">
     <table border=0>
     <tr>
     	<td>Database URL</td>

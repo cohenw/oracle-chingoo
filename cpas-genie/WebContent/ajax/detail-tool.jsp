@@ -110,3 +110,12 @@
 <% if (tool.equalsIgnoreCase("Trigger Analysis")) { %>
 <jsp:include page="refresh-trigger-table.jsp"/>
 <% } %>
+
+
+<% if (tool.equalsIgnoreCase("Clone Member")) { %>
+<jsp:include page="clone-member.jsp"/>
+<% } %>
+
+<% if (tool.equalsIgnoreCase("Clone Member (External DB)")) { %>
+<jsp:include page="clone-member-ext.jsp"/>
+<% } %>

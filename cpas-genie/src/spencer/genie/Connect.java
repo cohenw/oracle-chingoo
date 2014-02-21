@@ -77,6 +77,7 @@ public class Connect implements HttpSessionBindingListener {
 //	private Stack<String> history;
 	private ArrayList<QuickLink> qlink;
 	private ArrayList<String> jsplog;
+	private HashMap<String, PageCount> pageCount;
 
 	public CacheSchema cs;
 	
@@ -166,7 +167,7 @@ public class Connect implements HttpSessionBindingListener {
             addMessage("Database connection established for " + urlString + " @" + (new Date()) + " " + ipAddress);
             if (loadData) session.setAttribute("CN", this);
 
-            
+       		this.schemaName = userName;
             if (!loadData) return; 
             	
             comments = new Hashtable<String, String>();
@@ -174,6 +175,7 @@ public class Connect implements HttpSessionBindingListener {
             queryLog = new HashMap<String, QueryLog>();
             qlink = new ArrayList<QuickLink>();
             jsplog = new ArrayList<String>();
+            pageCount = new HashMap<String, PageCount>();
 
 //       		this.schemaName = conn.getCatalog();
        		this.schemaName = userName;
@@ -270,6 +272,12 @@ public class Connect implements HttpSessionBindingListener {
     	if (this.targetSchema != null) res += " for " + this.targetSchema;
     	
     	res = res.replace("@jdbc:oracle:thin:", "");
+    	res = res.replace(".cpas.com", "");
+    	return res;
+    }
+
+    public String getUrlStringLong() {
+    	String res = urlString;
     	return res;
     }
 
@@ -380,6 +388,7 @@ public class Connect implements HttpSessionBindingListener {
     		if (ql.getCount() > 1) cntLine += "s";
     		qryHist += ql.getQueryString() + ";\n"+ cntLine + "\n\n";
     	}
+    	
     	System.out.println("***] Query History from " + this.ipAddress);
     	
    		String who = this.getIPAddress() + " " + this.getEmail(); 
@@ -395,6 +404,18 @@ public class Connect implements HttpSessionBindingListener {
     	}
 
    		qryHist =  url + "\nWho: " + who + "\nAgent: " + getUserAgent() + "\nBuild No: " + Util.getBuildNo() + "\n\n" + qryHist + "\n\n"; //+ extractJS(this.getAddedHistory());
+   		// page count
+    	HashMap<String, PageCount> pc = getPageCount();
+    	List<PageCount> list = new ArrayList<PageCount>(pc.values());
+    	Collections.sort(list, new Comparator<PageCount>() {
+    	    public int compare(PageCount a, PageCount b) {
+    	        return a.getPage().compareTo(b.getPage());
+    	    }
+    	});
+    	for (PageCount p: list) {
+    		qryHist += "" + p.getPage() +" " +  p.getCount()+"\n";   		
+    	}
+
    		if (isInCpasNetwork())
    			Email.sendEmail("oracle.genie.email@gmail.com", title + this.urlString + " " +(this.targetSchema != null?this.targetSchema:"") + who, qryHist);
    		
@@ -2415,10 +2436,29 @@ public class Connect implements HttpSessionBindingListener {
 	
 	public void addJspLog(String log) {
 		jsplog.add(log);
+		
+		String page = log;
+		int idx = log.indexOf(".jsp");
+		if (idx > 0) page = log.substring(0, idx+4);
+		
+		PageCount pc = pageCount.get(page);
+		if (pc==null) {
+			pc = new PageCount();
+			pc.addCount();
+			pc.setPage(page);
+			
+			pageCount.put(page, pc);
+		} else {
+			pc.addCount();
+		}
 	}
 	
 	public ArrayList<String> getJspLog() {
 		return jsplog;
+	}
+	
+	public HashMap<String, PageCount> getPageCount() {
+		return pageCount;
 	}
 	
 	public String getQuickLinks() {

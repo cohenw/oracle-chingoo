@@ -90,6 +90,7 @@
 <b>Lutheran Church</b><br/>
 <li><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.cpas.com:1526/LUTHERAN', 'lcc_dev')">lcc_dev@s-ora-006.LUTHERAN</a><br/>
 <li><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.cpas.com:1526/LUTHERAN', 'lcc_test')">lcc_test@s-ora-006.LUTHERAN</a><br/>
+<li><a href="javascript:setLogin('jdbc:oracle:thin:@s-ora-006.cpas.com:1526/LUTHERAN', 'lcc_prd')">lcc_prd@s-ora-006.LUTHERAN</a><br/>
 <br/>
 
 <b>MCERA</b><br/>

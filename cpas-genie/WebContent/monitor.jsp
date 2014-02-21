@@ -141,6 +141,17 @@ public String extractJS(String str) {
     		jsplogStr += "<li>" + al.get(al.size()-i-1) +"<br/>";   		
     	}
     	
+    	jsplogStr += "<br/><br/>";
+    	HashMap<String, PageCount> pc = cn.getPageCount();
+    	List<PageCount> list = new ArrayList<PageCount>(pc.values());
+    	Collections.sort(list, new Comparator<PageCount>() {
+    	    public int compare(PageCount a, PageCount b) {
+    	        return a.getPage().compareTo(b.getPage());
+    	    }
+    	});
+    	for (PageCount p: list) {
+    		jsplogStr += "<li>" + p.getPage() +" " +  p.getCount()+"<br/>";   		
+    	}
     	rowCnt++;
     	String rowClass = "oddRow";
     	if (rowCnt%2 == 0) rowClass = "evenRow";

@@ -21,12 +21,12 @@
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
   </head>
 
- <img src="image/genie-lamp.jpg"/>
+ <img src="image/genie-lamp.jpg"  width="200" height="155"/>
 
 <h2>Disconnected from Schema2. Good Bye!</h2>
 
 <br/>
-<a href="index.jsp">Home</a>
+<a href="Javascript:window.close()">Close</a>
 
 <script type="text/javascript">
 
