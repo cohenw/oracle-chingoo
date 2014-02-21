@@ -87,7 +87,7 @@
 <%	
 for (int i=0; i<res1.size() && i < MAX_DISPLAY_LIST;i++) {
 %>
-<%=(i>0?",":"")%>{"value": "<%=res1.get(i)%>", "label": "<%=res1.get(i)%>", "desc": "<%= cn.getTableRowCount(res1.get(i).toUpperCase()) %>"} 
+<%=(i>0?",":"")%>{"value": "<%=res1.get(i)%>", "label": "<%=res1.get(i)%>", "desc": "<%=  cn.getTableRowCount(res1.get(i).toUpperCase()) %>"} 
 <% 
 } 
 %>

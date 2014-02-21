@@ -47,6 +47,9 @@
 	list.add("Trigger Analysis");
 	list.add("Preferences");
 
+	list.add("");
+	list.add("Clone Member");
+	list.add("Clone Member (External DB)");
 %>
 
 <% if (cn.isCpas()) { %>

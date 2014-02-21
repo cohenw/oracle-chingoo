@@ -71,7 +71,7 @@
 
 	ArrayList<String> varAl = getBindVariableList(sql);
 	if (varAl.size() >0 ) isDynamic = true;
-System.out.println("isDynamic=" + isDynamic);
+//System.out.println("isDynamic=" + isDynamic);
 
 	String sqlh = sql;
 	String dynamicVars = request.getParameter("dynamicVars");

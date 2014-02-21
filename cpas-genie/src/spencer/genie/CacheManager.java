@@ -108,7 +108,7 @@ public class CacheManager {
    		    
    	    }  
    	    catch(IOException ex){
-   	    	ex.printStackTrace();
+   	    	//ex.printStackTrace();
    	    	cs = null;
    	    }
    		

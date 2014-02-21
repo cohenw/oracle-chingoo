@@ -33,12 +33,12 @@
 	String q2 = "SELECT caption, grup FROM cpas_code order by 2";
 	List<String[]> codes2 = cn.query(q2);
 	
-	String key = request.getParameter("key");
+	String key1 = request.getParameter("key1");
 	String key2 = request.getParameter("key2");
 	if (key2 != null && key2.length()>0)
-		key = key2;
+		key1 = key2;
 	
-	if (key==null) key = "";
+	if (key1==null) key1 = "";
 %>
 <html>
 <head> 
@@ -91,6 +91,21 @@
 			.append( "<a>" + item.label + " <span class='rowcountstyle'>" + item.desc + "</span></a>" )
 			.appendTo( ul );
 		};
+
+		$( "#codeSearch" ).autocomplete({
+			source: "ajax/auto-complete-code.jsp",
+			minLength: 2,
+			select: function( event, ui ) {
+				searchBy3( ui.item ?
+					ui.item.value: "" );
+			}
+		}).data( "autocomplete" )._renderItem = function( ul, item ) {
+			return $( "<li></li>" )
+			.data( "item.autocomplete", item )
+			.append( "<a>" + item.label + " <span class='rowcountstyle'>" + item.desc + "</span></a>" )
+			.appendTo( ul );
+		};
+	
 	});	
 	function popObject(oname) {
 		$("#popKey").val(oname);
@@ -101,28 +116,26 @@
 		$("#name-map").val(pkgName+"."+prcName);
 		$("#form-map").submit();
 	}	
-	$(function() {
-		$( "#globalSearch" ).autocomplete({
-			source: "ajax/auto-complete2.jsp",
-			minLength: 2,
-			select: function( event, ui ) {
-				popObject( ui.item ?
-					ui.item.value: "" );
-			}
-		}).data( "autocomplete" )._renderItem = function( ul, item ) {
-			return $( "<li></li>" )
-			.data( "item.autocomplete", item )
-			.append( "<a>" + item.label + " <span class='rowcountstyle'>" + item.desc + "</span></a>" )
-			.appendTo( ul );
-		};
-	});	
+
 	function popObject(oname) {
 //		alert(oname);
 		$("#popKey").val(oname);
     	$("#FormPop").submit();
 	}
 	
-
+	function searchBy1() {
+		//var val = $("#key1").val();
+		$("#formCode").submit();
+	}
+	function searchBy2() {
+		$("#key1").val('');
+		$("#formCode").submit();
+	}
+	function searchBy3(key) {
+		$("#key1").val(key);
+		$("#key2").val('');
+		$("#formCode").submit();
+	}
     </script>
     
 </head> 
@@ -155,19 +168,30 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 
 <br/>
 
-<form>
-CODE
-<select name="key">
+<form id="formCode">
+<table>
+<tr>
+	<td>By Description</td>
+	<td>By Code</td>
+	<td>Search</td>
+</tr>
+<tr>
+<td>
+<select id="key1" name="key1" onChange="searchBy1()">
+<option></option>
 <%
 
 	for (String[] cd: codes) {
 %>
-	<option value="<%= cd[2] %>" <%= key.equals(cd[2])?"SELECTED":"" %>><%= cd[1] %> [<%= cd[2] %>]</option>
+	<option value="<%= cd[2] %>" <%= key1.equals(cd[2])?"SELECTED":"" %>><%= cd[1] %> [<%= cd[2] %>]</option>
 <%
 	}
 %>
 </select>
-<select name="key2">
+</td>
+
+<td>
+<select id="key2" name="key2" onChange="searchBy2()">
 <option></option>
 <%
 
@@ -179,14 +203,22 @@ CODE
 %>
 </select>
 
+</td>
+<td>
+<input id="codeSearch" style="width: 200px;" placeholder="code or description"/>
+</td>
+</tr>
+</table>
+
+<!-- 
 <input type="submit">
-</form>
+ --></form>
 <hr/>
 <%
-String sql = "SELECT SOURCE, CAPTION, SELECTSTMT FROM CPAS_CODE WHERE GRUP = '" + key + "'";
+String sql = "SELECT SOURCE, CAPTION, SELECTSTMT FROM CPAS_CODE WHERE GRUP = '" + key1 + "'";
 int cpasType = cn.getCpasType();
 if (cpasType ==5) {
-	sql = "SELECT TYPE, (SELECT capt from CODE_CAPTION WHERE GRUP='"	+ key + "' AND LANG='E'), (SELECT STMTCODE FROM CODE_SELECT WHERE GRUP=A.GRUP) STMT FROM CODE A WHERE GRUP='"	+ key + "'";
+	sql = "SELECT TYPE, (SELECT capt from CODE_CAPTION WHERE GRUP='"	+ key1 + "' AND LANG='E'), (SELECT STMTCODE FROM CODE_SELECT WHERE GRUP=A.GRUP) STMT FROM CODE A WHERE GRUP='"	+ key1 + "'";
 }
 
 List<String[]> res = cn.query(sql, false);
@@ -198,12 +230,12 @@ String caption = res.get(0)[2];
 String selectstmt = res.get(0)[3];
 
 if (source.equals("T"))
-	sql = "SELECT VALU, NAME FROM CPAS_CODE_VALUE WHERE GRUP='" + key + "'";
+	sql = "SELECT VALU, NAME FROM CPAS_CODE_VALUE WHERE GRUP='" + key1 + "'";
 else if (source.equals("S") || source.equals("3"))
 	sql = selectstmt;
 else if (source.equals("P") && false) {
 	// to do for 'P' : procedure
-	String stmt = cn.queryOne("SELECT SELECTSTMT FROM CPAS_CODE WHERE GRUP = '" + key + "'");
+	String stmt = cn.queryOne("SELECT SELECTSTMT FROM CPAS_CODE WHERE GRUP = '" + key1 + "'");
 	System.out.println("stmt=" + stmt);
 	if (stmt.startsWith("BEGIN")) {
 		CallableStatement call = cn.getConnection().prepareCall(stmt);
@@ -215,7 +247,7 @@ else if (source.equals("P") && false) {
 
 if (cpasType == 5) {
 	if (source.equals("G")) {
-		sql = "SELECT VALU, NAME FROM CODE_VALUE_NAME WHERE GRUP='" + key + "'";
+		sql = "SELECT VALU, NAME FROM CODE_VALUE_NAME WHERE GRUP='" + key1 + "'";
 	} if (source.equals("C")||source.equals("P")) {
 		sql = selectstmt;
 	}
@@ -243,7 +275,7 @@ if (dynamicVars!=null && dynamicVars.length() > 0) {
 
 %>
 
-<h2><%=caption %> [<%= key %>]</h2>
+<h2><%=caption %> [<%= key1 %>]</h2>
 <div id="sql-<%=id%>" style="display: none;"><%= sql %></div>
 <span id="sqlorig-<%=id%>"><%= sql %></span>
 &nbsp;
@@ -292,7 +324,7 @@ Util.p("-- " + var);
 <br/>
 <h2>Referenced By</h2>
 <%
-	sql = "SELECT * FROM CPAS_TABLE_COL A WHERE CODE='"+key+"'";
+	sql = "SELECT * FROM CPAS_TABLE_COL A WHERE CODE='"+key1+"'";
 	id = Util.getId();
 %>
 <%= sql %>
@@ -314,7 +346,7 @@ Util.p("-- " + var);
 <br/>
 <%
 if (cn.isTVS("BATCHCAT_IFACE_COL")) {
-	sql = "SELECT * FROM BATCHCAT_IFACE_COL A WHERE CODE='"+key+"'";
+	sql = "SELECT * FROM BATCHCAT_IFACE_COL A WHERE CODE='"+key1+"'";
 	id = Util.getId();
 %>
 <%= sql %>
@@ -336,7 +368,7 @@ if (cn.isTVS("BATCHCAT_IFACE_COL")) {
 <%
 }
 if (cn.isTVS("CPAS_WIZARD_FIELD")) {
-	sql = "SELECT * FROM CPAS_WIZARD_FIELD A WHERE CODE='"+key+"'";
+	sql = "SELECT * FROM CPAS_WIZARD_FIELD A WHERE CODE='"+key1+"'";
 	id = Util.getId();
 %>
 <%= sql %>
@@ -359,7 +391,7 @@ if (cn.isTVS("CPAS_WIZARD_FIELD")) {
 <%
 }
 if (cn.isTVS("CPAS_REPORT_PARAMETER")) {
-	sql = "SELECT * FROM CPAS_REPORT_PARAMETER A WHERE CODE='"+key+"'";
+	sql = "SELECT * FROM CPAS_REPORT_PARAMETER A WHERE CODE='"+key1+"'";
 	id = Util.getId();
 %>
 <%= sql %>

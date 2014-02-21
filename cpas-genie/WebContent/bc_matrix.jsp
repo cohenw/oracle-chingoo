@@ -16,6 +16,7 @@
 	String fdate = Util.nvl(request.getParameter("fdate"));
 	String tdate = Util.nvl(request.getParameter("tdate"));
 	boolean isRun = true; 
+	String mkey=null;
 
 	if (calcid.equals("")) {
 		calcid = cn.queryOne("SELECT MAX(calcid) FROM CALC");
@@ -25,6 +26,7 @@
 	String clnt=null;
 	if (!calcid.equals(""))
 		clnt = cn.queryOne("SELECT CLNT FROM CALC WHERE CALCID="+calcid);
+		mkey = cn.queryOne("SELECT MKEY FROM CALC WHERE CALCID="+calcid);
 	
 	String qry = "SELECT DISTINCT VARNAME, VARDESC FROM PLAN_MATRIX A ORDER BY 2";
 	if (clnt!=null) {
@@ -94,10 +96,72 @@
 	}
 	    
 	$(function() {
-	    $( "#datepicker1" ).datepicker();
-	    $( "#datepicker2" ).datepicker();
+	    $( "#datepicker1" ).datepicker( { dateFormat: "yymmdd", changeMonth: true, changeYear: true } );
+	    $( "#datepicker2" ).datepicker( { dateFormat: "yymmdd", changeMonth: true, changeYear: true } );
 	  });
-    </script>
+
+	function toggleMemberInfo() {
+		var src = $("#imgMemberInfo").attr('src');
+		//alert(src);
+		var data = $("#MemberInfo").html();
+		if (data == '') {
+			$("#MemberInfo").show();
+			$("#MemberInfo").html('<img src="image/waiting_big.gif">');
+			// AJAX load
+			$.ajax({
+				url: "ajax-cpas/member-info.jsp?clnt=<%=clnt%>&mkey=<%=mkey%>" + "&t=" + (new Date().getTime()),
+				success: function(data){
+					$("#MemberInfo").html(data);
+				},
+	            error:function (jqXHR, textStatus, errorThrown){
+	                alert(jqXHR.status + " " + errorThrown);
+	            }  
+			});
+			$("#imgMemberInfo").attr('src','image/minus.gif');
+			return;
+		}
+		if (src.indexOf("minus")>0) {
+			$("#MemberInfo").slideUp();
+			$("#imgMemberInfo").attr('src','image/plus.gif');
+		} else {
+			$("#MemberInfo").slideDown();
+			$("#imgMemberInfo").attr('src','image/minus.gif');
+		}
+	}
+
+	function toggleMemberService() {
+		var src = $("#imgMemberService").attr('src');
+		//alert(src);
+		var data = $("#MemberService").html();
+		if (data == '') {
+			$("#MemberService").show();
+			$("#MemberService").html('<img src="image/waiting_big.gif">');
+			// AJAX load
+			$.ajax({
+				url: "ajax-cpas/service-timeline.jsp?clnt=<%=clnt%>&mkey=<%=mkey%>" + "&t=" + (new Date().getTime()),
+				success: function(data){
+					$("#MemberService").html(data);
+				},
+	            error:function (jqXHR, textStatus, errorThrown){
+	                alert(jqXHR.status + " " + errorThrown);
+	            }  
+			});
+			$("#imgMemberService").attr('src','image/minus.gif');
+			return;
+		}
+		if (src.indexOf("minus")>0) {
+			$("#MemberService").slideUp();
+			$("#imgMemberService").attr('src','image/plus.gif');
+		} else {
+			$("#MemberService").slideDown();
+			$("#imgMemberService").attr('src','image/minus.gif');
+		}
+	}
+
+
+
+	
+	</script>
     
 </head> 
 
@@ -129,7 +193,7 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 <br/>
 
 <form method="get">
-Calc ID <input name="calcid" value="<%= calcid %>" size=10>
+Calc ID <input name="calcid" value="<%= calcid %>" size=8>
 Variable 1 
 <select name="var1" style="width: 160px;">
 <option></option>
@@ -166,10 +230,10 @@ Variable 3
 %>
 </select>
 <%-- <input name="var3" value="<%= var3 %>" size=10> --%>
-<%-- <br/>
-From Date <input name="fdate" type="text" id="datepicker1" value="<%= fdate %>" size=10/>
-To Date <input name="tdate" type="text" id="datepicker2" value="<%= tdate %>" size=10/>
- --%>
+
+From Date <input name="fdate" type="text" id="datepicker1" value="<%= fdate %>" size=8/>
+To Date <input name="tdate" type="text" id="datepicker2" value="<%= tdate %>" size=8/>
+
 <input type="submit" value="Run"> 
 </form>
 
@@ -192,11 +256,23 @@ To Date <input name="tdate" type="text" id="datepicker2" value="<%= tdate %>" si
 <br/>
 <% } %>
 
+<a href="javascript:toggleMemberService()"><span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Service Timeline</span><img id="imgMemberService" src="image/plus.gif"></a>
+<br/>
+<div id="MemberService" style="display: none; margin-left:20px;"></div>
+<br/>
+
+<a href="javascript:toggleMemberInfo()"><span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Member Tables</span><img id="imgMemberInfo" src="image/plus.gif"></a>
+<br/>
+<div id="MemberInfo" style="display: none;"></div>
+<br/>
+
+
 <pre style="font-family: Consolas; font-size: 14px;"></pre>
 <pre>
 <%
 	if (!calcid.equals("")) {
-		String sql = "BEGIN MAIN_RULEBUILD.TESTMATRIX("+calcid+ ",'" + var1 + "','" + var2 + "','" + var3 + "',null,null,'*','D'); END;";
+//		String sql = "BEGIN MAIN_RULEBUILD.TESTMATRIX("+calcid+ ",'" + var1 + "','" + var2 + "','" + var3 + "',null,null,'*','D'); END;";
+		String sql = "BEGIN MAIN_RULEBUILD.TESTMATRIX("+calcid+ ",'" + var1 + "','" + var2 + "','" + var3 + "',to_date('"+fdate+"','yyyymmdd'),to_date('"+tdate+"','yyyymmdd'),'*','D'); END;";
 		//Util.p(sql);
 		CallableStatement call = cn.getConnection().prepareCall(sql);
 		call.execute();
@@ -234,6 +310,23 @@ To Date <input name="tdate" type="text" id="datepicker2" value="<%= tdate %>" si
 <form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
 <input id="sql-query" name="sql" type="hidden"/>
 </form>
+
+<div style="display: none;">
+<form name="form0" id="form0" action="query.jsp" target="_blank">
+<input id="sql" name="sql" type="hidden" value=""/>
+<input id="dataLink" name="dataLink" type="hidden" value="1"/>
+<input id="id" name="id" type="hidden" value=""/>
+<input id="showFK" name="showFK" type="hidden" value="0"/>
+<input type="hidden" id="sortColumn" name="sortColumn" value="">
+<input type="hidden" id="sortDirection" name="sortDirection" value="0">
+<input type="hidden" id="hideColumn" name="hideColumn" value="">
+<input type="hidden" id="filterColumn" name="filterColumn" value="">
+<input type="hidden" id="filterValue" name="filterValue" value="">
+<input type="hidden" id="searchValue" name="searchValue" value="">
+<input type="hidden" id="pageNo" name="pageNo" value="1">
+<input type="hidden" id="rowsPerPage" name="rowsPerPage" value="20">
+</form>
+</div>
 
 </body>
 </html>
