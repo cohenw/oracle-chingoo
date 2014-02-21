@@ -6,6 +6,12 @@
 %>
 
 <%
+Connect cn = (Connect) session.getAttribute("CN");
+if (cn!=null && cn.isConnected()) {
+	String redirectPage = "index.jsp";
+	response.sendRedirect(redirectPage);
+	return;
+}
 	session.removeAttribute("CN");
 
 	String cookieName = "url";
