@@ -11,7 +11,7 @@
 %>
 <html>
 <head>
-	<title>Schema Reload</title>
+	<title>Schema Reloading</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
 
 	<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>

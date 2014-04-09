@@ -16,7 +16,7 @@
 
 	int totalCnt = list.size();
 	
-	qry = "SELECT CAPTION, TREEKEY FROM CUSTOMTREEVIEW where sdi='" + sdi + "' and actionid=" + actionid; 	
+	qry = "SELECT CAPTION, TREEKEY, UDATA FROM CUSTOMTREEVIEW where sdi='" + sdi + "' and actionid=" + actionid; 	
 	List<String[]> tv = cn.query(qry);
 	
 	String label[][] = {
@@ -100,10 +100,12 @@
 			l += "<a href=\"javascript:loadSTMT('"+sdi+"', "+s[3]+", '" + tkey + "');\">" + Util.escapeHtml(s[2]) + "</a>";
 		}
 	}
+	
+	String udata = Util.nvl(tv.get(0)[3]);
 %>
 	<%= l %><br/><br/>	
 
-<b><%= tv.get(0)[1] %></b> <%= tv.get(0)[2] %>
+<b><%= tv.get(0)[1] %></b> <%= tv.get(0)[2] %> <b><%= udata %></b>
 <a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=sql%>"/></a>
 <a href="javascript:openSimulator()">Simulator <img border=0 src="image/Media-play-2-icon.png"></a>
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>

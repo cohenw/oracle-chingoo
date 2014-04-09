@@ -444,9 +444,8 @@ function changeSchema(schema) {
 				<a href="query.jsp" target="_blank">Query</a> | <a target=_blank
 				href="history.jsp">History</a> | <a href="javascript:clearCache()">Clear Cache</a> |
 				<a href="reload.jsp" target="_blank">Reload</a> |  
-					<a href='Javascript:aboutGenie()'>About</a> | <a
-				href="logout.jsp">Log out</a>
-
+					<a href='Javascript:aboutGenie()'>About</a> | <a href="logout.jsp">Log out</a>
+		
 			</td>
 			<td align=right nowrap><b>Search</b> <input id="globalSearch"
 				style="width: 180px;" placeholder="table, view or package name" />

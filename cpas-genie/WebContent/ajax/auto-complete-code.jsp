@@ -28,7 +28,7 @@
 	List<String> res2 = null;
 	res1 = new ArrayList<String>();
 	res2 = new ArrayList<String>();
-Util.p("term="+term);
+//Util.p("term="+term);
 /* for (int i=0; i<list.size();i++) {
 	Util.p(list.get(i)[2].toUpperCase());
 }
@@ -44,7 +44,7 @@ Util.p("term="+term);
 
 	if (cnt < MAX_DISPLAY_LIST) {
 		for (int i=0; i<list.size();i++) {
-			if (!list.get(i)[1].toUpperCase().startsWith(term) && StringUtils.containsIgnoreCase(list.get(i)[2], term)) {
+			if (!list.get(i)[1].toUpperCase().startsWith(term) && (list.get(i)[1].toUpperCase().contains(term) || StringUtils.containsIgnoreCase(list.get(i)[2], term))) {
 				res1.add(list.get(i)[1]);
 				res2.add(list.get(i)[2]);
 				cnt ++;
@@ -53,7 +53,7 @@ Util.p("term="+term);
 		}	
 	}
 	
-	Util.p("res1.size="+res1.size());
+//	Util.p("res1.size="+res1.size());
 %>
 
 [

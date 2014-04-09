@@ -35,7 +35,7 @@ String imgList[] = {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>Genie</title>
+    <title>Genie - Connecting to Oracle...</title>
     <link rel='stylesheet' type='text/css' href='css/style.css'> 
     <link rel='stylesheet' type='text/css' href='css/slideshow.css'> 
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">

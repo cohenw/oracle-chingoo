@@ -7,7 +7,7 @@
 %>
 <%
 	String tables1[] = {"MEMBER", "CLIENT", "PLAN", "EMPLOYER", "PERSON", "PENSIONER", "", "ACCOUNT", "CALC", "BATCH",  "FUND", "REQUEST", "TASK"};
-	String tables2[] = {"BATCHCAT", "BATCHCAT_TASK", "ERRORCAT", "REPORTCAT", "REQUESTCAT", "TASKCAT", "FWIZCAT", "WIZARDCAT", "", "CPAS_CODE", "CPAS_REPORT", "CPAS_KIT", "CPAS_WIZARD", "CPAS_VALIDATION"};
+	String tables2[] = {"BATCHCAT", "BATCHCAT_TASK", "ERRORCAT", "REPORTCAT", "REQUESTCAT", "TASKCAT", "FWIZCAT", "WIZARDCAT", "", "CPAS_CODE", "CPAS_VERSION", "CPAS_REPORT", "CPAS_KIT", "CPAS_WIZARD", "CPAS_VALIDATION"};
 	String tables3[] = {"CPAS_CALCTYPE", "CPAS_CATALOG", "CPAS_ACTION", "CPAS_TABLE", "CPAS_LAYOUT", "CPAS_DATE", "CPAS_JML", "CPAS_GROUP", "CPAS_DOC", /*"CPAS_FORM",*/ "CPAS_PARAMETER", "CPAS_AGE", "", "CPAS_SEARCHTYPE", "CPASFIND"};
 	String tables4[] = {"FORMULA", "RULE", "EXPOSE", "EXPOSE_RULE", "PLAN_RULEID", "", "CPAS_ROLE", "SECSWITCH"};
 
@@ -96,6 +96,11 @@ Test
 <% } else { %>
 <span class="nullstyle">BenCalc</span>
 <% } %>
+
+<% if (cn.canReconnect())  { %>				
+| <a href="reconnect.jsp" target="_blank">Reconnect</a>	
+<% } %>		
+
 <%-- 
 |
 <% if (cn.isPackageProc("BC.setAll")) { %>

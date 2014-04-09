@@ -35,6 +35,18 @@
 			"SELECT actionstmt from TREEACTION_STMT where (sdi, schema, actionid) in ( " +
 			"SELECT sdi, schema, actionid FROM TREEACTION_STMT WHERE actiontype='DS' AND actionstmt like '%FROM " + tname + " %') and actiontype='DT' and actionstmt not like 'SELECT%'";		
 
+	if (tname.startsWith("BATCH_BUF$")&& tname.endsWith("$BUFF")) {
+		String tname2 = tname.replaceAll("\\$BUFF", "\\$VIEW");
+		tmp += "UNION " +
+				"SELECT '" + tname2 + "' FROM DUAL UNION " + 
+						"SELECT actionstmt from TREEACTION_STMT WHERE (sdi, schema, actionid) in ( " +
+						"SELECT sdi, schema, actionid FROM TREEACTION_STMT WHERE actiontype='MS' AND actionstmt like '%FROM " + tname2 + " %') and actiontype='MT' and actionstmt not like 'SELECT%'" +
+						"union " +
+						"SELECT actionstmt from TREEACTION_STMT where (sdi, schema, actionid) in ( " +
+						"SELECT sdi, schema, actionid FROM TREEACTION_STMT WHERE actiontype='DS' AND actionstmt like '%FROM " + tname2 + " %') and actiontype='DT' and actionstmt not like 'SELECT%'";				
+	}
+Util.p(tmp);
+
 	String sql = "SELECT * FROM CPAS_TABLE WHERE TNAME IN (" + tmp + ")";
 	
 	List<String[]> res = cn.query(sql, false);

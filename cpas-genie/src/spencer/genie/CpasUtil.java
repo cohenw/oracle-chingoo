@@ -434,6 +434,14 @@ public class CpasUtil {
 				grup = "CTC";
 		}
 
+		// override
+		// override if there is data in GENIE_TABLE_COL
+		String qry2 = "SELECT CPAS_CODE FROM GENIE_TABLE_COL WHERE TNAME='" + tname + "' AND CNAME='"+cname+"'";
+		String res = cn.queryOne(qry2, false);
+		if (res != null && !res.equals(""))
+			grup = res;
+		
+		
 		String qry = "SELECT SOURCE, SELECTSTMT FROM CPAS_CODE WHERE GRUP='"
 				+ grup + "'";
 		if (cpasType == 5)
@@ -531,6 +539,10 @@ public class CpasUtil {
 			qry = getQryStr(selectstmt, value, q);
 			return qry;
 		}
+		if (source.equals("3")) {  // 3 column
+			qry = getQryStr(selectstmt, value, q);
+			return qry;
+		}
 
 		if (source.equals("U")) {
 			selectstmt = "SELECT NAME FROM CODE_VALUE_NAME WHERE GRUP='" + grup +"' AND VALU ='" + value + "'";
@@ -552,14 +564,13 @@ public class CpasUtil {
 			}
 		}
 		String capt = htCapt.get(key);
-/*
-		if (capt == null) {
-			if (cname.equals("CLNT"))
-				return "Client";
-			if (cname.equals("ERKEY"))
-				return "Employer";
-		}
-*/
+
+		// override if there is data in GENIE_TABLE_COL
+		String qry = "SELECT CAPT FROM GENIE_TABLE_COL WHERE TNAME='" + tname + "' AND CNAME='"+cname+"'";
+		String res = cn.queryOne(qry, false);
+		if (res != null && !res.equals(""))
+			return res;
+		
 		return capt;
 	}
 
@@ -597,6 +608,12 @@ public class CpasUtil {
 			if (tname.equals("CALC") && cname.equals("CCLASS"))
 				grup = "CPAS_CTYPE";
 */		}
+		
+		// override if there is data in GENIE_TABLE_COL
+		String qry = "SELECT CPAS_CODE FROM GENIE_TABLE_COL WHERE TNAME='" + tname + "' AND CNAME='"+cname+"'";
+		String res = cn.queryOne(qry, false);
+		if (res != null && !res.equals(""))
+			return res;
 		
 		return grup;
 	}
@@ -793,6 +810,16 @@ public class CpasUtil {
 			}
 		}
 		
-		return null;
+		// override logical link for GENIE_TABLE_COL
+		return getLogicalLink(tname, colName);
+		
+		//return null;
+	}
+	
+	public String getLogicalLink(String tname, String cname) {
+		// override if there is data in GENIE_TABLE_COL
+		String qry2 = "SELECT LINK_TO FROM GENIE_TABLE_COL WHERE TNAME='" + tname + "' AND CNAME='"+cname+"'";
+		String res = cn.queryOne(qry2, false);
+		return res;
 	}
 }

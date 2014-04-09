@@ -335,7 +335,7 @@ Rows/Page
 			}
 			
 			pkLabel[i] = "<a " + ( highlight?"style='background-color:yellow;'" :"") + 
-				" href=\"Javascript:doAction('" + colName + "', " + (colIdx + offset) + ");\" title=\"" + tooltip + "\">" +
+				" href=\"Javascript:doAction('" + colName + "', " + (colIdx + offset) + ");\" title=\"" + Util.escapeHtml(tooltip) + "\">" +
 				colDisp + "</a>" + extraImage + cpasDisp;
 
 %>

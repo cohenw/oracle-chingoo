@@ -16,7 +16,8 @@
 			String token = st.nextToken().trim();
 			if (token.startsWith(":") && !token.startsWith(":=") && token.length()>1) {
 				System.out.println("token=" + token);
-				al.add(token);
+				if (!al.contains(token))
+					al.add(token);
 			}
 		}
 		return al;
@@ -53,9 +54,6 @@
 	<link rel="icon" type="image/png" href="image/Genie-icon.png">
 
 	<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css"/>
-	<link rel='stylesheet' type='text/css' href='css/doc.css?<%=Util.getScriptionVersion()%>'>
-	<link rel='stylesheet' type='text/css' href='css/newdoc.css?<%=Util.getScriptionVersion()%>'>
-	
 	<script src="script/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
 
 	<style>
@@ -253,7 +251,8 @@ if (cpasType == 5) {
 	}
 }
 
-
+sql = sql.replace("<System Calculated>", "System Calculated");
+sql = sql.replace("<no maximum=>", "no maximum=");
 boolean isDynamic = false;
 
 ArrayList<String> varAl = getBindVariableList(sql);

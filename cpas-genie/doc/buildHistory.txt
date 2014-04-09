@@ -515,13 +515,71 @@ Build CPAS1107
 	Page count: sorted
 	Member Service Timeline
 	
-Build CAPS1108	
+Build CPAS1108	
 	Explain Formula
 	Handle 1700 year dates
 	Formula (codegroup FOR) explained
 	Autocomplete Formula and Formula lookup
 	setHighlight after AJAX data load
+
+Build CPAS1109	
+	Rollback after BenCalc/Formula (to release lock)
+	Formula Explained - for FOR / FOR_, add codegroup
+	Support CodeGroup with 3 column
+	Display waiting image in BenCalc/Formula
+	Treeview search - by UDATA
+	Treeview - Exposed Rules - link to search
+	Custom Treeview search - by UDATA
+
+Build CPAS1110
+	Schema Reloading...
+	DivWait for Datalink		
+	CPAS Online URL links
+	Link to Magellan and CQ
+	GMA location changed
+
+Build CPAS1111
+	Treeview shows exposed code (template)
+	Treeview hides additional info if there is rule (source)
+	Treeview shows custom code and template code (not client specific)
+	Link to Sourcode from Exposed code
+	Cpas Code : use distinct cynamic value
+	Exception for <System Calculated>
+
+Build CPAS1112
+	CPAS Online to TreeView
+	TreeView to CPAS Online
+	Syntax Highlight for Treeview items "MS.DS.MB.MI.DI.AS.MA.DA.MD.DD.MU.DU.MV.DV"
+	Package Tree upstream - do not repeat the same object
+	Formula Search - remove old Div for the formula
+	Bug fix: CRUD matrix title may have ", escape tooltip
+
+Build CPAS1113
+	Erkey for BenCalc (cCalcErkey)
+	Get Erkey from last MEMBER_SERVICE as of calc date 
+	bencalc_member.jsp uses erkey as of calc date
+	Formula Explained - link to other Formulas
+	Treview search all columns
 	
+
+Build CPAS1114
+	XML Formatter (tool)
+	
+Build CPAS1115
+	GENIE_TABLE_COL for cpation, cpas code and logical link table
+	Auto-complete for CPAS_CODE in Table Col	
+	Auto-complete for LINK_TO tables
+	Logical Child from GENIE_TABLE_COL 	
+
+Build CPAS1116
+	Reconnect
+	Pass ERKEY to BC_PARAMETER
+	Javascript populate Test script text 
+
+Build CPAS1117
+	Fixed Explosed Rules in TreeView
+	Show subtype for Rescue/Slave
+
 New Feature to implement
 
 Known Bug

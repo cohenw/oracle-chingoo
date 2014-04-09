@@ -146,3 +146,6 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 
 </body>
 </html>
+<%
+cn.getConnection().rollback();
+%>

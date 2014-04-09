@@ -161,7 +161,7 @@ Found: <%= filteredCount %>
 		
 %>
 <th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
-	href="Javascript:setColumn(<%= id %>, '<%=colName%>', <%= colIdx%>);" title="<%= tooltip %>"><%=colName.toLowerCase()%></a>
+	href="Javascript:setColumn(<%= id %>, '<%=colName%>', <%= colIdx%>);" title="<%= Util.escapeHtml(tooltip) %>"><%=colName.toLowerCase()%></a>
 	<%= extraImage %><%= cpasDisp %>
 </th>
 <%

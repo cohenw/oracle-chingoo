@@ -35,10 +35,27 @@ public void BFS(Connect cn, int maxLevel, String pkg, String prc, ArrayList<PTre
 	}
 }
 
+public synchronized String getGenieFKCol(Connect cn, String tname, String reftname) {
+	String qry = "SELECT CNAME FROM GENIE_TABLE_COL WHERE LINK_TO='" + tname + "' AND TNAME = '"+reftname+"'";
+	return cn.queryOne(qry, false);
+}
+
 public synchronized List<String> getLogicalChildTables(Connect cn, String tname, Query q) {
 //System.out.println("tname="+tname);	
 	List<String> list = new ArrayList<String>();
 
+	{
+		// load logical child from GENIE_TABLE_COL
+		String qry = "SELECT DISTINCT TNAME, CNAME FROM GENIE_TABLE_COL WHERE LINK_TO='" + tname + "' ORDER BY 1";
+	
+		List<String[]> lst = cn.query(qry, false);
+		for (String[] st: lst) {
+			list.add(st[1]);
+			//Util.p(">>> " + st[1] + ","+ st[2]);
+		}
+		//Util.p("lst.size()" + lst.size());
+	}
+	
 	if ( tname.equals("BATCH") ) {
 		list.add("CALC");
 		// 1 Param table
@@ -389,6 +406,7 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 <%
 	id = Util.getId();
 %>
+<div id="divWait"><img src="image/loading_big.gif"></div>
 
 <b><%= table %></b> (<span class="rowcountstyle"><%= 1 %></span> / <%= cn.getTableRowCount(table) %>)
 &nbsp;&nbsp<a href="pop.jsp?key=<%= table %>" target="_blank" title="Detail"><img border=0 src="image/detail.png"></a>
@@ -785,15 +803,23 @@ if (cn.isViewTable(table)) {
 			recCount = cn.getQryCount(tmp);
 		} else if (table.equals("BATCH") && refTab.equals("BD_CALC_REQUEST")) {
 			refsql = "SELECT * FROM BD_CALC_REQUEST WHERE PROCESSID="+ key + " OR FEED_PROCESSID=" + key;
-			Util.p(refsql);
+			//Util.p(refsql);
 			
 			String tmp = refsql.replace("SELECT * ", "SELECT COUNT(*) ");
 			recCount = cn.getQryCount(tmp);
+
 		} else {
+			
+			if (fkColName== null || fkColName.equals("")) {
+				// check from GENIE_TABLE_COL
+				fkColName = getGenieFKCol(cn, table, refTab);		
+				//Util.p("^^^^ " + fkColName);
+			}
+			
 			recCount = cn.getPKLinkCount(refTab, fkColName , key);
 			refsql = cn.getRelatedLinkSql(refTab, fkColName, key);
 		}
-		
+
 		if (recCount==0) continue;
 
 		if (refTab.equals("CALC_ERROR")) {
@@ -969,6 +995,7 @@ toggleLFK();
 <%
 	}
 %>
+	$("#divWait").remove();
 });	    
 </script>
 

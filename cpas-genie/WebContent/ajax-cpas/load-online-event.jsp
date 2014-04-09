@@ -49,7 +49,8 @@
 		String indent = "";
 		if (position.contains(".")) indent =  "&nbsp;&nbsp;&nbsp;-";
 		if (pevent!=null) indent =  "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	
+
+		indent = "";
 %>
 
 <%= indent %>

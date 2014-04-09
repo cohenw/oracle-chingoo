@@ -164,7 +164,7 @@ String id2 = Util.getId();
 sortColumn, sortDirection = <%=sortColumn +"," + sortDirection %> Layout=<%= layout %><br/>
  --%>
 <span style="font-family: Consolas; font-size: 16px;"><b><%=new HyperSyntax().getHyperSyntax(cn, sql, "SQL")%></b></span>
-<a href="javascript:openQuery('<%=id2%>')"><img src="image/linkout.png" border=0 title="<%=sql%>"/></a>
+<a href="javascript:openQuery('<%=id2%>')"><img src="image/linkout.png" border=0 title="<%=Util.escapeHtml(sql)%>"/></a>
 <a href="javascript:toggleLayout('<%=id%>')">Layout</a>
 <div style="display: none;" id="sql-<%=id2%>"><%= sql%></div>
 
@@ -316,7 +316,7 @@ if (!applyLayout) {
 		
 %>
 <th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
-	href="Javascript:setColumn(<%= id %>, '<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colDisp%></a>
+	href="Javascript:setColumn(<%= id %>, '<%=colName%>', <%= colIdx + offset %>);" title="<%= Util.escapeHtml(tooltip) %>"><%=colDisp%></a>
 	<%= extraImage %><%= cpasDisp %>
 </th>
 

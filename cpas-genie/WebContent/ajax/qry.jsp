@@ -313,6 +313,13 @@ hasCpas = true;
 				}
 			}
 
+			// override logical link for GENIE_TABLE_COL
+			String lt = cn.getLogicalLink(tname, colName);
+			if (lt != null && !lt.equals("")) {
+				hasCpas = true;
+				break;
+			}
+			
 			if (hasCpas) break;
 		}
 	}
@@ -391,7 +398,7 @@ hasCpas = true;
 			
 %>
 <th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
-	href="Javascript:doAction('<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colDisp%></a>
+	href="Javascript:doAction('<%=colName%>', <%= colIdx + offset %>);" title="<%= Util.escapeHtml(tooltip) %>"><%=colDisp%></a>
 	<%= extraImage %><%= cpasDisp %> <%= cpas?grup:"" %>
 </th>
 <%
