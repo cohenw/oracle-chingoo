@@ -150,7 +150,7 @@ or
 
 
 <% if (isCPAS) { %>
-<hr width="850" align="left" color="green">
+<hr width="950" align="left" color="green">
 <br/>
 <b style="margin-left: 20px;">CPAS Databases:</b>
 <select id="dbSelect" onchange="setLogin(this.options[this.selectedIndex].value, '');">
@@ -237,6 +237,9 @@ or
 <option value="jdbc:oracle:thin:@s-ora-006.cpas.com:1521/UNILEASE">S-ORA-006.UNILEASE</option>
 <option></option>
 
+<option value="jdbc:oracle:thin:@s-ora-008.cpas.com:1521/GMA">S-ORA-008.GMA</option>
+<option></option>
+
 <option value="jdbc:oracle:thin:@s-dev-012.cpas.com:1521/DEV102">S-DEV-012.DEV102</option>
 <option value="jdbc:oracle:thin:@VS-ORATEST-001.CPAS.COM:1521/WEBDEMO">VS-ORATEST-001.WEBDEMO</option>
 <option value="jdbc:oracle:thin:@w-onlinecpascom:1521/ONLINE">W-ONLINECPASCOM.ONLINE</option>
@@ -246,6 +249,11 @@ or
 
 <img style="margin-left: 250px;" src="image/video.png">
 <a href="http://genie.cpas.com/genie-video/index.html" target=_blank><span style="background-color: yellow;">Watch tutorial videos</span></a>
+
+&nbsp;
+<a target="_blank" href="http://magellan/">Magellan</a> &nbsp;
+<a target="_blank" href="https://apps.cpas.com/cq">CQ</a> 
+
 <br/>
 
 

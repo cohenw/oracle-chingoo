@@ -46,6 +46,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
@@ -111,13 +112,46 @@ public class Connect implements HttpSessionBindingListener {
 	
 	public HashSet<String> tempSet;
 	String calcid = "";
+	String reconnectUrl, reconnectUserName, reconnectPassword;
 
 	public int tabToSpace = 3;
+	boolean canReconnect = true;
 	
 	public String getTabSpace() {
 		String res = "          ";
 		
 		return res.substring(0,tabToSpace);
+	}
+
+	public boolean canReconnect() {
+		return canReconnect;
+	}
+	
+	public boolean reconnect() {
+		if (!canReconnect) return false;
+		
+    	if (conn != null)	{
+    		try {
+                conn.close ();
+                System.out.println ("Database connection terminated for " + urlString + " @" + (new Date()) + " " + ipAddress);
+            }
+            catch (Exception e) { 
+            	/* ignore close errors */
+            	e.printStackTrace();
+            	return false;
+            }
+    		
+    		try {
+                Class.forName ("oracle.jdbc.driver.OracleDriver").newInstance ();
+                conn = DriverManager.getConnection (reconnectUrl, reconnectUserName, reconnectPassword);    			
+    		} catch (Exception e) { 
+            	/* ignore close errors */
+            	e.printStackTrace();
+            	return false;
+            }
+        }
+    	
+		return true;
 	}
 	
 	/**
@@ -151,7 +185,12 @@ public class Connect implements HttpSessionBindingListener {
             conn = DriverManager.getConnection (url, userName, password);
             conn.setReadOnly(true);
             
+            reconnectUrl = url;
+            reconnectUserName = userName;
+            reconnectPassword = password;
+            
             if (targetSchema !=null ) {
+            	canReconnect = false;
                 System.out.println("Switching to " + targetSchema);
             	Statement oStatement = null;
             	oStatement = conn.createStatement();
@@ -169,7 +208,9 @@ public class Connect implements HttpSessionBindingListener {
 
        		this.schemaName = userName;
             if (!loadData) return; 
-            	
+
+            createTable3();
+            
             comments = new Hashtable<String, String>();
             schemas = new Vector<String>();
             queryLog = new HashMap<String, QueryLog>();
@@ -2042,6 +2083,29 @@ public class Connect implements HttpSessionBindingListener {
 		cs.reload(this);
 	}
 	
+	public void createTable3() throws SQLException {
+	    conn.setReadOnly(false);
+		String stmt1 = 
+				"CREATE TABLE GENIE_TABLE_COL (	"+
+				"TNAME			VARCHAR2(30),  "+
+				"CNAME			VARCHAR2(30),  "+
+				"CAPT			VARCHAR2(100), "+
+				"CPAS_CODE		VARCHAR2(30),  "+
+				"LINK_TO		VARCHAR2(100), "+
+				"PRIMARY KEY (TNAME, CNAME) )";
+		Statement stmt = null;
+		try {
+			stmt = conn.createStatement();
+			stmt.execute(stmt1);
+			stmt.close();
+		} catch (Exception e) {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+	    conn.setReadOnly(true);
+	}
+	
 	public void createTable() throws SQLException {
         conn.setReadOnly(false);
 		String stmt1 = 
@@ -3286,6 +3350,10 @@ public class Connect implements HttpSessionBindingListener {
 
 	public String getBuildNo() {
 		return cu.buildNo;
+	}
+	
+	public String getLogicalLink(String tname, String cname) {
+		return cu.getLogicalLink(tname, cname);
 	}
 }
 

@@ -72,7 +72,7 @@ Please select a Table to see the detail.
 		String comment = cn.getComment(tname, colName);
 		if (comment != null && comment.length() > 0) tooltip += " " + comment;
 %>
-<td>&nbsp;<a href="Javascript:copyPaste('<%=colName%>');" title="<%= tooltip %>"><%= colDisp%></a></td>
+<td>&nbsp;<a href="Javascript:copyPaste('<%=colName%>');" title="<%= Util.escapeHtml(tooltip) %>"><%= colDisp%></a></td>
 <%
 		if ((i+1)%5==0) out.println("</tr><tr>");
 	}
@@ -113,7 +113,7 @@ Please select a Table to see the detail.
 		String comment = cn.getComment(tname, colName);
 		if (comment != null && comment.length() > 0) tooltip += " " + comment;
 %>
-<td>&nbsp;<a href="Javascript:copyPaste('<%=colName%>');" title="<%= tooltip %>"><%= colDisp%></a></td>
+<td>&nbsp;<a href="Javascript:copyPaste('<%=colName%>');" title="<%= Util.escapeHtml(tooltip) %>"><%= colDisp%></a></td>
 <%
 		if ((i+1)%5==0) out.println("</tr><tr>");
 	}

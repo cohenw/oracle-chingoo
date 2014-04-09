@@ -234,7 +234,7 @@ Found: <%= filteredCount %>
 			}			
 %>
 <th class="headerRow"><a <%= ( highlight?"style='background-color:yellow;'" :"")%>
-	href="Javascript:setColumn(<%= id %>, '<%=colName%>', <%= colIdx + offset %>);" title="<%= tooltip %>"><%=colDisp%></a>
+	href="Javascript:setColumn(<%= id %>, '<%=colName%>', <%= colIdx + offset %>);" title="<%= Util.escapeHtml( tooltip ) %>"><%=colDisp%></a>
 	<%= extraImage %><%= cpasDisp %> <%= grup %>
 </th>
 <%
@@ -471,7 +471,7 @@ for (int i=0; i<fkLinkTab.size(); i++) {
 
 &nbsp;&nbsp;
 <a href="pop.jsp?key=<%= tname %>" target="_blank" title="Detail"><img src="image/detail.png"></a>
-<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=fsql%>"/></a>
+<a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=Util.escapeHtml(fsql)%>"/></a>
 (<%= tname %>.<%=fc.toLowerCase() %>)
 &nbsp;&nbsp;<a href="javascript:hideDiv('div-fkk-<%=id%>')"><img src="image/clear.gif" border=0/></a>
 <div style="display: none;" id="sql-<%=id%>"><%= fsql%></div>

@@ -403,12 +403,13 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 
 <table border=0 cellpadding=0 cellspacing=0>
 <td valign=top>
-
-<div style="width: 250; float:left; margin: 4px; padding: 6px; border:1px solid #888888; background-color: #99FFFF;">
+<div style="width: 252; float:left; margin: 4px; padding: 6px; border:0px solid #888888; background-color: #ffffff;">
+</div>
+<%-- <div style="width: 250; float:left; margin: 4px; padding: 6px; border:1px solid #888888; background-color: #999999;">
 <b><%= cn.getProcedureLabel(gPkg, gPrc)  %></b><a href="javascript:showSource('<%= name %>')"><img src="image/detail.png"></a><br/>
 <div style="margin-left:20px;"><%= getTableCRUD(name, cn) %></div>
 </div>
-
+ --%>
 </td>
 <td valign=top>
 <% id = Util.getId(); %>
@@ -562,7 +563,6 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
   })();
 
 </script>
-
 
 </body>
 </html>

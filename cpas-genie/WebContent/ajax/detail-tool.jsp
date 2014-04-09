@@ -119,3 +119,7 @@
 <% if (tool.equalsIgnoreCase("Clone Member (External DB)")) { %>
 <jsp:include page="clone-member-ext.jsp"/>
 <% } %>
+
+<% if (tool.equalsIgnoreCase("XML Formatter")) { %>
+<jsp:include page="xml-format.jsp"/>
+<% } %>

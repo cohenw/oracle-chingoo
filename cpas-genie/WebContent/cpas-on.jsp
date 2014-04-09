@@ -9,6 +9,9 @@
 		" ORDER BY SORTORDER";	
 
 	Query q = new Query(cn, qry, false);
+	
+	String keyword = request.getParameter("keyword");
+	
 %>
 
 <html>
@@ -93,6 +96,9 @@ $(document).ready(function(){
 	});
 	
 	checkResize();
+<% if (keyword != null ) { %>	
+	processSearch('<%= keyword %>');
+<% } %>
 })
 
 	function checkResize() {

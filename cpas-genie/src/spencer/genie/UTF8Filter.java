@@ -17,3 +17,4 @@ public class UTF8Filter implements Filter {
 	public void init(FilterConfig filterConfig) throws ServletException {
 	}
 }
+

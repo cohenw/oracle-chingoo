@@ -320,7 +320,7 @@ if (tv!=null && sdi!=null && actionId != null) {
 
 String qrySlave = "SELECT * FROM CPAS_PROCESS_EVENT A WHERE A.PROCESS='" + process + "' AND A.PEVENT='" + event + "' ORDER BY A.POSITION";
 Query qSlave = new Query(cn, qrySlave, false);
-
+Util.p(qrySlave);
 if (qSlave.hasData()) {
 	id = Util.getId();
 %>
@@ -333,9 +333,11 @@ if (qSlave.hasData()) {
 <table id="dataTable" border=1 class="gridBody">
 <tr>
 	<th class="headerRow">Event Name</th>
-	<th class="headerRow">Process</th>
+<!-- 	<th class="headerRow">Process</th>
 	<th class="headerRow">Event</th>
-	<th class="headerRow">PEvent</th>
+ -->	
+ 	<th class="headerRow">Link To</th>
+ 	<th class="headerRow">Sub Type</th>
 	<th class="headerRow">Position</th>
 	<th class="headerRow">Action</th>
 	<th class="headerRow">Privilege</th>
@@ -356,6 +358,11 @@ qSlave.rewind(1000, 1);
 		String seclabel = qSlave.getValue("seclabel");
 		String log = qSlave.getValue("log");
 		String rkey = qSlave.getValue("rkey");
+		String stype = qSlave.getValue("stype");
+		if (stype != null) {
+			if (stype.equals("S")) stype = "Slave";
+			if (stype.equals("R")) stype = "Rescue";
+		}
 
 		rowCnt ++;
 		String rowClass = "oddRow";
@@ -377,9 +384,10 @@ qSlave.rewind(1000, 1);
 %>
 <tr class="simplehighlight">
 	<td class="<%= rowClass%>" nowrap><%= pevent==null?"":"&nbsp;&nbsp;&nbsp;&nbsp;" %><%= name %></td>
-	<td class="<%= rowClass%>" nowrap><%= pcss==null?"":pcss %></td>
+<%-- 	<td class="<%= rowClass%>" nowrap><%= pcss==null?"":pcss %></td>
 	<td class="<%= rowClass%>" nowrap><%= evnt==null?"":evnt %></td>
-	<td class="<%= rowClass%>" nowrap><%= pevent==null?"":pevent %><%= evnt==null?"":" <a target=_blank href='" + treeviewUrl +"'>" + treeviewCaption + " treeview</a>" %></td>
+ --%>	<td class="<%= rowClass%>" nowrap><%= evnt==null?"":" <a target=_blank href='" + treeviewUrl +"'>" + treeviewCaption + " treeview</a>" %></td>
+	<td class="<%= rowClass%>" nowrap><%= stype==null?"":stype %></td>
 	<td class="<%= rowClass%>" nowrap><%= position==null?"":position %></td>
 	<td class="<%= rowClass%>" nowrap><%= action==null?"":action + " <span class='cpas'>" + actionName + "</span>"%></td>
 	<td class="<%= rowClass%>" nowrap><%= seclabel==null?"":seclabel + " <span class='cpas'>" + secName + "</span>"%></td>

@@ -37,8 +37,9 @@
 %>
 <div id="objectTitle" style="display:none">VIEW: <%= view %></div>
 <h2>VIEW: <%= vname %> &nbsp;&nbsp;<a href="Javascript:runQuery('','<%=vname%>')"><img border=0 src="image/icon_query.png" title="query"></a>
-<a href="erd2.jsp?tname=<%=vname%>" target="_blank"><img title="ERD" border=0 src="image/erd.gif"></a>
-<a href="crud-matrix.jsp?table=<%=view%>" target="_blank"><img title="CRUD Matrix" border=0 src="image/matrix.gif"></a>
+<a href="erd2.jsp?tname=<%=vname%>"><img title="ERD" border=0 src="image/erd.gif"></a>
+<a href="crud-matrix.jsp?table=<%=view%>"><img title="CRUD Matrix" border=0 src="image/matrix.gif"></a>
+<a href="edit_table_col.jsp?table=<%=view%>"><img title="Table" border=0 src="image/file_edit.png"></a>
 <a href="pop.jsp?type=VIEW&key=<%=view%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
 </h2>
 

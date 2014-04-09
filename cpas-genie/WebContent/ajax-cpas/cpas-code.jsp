@@ -16,7 +16,8 @@
 			String token = st.nextToken().trim();
 			if (token.startsWith(":") && !token.startsWith(":=") && token.length()>1) {
 				System.out.println("token=" + token);
-				al.add(token);
+				if (!al.contains(token))
+					al.add(token);
 			}
 		}
 		return al;
@@ -68,7 +69,10 @@
 	
 	
 	boolean isDynamic = false;
-
+	sql = sql.replace("<System Calculated>", "System Calculated");
+	sql = sql.replace("<no maximum=>", "no maximum=");
+	
+	
 	ArrayList<String> varAl = getBindVariableList(sql);
 	if (varAl.size() >0 ) isDynamic = true;
 //System.out.println("isDynamic=" + isDynamic);
@@ -84,7 +88,7 @@
 			sqlh = sqlh.replaceAll(var, "'" + request.getParameter(var) + "'");
 		}
 	}		
-	
+Util.p(sqlh);	
 %>
 <b><%=caption %></b><br/>
 <div id="sql-<%=id%>" style="display: none;"><%= sql %></div>

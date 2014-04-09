@@ -304,6 +304,21 @@ function tvSearch(keyword) {
 	});
 }
 
+function searchExposedRule(ruleType) {
+	ruleType = $.trim(ruleType);
+	$("#inner-tvstmt").html("<img src='image/loading.gif'/>");
+
+	$.ajax({
+		url: "ajax-cpas/tv-search-custom.jsp?ruleType=" + ruleType + "&t=" + (new Date().getTime()),
+		success: function(data){
+			$("#inner-tvstmt").html(data);
+		},
+        error:function (jqXHR, textStatus, errorThrown){
+            alert(jqXHR.status + " " + errorThrown);
+        }  
+	});
+}
+
 function openSimulator() {
 	$("#formSimul").submit();
 }
@@ -332,6 +347,18 @@ function setYellow(sdi, treekey) {
 	//alert('aaa');
 }
 
+function exposedRules() {
+	$.ajax({
+		url: "ajax-cpas/exposed-rules.jsp",
+		success: function(data){
+			$("#inner-tvstmt").html(data);
+		},
+        error:function (jqXHR, textStatus, errorThrown){
+            alert(jqXHR.status + " " + errorThrown);
+        }  
+	});	
+}
+
 </script>
 
 </head>
@@ -353,7 +380,8 @@ function setYellow(sdi, treekey) {
 <a href="index.jsp">Home</a> |
 <a href="query.jsp" target="_blank">Query</a> |
 <a href="cpas-process.jsp" target="_blank">CPAS Process</a> 
-
+&nbsp;&nbsp;&nbsp;
+<a href="Javascript:exposedRules()" target="_blank">Exposed Rule</a>
 </td>
 <td align=right nowrap>
 <b>TreeView Search</b> <input id="globalSearch" style="width: 200px;" onChange="tvSearch($('#globalSearch').val())" placeholder="treeview item or table/view"/>

@@ -88,6 +88,9 @@
 <b><%= tv.get(0)[1] %></b> <%= tv.get(0)[2] %>
 <a href="javascript:openQuery('<%=id%>')"><img src="image/linkout.png" border=0 title="<%=sql%>"/></a>
 <a href="javascript:openSimulator()">Simulator <img border=0 src="image/Media-play-2-icon.png"></a>
+&nbsp;&nbsp;&nbsp;
+<a href="cpas-treeview.jsp?sdi=<%= sdi %>&treekey=<%= tv.get(0)[2] %>" target="_blank">TreeView<img src="image/tree.png" width=16 height=16></a>
+
 <div style="display: none;" id="sql-<%=id%>"><%= sql%></div>
 <br/>
 <%
@@ -122,8 +125,7 @@
 	<td class="<%= rowClass%>" nowrap><%= label[i][1] %></td>
 	<td class="<%= rowClass%>" nowrap><%= label[i][0] %></td>
 	<td class="<%= rowClass%>">
-<%= (label[i][0].equals("MS") || label[i][0].equals("DS")) ? "<span style='font-family: Consolas;'>" + new HyperSyntax().getHyperSyntax(cn, values[i], "SQL") : values[i] %>
-<%= (label[i][0].equals("MS") || label[i][0].equals("DS")) ? "</span>":"" %>
+<%= ("MS.DS.MB.MI.DI.AS.MA.DA.MD.DD.MU.DU.MV.DV".contains(label[i][0])) ? "<span style='font-family: Consolas;'>" + new HyperSyntax().getHyperSyntax(cn, values[i], "SQL") + "</span>": values[i] %>
 
 <% if ((label[i][0].equals("MT") || label[i][0].equals("DT")) && !values[i].equals("") && values[i].length() < 30) {
 	id = Util.getId();

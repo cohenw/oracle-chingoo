@@ -54,9 +54,10 @@ Please select a Table to see the detail.
 <div id="objectTitle" style="display:none"><%=(isTempTable?"TEMPORARY TABLE":"TABLE")%>: <%= table %></div>
 <h2><%=(isTempTable?"TEMPORARY TABLE":"TABLE")%>: <%= tname %> &nbsp;&nbsp;<span class="rowcountstyle"><%= cn.getTableRowCount(owner, table) %></span>
 <a href="Javascript:runQuery('','<%=tname%>')"><img border=0 src="image/icon_query.png" title="query"></a>
-<a href="erd2.jsp?tname=<%=tname%>" target="_blank"><img title="ERD" border=0 src="image/erd.gif"></a>
+<a href="erd2.jsp?tname=<%=tname%>"><img title="ERD" border=0 src="image/erd.gif"></a>
 <%-- <a href="erd_svg.jsp?tname=<%=tname%>" target="_blank"><img title="Simple ERD" border=0 src="image/simple-erd.png"></a> --%>
-<a href="crud-matrix.jsp?table=<%=tname%>" target="_blank"><img title="CRUD Matrix" border=0 src="image/matrix.gif"></a>
+<a href="crud-matrix.jsp?table=<%=tname%>"><img title="CRUD Matrix" border=0 src="image/matrix.gif"></a>
+<a href="edit_table_col.jsp?table=<%=tname%>"><img title="Table" border=0 src="image/file_edit.png"></a>
 <a href="pop.jsp?type=TABLE&key=<%=tname%>" target="_blank"><img title="Pop Out" border=0 src="image/popout.png"></a>
 </h2>
 <%= owner==null?cn.getComment(tname):cn.getSynTableComment(owner, tname) %> <span class="cpas"><%= cpasComment %></span><br/>

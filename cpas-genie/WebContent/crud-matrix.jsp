@@ -267,7 +267,8 @@ Search <input id="globalSearch" style="width: 200px;" placeholder="table or view
 %>
 <tr class="simplehighlight">
 	<td valign=top align=right class="<%= rowClass%>"><%= i+1 %></td>
-	<td valign=top class="<%= rowClass%>"><span style="font-size: 18px;" title="<%= owner==null?cn.getComment(tname, rec.getName()):cn.getSynColumnComment(owner, tname, rec.getName()) %>"><%= col_disp.toLowerCase() %></span>
+	<td valign=top class="<%= rowClass%>"><span style="font-size: 18px;" 
+	title="<%= Util.escapeHtml( owner==null?cn.getComment(tname, rec.getName()):cn.getSynColumnComment(owner, tname, rec.getName()) )%>"><%= col_disp.toLowerCase() %></span>
 	</td>
 	<td valign=top class="<%= rowClass%>"><%= rec.getTypeName() %></td>
 	<td valign=top class="<%= rowClass%>"><%= rec.getNullable()==0?"N":"" %></td>

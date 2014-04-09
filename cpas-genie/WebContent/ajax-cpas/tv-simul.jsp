@@ -25,8 +25,16 @@
 Util.p("actionid=" + actionid);
 	
 	String mainQry = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='MS'");
-//Util.p("mainQry=" + mainQry);
+
+	
+	//Util.p("mainQry=" + mainQry);
 if (key !=null && mainQry != null) mainQry = mainQry.replace(":P.TV_CODECATEGORY", "'" + key + "'");
+
+if (mainQry.contains(":S.UDATA")) {
+	mainQry = mainQry.replace(":S.UDATA", "'" + key + "'");
+}
+
+
 //if (mainQry != null) mainQry = mainQry.replace(":S.CLNT", "'CAAT'");
 //Util.p("mainQry=" + mainQry);
 	String subQry = cn.queryOne("SELECT ACTIONSTMT FROM TREEACTION_STMT WHERE SDI = '"+sdi+"' AND ACTIONID=" + actionid + " AND ACTIONTYPE='DS'");

@@ -50,6 +50,9 @@
 	list.add("");
 	list.add("Clone Member");
 	list.add("Clone Member (External DB)");
+	list.add("");
+	list.add("XML Formatter");
+
 %>
 
 <% if (cn.isCpas()) { %>

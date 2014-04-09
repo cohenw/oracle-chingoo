@@ -62,12 +62,12 @@ public void bcSetAll(Connection conn, String clnt, String plan, String mkey, Str
 	}
 }
 
-public String getFormula(Connection conn, String formula) {
+public String getFormula(Connection conn, String formula, String erkey) {
 	String res="";
 	if (conn != null) {
 
 		
-	    String cStmt = "{ ? = call BC.getFormula(?,'') }";
+	    String cStmt = "{ ? = call BC.getFormula(?,?,'') }";
 //	    String cStmt = "{ ? = call BC_JAVA.getFormula(?,'') }";
 	    
 	    CallableStatement oStmt=null;
@@ -77,7 +77,8 @@ public String getFormula(Connection conn, String formula) {
 	    	oStmt = conn.prepareCall(cStmt);
 //			oStmt.registerOutParameter(1, OracleTypes.FLOAT);
 			oStmt.registerOutParameter(1, OracleTypes.VARCHAR);
-	        oStmt.setString(2,formula);
+	        oStmt.setString(2,erkey);
+	        oStmt.setString(3,formula);
 	        oStmt.execute();
 	        
 //	        float f = oStmt.getFloat(1);
@@ -114,11 +115,13 @@ String getFormulaDesc(Connect cn, String formula) {
 	return desc;
 }
 
-public String getRuleDate(Connection conn, String dateStr) {
+public String getRuleDate(Connection conn, String dateStr, String erkey) {
 	String res="";
 	if (conn != null) {
 
-	    String cStmt = "{ ? = call TO_CHAR( BC_RULE.getDate(TO_DATE(?,'YYYYMMDD')), 'YYYY-MM-DD') }";
+//	    String cStmt = "{ ? = call TO_CHAR( BC_RULE.getDate(TO_DATE(?,'YYYYMMDD')),'"+erkey+"'), 'YYYY-MM-DD') }";
+	    String cStmt = "{ ? = call TO_CHAR( BC_RULE.getDate(TO_DATE(?,'YYYYMMDD'), '" + erkey+ "'), 'YYYY-MM-DD') }";
+	    
 	    CallableStatement oStmt=null;
 	    int nResult = 0;
 	    
@@ -145,7 +148,7 @@ public String getRuleDate(Connection conn, String dateStr) {
 	return res;
 }
 
-String explainFormular(Connect cn, String ftype, String formula, String calcid, String fkey) {
+String explainFormular(Connect cn, String ftype, String formula, String calcid, String fkey, String erkey) {
 //Util.p("ftype=" + ftype + " formula=" + formula + " fkey=" + fkey);
 	if (formula==null || formula.length()==0) return "";
 	Query qCalc = new Query(cn, "SELECT * FROM CALC WHERE calcid="+calcid);
@@ -163,10 +166,11 @@ String explainFormular(Connect cn, String ftype, String formula, String calcid, 
  			if (cg[2].equals("D") && !(tokens.get(i).startsWith("1800")||tokens.get(i).startsWith("1700")))
  				desc = tokens.get(i);
  			else if (cg[3]!=null&&cg[3].length()>0&&tokens.get(i).length() > 0) {
+//Util.p("$$$ " + cg[3] + "," +  tokens.get(i));
  				desc += cn.getCpasUtil().getGrupValue(cg[3], tokens.get(i), qCalc);
  				if (desc.equals("null") && !cg[2].equals("D")) desc = "[" + cg[3] +"]";
 
- 				if (cg[3].equals("FOR")) desc = "";
+ 				//if (cg[3].equals("FOR") || cg[3].startsWith("FOR_")) desc = "";
 			} else if (cg[2].equals("D") && tokens.get(i).length() > 0 ) {
 				if (tokens.get(i).startsWith("1800")||tokens.get(i).startsWith("1700"))
 					desc = getDateDesc(cn, tokens.get(i));
@@ -174,9 +178,10 @@ String explainFormular(Connect cn, String ftype, String formula, String calcid, 
 					desc = tokens.get(i);
 			}
  			String value="";
+ 			String tooltip = null;
  			if (cg[2].equals("D")) {
  				if (tokens.get(i).length() > 0)
- 					value = getRuleDate(cn.getConnection(), tokens.get(i));
+ 					value = getRuleDate(cn.getConnection(), tokens.get(i), erkey);
  				else if (cg[4].equals("DFROM")) {
  					value ="";
  				}
@@ -191,11 +196,13 @@ String explainFormular(Connect cn, String ftype, String formula, String calcid, 
  					else if (cg[1].endsWith(" age")) {
  						value = getAge(cn.getConnection(), tokens.get(i));
  					}
- 					else if (cg[3] != null && cg[3].equals("FOR")) {
+ 					else if (cg[3] != null && (cg[3].equals("FOR") || cg[3].startsWith("FOR_"))) {
  						if (Util.isNumber(tokens.get(i)))
  							value = tokens.get(i);
- 						else
- 							value = getFormula(cn.getConnection(), tokens.get(i));
+ 						else {
+ 							value = getFormula(cn.getConnection(), tokens.get(i), erkey);
+ 						}
+ 						
  					}
  					else
  						value = ""; //tokens.get(i); // + " " + getFormula(cn.getConnection(), tokens.get(i));
@@ -205,12 +212,19 @@ String explainFormular(Connect cn, String ftype, String formula, String calcid, 
  			if (cg[2].equals("N")) {
  				value = tokens.get(i);
  			}
- 			
+			
+				if (value != null && value.startsWith("ERROR")) {
+						tooltip = value;
+						value = "ERROR";
+					} 							
+
  			if (value==null || value.equals("null")) value = "";
- 			
+ 			if (tooltip != null) 
+ 				value = "<span class='pk2'><a title='" + Util.escapeQuote(tooltip) + "'>" + value + "</a></span>";
+ 				
 // 			res += "<tr><td>" + cg[4] + "</td><td>" + cg[1] + "</td><td>"+tokens.get(i)+"</td><td>"+cg[2]+"</td><td>" + desc + 
- 			res += "<tr><td>" + cg[1] + "</td><td>"+tokens.get(i)+"</td><td>"+cg[2]+"</td><td>" + desc +
- 					"</td><td><b>" + value + "</b></td></tr>";
+ 			res += "<tr><td>" + cg[1] + "</td><td>"+tokens.get(i)+"</td><td>"+cg[2]+"</td><td>" + desc + //" " + cg[3] +
+ 					"</td><td><b>" + value + "</b></td><td>" + (cg[3]==null?"":cg[3]) + "</td></tr>";
  		}
 		i++;
 	}
@@ -226,9 +240,9 @@ String explainFormular(Connect cn, String ftype, String formula, String calcid, 
 			if (token.equals("I")) continue;
 			if (token.startsWith("#")) continue;
 			if (Util.isNumber(token)) continue;
-			String val = getFormula(cn.getConnection(), token);
+			String val = getFormula(cn.getConnection(), token, erkey);
 			if (val.startsWith("ERROR")) val = "ERROR";
-			res += "<tr><td>" + token + "</td><td>" + getFormulaDesc(cn, token) + "</td><td align=right><b>" + val + "</b></td></tr>";
+			res += "<tr><td><a href=\"javascript:searchFormula('"+token+"')\">" + token + "</a></td><td>" + getFormulaDesc(cn, token) + "</td><td align=right><b>" + val + "</b></td></tr>";
 		}
 		res += "</table>";
 	};
@@ -335,10 +349,17 @@ public String getAge(Connection conn, String varname) {
 		mkey = Util.nvl(request.getParameter("mkey"));
 		cdate = Util.nvl(request.getParameter("cdate"));
 		
+		calcid = cn.queryOne("SELECT MAX(CALCID) FROM CALC WHERE CLNT='"+clnt + "' AND MKEY='" + mkey +"'");
+		
 		bcSetAll(cn.getConnection(), clnt, plan, mkey, cdate);
 	}
-Util.p("* clnt="+clnt);	
-	erkey = cn.queryOne("SELECT ERKEY FROM MEMBER_SERVICE WHERE CLNT='"+clnt + "' AND MKEY='" + mkey +"'");
+//Util.p("* clnt="+clnt);	
+	//erkey = cn.queryOne("SELECT ERKEY FROM MEMBER_SERVICE WHERE CLNT='"+clnt + "' AND MKEY='" + mkey +"'");
+	erkey = cn.queryOne("select erkey from ( "+
+				"SELECT A.*, row_number() over (partition by clnt, mkey order by edate) rn " +
+				"FROM MEMBER_SERVICE A WHERE CLNT='"+clnt + "' AND MKEY='"+mkey+"' " +
+				"and edate <= (select cdate from calc where calcid="+calcid + ") " + 
+				") where rn=1");	
 	
 	String qry = "SELECT FTYPE VALU,NAME FROM CPAS_FORMULA ORDER BY NAME";
 	List<String[]> ftypes = cn.query(qry);
@@ -392,7 +413,7 @@ Util.p("* clnt="+clnt);
 				(fkey != null?"AND FKEY = '"+fkey+"' ":"") +
 				") WHERE rn=1 ORDER BY FKEY";;
 		}
-Util.p(q);		
+//Util.p(q);		
 		List<String[]> ff = cn.query(q, false);
 
 		int rowCnt=0;
@@ -401,7 +422,7 @@ Util.p(q);
 			String rowClass = "oddRow";
 			if (rowCnt%2 == 0) rowClass = "evenRow";
 			
-			String value = getFormula(cn.getConnection(), fl[4]);
+			String value = getFormula(cn.getConnection(), fl[4], erkey);
 			String tooltip = null;
 			if (value!=null && value.startsWith("ERROR")) {
 				tooltip = value;
@@ -430,7 +451,7 @@ Util.p(q);
 	<td class="<%= rowClass%>"><%= fl[5] %></td>
 	
 	<td class="<%= rowClass%>">
-		Type: <%= fl[13]==null?"":fl[13] + " " +hmFtype.get(fl[13]) %><br/>
+		Type: <%= fl[13]==null?"":"[" + fl[13] + "] " +hmFtype.get(fl[13]) %><br/>
 		Category: <%= fl[9] %> <br/>
 		Page: <%= fl[6] %><br/>
 		Display: <%= fl[7] %><br/>
@@ -440,7 +461,7 @@ Util.p(q);
  		<%= "" %>
  	<% } else { %>
  		<%= fl[8]==null?"":Util.escapeHtml( fl[8] ) %><br/>
- 		<%= explainFormular(cn, fl[13], fl[8], calcid, fl[4]) %>
+ 		<%= explainFormular(cn, fl[13], fl[8], calcid, fl[4], erkey) %>
  	<% } %>
  	</td>
  	<td class="<%= rowClass%>"><%= fl[11] %><br/><%= fl[10] %></td>
@@ -451,3 +472,7 @@ Util.p(q);
 		}
 %>
 </table>
+
+<%
+cn.getConnection().rollback();
+%>

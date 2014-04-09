@@ -316,6 +316,21 @@ function tvSearch(keyword) {
 	});
 }
 
+function searchExposedRule(ruleType) {
+	ruleType = $.trim(ruleType);
+	$("#inner-tvstmt").html("<img src='image/loading.gif'/>");
+
+	$.ajax({
+		url: "ajax-cpas/tv-search.jsp?ruleType=" + ruleType + "&t=" + (new Date().getTime()),
+		success: function(data){
+			$("#inner-tvstmt").html(data);
+		},
+        error:function (jqXHR, textStatus, errorThrown){
+            alert(jqXHR.status + " " + errorThrown);
+        }  
+	});
+}
+
 function setYellow(sdi, treekey) {
 	$('#inner-sdi a.selected').removeClass('selected');
 	$('#inner-tv a.selected').removeClass('selected');
@@ -340,6 +355,22 @@ function setYellow(sdi, treekey) {
 	//alert('aaa');
 }
 
+function exposedRules() {
+	$.ajax({
+		url: "ajax-cpas/exposed-rules.jsp",
+		success: function(data){
+			$("#inner-tvstmt").html(data);
+		},
+        error:function (jqXHR, textStatus, errorThrown){
+            alert(jqXHR.status + " " + errorThrown);
+        }  
+	});	
+}
+
+function loadProc(pkgName, prcName) {
+	$("#name-map").val(pkgName+"."+prcName);
+	$("#form-map").submit();
+}	
 
 </script>
 
@@ -362,6 +393,8 @@ function setYellow(sdi, treekey) {
 <a href="index.jsp">Home</a> |
 <a href="query.jsp" target="_blank">Query</a> |
 <a href="cpas-process.jsp" target="_blank">CPAS Process</a> 
+&nbsp;&nbsp;&nbsp;
+<a href="Javascript:exposedRules()">Exposed Rule</a>
 
 </td>
 <td align=right nowrap>
@@ -393,6 +426,9 @@ function setYellow(sdi, treekey) {
 
 <form id="FORM_query" name="FORM_query" action="query.jsp" target="_blank" method="post">
 <input id="sql-query" name="sql" type="hidden"/>
+</form>
+<form name="form-map" id="form-map" action="package-tree.jsp" target="_blank" method="get">
+<input id="name-map" name="name" type="hidden">
 </form>
 
 <script type="text/javascript">

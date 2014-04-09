@@ -122,12 +122,12 @@ public String getBCBoolean(Connection conn, String fname) {
 }
 %>
 <%!
-public String getRuleDate(Connection conn, String dateStr) {
+public String getRuleDate(Connection conn, String dateStr, String erKey) {
 	String res="";
 	if (conn != null) {
 
-	    String cStmt = "{ ? = call TO_CHAR( BC_RULE.getDate(TO_DATE(?,'YYYYMMDD')), 'YYYY-MM-DD') }";
-	    CallableStatement oStmt=null;
+	    String cStmt = "{ ? = call TO_CHAR( BC_RULE.getDate(TO_DATE(?,'YYYYMMDD'), '" + erKey+ "'), 'YYYY-MM-DD') }";
+		CallableStatement oStmt=null;
 	    int nResult = 0;
 	    
 	    try {
@@ -154,12 +154,17 @@ public String getRuleDate(Connection conn, String dateStr) {
 }
 
 
-public String getFormula(Connection conn, String formula) {
+public String getRuleDate(Connection conn, String dateStr) {
+	return getRuleDate(conn, dateStr, "*");
+}
+
+
+public String getFormula(Connection conn, String formula, String erkey) {
 	String res="";
 	if (conn != null) {
 
 		
-	    String cStmt = "{ ? = call BC.getFormula(?,'') }";
+	    String cStmt = "{ ? = call BC.getFormula(?,?,'') }";
 //	    String cStmt = "{ ? = call BC_JAVA.getFormula(?,'') }";
 	    
 	    CallableStatement oStmt=null;
@@ -169,7 +174,8 @@ public String getFormula(Connection conn, String formula) {
 	    	oStmt = conn.prepareCall(cStmt);
 //			oStmt.registerOutParameter(1, OracleTypes.FLOAT);
 			oStmt.registerOutParameter(1, OracleTypes.VARCHAR);
-	        oStmt.setString(2,formula);
+	        oStmt.setString(2,erkey);
+	        oStmt.setString(3,formula);
 	        oStmt.execute();
 	        
 //	        float f = oStmt.getFloat(1);
@@ -271,7 +277,7 @@ String getFormulaDesc(Connect cn, String formula) {
 	return desc;
 }
 
-String explainFormular(Connect cn, String ftype, String formula, String calcid, String fkey) {
+String explainFormular(Connect cn, String ftype, String formula, String calcid, String fkey, String erkey) {
 	if (formula==null || formula.length()==0) return "";
 	Query qCalc = new Query(cn, "SELECT * FROM CALC WHERE calcid="+calcid);
 	String res="<table border=1 style='border: 1px solid #CCCCCC; border-collapse: collapse;'>";
@@ -299,9 +305,10 @@ String explainFormular(Connect cn, String ftype, String formula, String calcid, 
 			}
  			String value="";
  			if (cg[2].equals("D")) {
- 				if (tokens.get(i).length() > 0)
- 					value = getRuleDate(cn.getConnection(), tokens.get(i));
- 				else if (cg[4].equals("DFROM")) {
+ 				if (tokens.get(i).length() > 0) {
+ 					value = getRuleDate(cn.getConnection(), tokens.get(i), erkey);
+ 					//Util.p("erkey="+erkey);
+ 				} else if (cg[4].equals("DFROM")) {
  					value ="";
  				}
  			}
@@ -329,7 +336,7 @@ String explainFormular(Connect cn, String ftype, String formula, String calcid, 
 			if (token.equals("I")) continue;
 			if (token.startsWith("#")) continue;
 			if (Util.isNumber(token)) continue;
-			String val = getFormula(cn.getConnection(), token);
+			String val = getFormula(cn.getConnection(), erkey, token);
 			if (val.startsWith("ERROR")) val = "ERROR";
 			res += "<tr><td>" + token + "</td><td>" + getFormulaDesc(cn, token) + "</td><td align=right><b>" + val + "</b></td></tr>";
 		}
@@ -348,6 +355,10 @@ String explainFormular(Connect cn, String ftype, String formula, String calcid, 
 }
 
 public String getBCParameter(Connection conn, String param, String datatype) {
+	return getBCParameter(conn, param, "*", datatype);
+}
+
+public String getBCParameter(Connection conn, String param, String erkey, String datatype) {
 	String res="";
 	if (conn != null) {
 
@@ -356,7 +367,7 @@ public String getBCParameter(Connection conn, String param, String datatype) {
 		if (datatype.equals("N")) fname = "BC_PARAMETER.getNum";
 		if (datatype.equals("C")) fname = "BC_PARAMETER.getChar";
 		
-	    String cStmt = "{ ? = call " + fname+"(?) }";
+	    String cStmt = "{ ? = call " + fname+"(?,?) }";
 	    //Util.p(cStmt);
 	    CallableStatement oStmt=null;
 	    int nResult = 0;
@@ -365,6 +376,7 @@ public String getBCParameter(Connection conn, String param, String datatype) {
 	    	oStmt = conn.prepareCall(cStmt);
 			oStmt.registerOutParameter(1, OracleTypes.VARCHAR);
 			oStmt.setString(2,param);
+			oStmt.setString(3,erkey);
 	        oStmt.execute();
 	        res = oStmt.getString(1);
 
@@ -409,7 +421,13 @@ public String getBCParameter(Connection conn, String param, String datatype) {
 		clnt = cn.queryOne("SELECT CLNT FROM CALC WHERE CALCID="+calcid);
 		plan = cn.queryOne("SELECT PLAN FROM CALC WHERE CALCID="+calcid);
 		mkey = cn.queryOne("SELECT MKEY FROM CALC WHERE CALCID="+calcid);
-		erkey = cn.queryOne("SELECT ERKEY FROM MEMBER_SERVICE WHERE CLNT='"+clnt + "' AND MKEY='" + mkey +"'");
+		// get the last erkey as of the cdate
+		//erkey = cn.queryOne("SELECT ERKEY FROM MEMBER_SERVICE WHERE CLNT='"+clnt + "' AND MKEY='" + mkey +"'");
+		erkey = cn.queryOne("select erkey from ( "+
+				"SELECT A.*, row_number() over (partition by clnt, mkey order by edate) rn " +
+				"FROM MEMBER_SERVICE A WHERE CLNT='"+clnt + "' AND MKEY='"+mkey+"' " +
+				"and edate <= (select cdate from calc where calcid="+calcid + ") " + 
+				") where rn=1");
 	}
 	
 	String qry = "SELECT FTYPE VALU,NAME FROM CPAS_FORMULA ORDER BY NAME";
@@ -458,6 +476,27 @@ public String getBCParameter(Connection conn, String param, String datatype) {
 	</style>
 	    
 	<script type="text/javascript">
+	function testScript(idx, erkey) {
+		var erKeySet = "'" + erkey + "'";
+		var str = ""; 
+
+		if (idx==1) {
+			str = "BC.getFormula('FORMULA', " + erKeySet + ")";
+		} else if (idx==2) {
+			str = "BC_Parameter.getChar('PARAMETER', " + erKeySet + ")";
+		} else if (idx==3) {
+			str = "BC_Parameter.getNum('PARAMETER', " + erKeySet + ")";
+		} else if (idx==4) {
+			str = "BC_Parameter.getDate('PARAMETER', " + erKeySet + ")";
+		}
+		//alert(str);
+		$("#testvar").val(str);
+	}
+			
+	$(document).ready(function(){
+		$("#divWait").remove();
+	})
+	
 	$(function() {
 		$( "#globalSearch" ).autocomplete({
 			source: "ajax/auto-complete2.jsp",
@@ -668,10 +707,15 @@ public String getBCParameter(Connection conn, String param, String datatype) {
 	}
 	
 	function searchFormula(key) {
+		var w ='<div id="divWait"><img src="image/loading_big.gif"></div>';
+		$("#formulaDiv").prepend(w);
 		$.ajax({
 			url: "ajax-cpas/bencalc-formula.jsp?calcid=<%= calcid %>&fkey=" + key + "&t=" + (new Date().getTime()),
 			success: function(data){
-				$("#formulaDiv").append(data);
+				removeDiv("formula"+key);
+				$("#formulaDiv").prepend("<div id='formula"+ key+"'><a href='javascript:removeDiv(\"formula" + key+ "\")'><img src='image/clear.gif'></a>" + data + "</div>");
+				$("#divWait").remove();
+				$("#formulaSearch").val('');
 				setHighlight();
 			},
             error:function (jqXHR, textStatus, errorThrown){
@@ -680,6 +724,9 @@ public String getBCParameter(Connection conn, String param, String datatype) {
 		});		
 	}
 	
+	function removeDiv(divId) {
+		$("#"+divId).remove();
+	}
 	</script>
     
 </head> 
@@ -727,7 +774,7 @@ clnt=[<%= clnt %>] plan=[<%= plan %>] mkey=[<%= mkey %>] erkey=[<%= erkey %>]
 <% 		return;
 	} %>
 <hr>
-
+<div id="divWait"><img src="image/loading_big.gif"></div>
 <% if (!calcid.equals("")) {
 	id = Util.getId();
 	String sql= "SELECT * FROM CALC WHERE CALCID="+calcid; 
@@ -784,7 +831,19 @@ bcSetAll(cn.getConnection(), calcid);
 <span style="color: blue; font-family: Arial; font-size:16px; font-weight:bold;">Test</span>
 
 <form id="formTest">
-<textarea style="margin-left: 20px;" id="testvar" name="testvar" rows=3 cols=50></textarea><input type="button" value="Test" onclick="Javascript:testVar()">
+<table>
+<td>
+<textarea style="margin-left: 20px;" id="testvar" name="testvar" rows=4 cols=80></textarea><input type="button" value="Test" onclick="Javascript:testVar()">
+</td>
+<td valign=top>
+<a href="Javascript:testScript(1, '<%=erkey%>')">BC.getFormula</a><br/>
+<br/>
+<a href="Javascript:testScript(2, '<%=erkey%>')">BC_Parameter.getChar</a>
+<a href="Javascript:testScript(3, '<%=erkey%>')">getNum</a>
+<a href="Javascript:testScript(4, '<%=erkey%>')">getDate</a><br/>
+</td>
+</table>
+
 </form>
 <div id="testResult" style="margin-left: 20px;">
 </div>
@@ -901,7 +960,7 @@ if (cn.isTVS("CPAS_DATE")) {
 String q = "select to_char(rdate,'YYYYMMDD'), name, expcode from CPAS_DATE order by 1";
 boolean fromFormula = false;
 if (cn.getBuildNo().compareTo("1257") >= 0) {
-	q = "select fkey, fdesc, ruleid from FORMULA where fclass='D' and clnt='*' order by 1";
+	q = "select fkey, fdesc, ruleid from FORMULA where fclass='D' and clnt in ('*','"+clnt+"') order by 1";
 	fromFormula = true;
 }
 		List<String[]> ff = cn.query(q, false);
@@ -913,8 +972,7 @@ if (cn.getBuildNo().compareTo("1257") >= 0) {
 			String rowClass = "oddRow";
 			if (rowCnt%2 == 0) rowClass = "evenRow";
 			String dateStr = fl[1];
-
-			String value = getRuleDate(cn.getConnection(), dateStr);;
+			String value = getRuleDate(cn.getConnection(), dateStr, erkey);;
 			if (value==null) value="";
 			String tooltip = null;
 			if (value.startsWith("ERROR")) {
@@ -1064,7 +1122,7 @@ if (cn.isTVS("CPAS_PARAMETER")) {
 			String datatype = fl[2];
 			String remark = fl[3];
 			String value = "";
-			value = getBCParameter(cn.getConnection(), param, datatype);
+			value = getBCParameter(cn.getConnection(), param, erkey, datatype);
 			if (value==null) value ="";
 			
 			String tooltip = null;
@@ -1277,3 +1335,6 @@ if (cn.isTVS("FORMULA")) {
 </body>
 </html>
 
+<%
+cn.getConnection().rollback();
+%>

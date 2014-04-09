@@ -371,8 +371,8 @@ public static void main(String args[]) {
 	}
 
 	public static String getIpAddress(HttpServletRequest request) {
-		String ipAddress = request.getRemoteAddr();
-		if (request.getHeader("X-Forwarded-For") != null) ipAddress=request.getHeader("X-Forwarded-For");
+		String ipAddress = request.getHeader("X-FORWARDED-FOR"); //request.getHeader("X-Forwarded-For");
+		if ( ipAddress == null) ipAddress = request.getRemoteAddr();
 		//if (ipAddress.equals("127.0.0.1")) ipAddress=request.getHeader("X-Forwarded-For");
 		
 		return ipAddress;
@@ -500,11 +500,11 @@ public static void main(String args[]) {
 	}
 
 	public static String getBuildNo() {
-		return "CPAS-1108";
+		return "CPAS-1117";
 	}
 
 	public static String getVersionDate() {
-		return "Feb 20, 2014";
+		return "Apr 9, 2014";
 	}
 
 	public static void p(String str) {

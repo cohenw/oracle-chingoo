@@ -19,6 +19,7 @@
 	String id="";
 	for (String refTab : memberTables) {
 
+		if (!cn.isTVS(refTab)) continue;
 		String refsql = "SELECT * FROM " + refTab + " WHERE CLNT='" + clnt + "' AND MKEY='" + mkey +"'";
 		String tmp = "SELECT COUNT(*) FROM " + refTab + " WHERE CLNT='" + clnt + "' AND MKEY='" + mkey +"'";
 		int recCount = cn.getQryCount(tmp);
